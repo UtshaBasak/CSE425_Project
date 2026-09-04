@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "project": "gnn-bert-music-context",
+  "phase": "A1",
+  "current_step": "A1.1",
+  "sessions": 2,
+  "completed": [
+    "A0.1",
+    "A0.2",
+    "A0.3",
+    "A0.4",
+    "A0.5",
+    "A0.6",
+    "GATE_A0"
+  ],
+  "artifacts": {
+    "manifests": {
+      "mtat": "data/splits/mtat_manifest.csv",
+      "fma": "data/splits/fma_manifest.csv",
+      "deam": "data/splits/deam_manifest.csv",
+      "musiccaps": "data/splits/musiccaps_manifest.csv"
+    },
+    "feature_caches": {},
+    "graph_dirs": {},
+    "norm_stats": {},
+    "checkpoints": {}
+  },
+  "long_jobs": {},
+  "notes": "Gate A0 passed (pytest 148). OPEN for A2: cross-corpus artist leakage on the concatenated manifest (39 artists)."
+}

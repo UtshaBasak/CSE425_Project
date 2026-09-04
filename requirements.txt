@@ -1,0 +1,60 @@
+# =============================================================================
+# GNN-BERT Music Context Understanding
+#
+# INSTALL ORDER MATTERS. Do not `pip install -r requirements.txt` into an empty
+# environment and expect PyTorch Geometric to work -- see README.md section
+# "Installation". The short version:
+#
+#   1) pip install torch --index-url https://download.pytorch.org/whl/cu126
+#   2) pip install torch-geometric
+#      (+ optional pyg-lib / torch-scatter / torch-sparse from the wheel index
+#       that matches your EXACT torch + CUDA string)
+#   3) pip install -r requirements.txt
+#
+# Versions below are what actually resolved on the target machine
+# (Windows 11, Python 3.13, GTX 1650 / CUDA 12.6, driver 610.88) and are pinned
+# rather than guessed. `torch==2.14.0+cu126` only resolves from the PyTorch
+# index; on a CPU-only machine drop the local version suffix.
+# =============================================================================
+
+# The PyTorch index is declared here so a plain
+#   pip install -r requirements.txt
+# also resolves in a fresh venv. It does NOT remove the ordering requirement:
+# installing torch first (step 1) is what guarantees torch-geometric compiles
+# against the right CUDA build.
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+# ---- deep learning ----------------------------------------------------------
+torch==2.14.0+cu126
+torch-geometric==2.8.0.post1
+transformers==5.16.1
+tokenizers==0.23.2
+safetensors==0.8.0
+
+# ---- audio ------------------------------------------------------------------
+librosa==1.0.0
+soundfile==0.14.0
+pretty_midi==0.2.11.post0
+
+# ---- scientific stack -------------------------------------------------------
+numpy==2.5.2
+scipy==1.18.1
+pandas==3.0.5
+scikit-learn==1.9.0
+h5py==3.16.0
+networkx==3.6.1
+
+# ---- plots ------------------------------------------------------------------
+matplotlib==3.11.1
+seaborn==0.13.2
+
+# ---- agreement statistics (human evaluation, Task 4) ------------------------
+krippendorff==0.8.2
+
+# ---- tooling ----------------------------------------------------------------
+PyYAML==6.0.3
+tqdm==4.70.0
+pytest==9.1.1
+jupyter==1.1.1
+wandb==0.29.0
+yt-dlp==2026.8.19
