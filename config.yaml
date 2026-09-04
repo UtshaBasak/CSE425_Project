@@ -1,0 +1,201 @@
+# =============================================================================
+# GNN-BERT Music Context Understanding -- single source of truth.
+# Every script loads this file; every CLI flag (--override key=value) wins.
+# =============================================================================
+seed: 42
+device: cuda
+amp: true
+
+paths:
+  raw: data/raw
+  processed: data/processed
+  splits: data/splits
+  results: results
+  checkpoints: results/checkpoints
+
+# Where each corpus actually lives under paths.raw. Kept explicit so a machine
+# with a different on-disk layout only edits this block (no hardcoded paths).
+datasets:
+  mtat:
+    root: data/raw/mtat
+    audio: data/raw/mtat/audio
+    annotations: data/raw/mtat/annotations_final.csv
+    clip_info: data/raw/mtat/clip_info_final.csv
+  fma:
+    root: data/raw/fma
+    audio: data/raw/fma/fma_small
+    metadata: data/raw/fma/fma_metadata
+  musiccaps:
+    root: data/raw/musiccaps
+    audio: data/raw/musiccaps/audio
+    csv: data/raw/musiccaps/musiccaps-public.csv
+    clip_duration_s: 10.0
+    duration_tol_s: 1.0
+  deam:
+    root: data/raw/deam
+    audio: data/raw/deam/audio
+    annotations: data/raw/deam/annotations
+    metadata: data/raw/deam/metadata
+  lmd:
+    root: data/raw/lmd_clean
+
+audio:
+  sample_rate: 22050
+  n_fft: 2048
+  hop_length: 512
+  n_mels: 128
+  n_chroma: 12
+  n_mfcc: 20
+  n_bands: 6                  # spectral_contrast -> n_bands + 1 = 7 coefficients
+  mel_dtype: float16          # halves cache size; 4 GB VRAM / 16 GB RAM budget
+  max_duration_s: 30.0
+
+segmentation:
+  mode: fixed                 # fixed | beat_sync
+  window_s: 3.0
+  overlap: 0.5
+  min_nodes: 4
+  max_nodes: 32
+
+graph:
+  knn_k: 4                    # k-NN, NOT a fixed cosine threshold tau
+  add_self_loops: true
+  temporal_edges: true
+  similarity_edges: true
+  node_feat_dim: 96           # asserted at build time
+  chord_vocab_size: 25        # 12 roots x {maj, min} + N.C.
+  chord_feat_dim: 13          # [vocab index / 24] + aggregated 12-bin chroma
+
+chords:
+  smoothing_frames: 9         # median filter width over frame-wise decisions
+  min_energy: 1.0e-6          # below this a frame is declared "N" (no chord)
+
+# ---------------------------------------------------------------------------
+# LOCAL-VS-KAGGLE ROUTING, measured on the actual GTX 1650 (state/vram_report.md)
+# Judged on max_memory_reserved against a 3277 MB safe threshold (80% of 4 GB).
+#
+#   Task 1 distilbert        b<=32  seq128           1574 MB   local
+#   Task 1 bert-base         b<=32  seq128           2620 MB   local
+#   Task 1 bert-base         b=64   seq128           4254 MB   NEEDS grad ckpt
+#   Task 1 bert-base         b=32   seq256           4254 MB   NEEDS grad ckpt
+#   Task 1 bert-base + ckpt  b=64   seq128           2234 MB   local
+#   Task 2 GNN               b<=128                   130 MB   local, trivial
+#   Task 3 fusion distilbert b<=16  seq128           1418 MB   local
+#   Task 3 fusion bert-base  b<=32  seq128           2642 MB   local
+#   Task 3 fusion bert-base  b=64 + ckpt             2268 MB   local
+#   Task 4 frozen+precompute b=2048                  1802 MB   local
+#
+# Peak is dominated by AdamW optimiser state, not activations: fusion costs only
+# ~14 MB more than the text encoder alone. What forces work to Kaggle is
+# wall-clock (3 freeze modes x 3 seeds), not memory.
+# ---------------------------------------------------------------------------
+bert:
+  model_name: distilbert-base-uncased   # bert-base-uncased for final runs
+  gradient_checkpointing: false         # a no-op below batch 32; -45% peak at 64
+  max_length: 128
+  freeze_epochs: 3
+  unfreeze_top_n_layers: 4
+  freeze_mode: top_n          # frozen_probe | top_n | full_ft
+
+gnn:
+  conv: sage                  # sage | gatv2
+  hidden_dim: 256
+  num_layers: 2               # keep shallow: 10-32 node graphs oversmooth fast
+  dropout: 0.3
+  readout: mean_max           # mean | max | mean_max | attention
+  residual: true
+  heads: 4                    # GATv2 heads
+
+fusion:
+  mode: cross_attention       # bert_only | gnn_only | early_concat | late_concat | cross_attention | gated | bidirectional
+  shared_dim: 256
+  n_heads: 4
+
+contrastive:
+  temperature_init: 0.07
+  learnable_temperature: true
+  clamp_logit_scale: 100.0
+  symmetric: true
+  batch_size: 512
+  precompute_text: true
+
+multitask:
+  alpha_valence: 1.0
+  beta_arousal: 1.0
+  auto_balance: true          # rescale by running loss magnitude
+  ema_decay: 0.98             # smoothing for the running loss magnitudes
+
+train:
+  batch_size: 8
+  grad_accum_steps: 4         # effective batch 32
+  lr_bert: 2.0e-5
+  lr_head: 1.0e-3
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  epochs: 10
+  early_stop_patience: 3
+  early_stop_metric: val_macro_f1
+  num_workers: 4
+  pin_memory: true
+  persistent_workers: true
+  grad_clip: 1.0
+  log_every: 50
+  wandb: false
+  wandb_project: gnn-bert-music-context
+  tensorboard: false
+
+# ---------------------------------------------------------------------------
+# A0.6 -- what goes into Xtext, and why it is not the labels.
+#
+# MTAT ships NO captions or lyrics, only tags. Feeding a track's tags in to
+# predict those same tags is degenerate. MusicCaps captions are written *from*
+# the aspect list, so the raw caption also contains its own labels almost
+# verbatim. Locked configuration:
+#
+#   Run                | Dataset    | text_source     | Purpose
+#   -------------------|------------|-----------------|--------------------------
+#   Task 1 headline    | MusicCaps  | caption_masked  | the main Task 1 number
+#   Task 1 leakage demo| MusicCaps  | caption_raw     | quantifies the inflation
+#   Task 1 secondary   | MTAT       | metadata        | non-circular, weak signal
+#   Task 3 primary     | MTAT       | metadata        | PDF asks for MTAT results
+#   Task 3 secondary   | MusicCaps  | caption_masked  | rich-text domain
+#
+# The payoff: fusion gain should scale with text informativeness -- large on
+# MusicCaps captions, small on MTAT metadata. That contrast is a stronger
+# result than either dataset alone.
+#
+# Variants live in data/splits/{dataset}_text_variants.csv; the manifest schema
+# stays frozen at its ten columns.
+# ---------------------------------------------------------------------------
+data:
+  text_source: caption_masked   # caption_masked | caption_raw | metadata
+
+tags:
+  top_k: 50
+  merge_synonyms: true
+
+splits:
+  # MTAT's canonical hex-folder split is NOT artist-disjoint: Magnatune albums
+  # are hashed across directories, so ~57 artists have clips in two folders.
+  # With this on, each such artist is moved wholesale into its majority split
+  # before the leakage assertion runs. Turn it off only to reproduce the
+  # (leaky) literature split exactly, and say so in the report.
+  enforce_artist_disjoint: true
+
+eval:
+  tune_thresholds: true
+  n_seeds: 3
+  seeds: [42, 1337, 2024]
+  tsne_perplexity: 30
+  graph_coherence_tau: 0.5
+  knn_probe_k: 10
+  retrieval_examples: 10
+
+synthetic:
+  n_tracks: 200
+  n_tags: 50
+  out_dir: data/processed/synthetic
+
+human_eval:
+  n_items: 20
+  n_controls: 4

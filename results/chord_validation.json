@@ -1,0 +1,16 @@
+{
+  "lmd_dir": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\lmd_clean",
+  "methodology": "midi_derived_chroma",
+  "audio_synthesized": false,
+  "validates_audio_pipeline": false,
+  "caveat": "Lakh Clean MIDI ships no audio and none is synthesized here, so both sides of this comparison derive from the same MIDI note events: the 'input' is pretty_midi.get_chroma and the 'ground truth' is the same notes read directly. This therefore does NOT validate chord estimation from audio. It is an upper bound on the template-matching and smoothing step in isolation, measured on noiseless, perfectly-separated chroma. Real MTAT/FMA mp3s add polyphony, percussion, reverb, overtones and mastering, all of which smear chroma; expect substantially lower agreement there. No audio-domain chord accuracy is claimed anywhere in this project.",
+  "n_requested": 200,
+  "n_files_found": 17184,
+  "n_files_scored": 197,
+  "frame_agreement": 0.7738413320440396,
+  "root_agreement": 0.7846518906814596,
+  "per_file_agreement_std": 0.12462124400850844,
+  "errors": 3,
+  "n_frames": 471576,
+  "status": "ok"
+}

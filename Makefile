@@ -1,0 +1,109 @@
+# =============================================================================
+# GNN-BERT Music Context Understanding
+#
+# `make smoke` is the one that matters: it runs the acceptance path end to end
+# on synthetic data, on CPU, in a couple of minutes.
+# =============================================================================
+PYTHON ?= python
+CONFIG ?= config.yaml
+DEVICE ?= cuda
+SEED   ?= 42
+EPOCHS ?=
+
+OVERRIDE := $(if $(EPOCHS),--override train.epochs=$(EPOCHS),)
+TRAIN    := $(PYTHON) -m src.train --config $(CONFIG) --device $(DEVICE) --seed $(SEED)
+
+.PHONY: help setup verify-data splits features graphs smoke \
+        task1 task2 task3 task4 all-tasks baselines evaluate test lint clean clean-results
+
+help:
+	@echo "Targets:"
+	@echo "  setup         install dependencies in the correct order (torch -> PyG -> rest)"
+	@echo "  verify-data   check every dataset path, count files, report MusicCaps survival"
+	@echo "  splits        build data/splits/*_manifest.csv from the raw corpora"
+	@echo "  features      extract the 96-dim segment cache into data/processed/features.h5"
+	@echo "  graphs        export >= 20 sample graphs (graded deliverable)"
+	@echo "  smoke         acceptance criteria 4-8 on synthetic data, CPU"
+	@echo "  task1..task4  train one task            (DEVICE=cuda SEED=42 EPOCHS=10)"
+	@echo "  all-tasks     train all four, all seeds from config.eval.seeds"
+	@echo "  baselines     B1 random/majority, B2 CNN, B4 PCA+MLP"
+	@echo "  evaluate      regenerate every table and plot into results/"
+	@echo "  test          pytest"
+	@echo "  clean         remove caches, checkpoints and generated results"
+
+# ---- environment ------------------------------------------------------------
+setup:
+	$(PYTHON) -m pip install --upgrade pip setuptools wheel
+	$(PYTHON) -m pip install torch --index-url https://download.pytorch.org/whl/cu126
+	$(PYTHON) -m pip install torch-geometric
+	$(PYTHON) -m pip install -r requirements.txt
+	@echo "If you need pyg-lib/torch-scatter/torch-sparse, install them from the"
+	@echo "wheel index that matches your exact torch+CUDA string -- see README."
+
+# ---- data -------------------------------------------------------------------
+verify-data:
+	$(PYTHON) scripts/verify_datasets.py --config $(CONFIG)
+
+splits:
+	$(PYTHON) -m src.splits --config $(CONFIG)
+
+features:
+	$(PYTHON) -m src.audio_features --config $(CONFIG)
+
+graphs:
+	$(PYTHON) scripts/export_sample_graphs.py --config $(CONFIG) --n 20
+
+synthetic:
+	$(PYTHON) -m src.synthetic --config $(CONFIG)
+
+# ---- the acceptance path ----------------------------------------------------
+smoke:
+	$(PYTHON) -m src.synthetic --config $(CONFIG)
+	$(PYTHON) -m src.train --task 1 --synthetic --device cpu --override train.epochs=1
+	$(PYTHON) -m src.train --task 2 --synthetic --device cpu --override train.epochs=1
+	$(PYTHON) -m src.train --task 3 --synthetic --device cpu --override train.epochs=1
+	$(PYTHON) -m src.train --task 4 --synthetic --device cpu --override train.epochs=1
+	$(PYTHON) -m src.evaluate --synthetic --device cpu
+	$(PYTHON) scripts/export_sample_graphs.py --synthetic --n 20
+	@echo "smoke OK"
+
+# ---- training ---------------------------------------------------------------
+task1:
+	$(TRAIN) --task 1 $(OVERRIDE)
+task2:
+	$(TRAIN) --task 2 $(OVERRIDE)
+task3:
+	$(TRAIN) --task 3 $(OVERRIDE)
+task4:
+	$(TRAIN) --task 4 --precompute-text-embeddings $(OVERRIDE)
+
+all-tasks:
+	@for s in 42 1337 2024; do \
+	  for t in 1 2 3 4; do \
+	    $(PYTHON) -m src.train --task $$t --config $(CONFIG) --device $(DEVICE) --seed $$s $(OVERRIDE); \
+	  done; \
+	done
+
+baselines:
+	$(PYTHON) scripts/run_baselines.py --config $(CONFIG) --device $(DEVICE)
+
+evaluate:
+	$(PYTHON) -m src.evaluate --config $(CONFIG) --device $(DEVICE)
+
+# ---- quality ----------------------------------------------------------------
+test:
+	$(PYTHON) -m pytest
+
+lint:
+	$(PYTHON) -m compileall -q src scripts tests
+
+# ---- cleanup ----------------------------------------------------------------
+clean-results:
+	rm -rf results/plots results/retrieval_examples results/checkpoints
+	rm -f results/metrics.json results/task*_seed*.json results/per_tag_prf.csv results/ablation.csv
+
+clean: clean-results
+	rm -rf __pycache__ src/__pycache__ tests/__pycache__ scripts/__pycache__
+	rm -rf .pytest_cache runs wandb
+	rm -rf data/processed/synthetic data/processed/features.h5 data/processed/mels.h5
+	@echo "raw data and data/processed/sample_graphs/ were left alone"

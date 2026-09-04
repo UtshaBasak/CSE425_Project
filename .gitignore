@@ -1,0 +1,48 @@
+# ---- data -------------------------------------------------------------------
+data/raw/
+# Ignore the *contents* of data/processed rather than the directory itself:
+# git cannot re-include anything under an excluded directory, so `data/processed/`
+# would make the sample_graphs exception below silently impossible.
+data/processed/*
+# Sample graphs are a graded deliverable and MUST be committed.
+!data/processed/sample_graphs/
+
+# ---- media / caches / checkpoints -------------------------------------------
+*.mp3
+*.wav
+*.flac
+*.m4a
+*.h5
+*.hdf5
+*.ckpt
+*.pt
+# ...the one exception, re-included after the *.pt rule above.
+!data/processed/sample_graphs/*.pt
+
+# ---- experiment tracking ----------------------------------------------------
+wandb/
+runs/
+results/checkpoints/
+lightning_logs/
+logs/
+
+# Quarantined synthetic-smoke artifacts (see its README). Never submitted.
+results/_synthetic_smoke/
+
+# ---- python -----------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.coverage
+htmlcov/
+
+# ---- editors / os -----------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
