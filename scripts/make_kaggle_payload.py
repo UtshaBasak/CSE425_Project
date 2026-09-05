@@ -14,7 +14,8 @@ What goes in:
 * ``data/processed/norm_stats_*.json`` train-split statistics, so Kaggle applies
   exactly the same normalisation and cannot silently recompute it on the wrong split
 * ``data/splits/``                    manifests, tag vocabulary, text variants
-* ``config.yaml`` and ``src/``        so the remote run is the same code
+* ``config.yaml``, ``src/`` and ``scripts/``  so the remote run is the same code
+  and has its entry point
 
 Refuses to build if it would ship anything synthetic, and prints the size so the
 figure can go straight into the session log.
@@ -68,6 +69,10 @@ def collect(root: Path, cfg, include_graphs: bool = True) -> list[Path]:
         wanted += sorted(splits.glob("*.csv")) + sorted(splits.glob("*.json"))
     wanted.append(root / "config.yaml")
     wanted += sorted((root / "src").rglob("*.py"))
+    # scripts/ too: kaggle_task1.py is the entry point the remote run executes,
+    # and kaggle_setup.py stages the payload. Shipping src/ without scripts/
+    # produces a payload that cannot actually be run.
+    wanted += sorted((root / "scripts").rglob("*.py"))
     wanted.append(root / "requirements.txt")
 
     return [p for p in wanted if p.exists() and not _is_excluded(p, root)]
