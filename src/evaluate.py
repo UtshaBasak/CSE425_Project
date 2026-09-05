@@ -55,7 +55,7 @@ from .utils import (  # noqa: E402
 LOGGER = get_logger("gbmc.eval")
 
 PLOT_TYPES = (
-    "f1_vs_epoch", "per_tag_prf", "ablation", "tsne_genre", "tsne_mood",
+    "f1_vs_epoch", "per_tag_prf", "ablation", "tsne_genre", "tsne_mood", "tsne_mood_mtat",
     "retrieval", "graph_coherence", "seed_summary", "confusion_topk",
     "bert_attention", "case_study",
 )
@@ -781,7 +781,7 @@ def main(argv=None) -> int:
             written_plots["ablation"] = str(p)
 
     # ---- embeddings, t-SNE, probes ----------------------------------------- #
-    embeddings, genres, moods = _collect_embeddings(bundle, cfg, device, seed)
+    embeddings, genres, moods, tag_moods = _collect_embeddings(bundle, cfg, device, seed)
     if embeddings.size:
         stats = plot_tsne(embeddings, genres, plots_dir / "tsne_genre.png",
                           "Fused representation coloured by genre",
@@ -790,14 +790,31 @@ def main(argv=None) -> int:
         if stats:
             metrics["tsne_genre"] = stats
             written_plots["tsne_genre"] = str(plots_dir / "tsne_genre.png")
+        quadrant_names = [str(q) for q in cfg.get("mood", {}).get(
+            "deam_quadrants",
+            ["low V / low A", "low V / high A", "high V / low A", "high V / high A"])]
         stats = plot_tsne(embeddings, moods, plots_dir / "tsne_mood.png",
-                          "Fused representation coloured by mood quadrant",
-                          label_names=["low V / low A", "low V / high A",
-                                       "high V / low A", "high V / high A"],
+                          "Fused representation coloured by DEAM mood quadrant",
+                          label_names=quadrant_names,
                           perplexity=int(cfg["eval"]["tsne_perplexity"]), seed=seed)
         if stats:
             metrics["tsne_mood"] = stats
             written_plots["tsne_mood"] = str(plots_dir / "tsne_mood.png")
+
+        # third panel: MTAT mood tags. Reported separately from the DEAM
+        # quadrants because they are not the same construct -- what survives in
+        # MTAT's top-50 is texture and dynamics, not affect (see B0.5).
+        mood_tags = [str(t) for t in cfg.get("mood", {}).get("mtat_tags", [])]
+        if mood_tags and (tag_moods >= 0).sum() > 10:
+            stats = plot_tsne(embeddings, tag_moods, plots_dir / "tsne_mood_mtat.png",
+                              "Fused representation coloured by MTAT mood tag",
+                              label_names=mood_tags,
+                              perplexity=int(cfg["eval"]["tsne_perplexity"]), seed=seed)
+            if stats:
+                stats["n_labelled"] = int((tag_moods >= 0).sum())
+                stats["n_unlabelled_excluded"] = int((tag_moods < 0).sum())
+                metrics["tsne_mood_mtat"] = stats
+                written_plots["tsne_mood_mtat"] = str(plots_dir / "tsne_mood_mtat.png")
 
     # ---- retrieval --------------------------------------------------------- #
     retrieval = {}
@@ -932,8 +949,15 @@ def _collect_embeddings(bundle, cfg, device, seed: int):
         _load_compatible(model, payload["model_state"])
     model.eval()
 
+    # B0.5: the mood definitions come from config, not from a literal here. The
+    # midpoint in particular was hardcoded at 5, which is right for DEAM's 1-9
+    # scale and would silently be wrong for any other annotation range.
+    mood_cfg = cfg.get("mood", {}) if cfg else {}
+    midpoint = float(mood_cfg.get("deam_midpoint", 5.0))
+    mtat_moods = [str(t) for t in mood_cfg.get("mtat_tags", [])]
+
     loader = make_loader(bundle.dataset("test"), cfg, shuffle=False, seed=seed, num_workers=0)
-    embeddings, genres, moods = [], [], []
+    embeddings, genres, moods, tag_moods = [], [], [], []
     with torch.no_grad():
         for batch in loader:
             batch = batch.to(device)
@@ -947,14 +971,44 @@ def _collect_embeddings(bundle, cfg, device, seed: int):
             arousal = batch.y_arousal.view(-1).cpu().numpy()
             quadrant = np.where(
                 np.isfinite(valence) & np.isfinite(arousal),
-                (valence >= 5).astype(int) * 2 + (arousal >= 5).astype(int),
+                (valence >= midpoint).astype(int) * 2 + (arousal >= midpoint).astype(int),
                 -1,
             )
             moods.append(quadrant)
+            tag_moods.append(_mtat_mood_labels(batch, bundle.tag_vocab, mtat_moods))
     if not embeddings:
-        return np.zeros((0, 0)), np.zeros(0), np.zeros(0)
+        return np.zeros((0, 0)), np.zeros(0), np.zeros(0), np.zeros(0)
     return (np.concatenate(embeddings), np.concatenate(genres).astype(int),
-            np.concatenate(moods).astype(int))
+            np.concatenate(moods).astype(int),
+            np.concatenate(tag_moods).astype(int))
+
+
+def _mtat_mood_labels(batch, tag_vocab, mood_tags) -> np.ndarray:
+    """Colour each clip by its first matching mood tag; ``-1`` when none match.
+
+    B0.5 defines the mood subset in config. Clips matching none of it get ``-1``
+    and are dropped by :func:`plot_tsne` rather than pooled into an "other"
+    class -- a large catch-all class is trivially separable and would inflate
+    the k-NN probe into meaninglessness.
+
+    "First match in the configured order" rather than "all matches" because a
+    scatter plot needs one colour per point; the ordering is therefore part of
+    the definition and lives in config with the tag list.
+    """
+    y = getattr(batch, "y_tags", None)
+    n = int(getattr(batch, "num_graphs", 1))
+    if y is None or not mood_tags or not tag_vocab:
+        return np.full(n, -1, dtype=int)
+    index = {tag: i for i, tag in enumerate(tag_vocab)}
+    columns = [(rank, index[tag]) for rank, tag in enumerate(mood_tags) if tag in index]
+    matrix = y.float().cpu().numpy().reshape(n, -1)
+    out = np.full(n, -1, dtype=int)
+    for rank, column in columns:
+        if column >= matrix.shape[1]:
+            continue
+        hit = (matrix[:, column] > 0.5) & (out < 0)
+        out[hit] = rank
+    return out
 
 
 if __name__ == "__main__":

@@ -280,11 +280,15 @@ baselines:
 mood:
   mtat_tags: [soft, hard, ambient, quiet, loud, slow, fast, weird]
   deam_midpoint: 5.0
+  # Listed in the order of the index the code assigns,
+  # (valence >= midpoint) * 2 + (arousal >= midpoint), so position i IS class i.
+  # Keeping these in "circumplex order" instead would silently mislabel the
+  # legend, which is the kind of error a plot never reveals.
   deam_quadrants:
-    - {name: "high valence / high arousal", valence: high, arousal: high}
-    - {name: "low valence / high arousal",  valence: low,  arousal: high}
-    - {name: "low valence / low arousal",   valence: low,  arousal: low}
-    - {name: "high valence / low arousal",  valence: high, arousal: low}
+    - low valence / low arousal      # 0
+    - low valence / high arousal     # 1
+    - high valence / low arousal     # 2
+    - high valence / high arousal    # 3
 
 synthetic:
   n_tracks: 200

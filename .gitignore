@@ -116,7 +116,15 @@ data/processed/*
 # it is obvious they are deliberate rather than overlooked:
 #   data/processed/mels_full_*.h5   full-resolution mel cache, 5.8 GB
 #                                   (rebuild: scripts/build_mel_cache.py)
-#   results/scores/*.npz            per-run val/test score matrices, inputs to
+#   results/scores/
+
+# B4 listening study. The HTML page embeds ~24 x 10 s MP3 clips as base64, so it
+# is audio in a text file and falls under the no-audio rule; the sheet key,
+# question list and de-identified ratings ARE committed, because they are what
+# makes the study reproducible.
+data/human_eval/listening_page.html
+data/human_eval/*.mp3
+data/human_eval/*.wav*.npz            per-run val/test score matrices, inputs to
 #                                   scripts/threshold_bootstrap.py. The bootstrap
 #                                   RESULT (results/threshold_bootstrap.json) is
 #                                   committed; the matrices it consumes are not.
