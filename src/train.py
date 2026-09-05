@@ -845,6 +845,11 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
     metric_key = metric_key.replace("val_", "")
     stopper = EarlyStopper(int(train_cfg.get("early_stop_patience", 3)))
     ckpt_dir = ensure_dir(cfg["paths"].get("checkpoints", "results/checkpoints"))
+    # Checkpoints carry the run tag for the same reason results do. Without it
+    # the seven fusion modes of the ablation each overwrite the last, and the
+    # case studies -- which need one specific MusicCaps model -- would silently
+    # load whichever run happened to finish most recently.
+    suffix = f"_{args.run_tag}" if getattr(args, "run_tag", None) else ""
     best_state = None
     best_thresholds = None
     history: list[dict] = []
@@ -948,13 +953,13 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
             best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
             best_thresholds = thresholds
         if not args.dry_run:
-            save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}_last.pt",
+            save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}{suffix}_last.pt",
                             epoch, epoch_record, cfg,
                             extra={"thresholds": None if thresholds is None else
                                    np.asarray(thresholds).tolist(),
                                    "provenance": provenance})
             if improved:
-                save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}_best.pt",
+                save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}{suffix}_best.pt",
                                 epoch, epoch_record, cfg,
                                 extra={"thresholds": None if thresholds is None else
                                        np.asarray(thresholds).tolist(),
@@ -1033,7 +1038,6 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
     result.update(test_extra)
     result.update(extra_result or {})
 
-    suffix = f"_{args.run_tag}" if getattr(args, "run_tag", None) else ""
     result["run_tag"] = getattr(args, "run_tag", None)
     out_path = (resolve_path(cfg["paths"]["results"])
                 / f"task{task}_seed{args.seed}{suffix}.json")

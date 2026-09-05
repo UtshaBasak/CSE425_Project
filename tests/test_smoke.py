@@ -2167,3 +2167,57 @@ def test_control_discrimination_flags_an_uninformative_study():
                          "rating": 1.5 if control else 4.5, "is_control": control})
     stats = compute_agreement(pd.DataFrame(rows))
     assert stats["control_discrimination"] == pytest.approx(3.0, abs=1e-9)
+
+
+# --------------------------------------------------------------------------- #
+# Phase C -- checkpoints must carry the run tag.
+#
+# Without it, the seven fusion modes of the ablation each overwrite the last,
+# and the case studies -- which need one specific MusicCaps model -- silently
+# load whichever run finished most recently. Wrong weights, plausible output.
+# --------------------------------------------------------------------------- #
+def test_find_checkpoint_prefers_the_requested_run_tag(tmp_path):
+    from src.utils import find_checkpoint
+
+    for name in ("task3_seed42_mtat_cross_attention_best.pt",
+                 "task3_seed42_musiccaps_cross_attention_best.pt",
+                 "task3_seed42_best.pt"):
+        (tmp_path / name).write_text("x", encoding="utf-8")
+
+    got = find_checkpoint(tmp_path, task=3, seed=42,
+                          run_tag="musiccaps_cross_attention")
+    assert got.name == "task3_seed42_musiccaps_cross_attention_best.pt", (
+        f"asked for the MusicCaps model and got {got.name}"
+    )
+
+
+def test_find_checkpoint_falls_back_to_the_untagged_name(tmp_path):
+    """Artifacts written before tagging existed must still load."""
+    from src.utils import find_checkpoint
+
+    (tmp_path / "task2_seed42_best.pt").write_text("x", encoding="utf-8")
+    got = find_checkpoint(tmp_path, task=2, seed=42, run_tag="does_not_exist")
+    assert got.name == "task2_seed42_best.pt"
+
+
+def test_find_checkpoint_returns_none_rather_than_the_wrong_task(tmp_path):
+    from src.utils import find_checkpoint
+
+    (tmp_path / "task3_seed42_best.pt").write_text("x", encoding="utf-8")
+    assert find_checkpoint(tmp_path, task=4, seed=42) is None
+    assert find_checkpoint(tmp_path, task=3, seed=1337) is None
+    assert find_checkpoint(tmp_path / "nope", task=3, seed=42) is None
+
+
+def test_training_writes_a_tagged_checkpoint(tmp_path, monkeypatch):
+    """The end-to-end guarantee: --run-tag reaches the checkpoint filename."""
+    import re
+
+    source = (project_root() / "src" / "train.py").read_text(encoding="utf-8")
+    saves = re.findall(r'save_checkpoint\(model, ckpt_dir / f"([^"]+)"', source)
+    assert saves, "could not find the checkpoint writes in _fit"
+    for pattern in saves:
+        assert "{suffix}" in pattern, (
+            f"checkpoint path {pattern!r} has no run tag; ablation modes will "
+            "overwrite each other"
+        )

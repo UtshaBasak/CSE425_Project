@@ -43,6 +43,7 @@ from .utils import (  # noqa: E402
     detect_provenance,
     guard_against_synthetic,
     ensure_dir,
+    find_checkpoint,
     get_device,
     get_logger,
     load_config,
@@ -526,11 +527,11 @@ def compute_graph_coherence(bundle: DataBundle, cfg, device, seed: int) -> dict:
     ).to(device).eval()
 
     ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints"))
-    for name in (f"task3_seed{seed}_best.pt", f"task2_seed{seed}_best.pt"):
-        path = ckpt / name
-        if path.exists():
+    for task, prefix in ((3, "gnn."), (2, "encoder.")):
+        path = find_checkpoint(ckpt, task=task, seed=seed,
+                               run_tag=cfg.get("_run_tag"))
+        if path is not None:
             state = torch.load(path, map_location=device, weights_only=False)["model_state"]
-            prefix = "gnn." if name.startswith("task3") else "encoder."
             report = _load_compatible(encoder, state, prefix=prefix)
             if report["restored"]:
                 LOGGER.info("loaded GNN weights from %s", path.name)
@@ -602,9 +603,10 @@ def export_retrieval_examples(bundle: DataBundle, cfg, device, seed: int,
     model = DualEncoder(gnn, bert, shared_dim=int(cfg["fusion"]["shared_dim"]),
                         temperature_init=float(cfg["contrastive"]["temperature_init"])).to(device)
 
-    ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")) / \
-        f"task4_seed{seed}_best.pt"
-    if ckpt.exists():
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=4, seed=seed, run_tag=cfg.get("_run_tag"))
+    if ckpt is not None:
         payload = torch.load(ckpt, map_location=device, weights_only=False)
         _load_compatible(model, payload["model_state"])
         LOGGER.info("loaded Task 4 weights from %s", ckpt.name)
@@ -942,9 +944,10 @@ def _collect_embeddings(bundle, cfg, device, seed: int):
                           shared_dim=int(cfg["fusion"]["shared_dim"]),
                           n_heads=int(cfg["fusion"]["n_heads"]),
                           n_tags=len(bundle.tag_vocab)).to(device)
-    ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")) / \
-        f"task3_seed{seed}_best.pt"
-    if ckpt.exists():
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=3, seed=seed, run_tag=cfg.get("_run_tag"))
+    if ckpt is not None:
         payload = torch.load(ckpt, map_location=device, weights_only=False)
         _load_compatible(model, payload["model_state"])
     model.eval()

@@ -33,6 +33,7 @@ __all__ = [
     "count_parameters",
     "autocast_ctx",
     "log_vram",
+    "find_checkpoint",
     "get_logger",
     "AttrDict",
     "save_json",
@@ -527,3 +528,33 @@ def guard_against_synthetic(obj, allow_synthetic: bool, context: str = "") -> st
             context or "the input",
         )
     return provenance
+
+
+def find_checkpoint(ckpt_dir, task: int, seed: int, run_tag: str | None = None,
+                    kind: str = "best"):
+    """Locate a checkpoint, preferring an exact run tag.
+
+    Checkpoints are written as ``task{N}_seed{S}[_{tag}]_{kind}.pt``. Readers
+    ask for a tag when they need a specific model -- the case studies need the
+    MusicCaps fusion run, not whichever fusion mode trained last -- and get a
+    clear ``None`` rather than the wrong weights when it is absent.
+
+    Search order: the exact tag, then the untagged name (artifacts written
+    before tagging existed), then any tagged file for that task and seed, newest
+    first, so a directory that only holds tagged runs still resolves.
+    """
+    from pathlib import Path as _P
+
+    directory = _P(ckpt_dir)
+    if not directory.exists():
+        return None
+    if run_tag:
+        exact = directory / f"task{task}_seed{seed}_{run_tag}_{kind}.pt"
+        if exact.exists():
+            return exact
+    plain = directory / f"task{task}_seed{seed}_{kind}.pt"
+    if plain.exists():
+        return plain
+    candidates = sorted(directory.glob(f"task{task}_seed{seed}_*_{kind}.pt"),
+                        key=lambda q: q.stat().st_mtime, reverse=True)
+    return candidates[0] if candidates else None
