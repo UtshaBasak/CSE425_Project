@@ -208,6 +208,7 @@ def build_macros() -> dict:
         macros[f"{prefix}F"] = num(dig(payload, "test", "macro_f1"))
         macros[f"{prefix}Micro"] = num(dig(payload, "test", "micro_f1"))
         macros[f"{prefix}PR"] = num(dig(payload, "test", "mean_auc_pr"))
+        macros[f"{prefix}Params"] = integer(payload.get("trainable_params"))
     macros["MCMaskedVal"] = num(dig(payloads["MCMasked"], "best_val_metric"))
 
     masked = dig(payloads["MCMasked"], "test", "macro_f1")

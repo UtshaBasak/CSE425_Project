@@ -310,6 +310,11 @@ def masked_multitask_loss(out: dict, batch, cfg, magnitudes: "_RunningMagnitude 
     alpha = float(mt_cfg.get("alpha_valence", 1.0))
     beta = float(mt_cfg.get("beta_arousal", 1.0))
     auto_balance = bool(mt_cfg.get("auto_balance", True))
+    # B1.2: targets are standardised with TRAIN-split statistics before the MSE.
+    # Raw 1-9 valence produces squared errors of 4-10 against per-tag BCE near
+    # 0.2, so without this the emotion heads take essentially all the gradient.
+    emotion_stats = ((mt_cfg.get("emotion_stats") or {})
+                     if mt_cfg.get("standardise_targets", True) else {})
 
     logits = out["tag_logits"]
     device = logits.device
@@ -343,6 +348,11 @@ def masked_multitask_loss(out: dict, batch, cfg, magnitudes: "_RunningMagnitude 
             return torch.zeros((), device=device, dtype=dtype), 0
         target = target.to(device=device, dtype=dtype).view(-1)
         pred = pred.float().view(-1)
+        scale = emotion_stats.get(name)
+        if scale:
+            # the model predicts in standardised space, so the target moves to
+            # meet it; predictions are inverted again for reporting
+            target = (target - float(scale["mean"])) / max(float(scale["std"]), 1e-6)
         n = min(pred.shape[0], target.shape[0])
         pred, target = pred[:n], target[:n]
         mask = torch.isfinite(target)

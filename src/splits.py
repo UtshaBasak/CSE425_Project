@@ -47,6 +47,7 @@ __all__ = [
     "build_lmd_inventory",
     "split_summary",
     "reduce_to_top_k_tags",
+    "compute_emotion_stats",
     "assert_no_leakage",
     "enforce_artist_disjoint",
     "write_manifest",
@@ -1022,6 +1023,57 @@ def build_musiccaps_tag_vocab(cfg, k: int = 50, split: str = "train") -> tuple[l
         coverage["mean_labels_per_clip"], coverage["clips_with_no_label_pct"],
     )
     return vocab, coverage
+
+
+def compute_emotion_stats(manifest, split: str = "train") -> dict:
+    """Mean/std of valence and arousal on the **train** split only (B1.2).
+
+    DEAM's annotations live on a 1-9 scale. Fed straight into an MSE term they
+    produce squared errors around 4-10 while per-tag BCE sits near 0.2, so the
+    emotion heads absorb almost all the gradient and the tag head never trains.
+    ``multitask.auto_balance`` rescales by running magnitude and helps, but it is
+    a feedback loop reacting after the fact; standardising the target removes the
+    problem at the source and makes the two terms commensurable from step one.
+
+    Train-only, and it refuses any other split, for the same reason the feature
+    normalisation statistics do: a target scale fitted on test is test
+    information reaching the model.
+
+    Predictions are trained in standardised space and inverted before MAE and
+    RMSE are reported, so the numbers in the report stay on the original 1-9
+    scale. R2 is invariant to an affine transform of both sides, so it reads the
+    same either way.
+    """
+    if split != "train":
+        raise ValueError(
+            f"emotion statistics must come from the train split, got {split!r}"
+        )
+    if isinstance(manifest, (str, Path)):
+        manifest = pd.read_csv(resolve_path(manifest))
+    rows = manifest[manifest["split"] == "train"]
+
+    stats = {"split": "train"}
+    for field in ("y_valence", "y_arousal"):
+        values = pd.to_numeric(rows.get(field), errors="coerce").dropna()
+        name = field.replace("y_", "")
+        if len(values) < 2:
+            stats[name] = {"mean": 0.0, "std": 1.0, "n": int(len(values))}
+            continue
+        std = float(values.std(ddof=0))
+        stats[name] = {
+            "mean": float(values.mean()),
+            "std": std if std > 1e-6 else 1.0,
+            "n": int(len(values)),
+            "min": float(values.min()),
+            "max": float(values.max()),
+        }
+    LOGGER.info(
+        "emotion stats (train only): valence mean %.3f sd %.3f over %d, "
+        "arousal mean %.3f sd %.3f over %d",
+        stats["valence"]["mean"], stats["valence"]["std"], stats["valence"]["n"],
+        stats["arousal"]["mean"], stats["arousal"]["std"], stats["arousal"]["n"],
+    )
+    return stats
 
 
 def reconcile_across_corpora(frames: "dict[str, pd.DataFrame]") -> "dict[str, pd.DataFrame]":
