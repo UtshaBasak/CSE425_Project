@@ -1,0 +1,160 @@
+# Kaggle runbook — Task 1 (A6.4)
+
+Task 1 is BERT predicting tags from text. It is the only part of the project that
+wants more GPU-hours than one laptop card gives comfortably, so it runs on
+Kaggle. Everything else fits locally (see `state/vram_report.md`).
+
+**Budget:** ~15 minutes of your attention, ~45 minutes of unattended GPU.
+
+---
+
+## 0. Two corrections to the earlier notes
+
+| Claim | Verdict |
+|---|---|
+| "Internet must be On, needs phone verification" | **Correct, and critical.** `bert-base-uncased` is fetched from HuggingFace at runtime. Without internet the run dies at model load. |
+| "Drop the `pip install torch-geometric` line" | **Wrong — keep it.** Task 1 needs no graphs, but `src.train` imports the graph modules at module load, so the import fails without it. Verified by blocking the import: `src.train` raises `ImportError`. It is a pure-Python wheel and takes **11 seconds**, not several minutes. (The slow PyG installs are `pyg-lib`/`torch-scatter`, which this project never installs.) |
+| "6–10 hours of quota" | That is a three-seed figure. **One seed is ~45 min** — 2,095 MusicCaps rows (65 steps/epoch at batch 32) and 16,881 MTAT rows (527 steps/epoch). |
+
+A bug was also fixed before this runbook was usable: Task 1 used to load rows
+through the graph dataset, which opens the HDF5 feature caches. Those are
+deliberately excluded from the payload, so the run died ~30 s in on
+`FileNotFoundError: features.h5`. Task 1 now reads text straight from the
+manifests (`TextTagDataset`), verified end to end from the 3.4 MB payload in a
+clean directory.
+
+---
+
+## 1. Phone-verify your Kaggle account (do this first)
+
+`kaggle.com` → your avatar → **Settings** → **Phone Verification**.
+
+This gates the "Internet" toggle on notebooks. It can take a few minutes to come
+through, so start it before anything else.
+
+## 2. Upload the payload as a private dataset
+
+The payload is already built at the repo root:
+
+```
+gnn-bert-music-context/kaggle_payload_task1.tar.gz     (3.4 MB)
+```
+
+Rebuild it any time with `make kaggle-payload` or:
+
+```bash
+python scripts/make_kaggle_payload.py --no-graphs --out kaggle_payload_task1.tar.gz
+```
+
+On Kaggle: **Datasets → New Dataset** → drag the `.tar.gz` in → title it
+something like `gbmc-task1-payload` → **Private** → Create.
+
+Note the **slug** Kaggle gives you (shown in the URL, e.g.
+`amit/gbmc-task1-payload`). You need it in step 4.
+
+> It contains manifests, the text variants, both tag vocabularies, the train-only
+> normalisation stats, `config.yaml` and `src/`. No audio, no feature caches, no
+> checkpoints — the builder refuses to package those.
+
+## 3. Create the notebook
+
+**Code → New Notebook**, then in the right-hand sidebar:
+
+| Setting | Value |
+|---|---|
+| Accelerator | **GPU P100** (T4 x2 also fine; the code uses one GPU) |
+| Internet | **On** ← the step everyone misses |
+| Persistence | Files only (optional) |
+| Add Data | your `gbmc-task1-payload` dataset |
+
+## 4. Paste and run
+
+Replace `<slug>` with your dataset slug from step 2.
+
+```python
+!tar xzf /kaggle/input/<slug>/kaggle_payload_task1.tar.gz -C /kaggle/working
+%cd /kaggle/working
+!pip -q install torch-geometric
+!python scripts/kaggle_task1.py --model bert-base-uncased --epochs 8
+```
+
+Sanity-check the first 60 seconds of output:
+
+- `tag vocabulary: 50 tags from musiccaps_tag_vocab.json` — the right vocabulary
+- `text_source=caption_masked applied to N rows` — labels are not in the input
+- `leakage check passed` — splits are artist-disjoint
+- `task 1 epoch 1/8 | loss ... | val macro_f1=...` — it is training
+
+If you see `FileNotFoundError: features.h5`, you are on an old payload — rebuild
+it from the current repo.
+
+## 5. Save & Run All
+
+**Save Version → Save & Run All (Commit)**. This runs the notebook detached, so
+it survives closing the browser, and the 12-hour limit applies rather than the
+interactive idle timeout.
+
+### What it runs
+
+| # | Corpus | `text_source` | Freeze mode | Purpose |
+|---|---|---|---|---|
+| 1 | MusicCaps | `caption_masked` | `frozen_probe` | cheap floor |
+| 2 | MusicCaps | `caption_masked` | `top_n` | the usual recipe |
+| 3 | MusicCaps | `caption_masked` | `full_ft` | **the headline Task 1 number** |
+| 4 | MusicCaps | `caption_raw` | `full_ft` | leakage demo — labels visible in the caption |
+| 5 | MTAT | `metadata` | `full_ft` | non-circular secondary, weak text |
+
+Runs 3 and 4 are identical except for masking, so their difference is a clean
+measurement of how much the raw caption leaks its own labels. That gap is a
+result worth reporting in its own right.
+
+Results are written after **every** run to `results/task1_seed42_<tag>.json` plus
+a rolling `results/task1_sweep.json`, so a session that dies mid-sweep still
+leaves you everything finished so far.
+
+---
+
+## 6. Bring the results back
+
+When the commit finishes: notebook → **Output** tab → **Download all** (a zip of
+`/kaggle/working`).
+
+Then, from the repo:
+
+```bash
+python scripts/import_kaggle_results.py ~/Downloads/archive.zip
+```
+
+It copies the result JSONs into `results/`, prints the comparison table, and
+prints the leakage gap. It **refuses** anything whose provenance is synthetic or
+whose thresholds did not come from the validation split, and it will not silently
+overwrite an existing local result (`--force` if you mean it).
+
+Then regenerate the tables and figures:
+
+```bash
+python -m src.evaluate --device cuda
+```
+
+Finally put the headline number into `report/final_report.md` §6.1, which
+currently reads `[TBD — Kaggle]` for the B3/T1 row.
+
+---
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Dies at model load, `OSError`/connection error | Internet is Off | Sidebar → Internet On (needs phone verification) |
+| `ModuleNotFoundError: torch_geometric` | dropped the pip line | Put it back; it costs 11 s |
+| `FileNotFoundError: features.h5` | payload predates the Task 1 fix | Rebuild with `make kaggle-payload` |
+| `LEAKAGE: ... artist_id(s) span multiple splits` | edited manifests by hand | Rebuild: `python -m src.splits --validate-audio --prune-to-cache` |
+| Run stops early at epoch 4-5 | early stopping, `patience=3` | Working as intended; `best_epoch` is in the JSON |
+| Out of GPU quota | 30 h/week | The sweep is ~45 min; `--only full_ft` cuts it to ~25 min |
+
+## Quota note
+
+Kaggle gives ~30 GPU-hours/week. One seed of this sweep is roughly 45 minutes.
+Three seeds (42, 1337, 2024) — which the report wants for the headline rows only
+— is about 2.5 hours. That is comfortable; the 6–10 hour figure in the earlier
+notes was an over-estimate.
