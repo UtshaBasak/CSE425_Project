@@ -916,8 +916,37 @@ def build_all_splits(cfg, validate_audio: bool = False,
 # --------------------------------------------------------------------------- #
 # A2 -- cross-corpus reconciliation, the LMD inventory, and the summary payload
 # --------------------------------------------------------------------------- #
-def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
-    """Top-k MusicCaps aspects, because the MTAT vocabulary does not fit them.
+def musiccaps_train_ytids(cfg) -> set:
+    """YouTube ids on the MusicCaps **train** split, per the built manifest.
+
+    Manifest track ids are ``musiccaps_<ytid>_<start>_<end>``; the public CSV is
+    keyed by bare ``ytid``. Returns an empty set when no manifest exists yet, in
+    which case the caller must not silently fall back to counting everything.
+    """
+    manifest_path = resolve_path(cfg["paths"]["splits"]) / "musiccaps_manifest.csv"
+    if not manifest_path.exists():
+        return set()
+    frame = pd.read_csv(manifest_path)
+    train = frame[frame["split"] == "train"]["track_id"].astype(str)
+    return {musiccaps_ytid(t) for t in train}
+
+
+def musiccaps_ytid(track_id: str) -> str:
+    """``musiccaps_<ytid>_<start>_<end>`` -> ``<ytid>``.
+
+    Split from the right rather than pattern-matched: YouTube ids themselves
+    contain ``-`` and ``_`` (``-0Gj8-vB1q4``), so stripping the known prefix and
+    the two trailing integers is the only decomposition that survives them.
+    """
+    stem = str(track_id)
+    if stem.startswith("musiccaps_"):
+        stem = stem[len("musiccaps_"):]
+    parts = stem.rsplit("_", 2)
+    return parts[0] if len(parts) == 3 else stem
+
+
+def build_musiccaps_tag_vocab(cfg, k: int = 50, split: str = "train") -> tuple[list, dict]:
+    """Top-k MusicCaps aspects **counted on the train split only** (A7.3).
 
     Measured on the real corpus: of MusicCaps' 10.7 aspects per clip, only
     **0.52** appear in the MTAT top-50, and **62% of clips match none of it at
@@ -929,6 +958,19 @@ def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
     MusicCaps aspects are free text (12,023 distinct strings), so this takes the
     k most frequent after case and whitespace normalisation. Coverage is
     returned alongside so the choice is auditable rather than assumed.
+
+    **Why the split restriction matters.** Choosing *which labels exist* by
+    frequency over the whole corpus lets test-split annotations decide the
+    vocabulary, which is label information crossing the split boundary before a
+    single parameter is trained. It is not hypothetical here: counting over all
+    5,521 clips instead of the 2,095 train clips swaps **7 of the 50** tags
+    (``e-guitar``, ``fun``, ``keyboard harmony``, ``loud``, ``poor audio
+    quality``, ``spirited``, ``youthful`` in, ``calming``, ``classical``,
+    ``joyful``, ``keyboard``, ``lively``, ``melodic singing``, ``no other
+    instruments`` out). The MTAT vocabulary was checked the same way and is
+    unaffected -- its top-50 *set* is identical either way, only the frequency
+    ordering moves -- which is why MTAT-scored results did not need re-running
+    and the MusicCaps ones did.
     """
     paths = cfg["datasets"]["musiccaps"]
     csv_path = resolve_path(paths["csv"])
@@ -936,13 +978,25 @@ def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
         return [], {}
 
     source = pd.read_csv(csv_path)
+    keep_ids = musiccaps_train_ytids(cfg) if split == "train" else None
+    if split == "train" and not keep_ids:
+        raise RuntimeError(
+            "cannot build a train-only MusicCaps vocabulary before the "
+            "manifest exists; build splits first, or pass split='all' and say "
+            "so in the report"
+        )
+
     counts: dict[str, int] = {}
     per_clip: list[list[str]] = []
+    n_counted = 0
     for record in source.itertuples(index=False):
         aspects = [re.sub(r"\s+", " ", str(a).strip().lower())
                    for a in _parse_aspect_list(getattr(record, "aspect_list", ""))]
         aspects = [a for a in aspects if a]
         per_clip.append(aspects)
+        if keep_ids is not None and str(getattr(record, "ytid", "")) not in keep_ids:
+            continue                      # counted for coverage, not for selection
+        n_counted += 1
         for aspect in set(aspects):
             counts[aspect] = counts.get(aspect, 0) + 1
 
@@ -950,6 +1004,9 @@ def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
     chosen = set(vocab)
     hits = [sum(1 for a in aspects if a in chosen) for aspects in per_clip]
     coverage = {
+        "split_used": split,
+        "n_clips_counted": n_counted,
+        "n_clips_in_csv": int(len(source)),
         "n_distinct_aspects": len(counts),
         "vocab_size": len(vocab),
         "mean_aspects_per_clip": float(np.mean([len(a) for a in per_clip])) if per_clip else 0.0,
@@ -959,9 +1016,9 @@ def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
         "most_frequent": vocab[:10],
     }
     LOGGER.info(
-        "MusicCaps tag vocabulary: %d distinct aspects -> top %d; mean %.2f labels "
-        "per clip, %.1f%% of clips left with none",
-        coverage["n_distinct_aspects"], len(vocab),
+        "MusicCaps tag vocabulary (%s split, %d clips): %d distinct aspects -> "
+        "top %d; mean %.2f labels per clip, %.1f%% of clips left with none",
+        split, n_counted, coverage["n_distinct_aspects"], len(vocab),
         coverage["mean_labels_per_clip"], coverage["clips_with_no_label_pct"],
     )
     return vocab, coverage
@@ -1315,30 +1372,62 @@ def main(argv=None) -> int:
                         help="drop manifest rows with no cached features")
     parser.add_argument("--no-reconcile", action="store_true",
                         help="skip cross-corpus artist reconciliation (not advised)")
+    parser.add_argument("--vocab-only", action="store_true",
+                        help="re-derive the tag vocabularies from the manifests "
+                             "already on disk, without rebuilding any split")
     parser.add_argument("--override", nargs="*", default=[])
     args = parser.parse_args(argv)
 
     cfg = load_config(args.config, parse_overrides(args.override))
-    frames = build_all_splits(cfg, validate_audio=args.validate_audio,
-                              reconcile=not args.no_reconcile)
-    pruned = prune_to_cache(cfg) if args.prune_to_cache else {}
+    if args.vocab_only:
+        splits_dir = resolve_path(cfg["paths"]["splits"])
+        # the leaky literature variant is kept alongside as a comparison row, so
+        # it has to be reloaded too or --vocab-only silently shrinks the summary
+        sources = {name: splits_dir / f"{name}_manifest.csv"
+                   for name in ("mtat", "fma", "deam", "musiccaps", "lmd")}
+        sources["mtat_literature"] = splits_dir / "mtat_manifest_literature.csv"
+        frames = {name: pd.read_csv(path) for name, path in sources.items()
+                  if path.exists()}
+        if not frames:
+            raise SystemExit(f"--vocab-only needs manifests in {splits_dir}")
+        LOGGER.info("--vocab-only: reusing manifests for %s",
+                    ", ".join(sorted(frames)))
+    else:
+        frames = build_all_splits(cfg, validate_audio=args.validate_audio,
+                                  reconcile=not args.no_reconcile)
+    pruned = prune_to_cache(cfg) if args.prune_to_cache and not args.vocab_only else {}
     if pruned:
         frames = {name: (pd.read_csv(resolve_path(cfg["paths"]["splits"]) /
                                      f"{name}_manifest.csv")
                          if name in pruned else frame)
                   for name, frame in frames.items()}
 
+    # A7.3: both vocabularies are selected on the TRAIN split only. Picking
+    # which labels exist by frequency over the whole corpus lets test-split
+    # annotations decide the label space -- label information crossing the split
+    # boundary before any parameter is trained.
     vocab: list[str] = []
     if len(frames.get("mtat", [])):
         ann_path = resolve_path(cfg["datasets"]["mtat"]["annotations"])
         if ann_path.exists():
+            ann = pd.read_csv(ann_path, sep="\t")
+            ann["clip_id"] = ann["clip_id"].astype(str)
+            mtat_frame = frames["mtat"]
+            train_ids = set(
+                mtat_frame[mtat_frame["split"] == "train"]["track_id"]
+                .astype(str).str.removeprefix("mtat_")
+            )
+            train_ann = ann[ann["clip_id"].isin(train_ids)] if train_ids else ann
             _, vocab = reduce_to_top_k_tags(
-                pd.read_csv(ann_path, sep="\t"),
+                train_ann,
                 k=int(cfg["tags"]["top_k"]),
                 merge_synonyms=bool(cfg["tags"]["merge_synonyms"]),
             )
             save_json({"tags": vocab, "top_k": int(cfg["tags"]["top_k"]),
-                       "merge_synonyms": bool(cfg["tags"]["merge_synonyms"])},
+                       "merge_synonyms": bool(cfg["tags"]["merge_synonyms"]),
+                       "split_used": "train" if train_ids else "all",
+                       "n_clips_counted": int(len(train_ann)),
+                       "n_clips_in_annotations": int(len(ann))},
                       ensure_dir(cfg["paths"]["splits"]) / "tag_vocab.json")
 
     # MusicCaps needs its own vocabulary; see build_musiccaps_tag_vocab for why
@@ -1346,10 +1435,12 @@ def main(argv=None) -> int:
     if len(frames.get("musiccaps", [])):
         try:
             mc_vocab, mc_coverage = build_musiccaps_tag_vocab(
-                cfg, k=int(cfg["tags"]["top_k"]))
+                cfg, k=int(cfg["tags"]["top_k"]), split="train")
             if mc_vocab:
                 save_json({"tags": mc_vocab, "top_k": int(cfg["tags"]["top_k"]),
-                           "source": "musiccaps_aspect_list", "coverage": mc_coverage},
+                           "source": "musiccaps_aspect_list",
+                           "split_used": mc_coverage.get("split_used", "train"),
+                           "coverage": mc_coverage},
                           ensure_dir(cfg["paths"]["splits"]) / "musiccaps_tag_vocab.json")
         except Exception as exc:
             LOGGER.warning("could not build the MusicCaps vocabulary: %s", exc)
