@@ -13,7 +13,7 @@ EPOCHS ?=
 OVERRIDE := $(if $(EPOCHS),--override train.epochs=$(EPOCHS),)
 TRAIN    := $(PYTHON) -m src.train --config $(CONFIG) --device $(DEVICE) --seed $(SEED)
 
-.PHONY: help setup verify-data splits features graphs smoke \
+.PHONY: report mel-cache vocab thresholds help setup verify-data splits features graphs smoke \
         task1 task2 task3 task4 all-tasks baselines evaluate test lint clean clean-results
 
 help:
@@ -32,6 +32,10 @@ help:
 	@echo "  probe-env     A0.2 check BERT checkpoints load with working attentions"
 	@echo "  probe-vram    A0.4 measure real peak VRAM per config on this GPU"
 	@echo "  kaggle-payload build the upload archive (graphs + text, never mel caches)"
+	@echo "  mel-cache     A7.2 full-resolution mel cache for B2 (~5.8 GB, ~45 min)"
+	@echo "  vocab         A7.3 re-derive both tag vocabularies, train split only"
+	@echo "  thresholds    A7.4 bootstrap the val-tuned thresholds (100 replicates)"
+	@echo "  report        fill and structurally check report/final_report.tex"
 	@echo "  test          pytest"
 	@echo "  clean         remove caches, checkpoints and generated results"
 
@@ -106,6 +110,27 @@ baselines:
 
 evaluate:
 	$(PYTHON) -m src.evaluate --config $(CONFIG) --device $(DEVICE)
+
+# ---- A7 -------------------------------------------------------------------
+# B2 reads mels_full_{corpus}.h5, not the 256-column pooled cache. Building it
+# is the expensive prerequisite for the CNN baseline being worth reporting.
+mel-cache:
+	$(PYTHON) scripts/build_mel_cache.py --config $(CONFIG) --datasets mtat,fma
+
+# Re-derives tag_vocab.json and musiccaps_tag_vocab.json from the manifests
+# already on disk. Cheap, and safe to run any time the splits change.
+vocab:
+	$(PYTHON) -m src.splits --config $(CONFIG) --vocab-only
+
+thresholds:
+	$(PYTHON) scripts/threshold_bootstrap.py --config $(CONFIG) --n-boot 100
+
+# The living report: numbers injected from results/, then structurally checked
+# because there is no LaTeX toolchain here to catch a broken macro.
+report:
+	$(PYTHON) scripts/plot_genre_confusion.py --config $(CONFIG)
+	$(PYTHON) report/fill_report.py
+	$(PYTHON) report/check_tex.py --update
 
 # ---- quality ----------------------------------------------------------------
 test:

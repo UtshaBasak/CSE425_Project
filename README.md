@@ -8,15 +8,72 @@ before the real feature caches exist.
 | | Task | Input | Output | Headline metric |
 |---|---|---|---|---|
 | **T1** | BERT tag classifier | caption / tag text | 50 multi-label tags | macro-F1 |
-| **T2** | GNN on structure graphs | audio-only segment graph | 50 multi-label tags | macro-F1 |
+| **T2** | GNN on structure graphs | audio-only segment graph | **8 FMA genres** (headline) and 50 MTAT tags | accuracy + macro-F1 / macro-F1 |
 | **T3** | Cross-attention fusion | graph + text | tags **and** valence/arousal | macro-F1, MAE, R² |
 | **T4** | Contrastive dual encoder | graph ↔ caption | retrieval ranking | R@1/5/10, medR, MRR |
 | **B1** | Random / majority | — | tags | macro-F1 |
-| **B2** | Mel CNN | log-mel patches | tags | macro-F1 |
+| **B2** | Short-chunk mel CNN | 3 s excerpts, native-resolution log-mel | genres and tags | accuracy + macro-F1 / macro-F1 |
 | **B3** | BERT-only | text | tags | macro-F1 |
 | **B4** | PCA + MLP | mean-pooled features | tags | macro-F1 |
 
 ---
+
+## Four things this project does differently, and why
+
+Each of these was measured, not assumed, and each changed a number that was
+already written down. They are the parts most worth copying.
+
+**1. The label vocabulary is chosen on the training split.** Ranking tag
+frequency over a whole corpus lets test-split annotations decide which labels
+exist, before any parameter is trained. On MusicCaps that swaps 7 of the 50
+tags. On MagnaTagATune it happens to swap none -- the top-50 set is identical
+either way -- which is exactly why it has to be checked rather than argued
+about. `make vocab` re-derives both, and both files record `split_used`.
+
+**2. The input text is masked, and the cost of not masking is reported.**
+MusicCaps captions are written *from* the aspect list that supplies the labels,
+so a model reading the raw caption is doing string matching. Two runs identical
+except for masking differ by a large margin in macro-F1, and that gap is
+reported as a result rather than quietly avoided. MagnaTagATune ships no
+captions at all, so its text channel is `clip_info` metadata -- feeding a
+track's own tag string back in would be circular.
+
+**3. Baselines are equalised on compute, not on parameter count.** B2 was
+originally width-searched to match the GNN's parameter count, which sounds fair
+and is not: convolutional weights are reused at every time-frequency position,
+so the same count buys wildly different amounts of computation, and matching it
+starved the CNN to an implausible score. Both models now get the same GPU, epoch
+cap and early-stopping rule, and every result carries `trainable_params` and
+`wall_clock_s`. `target_params` raises if anyone tries to bring it back.
+
+**4. Threshold tuning is treated as a fit, and its variance is measured.**
+Per-tag thresholds are tuned on validation and frozen before test is touched --
+but MagnaTagATune's validation split is 977 clips from 14 artists, so that fit
+is itself noisy. `make thresholds` resamples validation 100 times, re-tunes on
+each replicate, and applies each threshold vector to the fixed test split. If
+the resulting spread exceeds 0.02 macro-F1, every table must carry the
+fixed-0.5 number alongside the tuned one; the verdict is written into
+`results/threshold_bootstrap.json` so it cannot be reinterpreted later.
+
+## The report
+
+`report/final_report.tex` is the living document, in IEEEtran two-column form.
+There is no LaTeX toolchain in this repository, so it is written to be compiled
+elsewhere -- paste it into a fresh Overleaf *IEEE Conference* project, copy the
+PNGs from `results/plots/` into `figures/`, and build with pdfLaTeX.
+
+Two scripts stand in for the missing compiler:
+
+```bash
+python report/fill_report.py          # inject numbers from results/*.json
+python report/check_tex.py --update   # structural checks + page-count estimate
+```
+
+The prose contains **no literal numbers** -- only macros, all defined in a
+generated block. A result that does not exist yet renders as *pending* and the
+script names it, so a stale figure cannot survive a re-run and a missing one
+cannot hide. `report/final_report.md` is a superseded draft kept only because
+`report/build_report.py` renders it as a quick preview.
 
 ## Installation
 
@@ -334,7 +391,7 @@ gnn-bert-music-context/
     synthetic.py        contract-compliant fake data
     bert_encoder.py     T1 / B3
     gnn_model.py        T2 + the hetero variant
-    cnn_baseline.py     B2 (parameter-matched)
+    cnn_baseline.py     B2 short-chunk CNN (NOT parameter-matched -- see A7.2)
     baselines.py        B1, B4
     fusion_model.py     T3 + masked_multitask_loss
     contrastive.py      T4

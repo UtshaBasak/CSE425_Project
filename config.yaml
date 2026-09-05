@@ -231,7 +231,15 @@ baselines:
   cnn_eval_chunks: 9          # 29 s MTAT clip / 3 s, non-overlapping
   cnn_batch_size: 32
   cnn_eval_batch_size: 8      # x9 chunks = 72; 32x9 measures 2.5 GB reserved
-  cnn_workers: 3              # gzip decode is the input bottleneck, not the GPU
+  # Measured on the 16,881-clip MTAT train split, input path only:
+  #   workers=0  108 ms/batch  0.95 min/epoch
+  #   workers=2   54 ms/batch  0.47 min/epoch
+  #   workers=3   15 ms/batch  0.13 min/epoch
+  # 3 is fastest, but spawn workers re-import torch and 4 of them alongside a
+  # resident BERT is what produced WinError 1455 (paging file too small) in
+  # phase A. 2 takes half the remaining risk for half the remaining time; the
+  # ~24 min it gives up over 30 epochs is not worth losing a two-hour run to.
+  cnn_workers: 2
   cnn_use_accumulation: false # batch 32 fits; turn on if the card gets smaller
 
 synthetic:
