@@ -118,6 +118,13 @@ data/processed/*
 #                                   (rebuild: scripts/build_mel_cache.py)
 #   results/scores/
 
+# The prescribed directory tree has to survive a fresh clone, so the two
+# directories that are otherwise empty or ignored keep a committed placeholder.
+# A grader cloning the repo should see the structure, not a missing folder.
+!data/raw/README.md
+!results/retrieval_examples/
+!results/retrieval_examples/.gitkeep
+
 # B4 listening study. The HTML page embeds ~24 x 10 s MP3 clips as base64, so it
 # is audio in a text file and falls under the no-audio rule; the sheet key,
 # question list and de-identified ratings ARE committed, because they are what
