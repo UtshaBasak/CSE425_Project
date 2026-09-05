@@ -19,5 +19,12 @@
     "micro_f1": 0.4139631456008305,
     "mean_auc_pr": 0.38411103654827206,
     "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_masked_full_ft.json"
+  },
+  {
+    "tag": "musiccaps_caption_raw_full_ft",
+    "macro_f1": 0.5669801746736773,
+    "micro_f1": 0.6341128970823494,
+    "mean_auc_pr": 0.6182151881437872,
+    "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_raw_full_ft.json"
   }
 ]

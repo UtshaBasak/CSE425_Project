@@ -438,6 +438,53 @@ Consequences, applied without exception to every ablation table:
   not count appendix material against the limit.
 
 
+
+## Phase B1 - Task 3 fusion (22 marks)
+
+Code complete and tested; the runs are queued behind the A7 pipeline and the
+B0.1 controls, because all three want the same GPU.
+
+- [x] **B1.2 DEAM imbalance handled explicitly**, three separate problems:
+
+  | problem | what it does if ignored | fix |
+  |---|---|---|
+  | 1:14 size ratio | emotion head sees each DEAM track ~14x per MTAT epoch and overfits | `multitask.batch_ratio: [4, 1]`, recorded in every result |
+  | raw 1-9 targets | MSE of 4-10 against per-tag BCE of 0.2; emotion takes the gradient | standardise with train-split stats |
+  | one blended loss | a collapsing head hides inside a falling total | per-term losses printed every epoch |
+
+  Train-split statistics are valence 4.901 +- 1.206 and arousal 4.861 +- 1.273
+  over 1,277 tracks, cached to `data/splits/emotion_stats.json`;
+  `compute_emotion_stats` refuses any split but train.
+
+  **The companion change matters as much as the standardisation.** Predictions
+  are inverted before MAE and RMSE, so the report stays on DEAM's original 1-9
+  scale. R2 is invariant to the affine transform; MAE is not, and an "MAE of
+  0.8" in standard deviations would mean nothing to a reader. A test asserts the
+  inversion happens and that skipping it makes a perfect model look wrong.
+
+  Early stopping follows the **tagging** metric with emotion auxiliary, per the
+  PDF's `L_aux` framing: a blended criterion lets a collapsing tag head hide
+  behind a good regression fit.
+
+- [x] **B1.3 ablation harness** (`scripts/fusion_ablation.py`) with **two
+  documented budgets**: distilbert at a reduced epoch count held *identical*
+  across all seven modes for the sweep, then bert-base at full budget for the
+  headline rows only. The budget is stamped into every result file so the two
+  tables cannot be merged by accident.
+
+  The noise-floor rule is enforced **in code, not in prose**: mean +- sd across
+  seeds on every row, a delta-vs-best column, every row inside 0.0288 flagged,
+  and `summarise()` returns `best_mode = None` when the top rows overlap. Three
+  tests cover it, including one asserting no winner is named among
+  indistinguishable rows.
+
+- [ ] **B1.1 both domains** - MTAT metadata primary, MusicCaps `caption_masked`
+  secondary. Queued. The contrast is the finding: fusion gain should scale with
+  text informativeness, so a small or absent gain on MTAT metadata is the
+  *expected* result and is explained by the text source rather than being a
+  failure.
+
+
 ### Why Task 1 needs no graphs
 
 Task 1 is text-only, so the payload is 3.4 MB rather than the ~1.4 GB a
