@@ -1,7 +1,7 @@
 # PROGRESS
 
 Last session ended: (in progress)
-Currently resuming at: A1.1
+Currently resuming at: A3.1
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -16,17 +16,19 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 ## Phase A0 GATE: PASSED — pytest 148/148, reports written, artifacts quarantined
 
 ## Phase A1 — Data verification
-- [~] A1.1 verify_datasets.py on real data, output archived
-- [ ] A1.2 MusicCaps retry pass launched (background)
-- [ ] A1.3 FMA errata cross-check
+- [x] A1.1 verify_datasets.py on real data, output archived
+- [~] A1.2 MusicCaps retry pass RUNNING in background (see note below)
+- [x] A1.3 FMA errata cross-check
 
 ## Phase A2 — Splits
-- [ ] A2.1 All 5 manifests built
-- [ ] A2.2 Leakage assertions pass on all
-- [ ] A2.3 Both artist-disjoint variants recorded for MTAT
+- [x] A2.1 All 5 manifests built
+- [x] A2.2 Leakage assertions pass on all (incl. the combined manifest)
+- [x] A2.3 Both artist-disjoint variants recorded for MTAT
+
+## Phase A2 GATE: PASSED — all leakage assertions green, both MTAT variants persisted
 
 ## Phase A3 — Feature extraction (LONG)
-- [ ] A3.1 Train-only norm stats plan verified
+- [~] A3.1 Train-only norm stats plan verified
 - [ ] A3.2 MTAT extracted
 - [ ] A3.3 FMA-small extracted
 - [ ] A3.4 MusicCaps extracted
@@ -87,3 +89,27 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 - **A0.6 MTAT `Xtext` was the degenerate case the spec warns about** — the
   manifest literally put the tag string into `text`. Now metadata-only, with a
   regression test.
+
+### A1/A2 findings
+
+- **ffmpeg was never installed.** `yt-dlp` cannot trim to the 10 s window without
+  it, so A1.2 would have failed every clip. Installed `Gyan.FFmpeg 9.0.1` via
+  winget. Feature extraction does *not* need it — libsndfile decodes the mp3s we
+  already have — so Phase A3 was never blocked.
+- **A1.3 FMA errata: exactly 3 bad tracks**, and two independent methods agree.
+  `not_found.pickle` covers the medium/large subsets and has zero overlap with
+  fma_small, so it would have caught nothing on its own; a size sweep of the disk
+  found 99134, 108925 and 133297 at 1–2 KB each, all of which fail to decode.
+  Manifest is now 7,997.
+- **A2 fixed the cross-corpus leak from A0.1.** 39 artists spanned corpora
+  (e.g. present in both FMA-train and DEAM-test) because each corpus assigned its
+  splits independently. Reconciling moved 52 rows — deam 46, fma 6 — and the
+  leakage assertion now runs on the *concatenation*, which is the object Task 3
+  and the evaluation actually load.
+- **MTAT val is thin after repair**: 977 clips from just 14 artists. That is the
+  honest cost of artist-disjointness on a 229-artist corpus, and it means val
+  macro-F1 will be noisy. Worth a sentence in the report.
+- **MusicCaps is growing while we work.** The A1.2 recovery pass is succeeding on
+  ~61% of retries. Pre-recovery gallery was **1,481**; it has already passed
+  1,597. Final counts must be re-recorded at the end of Phase A, with both
+  numbers reported.

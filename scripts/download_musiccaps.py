@@ -41,8 +41,25 @@ LOGGER = get_logger("gbmc.musiccaps")
 STATUSES = ("ok", "missing", "corrupt", "wrong_duration")
 
 
+def _find_binary(name: str) -> str | None:
+    """Locate a helper binary on PATH, or next to the running interpreter.
+
+    `pip install yt-dlp` puts `yt-dlp.exe` in the venv's Scripts/ directory,
+    which is only on PATH when the venv is activated. Refusing to run because a
+    binary we shipped ourselves is "missing" is a bad failure mode.
+    """
+    found = shutil.which(name)
+    if found:
+        return found
+    here = Path(sys.executable).parent
+    for candidate in (here / name, here / f"{name}.exe", here / "Scripts" / f"{name}.exe"):
+        if candidate.exists():
+            return str(candidate)
+    return None
+
+
 def _have(binary: str) -> bool:
-    return shutil.which(binary) is not None
+    return _find_binary(binary) is not None
 
 
 def _probe_duration(path: Path) -> float | None:
@@ -78,7 +95,7 @@ def download_clip(ytid: str, start_s: int, end_s: int, out_dir: Path,
 
     url = f"https://www.youtube.com/watch?v={ytid}"
     command = [
-        "yt-dlp", "--quiet", "--no-warnings", "--no-playlist",
+        _find_binary("yt-dlp") or "yt-dlp", "--quiet", "--no-warnings", "--no-playlist",
         "-f", "bestaudio", "-x", "--audio-format", fmt,
         # download only the needed window; --force-keyframes-at-cuts keeps the
         # trim accurate, which matters when the target is exactly 10 seconds
@@ -138,10 +155,17 @@ def main(argv=None) -> int:
                      "https://www.kaggle.com/datasets/googleai/musiccaps first", csv_path)
         return 1
     if not _have("yt-dlp"):
-        LOGGER.error("yt-dlp is not on PATH (`pip install yt-dlp`)")
+        LOGGER.error("yt-dlp not found on PATH or beside %s (`pip install yt-dlp`)",
+                     sys.executable)
         return 1
     if not _have("ffmpeg"):
-        LOGGER.error("ffmpeg is not on PATH; yt-dlp cannot trim or transcode without it")
+        LOGGER.error(
+            "ffmpeg not found. yt-dlp cannot trim to the 10 s window or transcode "
+            "without it, so every clip would fail. Install it "
+            "(winget install Gyan.FFmpeg / apt install ffmpeg / brew install ffmpeg) "
+            "and re-run. Note that feature extraction does NOT need ffmpeg -- "
+            "libsndfile decodes the mp3s we already have -- so Phase A3 is not blocked."
+        )
         return 1
 
     source = pd.read_csv(csv_path)          # read-only: never modified

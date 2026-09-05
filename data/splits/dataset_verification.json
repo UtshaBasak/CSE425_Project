@@ -25,11 +25,11 @@
         "rock"
       ],
       "decode_check": {
-        "sampled": 2,
-        "decoded": 2,
+        "sampled": 30,
+        "decoded": 30,
         "failed": 0,
-        "mean_duration_s": 29.28925,
-        "min_duration_s": 29.2885,
+        "mean_duration_s": 29.27751666666667,
+        "min_duration_s": 29.26575,
         "max_duration_s": 29.29,
         "failures": []
       }
@@ -59,11 +59,11 @@
         "test": 800
       },
       "decode_check": {
-        "sampled": 2,
-        "decoded": 2,
+        "sampled": 30,
+        "decoded": 30,
         "failed": 0,
-        "mean_duration_s": 30.00269841269841,
-        "min_duration_s": 30.00269841269841,
+        "mean_duration_s": 29.988265263605445,
+        "min_duration_s": 29.976575963718822,
         "max_duration_s": 30.00269841269841,
         "failures": []
       }
@@ -78,12 +78,12 @@
       "static_annotation_rows": 1802,
       "dynamic_annotations_exist": true,
       "decode_check": {
-        "sampled": 2,
-        "decoded": 2,
+        "sampled": 30,
+        "decoded": 30,
         "failed": 0,
-        "mean_duration_s": 45.01744897959183,
-        "min_duration_s": 45.000022675736965,
-        "max_duration_s": 45.03487528344671,
+        "mean_duration_s": 57.6315993953137,
+        "min_duration_s": 44.860022675736964,
+        "max_duration_s": 284.1785260770975,
         "failures": []
       }
     },

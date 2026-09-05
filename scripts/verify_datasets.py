@@ -194,10 +194,16 @@ def check_musiccaps(cfg, full_decode: bool) -> dict:
         log.to_csv(splits_dir / "musiccaps_download_log.csv", index=False)
         out["download_log"] = str(splits_dir / "musiccaps_download_log.csv")
     if len(manifest):
-        from src.splits import write_manifest
+        # Rebuild through build_musiccaps_splits, not write_manifest, so the
+        # text-variant sidecar is regenerated in the same breath. After a
+        # --retry-failed pass the manifest gains rows, and a stale sidecar would
+        # silently leave those rows on the RAW caption -- i.e. label leakage.
+        from src.splits import build_musiccaps_splits
 
-        write_manifest(manifest, splits_dir / "musiccaps_manifest.csv")
+        refreshed = build_musiccaps_splits(cfg, verify_decode=full_decode)
         out["manifest"] = str(splits_dir / "musiccaps_manifest.csv")
+        out["text_variants"] = str(splits_dir / "musiccaps_text_variants.csv")
+        out["usable_rows"] = int(len(refreshed))
     return out
 
 
