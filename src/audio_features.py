@@ -15,6 +15,7 @@ against the indices.
 """
 from __future__ import annotations
 
+import contextlib
 import json
 import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
@@ -42,6 +43,7 @@ __all__ = [
     "feature_names",
     "verify_cache",
     "cache_keys_path",
+    "pooled_log_mel",
 ]
 
 N_POOLED_MEL_BANDS = 16
@@ -361,19 +363,49 @@ def apply_norm(feats, stats: dict) -> np.ndarray:
 # --------------------------------------------------------------------------- #
 # the HDF5 cache
 # --------------------------------------------------------------------------- #
-def _extract_one(args) -> tuple[str, "np.ndarray | None", str]:
-    """Worker: decode one file and return its segment features (or the error)."""
-    track_id, audio_path, cfg, sr, max_duration = args
+def pooled_log_mel(y: np.ndarray, sr: int, cfg, n_frames: int = 256) -> np.ndarray:
+    """Whole-track log-mel, time-pooled to exactly ``n_frames`` columns.
+
+    Sized for fairness rather than fidelity. The CNN baseline must see the same
+    span of music as the GNN, so this covers the **whole** track; storing it at
+    native resolution would cost ~8 GB for MTAT alone, to serve a model that
+    pools over time anyway. At 256 frames over 30 s the CNN gets ~0.12 s
+    resolution against 32 GNN segments at ~1 s, so the baseline is if anything
+    favoured -- the right direction for a fair comparison.
+    """
+    mel = log_mel(y, sr, cfg)                       # [n_mels, T]
+    width = mel.shape[1]
+    if width == 0:
+        return np.zeros((mel.shape[0], int(n_frames)), dtype=np.float32)
+    edges = np.linspace(0, width, int(n_frames) + 1).round().astype(int)
+    out = np.empty((mel.shape[0], int(n_frames)), dtype=np.float32)
+    for i in range(int(n_frames)):
+        lo, hi = edges[i], max(edges[i + 1], edges[i] + 1)
+        out[:, i] = mel[:, lo:min(hi, width)].mean(axis=1)
+    return out
+
+
+def _extract_one(args) -> tuple[str, "np.ndarray | None", "np.ndarray | None", str]:
+    """Worker: decode one file once and return both cached views of it.
+
+    Decoding dominates the cost (25k mp3 decodes for MTAT), so the segment
+    features and the CNN baseline mel patch are produced from a single decode
+    rather than two passes over the corpus.
+    """
+    track_id, audio_path, cfg, sr, max_duration, want_mel, mel_frames = args
     try:
         y = load_audio(audio_path, sr=sr, mono=True, duration=max_duration)
         feats = segment_features(y, sr, cfg)
-        return str(track_id), feats.astype(np.float16), "ok"
+        mel = (pooled_log_mel(y, sr, cfg, mel_frames).astype(np.float16)
+               if want_mel else None)
+        return str(track_id), feats.astype(np.float16), mel, "ok"
     except Exception as exc:
-        return str(track_id), None, f"{type(exc).__name__}: {exc}"
+        return str(track_id), None, None, f"{type(exc).__name__}: {exc}"
 
 
 def extract_dataset(manifest, out_h5, cfg, n_workers: int = 6,
-                    overwrite: bool = False, log_path=None) -> dict:
+                    overwrite: bool = False, log_path=None, mel_h5=None,
+                    mel_frames: int = 256) -> dict:
     """Extract features for a manifest into a resumable float16 HDF5 cache.
 
     Resumability is not a nicety: 25k MTAT clips take hours on 6 cores and this
@@ -408,8 +440,13 @@ def extract_dataset(manifest, out_h5, cfg, n_workers: int = 6,
     mode = "w" if overwrite else "a"
     stats = {"total": int(len(manifest)), "written": 0, "skipped": 0, "failed": 0}
     failures: list[dict] = []
+    mel_path = resolve_path(mel_h5) if mel_h5 else None
+    if mel_path is not None:
+        mel_path.parent.mkdir(parents=True, exist_ok=True)
 
-    with h5py.File(out_path, mode) as store:
+    with h5py.File(out_path, mode) as store, \
+            (h5py.File(mel_path, mode) if mel_path is not None
+             else contextlib.nullcontext()) as mel_store:
         existing = set(store.keys())
         todo = []
         for row in manifest.itertuples(index=False):
@@ -417,7 +454,8 @@ def extract_dataset(manifest, out_h5, cfg, n_workers: int = 6,
             if key in existing:
                 stats["skipped"] += 1
                 continue
-            todo.append((key, row.audio_path, cfg_plain, sr, max_duration))
+            todo.append((key, row.audio_path, cfg_plain, sr, max_duration,
+                         mel_store is not None, int(mel_frames)))
 
         LOGGER.info(
             "extract_dataset: %d tracks, %d already cached, %d to do -> %s",
@@ -431,20 +469,28 @@ def extract_dataset(manifest, out_h5, cfg, n_workers: int = 6,
         n_workers = max(1, int(n_workers))
         if n_workers == 1 or len(todo) < 4:
             results = (_extract_one(item) for item in todo)
-            for key, feats, status in results:
-                _write_result(store, key, feats, status, stats, failures)
+            for key, feats, mel, status in results:
+                _write_result(store, key, feats, status, stats, failures, mel_store, mel)
         else:
             with ProcessPoolExecutor(max_workers=n_workers) as pool:
                 futures = {pool.submit(_extract_one, item): item[0] for item in todo}
                 for future in as_completed(futures):
-                    key, feats, status = future.result()
-                    _write_result(store, key, feats, status, stats, failures)
+                    key, feats, mel, status = future.result()
+                    _write_result(store, key, feats, status, stats, failures,
+                                  mel_store, mel)
                     if stats["written"] % 200 == 0:
                         _write_key_sidecar(out_path, set(store.keys()))
+                        LOGGER.info("  %d written, %d failed, %d to go",
+                                    stats["written"], stats["failed"],
+                                    len(todo) - stats["written"] - stats["failed"])
 
         store.attrs["feature_dim"] = NODE_FEAT_DIM
         store.attrs["sample_rate"] = sr
         store.attrs["layout"] = json.dumps(FEATURE_LAYOUT)
+        if mel_store is not None:
+            mel_store.attrs["n_mels"] = int(cfg["audio"]["n_mels"])
+            mel_store.attrs["n_frames"] = int(mel_frames)
+            mel_store.attrs["pooling"] = "whole track, mean-pooled to n_frames"
         final_keys = set(store.keys())
     _write_key_sidecar(out_path, final_keys)
 
@@ -454,7 +500,8 @@ def extract_dataset(manifest, out_h5, cfg, n_workers: int = 6,
     return stats
 
 
-def _write_result(store, key, feats, status, stats, failures) -> None:
+def _write_result(store, key, feats, status, stats, failures,
+                  mel_store=None, mel=None) -> None:
     if feats is None:
         stats["failed"] += 1
         failures.append({"track_id": key, "error": status})
@@ -462,6 +509,11 @@ def _write_result(store, key, feats, status, stats, failures) -> None:
     if key in store:  # pragma: no cover - concurrent re-run
         del store[key]
     store.create_dataset(key, data=feats, dtype="float16", compression="lzf")
+    if mel_store is not None and mel is not None:
+        if key in mel_store:  # pragma: no cover - concurrent re-run
+            del mel_store[key]
+        mel_store.create_dataset(key, data=mel, dtype="float16", compression="lzf")
+        mel_store.flush()
     # Flush per item, not per batch. HDF5 append is not transactional, so the
     # only bound on damage from a kill -9 is how much sits unflushed; one track
     # is an acceptable loss, two hundred is not.
@@ -529,11 +581,19 @@ def verify_cache(h5_path) -> dict:
 
 
 def main(argv=None) -> int:
-    """CLI: extract the feature cache for every manifest under paths.splits."""
+    """CLI: extract the feature cache for one or more datasets.
+
+    One HDF5 per dataset, not one shared file. Three reasons: a corrupt container
+    then costs one corpus rather than all of them; per-dataset normalisation
+    statistics are what the contract actually calls for; and the datasets finish
+    at wildly different times (MTAT is hours, DEAM is minutes), so separate files
+    let downstream work start on whichever is ready.
+    """
     import argparse
 
     import pandas as pd
 
+    from .splits import assert_no_leakage
     from .utils import load_config, parse_overrides
 
     parser = argparse.ArgumentParser(
@@ -546,42 +606,66 @@ def main(argv=None) -> int:
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--limit", type=int, default=None,
                         help="extract only the first N rows (for a quick trial run)")
+    parser.add_argument("--no-mel", action="store_true",
+                        help="skip the CNN-baseline mel cache")
+    parser.add_argument("--mel-frames", type=int, default=256)
+    parser.add_argument("--skip-norm-stats", action="store_true")
     parser.add_argument("--override", nargs="*", default=[])
     args = parser.parse_args(argv)
 
     cfg = load_config(args.config, parse_overrides(args.override))
     splits_dir = resolve_path(cfg["paths"]["splits"])
-    out_h5 = resolve_path(cfg["paths"]["processed"]) / "features.h5"
+    processed = resolve_path(cfg["paths"]["processed"])
+    processed.mkdir(parents=True, exist_ok=True)
 
-    frames = []
+    summary: dict = {}
     for name in args.datasets:
-        path = splits_dir / f"{name}_manifest.csv"
-        if not path.exists():
-            LOGGER.warning("no manifest for %s at %s -- run `make splits` first", name, path)
+        manifest_path = splits_dir / f"{name}_manifest.csv"
+        if not manifest_path.exists():
+            LOGGER.warning("no manifest for %s at %s -- run `make splits` first",
+                           name, manifest_path)
             continue
-        frames.append(pd.read_csv(path))
-    if not frames:
-        LOGGER.error("nothing to extract")
-        return 1
+        manifest = pd.read_csv(manifest_path)
+        if "dataset" not in manifest.columns:
+            manifest["dataset"] = name
+        # cheap insurance: never extract from a manifest that leaks
+        assert_no_leakage(manifest)
+        if args.limit:
+            manifest = manifest.head(int(args.limit))
 
-    manifest = pd.concat(frames, ignore_index=True)
-    if args.limit:
-        manifest = manifest.head(int(args.limit))
-    stats = extract_dataset(manifest, out_h5, cfg, n_workers=args.workers,
-                            overwrite=args.overwrite,
-                            log_path=resolve_path(cfg["paths"]["processed"]) /
-                            "feature_extraction_log.json")
+        out_h5 = processed / f"features_{name}.h5"
+        mel_h5 = None if args.no_mel else processed / f"mels_{name}.h5"
+        LOGGER.info("extracting %s: %d tracks -> %s", name, len(manifest), out_h5)
 
-    # normalisation statistics come from the TRAIN split only, and are reused
-    # verbatim for val and test
-    try:
-        norm = compute_norm_stats(manifest, split="train", cfg=cfg, h5_path=out_h5)
-        save_json(norm, resolve_path(cfg["paths"]["processed"]) / "norm_stats.json")
-        stats["norm_segments"] = norm["n_segments"]
-    except Exception as exc:
-        LOGGER.warning("could not compute normalisation statistics: %s", exc)
+        stats = extract_dataset(
+            manifest, out_h5, cfg, n_workers=args.workers, overwrite=args.overwrite,
+            log_path=processed / f"extract_log_{name}.json",
+            mel_h5=mel_h5, mel_frames=args.mel_frames,
+        )
 
-    print(json.dumps(stats, indent=2))
+        # A3.6: normalisation statistics come from the TRAIN split only, and the
+        # provenance is recorded so a later run can assert it rather than trust it.
+        if not args.skip_norm_stats:
+            try:
+                norm = compute_norm_stats(manifest, split="train", cfg=cfg,
+                                          h5_path=out_h5)
+                norm["dataset"] = name
+                norm["source_manifest"] = str(manifest_path)
+                norm["n_train_tracks"] = int((manifest["split"] == "train").sum())
+                save_json(norm, processed / f"norm_stats_{name}.json")
+                stats["norm_segments"] = norm["n_segments"]
+                LOGGER.info("%s norm stats: %d train segments, %d dims (train split only)",
+                            name, norm["n_segments"], norm["dim"])
+            except Exception as exc:
+                LOGGER.warning("could not compute %s normalisation statistics: %s",
+                               name, exc)
+
+        summary[name] = stats
+        LOGGER.info("%s done: %s", name,
+                    {k: v for k, v in stats.items() if k != "failures"})
+
+    save_json(summary, processed / "extract_summary.json")
+    print(json.dumps(summary, indent=2, default=str))
     return 0
 
 

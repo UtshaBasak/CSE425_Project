@@ -194,7 +194,7 @@ downloaded automatically** — run them deliberately.
 |---|---|---|---|
 | MagnaTagATune | `data/raw/mtat/` | 25,863 clips, 188 tags | folder split `0–b` train / `c` val / `d–f` test (artist-disjoint) |
 | FMA-small | `data/raw/fma/` | 8,000 × 30 s, 8 genres | official `set.split` column |
-| MusicCaps | `data/raw/musiccaps/` | 5,521 rows | **~50% of the audio is gone** — see below |
+| MusicCaps | `data/raw/musiccaps/` | 5,521 rows | **9% unavailable after recovery** (was ~50%) — see below |
 | DEAM | `data/raw/deam/` | 1,802 excerpts | valence/arousal on a 1–9 scale; artist-grouped 70/15/15 |
 | Lakh MIDI Clean | `data/raw/lmd_clean/` | ~17k MIDI files | chord-estimator validation only, not a training input |
 
@@ -215,8 +215,16 @@ never modified.** Instead:
   count is the Task 4 retrieval gallery size**, recorded in `results/metrics.json`.
   R@10 out of 1,400 and R@10 out of 2,858 are different claims.
 
-On the reference machine: 2,781 of 5,521 rows usable (50.4%) — 1,300/2,663 train
-and **1,481/2,858 eval**, so the gallery size is 1,481.
+On the reference machine, **after running the recovery pass**
+(`scripts/download_musiccaps.py --retry-failed`): **5,043 of 5,521 rows usable
+(91.3%)** — 2,409/2,663 train and
+**2,634/2,858 eval**, so the retrieval gallery is **2,634**.
+
+Before recovery it was 2,781 usable (50.4%) with a gallery of 1,481. The retry
+pass re-attempted the 2,740 previously-failed ids and succeeded on 82.4% of them,
+because most earlier failures were transient (rate limiting and timeouts) rather
+than genuinely deleted videos. **Report both numbers**: which one you have
+changes R@K materially, and a gallery that nearly doubled is not a footnote.
 
 ---
 

@@ -1,0 +1,69 @@
+{
+  "dataset": "deam",
+  "n_tracks": 3,
+  "min_lag": 3,
+  "mean_long_range_fraction": 0.7813467492260062,
+  "mean_repeat_recall": 0.8205128205128206,
+  "mean_similarity_lag": 5.938596491228071,
+  "tracks_with_isolated_nodes": 0,
+  "thresholds": {
+    "long_range_fraction": 0.3,
+    "repeat_recall": 0.3
+  },
+  "config": {
+    "window_s": 3.0,
+    "overlap": 0.5,
+    "knn_k": 4
+  },
+  "per_track": [
+    {
+      "track_id": "deam_8",
+      "dataset": "deam",
+      "num_nodes": 19,
+      "num_edges": 119,
+      "n_similarity_edges": 64,
+      "long_range_edges": 56,
+      "long_range_fraction": 0.875,
+      "mean_similarity_lag": 6.0,
+      "max_similarity_lag": 12,
+      "repeat_recall": 1.0,
+      "n_repeat_pairs_considered": 13,
+      "nodes_without_similarity_edges": 0,
+      "repetition_score": 0.9792500610482429,
+      "render": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\graph_sanity\\sanity_00_deam_8.png"
+    },
+    {
+      "track_id": "deam_43",
+      "dataset": "deam",
+      "num_nodes": 19,
+      "num_edges": 131,
+      "n_similarity_edges": 76,
+      "long_range_edges": 58,
+      "long_range_fraction": 0.7631578947368421,
+      "mean_similarity_lag": 6.815789473684211,
+      "max_similarity_lag": 18,
+      "repeat_recall": 0.7692307692307693,
+      "n_repeat_pairs_considered": 13,
+      "nodes_without_similarity_edges": 0,
+      "repetition_score": 0.9791462716264007,
+      "render": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\graph_sanity\\sanity_01_deam_43.png"
+    },
+    {
+      "track_id": "deam_41",
+      "dataset": "deam",
+      "num_nodes": 19,
+      "num_edges": 123,
+      "n_similarity_edges": 68,
+      "long_range_edges": 48,
+      "long_range_fraction": 0.7058823529411765,
+      "mean_similarity_lag": 5.0,
+      "max_similarity_lag": 17,
+      "repeat_recall": 0.6923076923076923,
+      "n_repeat_pairs_considered": 13,
+      "nodes_without_similarity_edges": 0,
+      "repetition_score": 0.959022755429963,
+      "render": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\graph_sanity\\sanity_02_deam_41.png"
+    }
+  ],
+  "passed": true
+}

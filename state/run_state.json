@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project": "gnn-bert-music-context",
   "phase": "A3",
-  "current_step": "A3.1",
+  "current_step": "A3.2-A3.5",
   "sessions": 2,
   "completed": [
     "A0.1",
@@ -17,7 +17,9 @@
     "A2.1",
     "A2.2",
     "A2.3",
-    "GATE_A2"
+    "GATE_A2",
+    "A1.2",
+    "A3.1"
   ],
   "artifacts": {
     "manifests": {
@@ -35,12 +37,25 @@
   },
   "long_jobs": {
     "musiccaps_retry": {
+      "status": "DONE",
+      "recovered": 2263,
+      "hit_rate": 0.824,
+      "gallery_before": 1481,
+      "gallery_after": 2634
+    },
+    "extraction": {
       "status": "RUNNING",
-      "started": "2026-09-05 06:03",
-      "log": "logs/mc_retry.log",
-      "total": 2740,
-      "note": "resumable; re-run the manifest builder when it finishes"
+      "started": "2026-09-05 07:06",
+      "log": "logs/extract_all.log",
+      "order": [
+        "mtat",
+        "fma",
+        "musiccaps",
+        "deam"
+      ],
+      "total_tracks": 36203,
+      "note": "item-level resumable; safe to restart"
     }
   },
-  "notes": "Gate A2 passed. MusicCaps recovery still running: pre-recovery gallery 1481, growing. Re-run src.splits at the end of Phase A."
+  "notes": "Extraction running. MusicCaps recovery complete: gallery 1481 -> 2634. A4.4 gate tooling trialled and passing on DEAM."
 }

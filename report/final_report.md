@@ -39,16 +39,30 @@ text-audio contrastive retrieval · multi-task emotion regression (DEAM).
 | MagnaTagATune | 25,863 clips | 21,361 with ≥1 top-50 tag | 82.6% | T1, T2, T3 tags |
 | FMA-small | 8,000 | 8,000 | 100% | genre probe, t-SNE colouring |
 | DEAM | 1,802 | 1,802 | 100% | valence/arousal (T3) |
-| MusicCaps | 5,521 rows | 2,781 | **50.4%** | captions (T4) |
+| MusicCaps | 5,521 rows | 5,043 | **91.3%** (was 50.4% pre-recovery) | captions (T4) |
 | Lakh MIDI Clean | ~17,256 | 17,184 | 99.6% | chord-estimator validation |
 
-**MusicCaps attrition is the headline data fact.** Roughly half the YouTube
-sources are gone. Per-split survival: **1,300/2,663 train (48.8%)** and
-**1,481/2,858 eval (51.8%)**. The eval survivor count *is* the Task 4 retrieval
-gallery size, so every R@K in Section 6 must be read against **N = 1,481**.
-Method: the source CSV is never modified; a manifest is derived by inner-joining
-against files that exist and decode, with a per-ytid status log in
-`data/splits/musiccaps_download_log.csv`.
+**MusicCaps attrition, and how much of it was recoverable.** The initial
+download left only 2,781 of 5,521 rows usable (50.4%), a gallery of 1,481. A
+recovery pass re-attempted the 2,740 failed ids and **succeeded on 82.4%** of
+them — most of the original failures were transient (rate limiting, timeouts),
+not deleted videos. Final counts: **5,043/5,521 usable
+(91.3%)**, 2,409/2,663 train
+(90.5%) and **2,634/2,858 eval
+(92.2%)**.
+
+The eval survivor count *is* the Task 4 retrieval gallery size, so every R@K in
+Section 6 must be read against **N = 2,634**. Both numbers are reported
+because they are not interchangeable: R@10 out of 1,481 and R@10 out of
+2,634 are different claims, and the pre-recovery figure is what a reader
+reproducing this from a single download pass would get.
+
+Method: the source CSV is never modified; the manifest is derived by
+inner-joining against files that exist *and decode*, with a per-ytid status log
+in `data/splits/musiccaps_download_log.csv`. Attrition is **not random** — it
+correlates with video age, region and channel deletion — so the surviving subset
+is a biased sample of the original and results should not be presented as
+MusicCaps-complete.
 
 **Split integrity.** MagnaTagATune's canonical hex-folder split (dirs `0–b`
 train, `c` val, `d–f` test) turns out **not** to be artist-disjoint: 57 artists
@@ -154,7 +168,7 @@ every run.
 | valence | [TBD] | [TBD] | [TBD] |
 | arousal | [TBD] | [TBD] | [TBD] |
 
-### 6.3 Retrieval (Task 4), gallery size N = 1,481
+### 6.3 Retrieval (Task 4), gallery size N = 2,634
 
 | Direction | R@1 | R@5 | R@10 | medR | MRR |
 |---|---|---|---|---|---|
@@ -186,8 +200,8 @@ control ratings. Without that gap the ratings do not show raters were listening.
 
 ## 9. Limitations
 
-MusicCaps attrition halves the gallery and biases it toward still-available
-videos · MTAT's 50-tag vocabulary is noisy and long-tailed even after synonym
+MusicCaps attrition still removes 8% of the eval
+gallery and biases it toward still-available videos · MTAT's 50-tag vocabulary is noisy and long-tailed even after synonym
 merging · chord estimation is template matching, not transcription ·
 4 GB of VRAM caps batch size and model scale · single-dataset emotion labels.
 

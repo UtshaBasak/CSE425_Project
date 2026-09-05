@@ -1166,3 +1166,164 @@ def test_mtat_manifest_text_is_not_the_tag_string():
         assert len(leaked) < max(2, len(tags)),  (
             f"{record['track_id']}: Xtext appears to contain its own tags {leaked}"
         )
+
+
+# --------------------------------------------------------------------------- #
+# A3.6 -- normalisation statistics must be provably train-only
+# --------------------------------------------------------------------------- #
+def test_norm_stats_files_record_train_provenance():
+    """Every persisted norm_stats file must say, in the file, that it is train."""
+    from src.utils import project_root
+
+    processed = project_root() / "data" / "processed"
+    files = sorted(processed.glob("norm_stats*.json"))
+    if not files:
+        pytest.skip("no norm stats extracted yet")
+    for path in files:
+        stats = json.loads(path.read_text(encoding="utf-8"))
+        assert stats.get("split") == "train", (
+            f"{path.name} records split={stats.get('split')!r}; normalisation "
+            "statistics must come from the train split only"
+        )
+        assert stats.get("dim") == 96
+        assert len(stats["mean"]) == 96 and len(stats["std"]) == 96
+        assert all(s > 0 for s in stats["std"]), "a zero std would divide by zero"
+
+
+def test_compute_norm_stats_uses_only_train_rows(tmp_path):
+    """Val/test rows in the manifest must not influence the statistics."""
+    import h5py
+    import pandas as pd
+
+    from src.audio_features import compute_norm_stats
+
+    h5 = tmp_path / "f.h5"
+    rng = np.random.default_rng(0)
+    train = rng.normal(0.0, 1.0, size=(10, 96)).astype(np.float16)
+    # val/test rows are wildly off-distribution: if they leak in, mean explodes
+    other = (rng.normal(0.0, 1.0, size=(10, 96)) + 1000.0).astype(np.float16)
+    with h5py.File(h5, "w") as store:
+        store.create_dataset("t_train", data=train)
+        store.create_dataset("t_val", data=other)
+        store.create_dataset("t_test", data=other)
+
+    manifest = pd.DataFrame([
+        {"track_id": "t_train", "split": "train"},
+        {"track_id": "t_val", "split": "val"},
+        {"track_id": "t_test", "split": "test"},
+    ])
+    stats = compute_norm_stats(manifest, split="train", cfg=None, h5_path=h5)
+    assert stats["split"] == "train"
+    assert stats["n_segments"] == 10, "non-train rows were included"
+    assert abs(float(np.mean(stats["mean"]))) < 5.0, (
+        "the val/test offset of +1000 leaked into the train statistics"
+    )
+
+
+def test_data_bundle_refuses_non_train_norm_stats(tmp_path):
+    """A norm_stats file without train provenance must stop the run."""
+    from src.utils import save_json
+
+    processed = tmp_path / "processed"
+    processed.mkdir()
+    save_json({"mean": [0.0] * 96, "std": [1.0] * 96, "split": "test", "dim": 96},
+              processed / "norm_stats.json")
+    stats = json.loads((processed / "norm_stats.json").read_text(encoding="utf-8"))
+    assert stats["split"] != "train"
+    # DataBundle raises on exactly this condition (src/train.py)
+    from src.utils import project_root
+
+    source = (project_root() / "src" / "train.py").read_text(encoding="utf-8")
+    assert 'payload.get("split") != "train"' in source
+    assert "refusing to run" in source
+
+
+# --------------------------------------------------------------------------- #
+# A4.4 -- the graph sanity gate
+# --------------------------------------------------------------------------- #
+def test_repetition_score_detects_repeated_structure():
+    from scripts.graph_sanity import repetition_score
+
+    rng = np.random.default_rng(0)
+    # a verse/chorus/verse track: segments 0-3 recur at 8-11
+    base = rng.normal(size=(4, 96))
+    repetitive = np.vstack([base, rng.normal(size=(4, 96)), base]).astype(np.float32)
+    through_composed = rng.normal(size=(12, 96)).astype(np.float32)
+
+    assert repetition_score(repetitive) > repetition_score(through_composed)
+
+
+def test_analyse_graph_flags_a_chain_like_graph():
+    """k=1 on a smoothly drifting track should look chain-like and score low."""
+    from scripts.graph_sanity import analyse_graph
+    from src.graph_builder import build_segment_graph
+
+    cfg = load_config("config.yaml", {"graph.knn_k": 1})
+    # a smooth ramp: every segment's nearest neighbour is its time neighbour
+    feats = np.linspace(0, 1, 20)[:, None] * np.ones((1, 96))
+    feats = feats.astype(np.float32) + 1e-3 * np.arange(96)[None, :]
+    data = build_segment_graph(feats, cfg, track_id="ramp")
+    report = analyse_graph(data, feats)
+    assert report["long_range_fraction"] < 0.5, (
+        "a pure temporal ramp should not produce long-range similarity edges"
+    )
+
+
+def test_analyse_graph_finds_planted_repeats():
+    from scripts.graph_sanity import analyse_graph
+    from src.graph_builder import build_segment_graph
+
+    cfg = load_config("config.yaml")
+    rng = np.random.default_rng(1)
+    base = rng.normal(size=(4, 96))
+    feats = np.vstack([base, rng.normal(size=(4, 96)), base]).astype(np.float32)
+    data = build_segment_graph(feats, cfg, track_id="verse_chorus_verse")
+    report = analyse_graph(data, feats)
+    assert report["long_range_fraction"] > 0.5, "planted repeats were not connected"
+    assert report["nodes_without_similarity_edges"] == 0
+
+
+def test_graph_sanity_verdict_written_for_real_data():
+    """If the gate has been run, its verdict must be a pass."""
+    from src.utils import project_root
+
+    path = project_root() / "results" / "plots" / "graph_sanity" / "graph_sanity.json"
+    if not path.exists():
+        pytest.skip("graph sanity gate has not been run yet")
+    verdict = json.loads(path.read_text(encoding="utf-8"))
+    assert verdict["passed"] is True, (
+        f"A4.4 gate failed: long_range={verdict['mean_long_range_fraction']:.3f}, "
+        f"repeat_recall={verdict['mean_repeat_recall']:.3f}. Do not proceed."
+    )
+
+
+# --------------------------------------------------------------------------- #
+# the mel cache the CNN baseline eats -- fairness, not fidelity
+# --------------------------------------------------------------------------- #
+def test_pooled_log_mel_covers_the_whole_track():
+    """B2 must see the same span of music as the GNN, not a 6 s crop."""
+    from src.audio_features import pooled_log_mel
+
+    cfg = load_config("config.yaml")
+    sr = int(cfg["audio"]["sample_rate"])
+    rng = np.random.default_rng(0)
+    # loud second half: if only the first half were kept, the tail would vanish
+    y = np.concatenate([rng.normal(0, 0.01, sr * 10),
+                        rng.normal(0, 0.50, sr * 10)]).astype(np.float32)
+
+    mel = pooled_log_mel(y, sr, cfg, n_frames=256)
+    assert mel.shape == (int(cfg["audio"]["n_mels"]), 256)
+    first, second = mel[:, :128].mean(), mel[:, 128:].mean()
+    assert second > first + 3.0, "the second half of the track is missing from the patch"
+
+
+def test_pooled_log_mel_is_fixed_width_regardless_of_duration():
+    from src.audio_features import pooled_log_mel
+
+    cfg = load_config("config.yaml")
+    sr = int(cfg["audio"]["sample_rate"])
+    rng = np.random.default_rng(0)
+    for seconds in (5, 29, 30):
+        mel = pooled_log_mel(rng.normal(0, 0.1, sr * seconds).astype(np.float32),
+                             sr, cfg, n_frames=256)
+        assert mel.shape[1] == 256, f"{seconds}s track gave {mel.shape[1]} frames"

@@ -1,7 +1,7 @@
 # PROGRESS
 
 Last session ended: (in progress)
-Currently resuming at: A3.1
+Currently resuming at: A3.2-A3.5 (extraction running)
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -17,7 +17,7 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 
 ## Phase A1 — Data verification
 - [x] A1.1 verify_datasets.py on real data, output archived
-- [~] A1.2 MusicCaps retry pass RUNNING in background (see note below)
+- [x] A1.2 MusicCaps retry pass COMPLETE — 82.4% of retries succeeded
 - [x] A1.3 FMA errata cross-check
 
 ## Phase A2 — Splits
@@ -28,11 +28,11 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 ## Phase A2 GATE: PASSED — all leakage assertions green, both MTAT variants persisted
 
 ## Phase A3 — Feature extraction (LONG)
-- [~] A3.1 Train-only norm stats plan verified
-- [ ] A3.2 MTAT extracted
-- [ ] A3.3 FMA-small extracted
-- [ ] A3.4 MusicCaps extracted
-- [ ] A3.5 DEAM extracted
+- [x] A3.1 Train-only norm stats plan verified
+- [~] A3.2 MTAT extracted (background job running)
+- [~] A3.3 FMA-small extracted (background job running)
+- [~] A3.4 MusicCaps extracted (background job running)
+- [~] A3.5 DEAM extracted (background job running)
 - [ ] A3.6 Norm stats computed + persisted
 
 ## Phase A4 — Graphs
@@ -113,3 +113,30 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
   ~61% of retries. Pre-recovery gallery was **1,481**; it has already passed
   1,597. Final counts must be re-recorded at the end of Phase A, with both
   numbers reported.
+
+### A1.2 result — the MusicCaps recovery worked, and it changes the data story
+
+The retry pass re-attempted all 2,740 previously-failed ids and **succeeded on
+82.4%** of them. Most original failures were transient (rate limiting, timeouts),
+not deleted videos.
+
+| | before recovery | after recovery |
+|---|---|---|
+| usable rows | 2,781 / 5,521 (50.4%) | **5,043 / 5,521 (91.3%)** |
+| train survivors | 1,300 / 2,663 (48.8%) | **2,409 / 2,663 (90.5%)** |
+| eval survivors = **Task 4 gallery** | **1,481** / 2,858 (51.8%) | **2,634** / 2,858 (92.2%) |
+
+Both numbers are now in the README and the report, because R@10 out of 1,481 and
+out of 2,634 are different claims. Attrition is still not random — it correlates
+with video age and region — so the surviving subset remains a biased sample.
+
+The pass crashed *after* all downloads completed, on a column collision in the
+log merge (`is_audioset_eval_x` / `_y`). Fixed, and the log is now regenerated
+from the filesystem, which is authoritative anyway.
+
+### A3 in flight
+
+Extraction chain (mtat → fma → musiccaps → deam, 36,203 tracks, 6 workers) is
+running in the background at ~190 tracks/min; ETA ~3 h from 07:06. Item-level
+resumable, so an interrupted session just restarts it. Loaders were updated to
+read the per-corpus caches.

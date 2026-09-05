@@ -43,3 +43,12 @@ Format:
 [2026-09-05 06:03] DONE   A2   All 5 manifests + both MTAT variants. Fixed the cross-corpus artist leak found in A0.1: 39 artists spanned
                         corpora, 52 rows moved (deam 46, fma 6). Combined leakage assertion now passes across all 4 training corpora.
 [2026-09-05 06:03] GATE   A2 PASSED - pytest 148/148 green.
+[2026-09-05 07:05] DONE   A1.2 musiccaps retry — 2740 attempted, ~2263 recovered (82.4% hit rate). Crashed on a log-merge column collision AFTER
+                        all downloads completed; bug fixed, log regenerated from the filesystem (authoritative). Files on disk: 2783 -> 5046.
+[2026-09-05 07:06] START  A3.2-A3.5 extract_dataset mtat->fma->musiccaps->deam (36,203 tracks, 6 workers) — expect ~5h, item-level resumable
+[2026-09-05 07:30] DONE   A3.1 train-only norm stats verified on a 40-track DEAM trial: 589 train segments, 96 dims, split=train recorded in the file.
+[2026-09-05 07:30] INFO   A3 design: one HDF5 per corpus (features_<ds>.h5 + mels_<ds>.h5), written from a SINGLE decode pass. Mel patch is the
+                        whole track pooled to 128x256 - full resolution would cost ~8 GB for MTAT to serve a model that pools anyway,
+                        and 256 frames over 30 s is finer than the 32 GNN segments, so B2 is not disadvantaged.
+[2026-09-05 07:30] DONE   A4.4 gate tooling written and trialled on real DEAM audio: long-range fraction 0.781, repeat recall 0.821. PASS.
+                        Formal gate re-runs on MTAT once its extraction finishes.

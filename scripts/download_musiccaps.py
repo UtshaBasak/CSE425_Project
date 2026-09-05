@@ -34,7 +34,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
-from src.utils import ensure_dir, get_logger, load_config, resolve_path  # noqa: E402
+from src.utils import (  # noqa: E402
+    atomic_write_text,
+    ensure_dir,
+    get_logger,
+    load_config,
+    resolve_path,
+)
 
 LOGGER = get_logger("gbmc.musiccaps")
 
@@ -203,19 +209,34 @@ def main(argv=None) -> int:
                             done, len(pending), ok, 100.0 * ok / done)
                 pd.DataFrame(rows).to_csv(log_path.with_suffix(".partial.csv"), index=False)
 
-    # merge with any previous log so the file always covers every original ytid
+    # Merge with any previous log so the file always covers every original ytid.
+    # The identity columns come from the source CSV alone: carrying them through
+    # the previous log too collides on merge and yields is_audioset_eval_x/_y,
+    # which then breaks the survival summary.
+    identity = ["ytid", "start_s", "end_s", "is_audioset_eval"]
+    result_columns = ["ytid", "status", "path", "duration_s", "error"]
+
     fresh = pd.DataFrame(rows)
-    full = source[["ytid", "start_s", "end_s", "is_audioset_eval"]].copy()
-    full["ytid"] = full["ytid"].astype(str)
+    fresh["ytid"] = fresh["ytid"].astype(str)
+    fresh = fresh.reindex(columns=result_columns)
+
     if log_path.exists():
-        previous = pd.read_csv(log_path)
-        previous["ytid"] = previous["ytid"].astype(str)
-        merged = previous.set_index("ytid")
-        merged.update(fresh.set_index("ytid"))
-        fresh = merged.reset_index()
+        try:
+            previous = pd.read_csv(log_path)
+            previous["ytid"] = previous["ytid"].astype(str)
+            previous = previous.reindex(columns=result_columns)
+            combined = pd.concat([previous, fresh], ignore_index=True)
+            # last write wins: this run supersedes whatever was recorded before
+            fresh = combined.drop_duplicates("ytid", keep="last")
+        except Exception as exc:  # pragma: no cover - unreadable previous log
+            LOGGER.warning("could not merge the previous log (%s); using this run only", exc)
+
+    full = source[identity].copy()
+    full["ytid"] = full["ytid"].astype(str)
     log = full.merge(fresh, on="ytid", how="left")
     log["status"] = log["status"].fillna("missing")
-    log.to_csv(log_path, index=False)
+    assert "is_audioset_eval" in log.columns, "identity columns collided on merge"
+    atomic_write_text(log_path, log.to_csv(index=False))
     log_path.with_suffix(".partial.csv").unlink(missing_ok=True)
 
     survival = (
