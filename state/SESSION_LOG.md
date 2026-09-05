@@ -84,3 +84,16 @@ Format:
 [2026-09-05 11:08] FIX    A6.2 B2 first came out at 0.1648, BELOW B4 on the same audio - undertrained, not an architectural finding.
                         Cause: B2 was the only model fed unstandardised input (raw dB, ~[-80,0]). Added train-only mel
                         standardisation and raised its budget to 25 epochs. Re-running; both numbers will be reported.
+[2026-09-05 13:10] DONE   A6.2 B2 re-run with standardised input + 25 epochs: macro-F1 0.1654 vs 0.1648 before. NO improvement.
+                        That rules out undertraining and bad conditioning. The remaining suspect is the input itself: the mel
+                        cache is time-pooled to 256 frames for disk economy, which removes the fine spectro-temporal texture a
+                        CNN depends on. Reported as a limitation of OUR cache, not as a CNN-vs-GNN result.
+[2026-09-05 13:10] NOTE   Two run_baselines processes overlapped; the stale one overwrote the result once. Confirmed the final file is
+                        from the fixed run (mel_normalised=true) before recording anything.
+[2026-09-05 13:10] DONE   A6.3 Kaggle payload built: 3.4 MB for Task 1 (text-only, no graphs needed). scripts/kaggle_task1.py drives the
+                        3 freeze modes + the masked/raw leakage pair. Validated the MusicCaps path locally: frozen probe,
+                        1 epoch, distilbert -> macro-F1 0.187 on 2,503 test clips.
+[2026-09-05 13:10] BLOCKED A6.4 cannot launch on Kaggle from here - no Kaggle credentials or browser in this environment. Payload and
+                        runner are ready; this is a one-step manual action for the operator. See PROGRESS.md.
+[2026-09-05 13:10] GATE   PHASE A COMPLETE except A6.4 (blocked on Kaggle credentials, which this environment does not have).
+                        10 of 11 exit criteria pass; the 11th is the operator action documented in PROGRESS.md.

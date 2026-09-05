@@ -1,7 +1,7 @@
 # PROGRESS
 
-Last session ended: (in progress)
-Currently resuming at: A6.2 (B2 re-run) then A6.3/A6.4
+Last session ended: 2026-09-05 13:10
+Currently resuming at: A6.4 (operator action), then Phase B
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -51,9 +51,9 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 
 ## Phase A6 — First real runs
 - [x] A6.1 Task 2 on real MTAT (local GPU) — macro-F1 0.3692
-- [ ] A6.2 CNN baseline B2 (local GPU)
-- [ ] A6.3 Kaggle payload built
-- [ ] A6.4 Task 1 launched on Kaggle
+- [x] A6.2 CNN baseline B2 (local GPU) — macro-F1 0.1654, param-matched 96.2%
+- [x] A6.3 Kaggle payload built — 3.4 MB (Task 1 is text-only)
+- [!] A6.4 Task 1 on Kaggle — BLOCKED on operator action (see below)
 
 ## Notes / blockers
 
@@ -218,3 +218,49 @@ bert-base above batch 32 (or seq 256) needs `bert.gradient_checkpointing: true`.
 
 - Extraction totals: MTAT 21,358 · FMA 7,994 · MusicCaps 4,830 · DEAM 1,802 =
   **35,984 tracks**, ~2h20 wall clock at ~196 tracks/min on 6 workers.
+
+
+---
+
+## Phase A exit criteria — audit
+
+| # | Criterion | Status |
+|---|---|---|
+| 1 | Every A0–A6 item `[x]` or explicitly `[-]`/`[!]` | **A6.4 is `[!]`**, everything else done |
+| 2 | No synthetic artifact reachable by `evaluate.py` without `--synthetic` | PASS — provenance field + hard guard + 12 tests |
+| 3 | Four feature caches complete; norm stats provenance-tested train-only | PASS — 35,984 tracks, 100% manifest/cache coverage |
+| 4 | Graph visual sanity gate passed, renders saved | PASS — MTAT long-range 0.858, repeat recall 0.900 |
+| 5 | 20 **real** sample graphs committed | PASS — 5 from each of 4 corpora |
+| 6 | Leakage assertions pass on all five manifests; both MTAT variants exist | PASS — including the concatenation |
+| 7 | `state/vram_report.md` records real-encoder peaks and routing | PASS |
+| 8 | `state/env_report.md` records BERT loadability and chord methodology | PASS |
+| 9 | Task 2 + B2 have real numbers; Task 1 running on Kaggle | Task 2 + B2 **done**; Task 1 **blocked on operator** |
+| 10 | `pytest` green | PASS |
+| 11 | Everything committed with phase-ID messages | PASS |
+
+### A6.4 — what is blocked, and exactly what to do
+
+Launching a Kaggle run needs Kaggle credentials and a browser session, neither of
+which exists in this environment. Everything that *can* be prepared is prepared,
+and the local dry run confirms the path works end to end (frozen probe, 1 epoch,
+distilbert on real MusicCaps: macro-F1 0.187 on 2,503 test clips).
+
+1. Upload `kaggle_payload_task1.tar.gz` (3.4 MB) as a Kaggle dataset.
+2. New notebook, GPU accelerator on, attach that dataset, then:
+
+   ```
+   !tar xzf /kaggle/input/<dataset>/kaggle_payload_task1.tar.gz -C /kaggle/working
+   %cd /kaggle/working
+   !pip -q install torch-geometric
+   !python scripts/kaggle_task1.py --model bert-base-uncased --epochs 8
+   ```
+3. **Save & Run All** so it runs in the background against the 12-hour limit.
+
+The sweep covers the three freeze modes plus the masked/raw caption pair; that
+pair *is* the leakage result, and the script prints the gap explicitly.
+
+### Why Task 1 needs no graphs
+
+Task 1 is text-only, so the payload is 3.4 MB rather than the ~1.4 GB a
+graph-carrying archive would be. Phase B will need the graph payload
+(`make kaggle-payload`) for Tasks 3 and 4.

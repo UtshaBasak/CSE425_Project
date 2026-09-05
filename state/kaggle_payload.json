@@ -1,11 +1,11 @@
 {
-  "archive": "C:\\Users\\User\\AppData\\Local\\Temp\\payload_test.tar.gz",
-  "size_mb": 3.5,
-  "uncompressed_mb": 26.2,
-  "n_files": 34,
+  "archive": "B:\\CSE425_Project\\gnn-bert-music-context\\kaggle_payload_task1.tar.gz",
+  "size_mb": 3.4,
+  "uncompressed_mb": 26.0,
+  "n_files": 38,
   "files_by_extension": {
     ".csv": 9,
-    ".json": 4,
+    ".json": 8,
     ".py": 19,
     ".txt": 1,
     ".yaml": 1
