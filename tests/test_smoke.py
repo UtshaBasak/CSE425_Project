@@ -1433,3 +1433,60 @@ def test_kaggle_payload_carries_what_task1_needs(tmp_path):
     # the whole point: no gigabyte caches
     assert not [n for n in names if n.endswith((".h5", ".hdf5"))], "cache leaked into payload"
     assert not [n for n in names if n.endswith(".mp3")], "audio leaked into payload"
+
+
+# --------------------------------------------------------------------------- #
+# get_device must fail fast on a GPU this torch has no kernels for.
+#
+# torch.cuda.is_available() returns True for such a device; the failure only
+# appears later as "no kernel image is available for execution on the device".
+# Kaggle's P100 is sm_60 and current torch builds start at sm_70, so a whole
+# sweep dies the same cryptic way, once per run.
+# --------------------------------------------------------------------------- #
+def test_get_device_rejects_a_too_old_gpu(monkeypatch):
+    from src.utils import get_device
+
+    if not torch.cuda.is_available():
+        pytest.skip("no CUDA device to patch")
+
+    monkeypatch.setattr(torch.cuda, "get_device_capability", lambda i=0: (6, 0))
+    monkeypatch.setattr(torch.cuda, "get_arch_list",
+                        lambda: ["sm_70", "sm_75", "sm_80", "sm_90"])
+    monkeypatch.setattr(torch.cuda, "get_device_name", lambda i=0: "Tesla P100-PCIE-16GB")
+
+    with pytest.raises(RuntimeError) as excinfo:
+        get_device("cuda")
+    message = str(excinfo.value)
+    assert "sm_60" in message
+    assert "T4" in message, "the error must name the actual remedy"
+    assert "--device cpu" in message
+
+
+def test_get_device_accepts_a_supported_gpu(monkeypatch):
+    from src.utils import get_device
+
+    if not torch.cuda.is_available():
+        pytest.skip("no CUDA device to patch")
+
+    monkeypatch.setattr(torch.cuda, "get_device_capability", lambda i=0: (7, 5))
+    monkeypatch.setattr(torch.cuda, "get_arch_list",
+                        lambda: ["sm_70", "sm_75", "sm_80"])
+    assert get_device("cuda").type == "cuda"
+
+
+def test_get_device_allows_a_newer_than_listed_gpu(monkeypatch):
+    """A device newer than anything listed can JIT from PTX; do not block it."""
+    from src.utils import get_device
+
+    if not torch.cuda.is_available():
+        pytest.skip("no CUDA device to patch")
+
+    monkeypatch.setattr(torch.cuda, "get_device_capability", lambda i=0: (12, 0))
+    monkeypatch.setattr(torch.cuda, "get_arch_list", lambda: ["sm_70", "sm_75"])
+    assert get_device("cuda").type == "cuda"
+
+
+def test_get_device_cpu_is_always_honoured():
+    from src.utils import get_device
+
+    assert get_device("cpu").type == "cpu"
