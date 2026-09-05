@@ -440,3 +440,45 @@ for Windows) or run the target's commands directly; they are all plain
 `data/splits/musiccaps_download_log.csv` for the per-status breakdown, and
 `scripts/download_musiccaps.py --retry-failed` for a recovery pass from a
 different network.
+
+---
+
+## Publishing to GitHub
+
+The repository is `gnn-bert-music-context/`. **Push that directory, not its
+parent** — the parent holds ~30 GB of third-party audio, and because this
+directory already contains its own `.git`, a parent-level repo would record it
+as an unusable embedded gitlink and upload none of these files.
+
+```bash
+cd gnn-bert-music-context
+git remote add origin git@github.com:<you>/<repo>.git
+git push -u origin main
+```
+
+### What is deliberately excluded
+
+| Excluded | Why |
+|---|---|
+| `data/raw/` and the corpus directories by name | ~30 GB of audio; MusicCaps clips are YouTube-sourced and not redistributable |
+| `data/processed/` (except `sample_graphs/`) | 1.4 GB of graphs + 2.5 GB of HDF5 caches, all regenerable |
+| `results/checkpoints/`, `results/_synthetic_smoke/` | model weights; the synthetic set must never reach a report |
+| `logs/`, `*.tar.gz` | run logs and rebuildable upload payloads |
+| every credential pattern | `.env`, `kaggle.json`, `*.pem`, `*.key`, `id_rsa*`, `.netrc`, `.aws/`, `.huggingface/`, … |
+
+`data/processed/sample_graphs/` is the **one** deliberate binary exception: 20
+real `.pt` graphs that are a graded deliverable, re-included after the `*.pt`
+rule. Roughly 35 MB is tracked in total, mostly manifest CSVs.
+
+### Audit before each push
+
+```bash
+git status --porcelain                        # nothing unexpected staged
+git ls-files | xargs du -ch | tail -1         # total size sanity check
+git check-ignore -v <path>                    # explain any single path
+```
+
+Keep `.gitignore` current in the same commit that introduces a new tool, cache
+or credential file. `git rm --cached` untracks a file but does **not** remove it
+from history — if a secret is ever pushed, rotate it rather than trying to
+rewrite the past.
