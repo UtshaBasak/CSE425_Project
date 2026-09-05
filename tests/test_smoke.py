@@ -1490,3 +1490,78 @@ def test_get_device_cpu_is_always_honoured():
     from src.utils import get_device
 
     assert get_device("cpu").type == "cpu"
+
+
+# --------------------------------------------------------------------------- #
+# bert.freeze_mode must actually take effect.
+#
+# It used to be ignored: run_task1 derived the mode from freeze_epochs alone, so
+# a sweep asking for frozen_probe with freeze_epochs=0 trained full_ft instead,
+# and two of its three "freeze modes" were the same configuration.
+# --------------------------------------------------------------------------- #
+def test_freeze_mode_is_honoured_not_derived_from_freeze_epochs():
+    from src.train import starting_freeze_mode, target_freeze_mode
+
+    cfg = load_config("config.yaml", {"bert.freeze_mode": "frozen_probe",
+                                      "bert.freeze_epochs": 0})
+    assert starting_freeze_mode(cfg) == "frozen_probe", (
+        "freeze_mode=frozen_probe with freeze_epochs=0 must NOT become full_ft"
+    )
+    assert target_freeze_mode(cfg) == "frozen_probe"
+
+
+def test_freeze_epochs_starts_frozen_then_reaches_the_target():
+    from src.train import starting_freeze_mode, target_freeze_mode
+
+    for target in ("top_n", "full_ft"):
+        cfg = load_config("config.yaml", {"bert.freeze_mode": target,
+                                          "bert.freeze_epochs": 2})
+        assert starting_freeze_mode(cfg) == "frozen_probe"
+        assert target_freeze_mode(cfg) == target
+
+
+def test_full_ft_with_no_warmup_starts_unfrozen():
+    from src.train import starting_freeze_mode
+
+    cfg = load_config("config.yaml", {"bert.freeze_mode": "full_ft",
+                                      "bert.freeze_epochs": 0})
+    assert starting_freeze_mode(cfg) == "full_ft"
+
+
+def test_unknown_freeze_mode_is_rejected():
+    from src.train import target_freeze_mode
+
+    cfg = load_config("config.yaml", {"bert.freeze_mode": "thaw_everything"})
+    with pytest.raises(ValueError, match="freeze_mode"):
+        target_freeze_mode(cfg)
+
+
+def test_the_three_sweep_modes_are_actually_distinct():
+    """The sweep must compare three different configurations, not two."""
+    from src.train import starting_freeze_mode, target_freeze_mode
+
+    sweep = [("frozen_probe", 0), ("top_n", 2), ("full_ft", 0)]
+    seen = set()
+    for mode, epochs in sweep:
+        cfg = load_config("config.yaml", {"bert.freeze_mode": mode,
+                                          "bert.freeze_epochs": epochs})
+        seen.add((starting_freeze_mode(cfg), target_freeze_mode(cfg), epochs))
+    assert len(seen) == 3, f"sweep collapses to {len(seen)} distinct configs: {seen}"
+
+
+def test_recovered_results_are_stamped():
+    """A result rebuilt from a log must never look like a first-hand artifact."""
+    from src.utils import project_root
+
+    recovered = sorted((project_root() / "results").glob("task1_seed42_*.json"))
+    checked = 0
+    for path in recovered:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not payload.get("recovered_from_log"):
+            continue
+        checked += 1
+        assert payload["thresholds"] is None
+        assert "recovery_note" in payload
+        assert payload["threshold_source"] == "val"
+    if checked == 0:
+        pytest.skip("no log-recovered results present")

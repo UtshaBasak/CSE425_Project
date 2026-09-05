@@ -1,0 +1,71 @@
+{
+  "task": 1,
+  "seed": 42,
+  "synthetic": false,
+  "provenance": "real",
+  "text_source": "metadata",
+  "device": "cuda",
+  "amp": true,
+  "grad_accum_steps": 1,
+  "effective_batch": 32,
+  "epochs_run": 5,
+  "best_epoch": 2,
+  "early_stop_metric": "macro_f1",
+  "best_val_metric": 0.24751703107725784,
+  "trainable_params": 109520690,
+  "n_tags": 50,
+  "threshold_source": "val",
+  "test": {
+    "macro_f1": 0.18083424094064227,
+    "micro_f1": 0.19979627213753418,
+    "mean_auc_pr": 0.18055993766256256,
+    "n_rows": 3500
+  },
+  "vram": {
+    "tag": "task1_epoch5",
+    "allocated_mb": 1280.99072265625,
+    "peak_mb": 2225.53955078125,
+    "reserved_mb": 3598.0
+  },
+  "knn_probe": null,
+  "history": [
+    {
+      "epoch": 1,
+      "seconds": 55.9,
+      "train_loss_total": 1.0703,
+      "val_macro_f1": 0.2456
+    },
+    {
+      "epoch": 2,
+      "seconds": 55.8,
+      "train_loss_total": 0.9947,
+      "val_macro_f1": 0.2475
+    },
+    {
+      "epoch": 3,
+      "seconds": 55.6,
+      "train_loss_total": 0.9954,
+      "val_macro_f1": 0.2411
+    },
+    {
+      "epoch": 4,
+      "seconds": 55.5,
+      "train_loss_total": 0.9966,
+      "val_macro_f1": 0.2381
+    },
+    {
+      "epoch": 5,
+      "seconds": 55.7,
+      "train_loss_total": 0.9973,
+      "val_macro_f1": 0.2341
+    }
+  ],
+  "thresholds": null,
+  "recovered_from_log": true,
+  "recovery_note": "Rebuilt from the console log; per-tag thresholds were not printed and are absent. Test metrics are verbatim from the run.",
+  "sweep_tag": "mtat_metadata_full_ft",
+  "observed_freeze_modes": [
+    "full_ft"
+  ],
+  "effective_freeze_mode": "full_ft"
+}

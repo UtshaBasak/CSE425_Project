@@ -136,11 +136,23 @@ Sanity-check the first minute:
 - `leakage check passed` — splits are artist-disjoint
 - `task 1 epoch 1/8 | loss ... | val macro_f1=...` — it is training
 
-## 5. Save & Run All
+## 5. Save & Run All — not Quick Save
 
-**Save Version → Save & Run All (Commit)**. This runs the notebook detached, so
-it survives closing the browser, and the 12-hour limit applies rather than the
+**Save Version → Save & Run All (Commit)**. This re-executes the notebook
+detached, survives closing the browser, and gets the 12-hour limit instead of the
 interactive idle timeout.
+
+> **This is the step that decides whether you get your results back.**
+> `/kaggle/working` is discarded when an interactive session ends, and **Quick
+> Save stores the notebook without re-running it**, so its version carries no
+> output files. Download the Output of a Quick-Saved version and you get an empty
+> tree — typically just `kaggle/working/.virtual_documents`. Only
+> **Save & Run All (Commit)** captures the files.
+>
+> If it already happened: the console log has everything. Save it to a file and
+> run `python scripts/recover_results_from_log.py run.log`, which rebuilds the
+> result JSONs (including per-epoch history) and stamps them
+> `recovered_from_log: true`. Only the per-tag thresholds are unrecoverable.
 
 ### What it runs
 
@@ -202,6 +214,7 @@ currently reads `[TBD — Kaggle]` for the B3/T1 row.
 | `tar: ...tar.gz: Cannot open` | Kaggle already extracted the archive | Use Cell 1; do not call `tar` |
 | `LEAKAGE: ... artist_id(s) span multiple splits` | edited manifests by hand | Rebuild: `python -m src.splits --validate-audio --prune-to-cache` |
 | Run stops early at epoch 4-5 | early stopping, `patience=3` | Working as intended; `best_epoch` is in the JSON |
+| Output tab is empty / zip has only `.virtual_documents` | used **Quick Save** instead of **Save & Run All**, or the interactive session ended | Re-run with Save & Run All, or recover from the log with `scripts/recover_results_from_log.py` |
 | Out of GPU quota | 30 h/week | The sweep is ~45 min; `--only full_ft` cuts it to ~25 min |
 
 ## Quota note

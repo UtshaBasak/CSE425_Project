@@ -28,7 +28,8 @@ import torch
 import torch.nn.functional as F
 
 from . import metrics as M
-from .bert_encoder import BertTagClassifier, BertTextEncoder, load_tokenizer
+from .bert_encoder import (FREEZE_MODES, BertTagClassifier, BertTextEncoder,
+                           load_tokenizer)
 from .contrastive import DualEncoder, build_similarity_matrix, symmetric_info_nce
 from .datasets import (MusicGraphDataset, TextTagDataset, alternating_loader,
                        collate_texts, make_loader)
@@ -63,6 +64,32 @@ LOGGER = get_logger("gbmc.train")
 TAG_DATASETS = ("mtat",)                    # corpora that carry the tag vocabulary
 EMOTION_DATASETS = ("deam",)                # corpora that carry valence/arousal
 CAPTION_DATASETS = ("musiccaps",)           # corpora with free-text captions
+
+
+def target_freeze_mode(cfg) -> str:
+    """The freeze mode a run should end up training in.
+
+    ``bert.freeze_mode`` is the setting that decides this. It used to be ignored
+    entirely -- the mode was derived from ``freeze_epochs`` alone -- so a sweep
+    asking for `frozen_probe` with `freeze_epochs=0` silently trained `full_ft`,
+    and two of its three "freeze modes" were the same configuration.
+    """
+    mode = str(cfg.get("bert", {}).get("freeze_mode", "top_n"))
+    if mode not in FREEZE_MODES:
+        raise ValueError(f"bert.freeze_mode must be one of {FREEZE_MODES}, got {mode!r}")
+    return mode
+
+
+def starting_freeze_mode(cfg) -> str:
+    """What the encoder starts as, honouring the warm-up schedule.
+
+    ``freeze_epochs > 0`` means: keep the encoder frozen for that many epochs,
+    then switch to :func:`target_freeze_mode`. With ``freeze_epochs == 0`` the
+    target mode applies from step one.
+    """
+    if int(cfg.get("bert", {}).get("freeze_epochs", 0)) > 0:
+        return "frozen_probe"
+    return target_freeze_mode(cfg)
 
 
 def corpora_for(cfg, kind: str) -> tuple:
@@ -439,7 +466,7 @@ def run_task1(cfg, args, bundle: DataBundle, device) -> dict:
     model = BertTagClassifier(
         n_tags=len(bundle.tag_vocab),
         model_name=cfg["bert"]["model_name"],
-        freeze_mode="frozen_probe" if int(cfg["bert"]["freeze_epochs"]) > 0 else "full_ft",
+        freeze_mode=starting_freeze_mode(cfg),
         unfreeze_top_n=int(cfg["bert"]["unfreeze_top_n_layers"]),
         gradient_checkpointing=bool(cfg["bert"].get("gradient_checkpointing", False)),
     ).to(device)
@@ -514,7 +541,7 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
     )
     bert = BertTextEncoder(
         cfg["bert"]["model_name"],
-        freeze_mode="frozen_probe" if int(cfg["bert"]["freeze_epochs"]) > 0 else "full_ft",
+        freeze_mode=starting_freeze_mode(cfg),
         unfreeze_top_n=int(cfg["bert"]["unfreeze_top_n_layers"]),
         gradient_checkpointing=bool(cfg["bert"].get("gradient_checkpointing", False)),
     )
@@ -696,7 +723,12 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         text_encoder = model.bert if isinstance(getattr(model, "bert", None), BertTextEncoder) else \
             getattr(model, "encoder", None)
         if isinstance(text_encoder, BertTextEncoder) and freeze_epochs and epoch == freeze_epochs + 1:
-            text_encoder.unfreeze_top_layers(unfreeze_top_n)
+            # switch to whatever bert.freeze_mode actually asked for, not always top_n
+            target = target_freeze_mode(cfg)
+            if target == "top_n":
+                text_encoder.unfreeze_top_layers(unfreeze_top_n)
+            else:
+                text_encoder.set_freeze_mode(target)
             # the optimiser must be rebuilt: parameters that were frozen at
             # construction time are absent from its param groups
             optimizer = build_optimizer(model, cfg)
@@ -820,6 +852,8 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         "synthetic": bool(args.synthetic),
         "provenance": provenance,
         "text_source": text_source,
+        "freeze_mode": target_freeze_mode(cfg),
+        "freeze_epochs": int(cfg["bert"].get("freeze_epochs", 0)),
         "device": str(device),
         "amp": bool(amp),
         "grad_accum_steps": accum,

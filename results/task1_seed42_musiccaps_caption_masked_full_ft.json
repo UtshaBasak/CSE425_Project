@@ -1,0 +1,89 @@
+{
+  "task": 1,
+  "seed": 42,
+  "synthetic": false,
+  "provenance": "real",
+  "text_source": "caption_masked",
+  "device": "cuda",
+  "amp": true,
+  "grad_accum_steps": 1,
+  "effective_batch": 32,
+  "epochs_run": 8,
+  "best_epoch": 6,
+  "early_stop_metric": "macro_f1",
+  "best_val_metric": 0.5537316520081025,
+  "trainable_params": 109520690,
+  "n_tags": 50,
+  "threshold_source": "val",
+  "test": {
+    "macro_f1": 0.3574125500410388,
+    "micro_f1": 0.3623827051687491,
+    "mean_auc_pr": 0.38444910643181585,
+    "n_rows": 2503
+  },
+  "vram": {
+    "tag": "task1_epoch8",
+    "allocated_mb": 1285.271484375,
+    "peak_mb": 2918.8720703125,
+    "reserved_mb": 3274.0
+  },
+  "knn_probe": null,
+  "history": [
+    {
+      "epoch": 1,
+      "seconds": 11.9,
+      "train_loss_total": 1.4858,
+      "val_macro_f1": 0.3745
+    },
+    {
+      "epoch": 2,
+      "seconds": 11.7,
+      "train_loss_total": 0.773,
+      "val_macro_f1": 0.4818
+    },
+    {
+      "epoch": 3,
+      "seconds": 11.7,
+      "train_loss_total": 0.8705,
+      "val_macro_f1": 0.5104
+    },
+    {
+      "epoch": 4,
+      "seconds": 11.6,
+      "train_loss_total": 0.9168,
+      "val_macro_f1": 0.5405
+    },
+    {
+      "epoch": 5,
+      "seconds": 11.7,
+      "train_loss_total": 0.9458,
+      "val_macro_f1": 0.5426
+    },
+    {
+      "epoch": 6,
+      "seconds": 11.7,
+      "train_loss_total": 0.9596,
+      "val_macro_f1": 0.5537
+    },
+    {
+      "epoch": 7,
+      "seconds": 11.6,
+      "train_loss_total": 0.9611,
+      "val_macro_f1": 0.5493
+    },
+    {
+      "epoch": 8,
+      "seconds": 11.7,
+      "train_loss_total": 0.9708,
+      "val_macro_f1": 0.5534
+    }
+  ],
+  "thresholds": null,
+  "recovered_from_log": true,
+  "recovery_note": "Rebuilt from the console log; per-tag thresholds were not printed and are absent. Test metrics are verbatim from the run.",
+  "sweep_tag": "musiccaps_caption_masked_full_ft",
+  "observed_freeze_modes": [
+    "full_ft"
+  ],
+  "effective_freeze_mode": "full_ft"
+}
