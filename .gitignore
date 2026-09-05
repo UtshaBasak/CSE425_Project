@@ -112,6 +112,16 @@ data/processed/*
 # ...the one exception, re-included after the *.pt rule above
 !data/processed/sample_graphs/*.pt
 
+# A7.2/A7.4 build artifacts, both covered by the rules above but named here so
+# it is obvious they are deliberate rather than overlooked:
+#   data/processed/mels_full_*.h5   full-resolution mel cache, 5.8 GB
+#                                   (rebuild: scripts/build_mel_cache.py)
+#   results/scores/*.npz            per-run val/test score matrices, inputs to
+#                                   scripts/threshold_bootstrap.py. The bootstrap
+#                                   RESULT (results/threshold_bootstrap.json) is
+#                                   committed; the matrices it consumes are not.
+results/scores/
+
 # -----------------------------------------------------------------------------
 # EXPERIMENT TRACKING, LOGS AND BUILD ARTIFACTS
 # -----------------------------------------------------------------------------

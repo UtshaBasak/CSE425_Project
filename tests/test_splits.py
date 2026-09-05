@@ -166,3 +166,104 @@ def test_written_manifest_has_the_contract_columns(tmp_path):
     columns = list(pd.read_csv(path).columns)
     assert columns == ["track_id", "artist_id", "audio_path", "text", "split",
                        "y_genre", "y_tags", "y_valence", "y_arousal", "duration_s"]
+
+
+# --------------------------------------------------------------------------- #
+# A7.3 -- the tag vocabularies must be selected on the train split only
+#
+# Choosing *which labels exist* by frequency over the whole corpus lets
+# test-split annotations decide the label space. That is label information
+# crossing the split boundary before a single parameter is trained, and it is
+# not hypothetical: counting MusicCaps aspects over all 5,521 clips instead of
+# the 2,095 train clips swaps 7 of the 50 tags.
+# --------------------------------------------------------------------------- #
+def _vocab_file(name):
+    from src.utils import project_root
+
+    path = project_root() / "data" / "splits" / name
+    if not path.exists():
+        pytest.skip(f"{name} not built yet")
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def test_musiccaps_vocab_declares_train_provenance():
+    payload = _vocab_file("musiccaps_tag_vocab.json")
+    assert payload.get("split_used") == "train", (
+        "musiccaps_tag_vocab.json does not record that it was built on the "
+        "train split; rebuild with `python -m src.splits --vocab-only`"
+    )
+    coverage = payload.get("coverage", {})
+    assert coverage.get("n_clips_counted", 0) < coverage.get("n_clips_in_csv", 0), (
+        "the vocabulary counted every clip in the CSV, so the test split "
+        "helped choose the label space"
+    )
+
+
+def test_mtat_vocab_declares_train_provenance():
+    payload = _vocab_file("tag_vocab.json")
+    assert payload.get("split_used") == "train"
+    assert payload.get("n_clips_counted", 0) < payload.get("n_clips_in_annotations", 0)
+
+
+def test_musiccaps_vocab_matches_a_train_only_recount():
+    """Rebuild the vocabulary from the raw CSV and require an exact match."""
+    from src.splits import build_musiccaps_tag_vocab, musiccaps_train_ytids
+    from src.utils import load_config, project_root
+
+    saved = _vocab_file("musiccaps_tag_vocab.json")
+    cfg = load_config(project_root() / "config.yaml")
+    if not musiccaps_train_ytids(cfg):
+        pytest.skip("MusicCaps manifest not built yet")
+
+    rebuilt, coverage = build_musiccaps_tag_vocab(cfg, k=len(saved["tags"]),
+                                                  split="train")
+    assert rebuilt == saved["tags"], (
+        "the stored MusicCaps vocabulary is not what a train-only recount "
+        "produces -- it is stale or was built on the wrong split"
+    )
+    assert coverage["split_used"] == "train"
+
+
+def test_counting_every_split_would_change_the_musiccaps_vocabulary():
+    """The guard above is only meaningful if the leak would actually show.
+
+    If train-only and all-split selection happened to agree, the provenance
+    tests would pass whether or not the fix were in place. They do not agree
+    here -- 7 of 50 tags differ -- so this pins the fact that the restriction
+    is load-bearing rather than cosmetic.
+    """
+    from src.splits import build_musiccaps_tag_vocab, musiccaps_train_ytids
+    from src.utils import load_config, project_root
+
+    cfg = load_config(project_root() / "config.yaml")
+    if not musiccaps_train_ytids(cfg):
+        pytest.skip("MusicCaps manifest not built yet")
+
+    train_only, _ = build_musiccaps_tag_vocab(cfg, k=50, split="train")
+    all_splits, _ = build_musiccaps_tag_vocab(cfg, k=50, split="all")
+    assert set(train_only) != set(all_splits), (
+        "train-only and all-split selection now agree, so the provenance "
+        "tests can no longer detect the leak -- re-derive the guard"
+    )
+
+
+def test_musiccaps_train_vocab_refuses_to_guess_without_a_manifest(tmp_path):
+    """No manifest must be an error, not a silent fall back to all splits."""
+    from src.splits import build_musiccaps_tag_vocab
+    from src.utils import load_config, project_root
+
+    cfg = load_config(project_root() / "config.yaml")
+    csv_path = project_root() / cfg["datasets"]["musiccaps"]["csv"]
+    if not csv_path.exists():
+        pytest.skip("MusicCaps CSV not present")
+    cfg["paths"]["splits"] = str(tmp_path)          # no manifest lives here
+    with pytest.raises(RuntimeError, match="train-only"):
+        build_musiccaps_tag_vocab(cfg, k=50, split="train")
+
+
+def test_musiccaps_ytid_survives_ids_containing_dashes_and_underscores():
+    from src.splits import musiccaps_ytid
+
+    assert musiccaps_ytid("musiccaps_-0Gj8-vB1q4_30_40") == "-0Gj8-vB1q4"
+    assert musiccaps_ytid("musiccaps_a_b_c_10_20") == "a_b_c"
+    assert musiccaps_ytid("-0Gj8-vB1q4_30_40") == "-0Gj8-vB1q4"

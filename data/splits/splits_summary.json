@@ -122,23 +122,26 @@
   "tag_vocab_size": 50,
   "musiccaps_tag_vocab_size": 50,
   "musiccaps_vocab_coverage": {
-    "n_distinct_aspects": 13197,
+    "split_used": "train",
+    "n_clips_counted": 2095,
+    "n_clips_in_csv": 5521,
+    "n_distinct_aspects": 5830,
     "vocab_size": 50,
     "mean_aspects_per_clip": 10.668538308277485,
-    "mean_labels_per_clip": 2.831733381633762,
-    "clips_with_no_label": 525,
-    "clips_with_no_label_pct": 9.50914689367868,
+    "mean_labels_per_clip": 2.7616373845317876,
+    "clips_with_no_label": 511,
+    "clips_with_no_label_pct": 9.255569643180584,
     "most_frequent": [
       "low quality",
       "instrumental",
+      "passionate",
       "noisy",
       "emotional",
-      "medium tempo",
-      "energetic",
-      "passionate",
-      "amateur recording",
       "slow tempo",
-      "live performance"
+      "energetic",
+      "live performance",
+      "medium tempo",
+      "amateur recording"
     ]
   },
   "musiccaps_survival": {
