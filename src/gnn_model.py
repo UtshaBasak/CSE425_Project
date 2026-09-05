@@ -151,16 +151,23 @@ class GNNClassifier(nn.Module):
         )
         d = self.encoder.out_dim
         self.dropout = nn.Dropout(dropout)
+        # n_tags=0 builds a genre-only classifier: the parameter count then
+        # reflects the model actually being trained, which is the whole point of
+        # reporting it next to a compute budget (A7.1/A7.2).
         self.tag_head = nn.Sequential(
             nn.Linear(d, hidden_dim), nn.GELU(), nn.Dropout(dropout),
             nn.Linear(hidden_dim, int(n_tags)),
-        )
+        ) if int(n_tags) else None
         self.genre_head = nn.Linear(d, int(n_genres)) if n_genres else None
+        if self.tag_head is None and self.genre_head is None:
+            raise ValueError("GNNClassifier needs n_tags > 0 or n_genres > 0")
         self.n_tags = int(n_tags)
 
     def forward(self, data, return_nodes: bool = False):
         g, node_h = self.encoder(data, return_nodes=return_nodes)
-        out = {"tag_logits": self.tag_head(self.dropout(g)), "z": g, "node_h": node_h}
+        out = {"z": g, "node_h": node_h}
+        if self.tag_head is not None:
+            out["tag_logits"] = self.tag_head(self.dropout(g))
         if self.genre_head is not None:
             out["genre_logits"] = self.genre_head(g)
         return out

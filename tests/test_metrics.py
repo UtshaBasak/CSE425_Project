@@ -275,3 +275,90 @@ def test_aggregate_seeds_keeps_constant_strings_only():
 def test_no_accuracy_function_is_exported():
     """Guardrail: accuracy must not be reachable from the metrics module."""
     assert not [name for name in dir(M) if "accuracy" in name.lower()]
+
+
+# --------------------------------------------------------------------------- #
+# A7.1 -- single-label multiclass metrics
+# --------------------------------------------------------------------------- #
+def test_multiclass_metrics_perfect_prediction():
+    y = np.array([0, 1, 2, 3, 0, 1, 2, 3])
+    logits = np.eye(4)[y] * 10.0
+    out = M.multiclass_metrics(y, logits)
+    assert out["accuracy"] == pytest.approx(1.0)
+    assert out["macro_f1"] == pytest.approx(1.0)
+    assert out["n_rows"] == 8
+
+
+def test_multiclass_metrics_drops_the_minus_one_sentinel():
+    """Clips from corpora with no genre column must not be scored as class 0."""
+    y = np.array([-1, -1, 1, 1])
+    logits = np.tile([5.0, 0.0], (4, 1))          # everything predicted class 0
+    out = M.multiclass_metrics(y, logits)
+    assert out["n_rows"] == 2, "sentinel rows leaked into the score"
+    assert out["accuracy"] == pytest.approx(0.0)
+
+
+def test_multiclass_confusion_matrix_rows_are_truth():
+    y = np.array([0, 0, 1])
+    logits = np.array([[9.0, 0.0], [0.0, 9.0], [0.0, 9.0]])
+    cm = np.asarray(M.multiclass_metrics(y, logits)["confusion"])
+    assert cm.tolist() == [[1, 1], [0, 1]]
+
+
+def test_multiclass_chance_level_is_near_one_over_k():
+    rng = np.random.default_rng(0)
+    y = rng.integers(0, 8, 4000)
+    out = M.multiclass_metrics(y, rng.normal(size=(4000, 8)))
+    assert 0.09 < out["accuracy"] < 0.16, "chance should sit near 1/8"
+
+
+# --------------------------------------------------------------------------- #
+# A7.4 -- bootstrapped threshold stability
+# --------------------------------------------------------------------------- #
+def _separable(n_rows, n_tags, seed=0, noise=1.0):
+    rng = np.random.default_rng(seed)
+    y = (rng.random((n_rows, n_tags)) < 0.3).astype(float)
+    score = np.clip(y * 0.6 + rng.normal(0, noise * 0.15, y.shape) + 0.2, 0.01, 0.99)
+    return y, score
+
+
+def test_bootstrap_thresholds_reports_one_std_per_tag():
+    yv, sv = _separable(200, 6, seed=1)
+    yt, st = _separable(200, 6, seed=2)
+    out = M.bootstrap_thresholds(yv, sv, yt, st, n_boot=15, seed=0)
+    assert len(out["threshold_std_per_tag"]) == 6
+    assert len(out["threshold_mean_per_tag"]) == 6
+    assert out["n_boot"] == 15 and out["n_val_rows"] == 200
+
+
+def test_bootstrap_is_reproducible_for_a_fixed_seed():
+    yv, sv = _separable(120, 4, seed=3)
+    yt, st = _separable(120, 4, seed=4)
+    a = M.bootstrap_thresholds(yv, sv, yt, st, n_boot=10, seed=7)
+    b = M.bootstrap_thresholds(yv, sv, yt, st, n_boot=10, seed=7)
+    assert a["test_macro_f1_mean"] == pytest.approx(b["test_macro_f1_mean"])
+    assert a["threshold_std_per_tag"] == b["threshold_std_per_tag"]
+
+
+def test_bootstrap_spread_is_larger_on_a_smaller_validation_split():
+    """The whole point of A7.4: a small val split makes tuning noisier.
+
+    977 clips from 14 artists is what MTAT actually gives us, so the claim that
+    the spread depends on validation size has to hold in the code, not just in
+    the argument.
+    """
+    yt, st = _separable(600, 8, seed=11)
+    big = M.bootstrap_thresholds(*_separable(600, 8, seed=10), yt, st,
+                                 n_boot=25, seed=0)
+    small = M.bootstrap_thresholds(*_separable(60, 8, seed=10), yt, st,
+                                   n_boot=25, seed=0)
+    assert small["test_macro_f1_std"] > big["test_macro_f1_std"]
+
+
+def test_bootstrap_reports_the_fixed_half_baseline_too():
+    yv, sv = _separable(150, 5, seed=5)
+    yt, st = _separable(150, 5, seed=6)
+    out = M.bootstrap_thresholds(yv, sv, yt, st, n_boot=10, seed=0)
+    assert out["test_macro_f1_fixed_half"] == pytest.approx(
+        M.macro_f1(yt, st, 0.5))
+    assert np.isfinite(out["test_macro_f1_point"])

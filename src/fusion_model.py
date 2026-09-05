@@ -21,6 +21,7 @@ from .utils import get_logger
 LOGGER = get_logger("gbmc.fusion")
 
 __all__ = [
+    "masked_genre_loss",
     "CrossAttentionFusion",
     "GatedFusion",
     "GNNBertFusion",
@@ -250,6 +251,41 @@ class _RunningMagnitude:
 
 
 _MAGNITUDES = _RunningMagnitude()
+
+
+def masked_genre_loss(out: dict, batch, cfg=None):
+    """Cross-entropy over the single-label genre head, ``-1`` rows masked out.
+
+    FMA-small is one genre per clip over eight classes, so this is ordinary
+    softmax cross-entropy rather than anything in the multi-label machinery
+    above. It still has to mask: manifests from corpora with no genre column
+    carry ``y_genre = -1``, and feeding those to ``cross_entropy`` would either
+    crash on a negative index or, worse, silently train class 0.
+
+    Returns ``(loss, parts)`` in the same shape as
+    :func:`masked_multitask_loss`, so ``_fit`` needs no special case.
+    """
+    logits = out.get("genre_logits")
+    if logits is None:
+        raise ValueError(
+            "genre target selected but the model exposes no genre_logits -- "
+            "construct it with n_genres > 0"
+        )
+    device = logits.device
+    y = getattr(batch, "y_genre", None)
+    if y is None:
+        return (torch.zeros((), device=device),
+                {"loss_genre": 0.0, "n_genre": 0, "loss_total": 0.0})
+    y = y.view(-1).long().to(device)
+    mask = y >= 0
+    count = int(mask.sum().item())
+    if count == 0:
+        return (torch.zeros((), device=device),
+                {"loss_genre": 0.0, "n_genre": 0, "loss_total": 0.0})
+    loss = F.cross_entropy(logits.float()[mask], y[mask])
+    parts = {"loss_genre": float(loss.detach().item()), "n_genre": count}
+    parts["loss_total"] = parts["loss_genre"]
+    return loss, parts
 
 
 def masked_multitask_loss(out: dict, batch, cfg, magnitudes: "_RunningMagnitude | None" = None):

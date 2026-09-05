@@ -29,6 +29,7 @@ __all__ = [
     "MusicGraphDataset",
     "TextTagDataset",
     "MelSpecDataset",
+    "ChunkedMelDataset",
     "make_loader",
     "alternating_loader",
     "collate_texts",
@@ -424,6 +425,147 @@ class MelSpecDataset(Dataset):
         )
 
 
+class ChunkedMelDataset(Dataset):
+    """Short excerpts of a **full-resolution** log-mel, for the B2 CNN (A7.2).
+
+    Two things separate this from :class:`MelSpecDataset`, and both were causes
+    of B2's implausible 0.165 macro-F1 on MTAT:
+
+    * **Resolution.** The old cache mean-pooled each track to 256 columns, about
+      8.8 frames per second, so a 3-second window was 26 columns wide. This
+      reads ``mels_full_{corpus}.h5`` at the native 43.07 frames/second, where
+      the same window is 129 columns -- the resolution a convolutional stack
+      over time-frequency structure actually needs.
+    * **Chunking.** Feeding a whole 29-second track to a CNN and pooling at the
+      end asks one global descriptor to explain fifty local tags. The standard
+      MTAT protocol instead trains on short excerpts and averages *per-chunk
+      probabilities* at inference. That is what ``mode="all"`` returns.
+
+    ``mode="random"`` (training) draws one uniformly random chunk per access,
+    which doubles as augmentation: the same clip is a different example each
+    epoch. ``mode="all"`` (validation and test) returns ``n_eval_chunks``
+    evenly-spaced chunks as one stacked tensor, so every batch stays rectangular
+    whatever the clip length.
+    """
+
+    def __init__(self, manifest, cfg=None, h5_path=None, tag_vocab=None,
+                 split: str | None = None, datasets=None, chunk_s: float = 3.0,
+                 mode: str = "random", n_eval_chunks: int = 9,
+                 mel_stats: dict | None = None, seed: int = 42):
+        if mode not in ("random", "all"):
+            raise ValueError(f"mode must be 'random' or 'all', got {mode!r}")
+        self.manifest = _read_manifest(manifest)
+        if split is not None and "split" in self.manifest.columns:
+            self.manifest = self.manifest[self.manifest["split"] == split]
+        if datasets is not None and "dataset" in self.manifest.columns:
+            self.manifest = self.manifest[self.manifest["dataset"].isin(list(datasets))]
+        self.manifest = self.manifest.reset_index(drop=True)
+
+        self.cfg = cfg
+        if isinstance(h5_path, dict):
+            self.h5_path = {k: str(resolve_path(v)) for k, v in h5_path.items() if v}
+        else:
+            self.h5_path = str(resolve_path(h5_path)) if h5_path else None
+        self.mode = mode
+        self.n_eval_chunks = int(n_eval_chunks)
+        self.mel_stats = mel_stats
+        self.n_mels = int(cfg["audio"]["n_mels"]) if cfg else 128
+        self.seed = int(seed)
+
+        sr = int(cfg["audio"]["sample_rate"]) if cfg else 22050
+        hop = int(cfg["audio"]["hop_length"]) if cfg else 512
+        self.frames_per_second = sr / float(hop)
+        self.chunk_frames = max(8, int(round(float(chunk_s) * self.frames_per_second)))
+        self.chunk_s = float(chunk_s)
+
+        self.tag_vocab = list(tag_vocab) if tag_vocab is not None else []
+        self.tag_index = {t: i for i, t in enumerate(self.tag_vocab)}
+        self._store = None
+        self._epoch = 0
+
+    def __len__(self) -> int:
+        return len(self.manifest)
+
+    def set_epoch(self, epoch: int) -> None:
+        """Re-seed the chunk draw per epoch so it is random *and* reproducible."""
+        self._epoch = int(epoch)
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state["_store"] = None
+        return state
+
+    def _handle(self, dataset: str = ""):
+        if self._store is None:
+            self._store = {}
+        if not self.h5_path:
+            return None
+        key = dataset if isinstance(self.h5_path, dict) else "__single__"
+        if key not in self._store:
+            import h5py
+
+            path = (self.h5_path.get(dataset) if isinstance(self.h5_path, dict)
+                    else self.h5_path)
+            self._store[key] = h5py.File(path, "r") if path else None
+        return self._store[key]
+
+    def _standardise(self, mel: np.ndarray) -> np.ndarray:
+        if self.mel_stats is None:
+            return mel
+        return ((mel - float(self.mel_stats["mean"]))
+                / max(float(self.mel_stats["std"]), 1e-6)).astype(np.float32)
+
+    def _starts(self, width: int, index: int) -> list[int]:
+        span = max(width - self.chunk_frames, 0)
+        if self.mode == "random":
+            # deterministic given (seed, epoch, row): reproducible without a
+            # shared RNG that workers would each have to fork correctly
+            rng = np.random.default_rng((self.seed, self._epoch, index))
+            return [int(rng.integers(0, span + 1))]
+        if span == 0:
+            return [0] * self.n_eval_chunks
+        return [int(round(v)) for v in np.linspace(0, span, self.n_eval_chunks)]
+
+    def __getitem__(self, index: int):
+        row = self.manifest.iloc[index]
+        track_id = str(row["track_id"])
+        store = self._handle(str(row.get("dataset", "")))
+        if store is None or track_id not in store:
+            raise KeyError(
+                f"no full-resolution mel for {track_id!r} -- run "
+                "`python scripts/build_mel_cache.py` first"
+            )
+        node = store[track_id]
+        width = node.shape[1]
+
+        chunks = []
+        for start in self._starts(width, index):
+            piece = np.asarray(node[:, start: start + self.chunk_frames],
+                               dtype=np.float32)
+            if piece.shape[1] < self.chunk_frames:            # short clip: edge-pad
+                pad = self.chunk_frames - piece.shape[1]
+                piece = np.pad(piece, ((0, 0), (0, pad)), mode="edge")
+            chunks.append(self._standardise(piece))
+        mel = np.stack(chunks, axis=0)[:, None, :, :]          # [C, 1, n_mels, F]
+
+        y = np.full(len(self.tag_vocab), -1.0, dtype=np.float32)
+        tags = row["y_tags"] if "y_tags" in row else []
+        if str(row.get("dataset", "")) in {"mtat", "musiccaps"} or tags:
+            y[:] = 0.0
+            for tag in tags:
+                idx = self.tag_index.get(tag)
+                if idx is not None:
+                    y[idx] = 1.0
+
+        genre = _int_or_none(row.get("y_genre"))
+        return (
+            torch.from_numpy(mel).float(),
+            torch.from_numpy(y).float(),
+            torch.tensor(int(genre), dtype=torch.long),
+            track_id,
+        )
+
+
 # --------------------------------------------------------------------------- #
 # loaders
 # --------------------------------------------------------------------------- #
@@ -454,7 +596,7 @@ def make_loader(ds, cfg, shuffle: bool = False, seed: int = 42, batch_size=None,
         kwargs["persistent_workers"] = bool(train_cfg.get("persistent_workers", True))
 
     loader_cls = PyGDataLoader if isinstance(ds, MusicGraphDataset) else TorchDataLoader
-    if not isinstance(ds, (MusicGraphDataset, MelSpecDataset)):
+    if not isinstance(ds, (MusicGraphDataset, MelSpecDataset, ChunkedMelDataset)):
         # a plain list of Data objects still wants PyG collation
         sample = ds[0] if len(ds) else None
         from torch_geometric.data import Data as PyGData
