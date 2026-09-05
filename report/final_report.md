@@ -158,13 +158,24 @@ and frozen before test was touched once.
 | B2 mel CNN (param-matched) | 0.1654 | 0.1759 | 0.1252 | 416,154 |
 | B4 PCA + MLP | 0.3239 | 0.3167 | 0.3067 | — |
 | **T2 GNN** | **0.3692** | **0.4124** | **0.3915** | 432,690 |
-| B3 / T1 BERT-only | [TBD — Kaggle] | [TBD] | [TBD] | [TBD] |
+| B3 / T1 BERT-only (MTAT metadata) | 0.1808 | 0.1998 | 0.1806 | 109,520,690 |
 | T3 fusion | [TBD — Phase B] | [TBD] | [TBD] | [TBD] |
+
+*(T1/B3 above is the MTAT-metadata run so that the column is like-for-like; the MusicCaps caption results are in §6.1b.)*
 
 **What the audio-only rows say.** B4 mean-pools the *same* 96-dim segment
 features and feeds them to an MLP, so it is the "do you even need a graph?"
 control. The GNN beats it by **+0.0453 macro-F1**, and that gap — not the gap to
 random — is the graph's actual contribution.
+
+**Text alone is weak on MTAT, and that is the expected result.** B3/T1 reaches
+only 0.1808 macro-F1 from `clip_info` metadata
+(title, album, artist), and it early-stopped at epoch 5
+with its best validation score at epoch 2 — validation
+macro-F1 *fell* from 0.2475 onwards, so there was little signal to extract. MTAT
+ships no captions or lyrics, and an artist name is close to uninformative about
+which of 50 tags applies. This is the low end of the informativeness axis that
+the MusicCaps results in §6.1b anchor at the other end.
 
 **B2 needs a caveat, and it is our fault, not the CNN's.** At 0.1654 it lands
 below B4 on the same audio, which is not a credible architecture result. It was
@@ -182,6 +193,44 @@ this limitation next to the number.
 > Note for the discussion: the majority baseline reaches ~94.6% element accuracy
 > on MTAT while scoring ~0.00 macro-F1. That contrast is why accuracy is absent
 > from this table.
+
+
+### 6.1b Task 1 on MusicCaps captions — and the cost of not masking
+
+Different corpus, different label vocabulary and a different test split from
+§6.1, so **these numbers are not comparable with the MTAT table above** and must
+never be placed in the same column. MusicCaps test = 2,503
+clips scored against the 50 most frequent MusicCaps aspects.
+
+| Run | `text_source` | freeze mode | macro-F1 | micro-F1 | AUC-PR |
+|---|---|---|---|---|---|
+| Task 1 headline | `caption_masked` | full_ft | **0.3574** | 0.3624 | 0.3844 |
+| — | `caption_masked` | top_n | 0.3290 | 0.3479 | 0.3675 |
+| leakage demo | `caption_raw` | full_ft | 0.5788 | 0.6290 | 0.6200 |
+
+**The leakage gap is +0.2214 macro-F1 — a 62% relative inflation.**
+MusicCaps captions are *written from* the aspect list, so the raw caption
+contains its own labels almost verbatim; a model reading it is doing string
+matching, not music understanding. Both runs are identical except for masking,
+so the difference is attributable to leakage alone and to nothing else. **The
+headline Task 1 number is the masked one, 0.3574.**
+Reporting 0.5788 without this caveat would overstate
+the result by more than half.
+
+**Fine-tuning buys nothing here, and the validation gap says why.** Validation
+macro-F1 reached 0.5537 while test reached
+0.3574. With only 2,095 MusicCaps training rows
+against 109M parameters, the model fits the 232-row validation split long before
+it generalises, and the test split is the AudioSet-eval partition — a different
+sample, not a random holdout. Treat the freeze-mode ordering here as noise.
+
+> **Caveat on the freeze-mode comparison.** In the run that produced these
+> numbers, `bert.freeze_mode` was not being honoured: the mode was derived from
+> `freeze_epochs` alone, so the row labelled `frozen_probe` actually trained
+> `full_ft` and duplicated the headline configuration (0.3579 vs 0.3574 — the
+> difference is CUDA non-determinism, not the freeze mode). Only `top_n`, which
+> uses the warm-up schedule, was genuinely distinct. The bug is fixed and covered
+> by tests; a genuine three-way comparison needs a ~21-minute re-run.
 
 ### 6.2 Emotion regression (DEAM)
 

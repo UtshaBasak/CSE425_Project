@@ -1,14 +1,31 @@
 {
-  "source": "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\b--CSE425-Project\\15222d64-48b5-467e-889b-6417a85513e3\\scratchpad\\fakerun",
+  "source": "results",
   "imported": [],
-  "skipped_existing": [],
+  "skipped_existing": [
+    "task1_seed42_mtat_metadata_full_ft.json",
+    "task1_seed42_musiccaps_caption_masked_frozen_probe.json",
+    "task1_seed42_musiccaps_caption_masked_full_ft.json",
+    "task1_seed42_musiccaps_caption_masked_top_n.json",
+    "task1_seed42_musiccaps_caption_raw_full_ft.json",
+    "task1_seed42_smoke_frozen_probe_1epoch.json",
+    "task2_seed42.json",
+    "task1_sweep.json"
+  ],
   "rejected": [
     [
-      "task1_seed98.json",
-      "thresholds from test"
+      "task1_seed42.json",
+      "synthetic provenance"
     ],
     [
-      "task1_seed99.json",
+      "task2_seed42.json",
+      "synthetic provenance"
+    ],
+    [
+      "task3_seed42.json",
+      "synthetic provenance"
+    ],
+    [
+      "task4_seed42.json",
       "synthetic provenance"
     ]
   ]
