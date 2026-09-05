@@ -49,12 +49,15 @@ python scripts/make_kaggle_payload.py --no-graphs --out kaggle_payload_task1.tar
 On Kaggle: **Datasets → New Dataset** → drag the `.tar.gz` in → title it
 something like `gbmc-task1-payload` → **Private** → Create.
 
-Note the **slug** Kaggle gives you (shown in the URL, e.g.
-`amit/gbmc-task1-payload`). You need it in step 4.
+You do **not** need the slug — the staging cell in step 4 finds the payload
+wherever Kaggle mounts it.
 
-> It contains manifests, the text variants, both tag vocabularies, the train-only
-> normalisation stats, `config.yaml` and `src/`. No audio, no feature caches, no
-> checkpoints — the builder refuses to package those.
+> It contains manifests, text variants, both tag vocabularies, the train-only
+> normalisation stats, `config.yaml`, `src/` and `scripts/`. No audio, no feature
+> caches, no checkpoints — the builder refuses to package those.
+
+**Kaggle will decompress the `.tar.gz` on upload.** That is expected; the staging
+cell handles both the extracted tree and a surviving archive.
 
 ## 3. Create the notebook
 
@@ -69,24 +72,62 @@ Note the **slug** Kaggle gives you (shown in the URL, e.g.
 
 ## 4. Paste and run
 
-Replace `<slug>` with your dataset slug from step 2.
+**Do not use `tar xzf`.** Kaggle decompresses archives when it creates a
+dataset, so the tarball no longer exists inside `/kaggle/input` — and the mount
+path varies between `/kaggle/input/<slug>/` and
+`/kaggle/input/datasets/<owner>/<slug>/`. Hardcoding either is how you lose two
+minutes to a path error.
+
+Also: `/kaggle/input` is read-only, and training writes `results/`, so the tree
+has to be copied into `/kaggle/working` first.
+
+**Cell 1 — stage the payload (no slug needed, finds it wherever it landed):**
 
 ```python
-!tar xzf /kaggle/input/<slug>/kaggle_payload_task1.tar.gz -C /kaggle/working
-%cd /kaggle/working
+import os, shutil, tarfile
+from pathlib import Path
+
+WORK, INPUT = Path("/kaggle/working"), Path("/kaggle/input")
+
+tarball = next(iter(sorted(INPUT.rglob("kaggle_payload_task1.tar.gz"))), None)
+if tarball:                                   # archive survived upload
+    print("archive:", tarball)
+    with tarfile.open(tarball) as tf:
+        tf.extractall(WORK)
+else:                                         # Kaggle already extracted it
+    marker = next(iter(sorted(INPUT.rglob("src/train.py"))), None)
+    if marker is None:
+        raise SystemExit("payload not found under /kaggle/input -- is the dataset attached?")
+    payload = marker.parent.parent
+    print("payload:", payload)
+    for item in sorted(payload.iterdir()):
+        dst = WORK / item.name
+        if dst.exists():
+            continue
+        shutil.copytree(item, dst) if item.is_dir() else shutil.copy2(item, dst)
+
+os.chdir(WORK)
+print("cwd:", os.getcwd())
+print("contents:", sorted(p.name for p in WORK.iterdir()))
+```
+
+Expect `contents: ['config.yaml', 'data', 'requirements.txt', 'scripts', 'src']`.
+If `scripts` is missing, your dataset predates the payload fix — rebuild with
+`make kaggle-payload` and upload a new version.
+
+**Cell 2 — run:**
+
+```python
 !pip -q install torch-geometric
 !python scripts/kaggle_task1.py --model bert-base-uncased --epochs 8
 ```
 
-Sanity-check the first 60 seconds of output:
+Sanity-check the first minute:
 
-- `tag vocabulary: 50 tags from musiccaps_tag_vocab.json` — the right vocabulary
+- `tag vocabulary: 50 tags from musiccaps_tag_vocab.json` — right vocabulary
 - `text_source=caption_masked applied to N rows` — labels are not in the input
 - `leakage check passed` — splits are artist-disjoint
 - `task 1 epoch 1/8 | loss ... | val macro_f1=...` — it is training
-
-If you see `FileNotFoundError: features.h5`, you are on an old payload — rebuild
-it from the current repo.
 
 ## 5. Save & Run All
 
@@ -148,6 +189,9 @@ currently reads `[TBD — Kaggle]` for the B3/T1 row.
 | Dies at model load, `OSError`/connection error | Internet is Off | Sidebar → Internet On (needs phone verification) |
 | `ModuleNotFoundError: torch_geometric` | dropped the pip line | Put it back; it costs 11 s |
 | `FileNotFoundError: features.h5` | payload predates the Task 1 fix | Rebuild with `make kaggle-payload` |
+| `/bin/bash: line 1: slug: No such file or directory` | the literal `<slug>` placeholder was left in; bash read `<` as redirection | Use the Cell 1 above — it needs no slug |
+| `can't open file '.../scripts/kaggle_task1.py'` | either Cell 1 did not run, or the dataset predates the payload fix that added `scripts/` | Re-upload a freshly built payload |
+| `tar: ...tar.gz: Cannot open` | Kaggle already extracted the archive | Use Cell 1; do not call `tar` |
 | `LEAKAGE: ... artist_id(s) span multiple splits` | edited manifests by hand | Rebuild: `python -m src.splits --validate-audio --prune-to-cache` |
 | Run stops early at epoch 4-5 | early stopping, `patience=3` | Working as intended; `best_epoch` is in the JSON |
 | Out of GPU quota | 30 h/week | The sweep is ~45 min; `--only full_ft` cuts it to ~25 min |
