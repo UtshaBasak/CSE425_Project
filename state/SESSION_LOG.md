@@ -249,3 +249,12 @@ Format:
 [2026-09-06 05:52] DONE   Related work now names MuLan alongside CLAP, with the scale gap made explicit: MuLan trains on
                         ~44M audio-text pairs against our 2,095, four orders of magnitude, which is the right frame for
                         reading the retrieval numbers.
+
+[2026-09-06 05:56] FIX    Checkpoints were written as task{N}_seed{S}_{best,last}.pt with NO run tag, while results have
+                        carried one since A7. Consequences, both silent: the C4 ablation's seven fusion modes would each
+                        overwrite the previous mode's checkpoint, and the C6 case studies - which need the MusicCaps
+                        Task 3 model specifically - would load whichever run finished last and produce plausible output
+                        from the wrong weights. Found by asking what 4.4 would load, before running C2, not after C4.
+                        Checkpoints now carry the tag; utils.find_checkpoint resolves exact tag -> untagged (older
+                        artifacts) -> newest tagged, and returns None rather than a wrong-task file. Four tests, one of
+                        which greps src/train.py to assert the write paths still interpolate the suffix.

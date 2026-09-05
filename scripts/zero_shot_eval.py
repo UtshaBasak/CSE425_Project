@@ -35,9 +35,9 @@ import torch
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src import metrics as M  # noqa: E402
-from src.utils import (autocast_ctx, get_device, get_logger,  # noqa: E402
-                       load_config, parse_overrides, project_root, save_json,
-                       set_seed)
+from src.utils import (autocast_ctx, find_checkpoint, get_device,  # noqa: E402
+                       get_logger, load_config, parse_overrides, project_root,
+                       save_json, set_seed)
 
 LOGGER = get_logger("gbmc.zeroshot")
 
@@ -98,6 +98,8 @@ def main(argv=None) -> int:
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--device", default="cuda")
+    parser.add_argument("--run-tag", default=None,
+                        help="pick a specific Task 4 checkpoint by run tag")
     parser.add_argument("--override", nargs="*", default=[])
     args = parser.parse_args(argv)
 
@@ -139,13 +141,15 @@ def main(argv=None) -> int:
                 len(tags), len(TEMPLATES))
 
     model = _build_dual(cfg, device)
-    ckpt = (project_root() / cfg["paths"].get("checkpoints", "results/checkpoints")
-            / f"task4_seed{args.seed}_best.pt")
-    if not ckpt.exists():
+    ckpt = find_checkpoint(
+        project_root() / cfg["paths"].get("checkpoints", "results/checkpoints"),
+        task=4, seed=args.seed, run_tag=args.run_tag)
+    if ckpt is None:
         raise SystemExit(
-            f"{ckpt} not found -- train Task 4 first "
+            f"no Task 4 checkpoint for seed {args.seed} -- train it first "
             f"(python -m src.train --task 4 --seed {args.seed})"
         )
+    LOGGER.info("using checkpoint %s", ckpt.name)
     payload = torch.load(ckpt, map_location=device, weights_only=False)
     state = payload.get("model_state", payload)
     missing, unexpected = model.load_state_dict(state, strict=False)
