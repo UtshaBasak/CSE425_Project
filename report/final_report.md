@@ -1,5 +1,18 @@
 # GNN–BERT Music Context Understanding — report outline
 
+> ## SUPERSEDED — the living report is now `report/final_report.tex`
+>
+> As of phase A7 the report is maintained directly in IEEEtran two-column LaTeX,
+> because that is the format it has to be submitted in and a markdown-to-LaTeX
+> conversion at the end is where numbers get lost. **Edit `final_report.tex`, not
+> this file.** Its numbers come from `results/*.json` via
+> `python report/fill_report.py`, so the prose contains no literal figures.
+>
+> This file is kept because `report/build_report.py` renders it to a quick PDF
+> preview, which is useful while there is no LaTeX toolchain on this machine. It
+> is a historical draft; where the two disagree, the `.tex` is correct.
+
+
 > **Status: skeleton.** Every number below is a placeholder marked `[TBD]` and
 > must be filled from `results/metrics.json` after the real training runs.
 > Nothing here is copied from the assignment PDF's Table 3 — those figures are

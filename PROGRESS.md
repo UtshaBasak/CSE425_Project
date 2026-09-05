@@ -1,7 +1,7 @@
 # PROGRESS
 
-Last session ended: 2026-09-05 13:10
-Currently resuming at: A6.4 (operator action), then Phase B
+Last session ended: 2026-09-06 (phase A7)
+Currently resuming at: Phase B
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -268,6 +268,91 @@ distilbert on real MusicCaps: macro-F1 0.187 on 2,503 test clips).
 
 The sweep covers the three freeze modes plus the masked/raw caption pair; that
 pair *is* the leakage result, and the script prints the gap explicitly.
+
+
+## Phase A7 — Pre-Phase-B corrections
+
+Five defects found after the first real results came in. Three of them changed
+numbers that were already written down, which is the reason this phase exists
+rather than being folded into Phase B.
+
+- [x] **A7.0 Real Kaggle output imported.** The operator re-ran with *Save & Run
+  All* and the output files exist this time. Every test metric matches the values
+  previously recovered from the console log exactly, and the runs now carry their
+  real per-tag thresholds and per-epoch history. No result in `results/` is
+  second-hand any more. `output/` (863 MB, mostly checkpoints) added to the parent
+  `.gitignore`.
+
+- [x] **A7.1 FMA-small genre is now the Task 2 headline.** The deliverable asks
+  for genre classification on FMA-small; what existed was MTAT multi-label
+  tagging. Eight-way single-label classification is wired end to end
+  (`masked_genre_loss`, `M.multiclass_metrics`, `GNNClassifier(n_tags=0)`), and
+  MTAT multi-label is kept as a reported second domain because it is the only
+  corpus whose label space Task 3 also uses. Accuracy is reported for the genre
+  runs and only for them: one label per clip, eight near-balanced classes
+  (train 797-801, test 100-101), chance 12.5%.
+
+- [x] **A7.2 B2 rebuilt as a real mel-CNN.** Parameter-matching it to the GNN's
+  432,690 parameters was a specification error and the likely cause of its
+  0.1654. Three things were wrong and all three were ours, not the CNN's:
+
+  | Was | Now |
+  |---|---|
+  | width searched to match 432,690 params | short-chunk CNN, 3.43M params (tags) / 2.89M (genre) |
+  | mel mean-pooled to 256 columns (8.8 fps) | native resolution, 43.07 fps |
+  | one global descriptor per 29 s clip | random 3 s excerpts; 9 chunks averaged at inference |
+
+  `target_params` now **raises** rather than being quietly accepted, so the
+  constraint cannot come back by accident. Compute budget is what is equalised
+  (same GPU, same 30-epoch cap, same early-stopping rule) and both parameter
+  counts and wall-clock times are reported. Full-resolution cache built by
+  `scripts/build_mel_cache.py`: MTAT 4.03 GB, FMA 1.74 GB, 0 failures, float16 +
+  gzip-4 + shuffle (1.63x measured, 2.2 ms/clip to read back).
+
+- [x] **A7.3 Tag vocabularies were leaking, and one of them mattered.**
+  `build_musiccaps_tag_vocab` ranked aspect frequency over all 5,521 MusicCaps
+  clips, so the test split helped choose the label space before training began.
+  Counting only the 2,095 train clips **swaps 7 of the 50 tags**, so every
+  MusicCaps Task 1 number was invalidated and re-run. The MTAT vocabulary was
+  audited the same way and turned out to be **unaffected in content** — its
+  top-50 set is identical either way, only the frequency ordering moves — so
+  MTAT-scored results did not need re-running for this reason. Fixed anyway;
+  both vocabulary files now record `split_used` and `n_clips_counted`, and six
+  tests cover it, including one asserting that train-only and all-split
+  selection still *disagree* (without it the other five would pass whether or
+  not the fix were present).
+
+- [x] **A7.4 Threshold stability quantified rather than assumed.** MTAT's
+  validation split is 977 clips from 14 artists, so the per-tag thresholds fitted
+  on it carry a variance term that a point estimate hides. `_fit` now dumps the
+  val/test score matrices of the selected model; `scripts/threshold_bootstrap.py`
+  resamples validation 100x, re-tunes all 50 thresholds per replicate and applies
+  each to the fixed test split. **Decision rule fixed in advance:** spread above
+  0.02 test macro-F1 means tuned numbers may not stand alone and every table
+  carries the fixed-0.5 number beside them. The verdict is written into the JSON.
+
+- [x] **A7.5** pytest re-run, PROGRESS.md updated, committed with phase-ID
+  messages, pushed.
+
+### Also in A7 (not requested, but load-bearing)
+
+- `--run-tag` on `src.train`. Two configurations of the same task were writing to
+  the same result file; the genre smoke run overwrote the MTAT Task 2 result and
+  it had to be restored from git.
+- `report/final_report.tex` replaces the markdown report as the living document,
+  in IEEEtran two-column form. `report/fill_report.py` injects every number from
+  `results/*.json` into an AUTOGEN macro block, so the prose contains no literal
+  figures and a stale number cannot survive a re-run. Missing results render as
+  `\textit{pending}` and the script names them.
+- The Task 1 sweep now runs **locally**. This GPU is sm_75, so the work that went
+  to Kaggle for wall-clock reasons is reproducible here — roughly 2 min/epoch
+  against Kaggle's 12 s, which is slow but unattended.
+
+### Left as-is, deliberately
+
+The 0.774 chord-validation figure keeps its caveat unchanged: it is measured on
+MIDI-derived chroma, validates the template-matching step in isolation, and is
+not an audio-domain chord accuracy.
 
 ### Why Task 1 needs no graphs
 
