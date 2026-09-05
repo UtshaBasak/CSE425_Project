@@ -58,34 +58,34 @@
 \newcommand{\BootVerdict}{The largest spread is 0.0288 macro-F1, above the 0.02 threshold fixed in advance. Tuned numbers are therefore reported alongside fixed-0.5 numbers throughout, and differences smaller than this spread are not interpreted.}
 \newcommand{\BootWorstTags}{\texttt{choir} ($\sigma=0.24$), \texttt{chant} ($\sigma=0.23$), \texttt{india} ($\sigma=0.17$), \texttt{orchestra} ($\sigma=0.16$), \texttt{baroque} ($\sigma=0.12$)}
 \newcommand{\FMATestRows}{801}
-\newcommand{\LeakGap}{$+$0.2214}
-\newcommand{\LeakPct}{62}
-\newcommand{\MCMaskedF}{0.3574}
+\newcommand{\LeakGap}{\textit{pending}}
+\newcommand{\LeakPct}{\textit{pending}}
+\newcommand{\MCMaskedF}{\textit{pending}}
 \newcommand{\MCMaskedFixed}{\textit{pending}}
-\newcommand{\MCMaskedMicro}{0.3624}
-\newcommand{\MCMaskedPR}{0.3844}
-\newcommand{\MCMaskedVal}{0.5537}
-\newcommand{\MCProbeF}{0.3579}
-\newcommand{\MCProbeMicro}{0.3756}
-\newcommand{\MCProbePR}{0.3904}
-\newcommand{\MCRawF}{0.5788}
+\newcommand{\MCMaskedMicro}{\textit{pending}}
+\newcommand{\MCMaskedPR}{\textit{pending}}
+\newcommand{\MCMaskedVal}{\textit{pending}}
+\newcommand{\MCProbeF}{0.2637}
+\newcommand{\MCProbeMicro}{0.2644}
+\newcommand{\MCProbePR}{0.2413}
+\newcommand{\MCRawF}{\textit{pending}}
 \newcommand{\MCRawFixed}{\textit{pending}}
-\newcommand{\MCRawMicro}{0.6290}
-\newcommand{\MCRawPR}{0.6200}
+\newcommand{\MCRawMicro}{\textit{pending}}
+\newcommand{\MCRawPR}{\textit{pending}}
 \newcommand{\MCTest}{2{,}503}
-\newcommand{\MCTopNF}{0.3290}
-\newcommand{\MCTopNMicro}{0.3479}
-\newcommand{\MCTopNPR}{0.3675}
+\newcommand{\MCTopNF}{\textit{pending}}
+\newcommand{\MCTopNMicro}{\textit{pending}}
+\newcommand{\MCTopNPR}{\textit{pending}}
 \newcommand{\MCTrain}{2{,}095}
 \newcommand{\MCVal}{232}
 \newcommand{\NBoot}{100}
 \newcommand{\NGraphs}{107{,}952}
 \newcommand{\NTracks}{35{,}984}
-\newcommand{\TOneMtatF}{0.1808}
+\newcommand{\TOneMtatF}{\textit{pending}}
 \newcommand{\TOneMtatFixed}{\textit{pending}}
-\newcommand{\TOneMtatMicro}{0.1998}
-\newcommand{\TOneMtatPR}{0.1806}
-\newcommand{\TOneMtatParams}{109{,}520{,}690}
+\newcommand{\TOneMtatMicro}{\textit{pending}}
+\newcommand{\TOneMtatPR}{\textit{pending}}
+\newcommand{\TOneMtatParams}{\textit{pending}}
 \newcommand{\TTwoGenreAcc}{42.3\%}
 \newcommand{\TTwoGenreF}{0.4277}
 \newcommand{\TTwoGenreParams}{292{,}616}
@@ -119,7 +119,8 @@ a temporal chain plus $k$-nearest-neighbour similarity links. Over this shared
 representation we run four tasks -- text-only tagging with BERT, graph-only
 classification with a GNN, cross-attention fusion with multi-task emotion
 regression, and contrastive graph--caption retrieval -- on four public corpora
-totalling \NTracks{} tracks and \NGraphs{} graphs. Two methodological findings
+totalling \NTracks{} tracks, each stored as three graph views
+(\NGraphs{} graphs in all). Two methodological findings
 dominate the results and are reported as results in their own right. First,
 MusicCaps captions are written \emph{from} the aspect list that also serves as
 the label set, so a model reading the raw caption performs string matching
@@ -224,7 +225,7 @@ DEAM           &  1{,}802 &  1{,}802 & valence/arousal (T3) \\
 MusicCaps      &  5{,}521 &  4{,}830 & captions (T1, T4) \\
 Lakh MIDI Clean & 17{,}256 & 17{,}184 & chord validation only \\
 \midrule
-\textbf{Total (trained on)} & & \textbf{\NTracks{}} & \textbf{\NGraphs{} graphs} \\
+\textbf{Total (trained on)} & & \textbf{\NTracks{}} & \textbf{\NGraphs{} stored graphs} \\
 \bottomrule
 \end{tabular}
 \end{table}
