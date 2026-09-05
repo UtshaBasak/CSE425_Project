@@ -31,6 +31,7 @@ from .graph_builder import rewire_edges  # noqa: E402
 from .train import (  # noqa: E402
     CAPTION_DATASETS,
     TAG_DATASETS,
+    corpora_for,
     DataBundle,
     collect_scores,
     emotion_metrics,
@@ -391,7 +392,7 @@ def run_baselines(bundle: DataBundle, cfg) -> list[dict]:
     import torch as _torch
 
     def _matrix(split: str):
-        ds = bundle.dataset(split, TAG_DATASETS)
+        ds = bundle.dataset(split, corpora_for(cfg, 'tag'))
         feats, tags = [], []
         for i in range(len(ds)):
             data = ds[i]
@@ -451,11 +452,11 @@ def run_ablation(bundle: DataBundle, cfg, device, seed: int, epochs: int = 1) ->
                               n_heads=int(cfg["fusion"]["n_heads"]),
                               n_tags=len(bundle.tag_vocab), predict_emotion=True).to(device)
 
-        train_loader = make_loader(bundle.dataset("train", TAG_DATASETS), cfg, shuffle=True,
+        train_loader = make_loader(bundle.dataset("train", corpora_for(cfg, "tag")), cfg, shuffle=True,
                                    seed=seed, num_workers=0)
-        val_loader = make_loader(bundle.dataset("val", TAG_DATASETS), cfg, shuffle=False,
+        val_loader = make_loader(bundle.dataset("val", corpora_for(cfg, "tag")), cfg, shuffle=False,
                                  seed=seed, num_workers=0)
-        test_loader = make_loader(bundle.dataset("test", TAG_DATASETS), cfg, shuffle=False,
+        test_loader = make_loader(bundle.dataset("test", corpora_for(cfg, "tag")), cfg, shuffle=False,
                                   seed=seed, num_workers=0)
 
         optimizer = torch.optim.AdamW(model.param_groups(
@@ -609,7 +610,7 @@ def export_retrieval_examples(bundle: DataBundle, cfg, device, seed: int,
         LOGGER.info("loaded Task 4 weights from %s", ckpt.name)
     model.eval()
 
-    loader = make_loader(bundle.dataset("test", CAPTION_DATASETS), cfg, shuffle=False,
+    loader = make_loader(bundle.dataset("test", corpora_for(cfg, "caption")), cfg, shuffle=False,
                          seed=seed, num_workers=0, batch_size=16)
     graphs, texts, ids, captions = [], [], [], []
     with torch.no_grad():
@@ -882,7 +883,7 @@ def _rescore_from_checkpoint(bundle, cfg, device, task: int, run: dict):
     else:
         LOGGER.warning("no checkpoint at %s; scoring an untrained model", ckpt)
 
-    loader = make_loader(bundle.dataset("test", TAG_DATASETS), cfg, shuffle=False,
+    loader = make_loader(bundle.dataset("test", corpora_for(cfg, "tag")), cfg, shuffle=False,
                          seed=int(cfg.get("seed", 42)), num_workers=0)
     if len(loader.dataset) == 0:
         return None

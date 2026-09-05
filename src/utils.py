@@ -15,8 +15,14 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 import numpy as np
-import torch
 import yaml
+
+# torch is imported lazily, inside the functions that need it. On Windows a
+# ProcessPoolExecutor worker re-imports the module that defines its task
+# function, and src.audio_features imports this module -- so a module-level
+# torch import meant six extraction workers each loading torch's DLLs, which
+# exhausts the commit limit (WinError 1455: the paging file is too small).
+# The extraction workers need numpy and librosa; they never touch torch.
 
 __all__ = [
     "set_seed",
@@ -70,6 +76,8 @@ LOGGER = get_logger()
 # --------------------------------------------------------------------------- #
 def set_seed(seed: int) -> None:
     """Seed every RNG this project can reach, including subprocess hashing."""
+    import torch
+
     seed = int(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
     random.seed(seed)
@@ -84,13 +92,17 @@ def set_seed(seed: int) -> None:
 
 def seed_worker(worker_id: int) -> None:
     """`worker_init_fn` for DataLoader: derive each worker seed from torch's."""
+    import torch
+
     worker_seed = torch.initial_seed() % (2**32)
     np.random.seed(worker_seed)
     random.seed(worker_seed)
 
 
-def get_generator(seed: int) -> torch.Generator:
+def get_generator(seed: int):
     """Seeded generator to hand to DataLoader(generator=...)."""
+    import torch
+
     g = torch.Generator()
     g.manual_seed(int(seed))
     return g
@@ -287,6 +299,8 @@ def atomic_torch_save(obj: Any, path: "str | os.PathLike") -> Path:
     """``torch.save`` through a temp file, so a killed run leaves no half-checkpoint."""
     import io as _io
 
+    import torch
+
     buffer = _io.BytesIO()
     torch.save(obj, buffer)
     return atomic_write_bytes(path, buffer.getvalue())
@@ -316,7 +330,7 @@ def _json_default(obj):
         return str(obj)
     if isinstance(obj, AttrDict):
         return _sanitise(obj.to_dict())
-    if isinstance(obj, torch.Tensor):
+    if hasattr(obj, "detach") and hasattr(obj, "cpu"):      # a torch.Tensor
         return _sanitise(obj.detach().cpu().tolist())
     return str(obj)
 
@@ -324,8 +338,10 @@ def _json_default(obj):
 # --------------------------------------------------------------------------- #
 # device / AMP / VRAM
 # --------------------------------------------------------------------------- #
-def get_device(pref: str = "cuda") -> torch.device:
+def get_device(pref: str = "cuda"):
     """Honour the preference, falling back to CPU with a warning."""
+    import torch
+
     pref = (pref or "cuda").lower()
     if pref.startswith("cuda"):
         if torch.cuda.is_available():
@@ -335,7 +351,7 @@ def get_device(pref: str = "cuda") -> torch.device:
     return torch.device(pref)
 
 
-def count_parameters(model: torch.nn.Module, trainable_only: bool = True) -> int:
+def count_parameters(model, trainable_only: bool = True) -> int:
     if trainable_only:
         return sum(p.numel() for p in model.parameters() if p.requires_grad)
     return sum(p.numel() for p in model.parameters())
@@ -348,6 +364,8 @@ def autocast_ctx(enabled: bool, device_type: str = "cuda", dtype=None):
     not speed -- which is exactly what a 4 GB card needs. bf16 is unsupported
     on sm_75, so fp16 is the only useful autocast dtype.
     """
+    import torch
+
     if not enabled or device_type != "cuda" or not torch.cuda.is_available():
         return contextlib.nullcontext()
     return torch.amp.autocast(device_type="cuda", dtype=dtype or torch.float16)
@@ -355,12 +373,16 @@ def autocast_ctx(enabled: bool, device_type: str = "cuda", dtype=None):
 
 def make_grad_scaler(enabled: bool, device_type: str = "cuda"):
     """GradScaler that is a no-op when AMP is off or we are on CPU."""
+    import torch
+
     use = bool(enabled) and device_type == "cuda" and torch.cuda.is_available()
     return torch.amp.GradScaler("cuda", enabled=use)
 
 
 def log_vram(tag: str = "", logger: "logging.Logger | None" = None) -> dict:
     """Report current/peak CUDA allocation -- the 4 GB debugging workhorse."""
+    import torch
+
     logger = logger or LOGGER
     if not torch.cuda.is_available():
         return {"tag": tag, "allocated_mb": 0.0, "peak_mb": 0.0, "reserved_mb": 0.0}
@@ -378,6 +400,8 @@ def log_vram(tag: str = "", logger: "logging.Logger | None" = None) -> dict:
 
 
 def reset_vram_peak() -> None:
+    import torch
+
     if torch.cuda.is_available():
         torch.cuda.reset_peak_memory_stats()
 

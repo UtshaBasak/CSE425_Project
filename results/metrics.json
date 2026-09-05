@@ -2,7 +2,7 @@
   "splits": {
     "datasets": {
       "mtat": {
-        "rows": 21361,
+        "rows": 21358,
         "artists": 229,
         "per_split": {
           "test": {
@@ -10,7 +10,7 @@
             "artists": 42
           },
           "train": {
-            "clips": 16884,
+            "clips": 16881,
             "artists": 173
           },
           "val": {
@@ -18,12 +18,12 @@
             "artists": 14
           }
         },
-        "artist_disjoint_moved": 3465,
+        "artist_disjoint_moved": 0,
         "cross_corpus_moved": 0,
         "errata_excluded": 0
       },
       "fma": {
-        "rows": 7997,
+        "rows": 7994,
         "artists": 2305,
         "per_split": {
           "test": {
@@ -31,7 +31,7 @@
             "artists": 204
           },
           "train": {
-            "clips": 6401,
+            "clips": 6398,
             "artists": 1886
           },
           "val": {
@@ -40,8 +40,8 @@
           }
         },
         "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 6,
-        "errata_excluded": 3
+        "cross_corpus_moved": 0,
+        "errata_excluded": 0
       },
       "deam": {
         "rows": 1802,
@@ -61,24 +61,24 @@
           }
         },
         "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 46,
+        "cross_corpus_moved": 0,
         "errata_excluded": 0
       },
       "musiccaps": {
-        "rows": 5043,
-        "artists": 5043,
+        "rows": 4830,
+        "artists": 4830,
         "per_split": {
           "test": {
-            "clips": 2634,
-            "artists": 2634
+            "clips": 2503,
+            "artists": 2503
           },
           "train": {
-            "clips": 2169,
-            "artists": 2169
+            "clips": 2095,
+            "artists": 2095
           },
           "val": {
-            "clips": 240,
-            "artists": 240
+            "clips": 232,
+            "artists": 232
           }
         },
         "artist_disjoint_moved": 0,
@@ -121,18 +121,41 @@
       }
     },
     "tag_vocab_size": 50,
+    "musiccaps_tag_vocab_size": 50,
+    "musiccaps_vocab_coverage": {
+      "n_distinct_aspects": 13197,
+      "vocab_size": 50,
+      "mean_aspects_per_clip": 10.668538308277485,
+      "mean_labels_per_clip": 2.831733381633762,
+      "clips_with_no_label": 525,
+      "clips_with_no_label_pct": 9.50914689367868,
+      "most_frequent": [
+        "low quality",
+        "instrumental",
+        "noisy",
+        "emotional",
+        "medium tempo",
+        "energetic",
+        "passionate",
+        "amateur recording",
+        "slow tempo",
+        "live performance"
+      ]
+    },
     "musiccaps_survival": {
       "status_counts": {
-        "ok": 5043,
-        "missing": 478
+        "ok": 4830,
+        "missing": 478,
+        "corrupt": 206,
+        "wrong_duration": 7
       },
       "train_nominal": 2663,
-      "train_survivors": 2409,
-      "train_survival_rate": 0.904618850920015,
+      "train_survivors": 2327,
+      "train_survival_rate": 0.8738265114532482,
       "eval_nominal": 2858,
-      "eval_survivors": 2634,
-      "eval_survival_rate": 0.9216235129461162,
-      "retrieval_gallery_size": 2634
+      "eval_survivors": 2503,
+      "eval_survival_rate": 0.8757872638208537,
+      "retrieval_gallery_size": 2503
     }
   }
 }

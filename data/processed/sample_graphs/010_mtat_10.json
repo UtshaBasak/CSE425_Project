@@ -1,0 +1,21 @@
+{
+  "track_id": "mtat_10",
+  "artist_id": "american_bach_soloists",
+  "dataset": "mtat",
+  "provenance": "real",
+  "split": "train",
+  "num_nodes": 18,
+  "num_edges": 112,
+  "num_self_loops": 18,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.222222222222222,
+  "min_degree": 4,
+  "temporal_edges": 34,
+  "mean_edge_cosine": 0.7190381288528442,
+  "n_positive_tags": 2,
+  "y_genre": -1,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "BWV54 - I Aria. J.S. Bach Solo Cantatas. American Bach Soloists"
+}

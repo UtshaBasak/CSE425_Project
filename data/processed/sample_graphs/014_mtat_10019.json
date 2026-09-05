@@ -1,0 +1,21 @@
+{
+  "track_id": "mtat_10019",
+  "artist_id": "vito_paternoster",
+  "dataset": "mtat",
+  "provenance": "real",
+  "split": "train",
+  "num_nodes": 18,
+  "num_edges": 116,
+  "num_self_loops": 18,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.444444444444445,
+  "min_degree": 4,
+  "temporal_edges": 34,
+  "mean_edge_cosine": 0.9034940600395203,
+  "n_positive_tags": 3,
+  "y_genre": -1,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "Sonata Prima in do minore - Fuga (Allegro). CD1-Bach Sonatas and Partitas for solo violin. Vito Paternoster"
+}

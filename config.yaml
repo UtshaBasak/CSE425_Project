@@ -169,10 +169,24 @@ train:
 # ---------------------------------------------------------------------------
 data:
   text_source: caption_masked   # caption_masked | caption_raw | metadata
+  # Which corpora a task draws from. Kept explicit because mixing corpora with
+  # different label vocabularies silently fills rows with all-negative targets:
+  # scoring MusicCaps against the MTAT top-50 leaves 62% of its clips with no
+  # positive label at all.
+  tag_corpora: [mtat]                 # Tasks 1-3 tag supervision
+  emotion_corpora: [deam]             # Task 3 valence/arousal
+  caption_corpora: [musiccaps]        # Task 4 retrieval
 
 tags:
   top_k: 50
   merge_synonyms: true
+  # Which label vocabulary a run trains against. Measured on the real corpora:
+  # only 0.52 of MusicCaps 10.7 aspects per clip appear in the MTAT top-50, and
+  # 62% of MusicCaps clips match none of it, so the Task 1 MusicCaps headline
+  # must use the MusicCaps vocabulary or most rows carry no positive label.
+  #   mtat      -> data/splits/tag_vocab.json            (MTAT/Task 3 primary)
+  #   musiccaps -> data/splits/musiccaps_tag_vocab.json  (Task 1 headline)
+  vocab_source: mtat
 
 splits:
   # MTAT's canonical hex-folder split is NOT artist-disjoint: Magnatune albums

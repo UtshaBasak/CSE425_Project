@@ -24,7 +24,7 @@ from src.baselines import majority_tag_baseline, pca_mlp_baseline, random_tag_ba
 from src.cnn_baseline import MelCNN  # noqa: E402
 from src.datasets import MelSpecDataset  # noqa: E402
 from src.gnn_model import GNNClassifier  # noqa: E402
-from src.train import TAG_DATASETS, DataBundle  # noqa: E402
+from src.train import TAG_DATASETS, DataBundle, corpora_for  # noqa: E402
 from src.utils import (  # noqa: E402
     autocast_ctx,
     count_parameters,
@@ -42,7 +42,7 @@ LOGGER = get_logger("gbmc.baselines.cli")
 
 def _pooled_features(bundle: DataBundle, split: str):
     """Mean-pooled 96-dim segment features + the tag matrix for one split."""
-    dataset = bundle.dataset(split, TAG_DATASETS)
+    dataset = bundle.dataset(split, corpora_for(bundle.cfg, 'tag'))
     feats, tags = [], []
     for i in range(len(dataset)):
         data = dataset[i]
@@ -58,17 +58,36 @@ def run_cnn_baseline(bundle: DataBundle, cfg, device, seed: int, epochs: int,
     """Train B2 on the mel cache, tuning thresholds on val and scoring test once."""
     from torch.utils.data import DataLoader
 
+    # bundle.mel_h5 is a {dataset: path} mapping once per-corpus caches exist
     mel_h5 = bundle.mel_h5
-    if not Path(mel_h5).exists():
-        LOGGER.warning("no mel cache at %s; skipping B2", mel_h5)
+    available = ({k: v for k, v in mel_h5.items() if Path(v).exists()}
+                 if isinstance(mel_h5, dict)
+                 else (mel_h5 if Path(mel_h5).exists() else None))
+    if not available:
+        LOGGER.warning("no mel cache found (%s); skipping B2", mel_h5)
         return {"baseline": "B2_mel_cnn", "skipped": "no mel cache"}
+    mel_h5 = available
 
     set_seed(seed)
+
+    # train-split mel statistics, so B2 sees standardised input like every other
+    # model here. Without this the first conv sees dB values around -80.
+    from src.audio_features import compute_mel_stats
+
+    mel_stats = None
+    try:
+        train_frame = bundle.frame("train", corpora_for(bundle.cfg, "tag"))
+        mel_stats = compute_mel_stats(train_frame, mel_h5, split="train")
+        LOGGER.info("mel normalisation (train only): mean %.2f std %.2f over %d values",
+                    mel_stats["mean"], mel_stats["std"], mel_stats["n_values"])
+    except Exception as exc:
+        LOGGER.warning("could not compute mel statistics (%s); B2 will see raw dB", exc)
+
     loaders = {}
     for split in ("train", "val", "test"):
-        frame = bundle.frame(split, TAG_DATASETS)
+        frame = bundle.frame(split, corpora_for(bundle.cfg, 'tag'))
         dataset = MelSpecDataset(frame, cfg=cfg, h5_path=mel_h5,
-                                 tag_vocab=bundle.tag_vocab)
+                                 tag_vocab=bundle.tag_vocab, mel_stats=mel_stats)
         if len(dataset) == 0:
             LOGGER.warning("no %s rows for B2; skipping", split)
             return {"baseline": "B2_mel_cnn", "skipped": f"empty {split} split"}
@@ -127,6 +146,7 @@ def run_cnn_baseline(bundle: DataBundle, cfg, device, seed: int, epochs: int,
         "mean_auc_pr": M.mean_auc_pr(y_test, s_test),
         "threshold_source": "val",
         "epochs": int(max(1, epochs)),
+        "mel_normalised": mel_stats is not None,
     })
     LOGGER.info("B2 mel CNN: macro-F1 %.4f with %d params (target %d)",
                 report["macro_f1"], report["trainable_params"], target_params)

@@ -95,27 +95,30 @@
       "nominal_rows": 5521,
       "nominal_eval": 2858,
       "nominal_train": 2663,
-      "actual_audio_files": 2781,
+      "actual_audio_files": 5043,
       "csv_rows": 5521,
       "csv_eval_rows": 2858,
       "csv_train_rows": 2663,
-      "usable_rows": 2781,
+      "usable_rows": 4830,
       "survival": {
         "status_counts": {
-          "ok": 2781,
-          "missing": 2740
+          "ok": 4830,
+          "missing": 478,
+          "corrupt": 206,
+          "wrong_duration": 7
         },
         "train_nominal": 2663,
-        "train_survivors": 1300,
-        "train_survival_rate": 0.488171235448742,
+        "train_survivors": 2327,
+        "train_survival_rate": 0.8738265114532482,
         "eval_nominal": 2858,
-        "eval_survivors": 1481,
-        "eval_survival_rate": 0.5181945416375088,
-        "retrieval_gallery_size": 1481
+        "eval_survivors": 2503,
+        "eval_survival_rate": 0.8757872638208537,
+        "retrieval_gallery_size": 2503
       },
-      "decode_verified": false,
+      "decode_verified": true,
       "download_log": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\splits\\musiccaps_download_log.csv",
-      "manifest": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\splits\\musiccaps_manifest.csv"
+      "manifest": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\splits\\musiccaps_manifest.csv",
+      "text_variants": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\splits\\musiccaps_text_variants.csv"
     },
     "lmd": {
       "dataset": "Lakh MIDI Clean",

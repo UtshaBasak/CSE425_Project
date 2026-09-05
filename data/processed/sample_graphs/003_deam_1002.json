@@ -1,0 +1,21 @@
+{
+  "track_id": "deam_1002",
+  "artist_id": "deam_unknown_1002",
+  "dataset": "deam",
+  "provenance": "real",
+  "split": "test",
+  "num_nodes": 19,
+  "num_edges": 123,
+  "num_self_loops": 19,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.473684210526316,
+  "min_degree": 4,
+  "temporal_edges": 36,
+  "mean_edge_cosine": 0.880669891834259,
+  "n_positive_tags": -1,
+  "y_genre": -1,
+  "y_valence": 4.5,
+  "y_arousal": 3.200000047683716,
+  "text": "deam excerpt 1002"
+}

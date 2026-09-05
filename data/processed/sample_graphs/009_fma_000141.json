@@ -1,0 +1,21 @@
+{
+  "track_id": "fma_000141",
+  "artist_id": "alec_k_redfearn_the_eyesores",
+  "dataset": "fma",
+  "provenance": "real",
+  "split": "train",
+  "num_nodes": 18,
+  "num_edges": 110,
+  "num_self_loops": 18,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.111111111111111,
+  "min_degree": 4,
+  "temporal_edges": 34,
+  "mean_edge_cosine": 0.7966297268867493,
+  "n_positive_tags": -1,
+  "y_genre": 2,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "Ohio by Alec K. Redfearn & the Eyesores. genre: Folk."
+}

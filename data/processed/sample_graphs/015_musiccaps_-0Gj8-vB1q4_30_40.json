@@ -1,0 +1,21 @@
+{
+  "track_id": "musiccaps_-0Gj8-vB1q4_30_40",
+  "artist_id": "yt_-0Gj8-vB1q4",
+  "dataset": "musiccaps",
+  "provenance": "real",
+  "split": "test",
+  "num_nodes": 5,
+  "num_edges": 25,
+  "num_self_loops": 5,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 4.0,
+  "min_degree": 4,
+  "temporal_edges": 8,
+  "mean_edge_cosine": 0.5901401042938232,
+  "n_positive_tags": 0,
+  "y_genre": -1,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "The low quality recording features a ballad song that contains sustained strings, mellow piano melody and soft female vocal singing over it. It sounds sad and soulful, like something you would hear at Sunday services."
+}

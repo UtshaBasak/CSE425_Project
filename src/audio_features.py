@@ -44,6 +44,7 @@ __all__ = [
     "verify_cache",
     "cache_keys_path",
     "pooled_log_mel",
+    "compute_mel_stats",
 ]
 
 N_POOLED_MEL_BANDS = 16
@@ -346,6 +347,62 @@ def compute_norm_stats(manifest, split: str = "train", cfg=None, h5_path=None,
         "split": "train",
         "dim": NODE_FEAT_DIM,
     }
+
+
+def compute_mel_stats(manifest, mel_h5, split: str = "train",
+                      max_tracks: int | None = 4000) -> dict:
+    """Scalar mean/std of the log-mel cache over the **train split only**.
+
+    A single scalar rather than per-band: the CNN sees the mel patch as an image
+    and BatchNorm handles per-channel scale after the first layer. The point here
+    is only to bring the input into unit range before the first convolution.
+    """
+    import h5py
+    import pandas as pd
+
+    if split != "train":
+        raise ValueError(
+            f"mel normalisation statistics must come from the train split, got {split!r}"
+        )
+    if isinstance(manifest, (str, Path)):
+        manifest = pd.read_csv(resolve_path(manifest))
+    train = manifest[manifest["split"] == "train"]
+
+    # mel_h5 may be a single path or a {dataset: path} mapping, because the
+    # caches are written per corpus; looking in the wrong one silently finds
+    # nothing, which is how this failed the first time.
+    caches = mel_h5 if isinstance(mel_h5, dict) else {"__single__": mel_h5}
+    total = total_sq = 0.0
+    count = 0
+    for name, path in caches.items():
+        path = resolve_path(path)
+        if not path.exists():
+            continue
+        rows = (train if name == "__single__"
+                else train[train.get("dataset", "") == name])
+        keys = rows["track_id"].astype(str).tolist()
+        if not keys:
+            continue
+        with h5py.File(path, "r") as store:
+            for i, key in enumerate(keys):
+                if max_tracks and i >= max_tracks:
+                    break
+                if key not in store:
+                    continue
+                arr = np.asarray(store[key][...], dtype=np.float64)
+                total += float(arr.sum())
+                total_sq += float((arr**2).sum())
+                count += arr.size
+    if count == 0:
+        raise RuntimeError(
+            f"no train-split mel patches found in {list(caches)} -- check that the "
+            "mel cache matches the corpora in the manifest"
+        )
+
+    mean = total / count
+    std = float(np.sqrt(max(total_sq / count - mean**2, 1e-12)))
+    return {"mean": float(mean), "std": std, "n_values": int(count),
+            "split": "train", "n_tracks_used": min(len(keys), max_tracks or len(keys))}
 
 
 def apply_norm(feats, stats: dict) -> np.ndarray:
