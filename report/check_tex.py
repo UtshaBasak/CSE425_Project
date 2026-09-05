@@ -52,6 +52,8 @@ KNOWN = {
     "ell", "neq", "tau", "mu", "theta", "phi", "beta", "gamma", "delta",
     "epsilon", "infty", "partial", "nabla", "log", "exp", "max", "min",
     "argmax", "argmin", "mathbb", "mathbf", "operatorname", "top", "bot",
+    "Delta", "Sigma", "Omega", "Phi", "Psi", "Lambda", "Gamma", "verbatim",
+    "emph", "ldots", "cdots", "textrm", "textsc", "hfill", "vspace", "hspace",
 }
 
 MACRO = re.compile(r"\\([A-Za-z]+)")
