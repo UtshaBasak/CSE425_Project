@@ -1,48 +1,175 @@
-# ---- data -------------------------------------------------------------------
+# =============================================================================
+# gnn-bert-music-context
+#
+# Keep this file current. When you add a tool, a cache or a credential file,
+# add it here in the same commit -- a secret is only secret until its first
+# push, and `git rm --cached` does not remove it from history.
+#
+# Quick audit before any push:
+#   git status --porcelain          # nothing unexpected staged
+#   git ls-files | xargs du -ch | tail -1   # total size sanity check
+#   git check-ignore -v <path>      # why is this path (not) ignored?
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# SECRETS AND CREDENTIALS -- never commit any of these
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.env
+secrets.*
+secrets/
+credentials*
+!credentials*.example
+service-account*.json
+client_secret*.json
+
+# keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ecdsa*
+id_ed25519*
+*.ppk
+.ssh/
+
+# service credentials this project could plausibly touch
+kaggle.json
+.kaggle/
+.netrc
+_netrc
+.aws/
+.gcloud/
+.azure/
+.huggingface/
+huggingface_token*
+wandb/settings
+.wandb_api_key
+*token.txt
+*_token
+.git-credentials
+
+# local machine overrides (may hold paths, hosts or keys)
+config.local.yaml
+config.*.local.yaml
+settings.local.json
+.claude/settings.local.json
+local_settings.py
+
+# -----------------------------------------------------------------------------
+# DATASETS -- read-only inputs, far too large for git, and mostly redistributable
+# only under their own licences. Never push audio.
+# -----------------------------------------------------------------------------
 data/raw/
-# Ignore the *contents* of data/processed rather than the directory itself:
-# git cannot re-include anything under an excluded directory, so `data/processed/`
-# would make the sample_graphs exception below silently impossible.
+# The corpora also live beside the repo on this machine; if this ignore file is
+# ever reused one level up, these names keep the datasets out by themselves.
+DEAM/
+FMA/
+MagnaTagATune/
+MusicCaps/
+Lakh MIDI/
+lmd_clean/
+fma_small/
+fma_metadata/
+fma_full/
+fma_large/
+musiccaps_audio/
+MEMD_audio/
+merged_mp3/
+clean_midi/
+
+# derived caches: regenerate with `make features` / `make graphs`
 data/processed/*
-# Sample graphs are a graded deliverable and MUST be committed.
+# ...except the sample graphs, which are a graded submission deliverable
 !data/processed/sample_graphs/
 
-# ---- media / caches / checkpoints -------------------------------------------
+# -----------------------------------------------------------------------------
+# MEDIA, CACHES AND CHECKPOINTS
+# -----------------------------------------------------------------------------
 *.mp3
 *.wav
 *.flac
 *.m4a
+*.ogg
+*.opus
+*.au
+*.mid
+*.midi
 *.h5
 *.hdf5
+*.npy
+*.npz
 *.ckpt
 *.pt
-# ...the one exception, re-included after the *.pt rule above.
+*.pth
+*.safetensors
+*.onnx
+# ...the one exception, re-included after the *.pt rule above
 !data/processed/sample_graphs/*.pt
 
-# ---- experiment tracking ----------------------------------------------------
+# -----------------------------------------------------------------------------
+# EXPERIMENT TRACKING, LOGS AND BUILD ARTIFACTS
+# -----------------------------------------------------------------------------
 wandb/
 runs/
-results/checkpoints/
 lightning_logs/
+mlruns/
 logs/
-
+results/checkpoints/
 # Quarantined synthetic-smoke artifacts (see its README). Never submitted.
 results/_synthetic_smoke/
 
-# ---- python -----------------------------------------------------------------
+# upload payloads are rebuilt on demand by scripts/make_kaggle_payload.py
+kaggle_payload*.tar.gz
+*.tar.gz
+*.tgz
+*.zip
+*.7z
+*.rar
+
+# -----------------------------------------------------------------------------
+# PYTHON
+# -----------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
+*$py.class
+*.so
 *.egg-info/
+.eggs/
+dist/
+build/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
 .ipynb_checkpoints/
+.python-version
+
+# virtual environments
 .venv/
 venv/
 env/
-.coverage
-htmlcov/
+ENV/
+.conda/
 
-# ---- editors / os -----------------------------------------------------------
+# -----------------------------------------------------------------------------
+# EDITORS AND OS
+# -----------------------------------------------------------------------------
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
 .DS_Store
 Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
