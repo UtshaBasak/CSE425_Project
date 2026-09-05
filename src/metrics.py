@@ -29,6 +29,9 @@ __all__ = [
     "retrieval_metrics",
     "graph_coherence_score",
     "knn_probe",
+    "multiclass_metrics",
+    "confusion_matrix",
+    "bootstrap_thresholds",
     "silhouette",
     "aggregate_seeds",
     "TAG_SENTINEL",
@@ -362,6 +365,117 @@ def knn_probe(emb, labels, k: int = 10, seed: int = 42) -> float:
         if votes[np.argmax(counts)] == labels[i]:
             correct += 1
     return float(correct / n)
+
+
+def confusion_matrix(y_true, y_pred, n_classes: int | None = None) -> np.ndarray:
+    """Counts with true classes down the rows, predictions across the columns."""
+    y_true = np.asarray(_to_numpy(y_true)).reshape(-1).astype(int)
+    y_pred = np.asarray(_to_numpy(y_pred)).reshape(-1).astype(int)
+    keep = y_true >= 0
+    y_true, y_pred = y_true[keep], y_pred[keep]
+    if n_classes is None:
+        n_classes = int(max(y_true.max(initial=-1), y_pred.max(initial=-1)) + 1)
+    out = np.zeros((n_classes, n_classes), dtype=np.int64)
+    for t, p_ in zip(y_true, y_pred):
+        if 0 <= t < n_classes and 0 <= p_ < n_classes:
+            out[t, p_] += 1
+    return out
+
+
+def multiclass_metrics(y_true, logits, prefix: str = "", n_classes: int | None = None) -> dict:
+    """Accuracy, macro-F1 and the confusion matrix for a **single-label** task.
+
+    Accuracy is reported here and nowhere else in this file. The prohibition in
+    the module docstring is about multi-label tagging, where all-zeros scores
+    ~92% element accuracy and the number is meaningless. FMA-small genre is one
+    label per clip over eight classes balanced at ~1,000 clips each, so a chance
+    classifier sits at 12.5% and accuracy means exactly what it appears to.
+    Macro-F1 travels with it anyway, because the split is only *nearly* balanced
+    (997-1,000 per class) and it keeps this row comparable with the tagging
+    tables.
+
+    ``y_true`` carries ``-1`` for clips from corpora with no genre label; those
+    rows are dropped rather than scored, exactly as the tag sentinel is.
+    """
+    y_true = np.asarray(_to_numpy(y_true)).reshape(-1).astype(int)
+    logits = np.asarray(_to_numpy(logits), dtype=np.float64)
+    if logits.ndim == 1:
+        logits = logits.reshape(-1, 1)
+    keep = y_true >= 0
+    if keep.sum() == 0 or logits.shape[0] != y_true.shape[0]:
+        return {f"{prefix}accuracy": float("nan"), f"{prefix}macro_f1": float("nan"),
+                f"{prefix}n_rows": 0}
+    y_true, logits = y_true[keep], logits[keep]
+    y_pred = logits.argmax(axis=1)
+    n_classes = int(n_classes or logits.shape[1])
+
+    cm = confusion_matrix(y_true, y_pred, n_classes)
+    f1s = []
+    for c in range(n_classes):
+        tp = float(cm[c, c])
+        fp = float(cm[:, c].sum() - tp)
+        fn = float(cm[c, :].sum() - tp)
+        if cm[c, :].sum() == 0:
+            continue                       # class absent from this split
+        f1s.append(_prf_from_counts(tp, fp, fn)[2])
+    return {
+        f"{prefix}accuracy": float((y_pred == y_true).mean()),
+        f"{prefix}macro_f1": float(np.mean(f1s)) if f1s else float("nan"),
+        f"{prefix}n_rows": int(y_true.shape[0]),
+        f"{prefix}n_classes": n_classes,
+        f"{prefix}per_class_f1": [round(f, 4) for f in f1s],
+        f"{prefix}confusion": cm.tolist(),
+    }
+
+
+def bootstrap_thresholds(val_y_true, val_y_score, test_y_true, test_y_score,
+                         n_boot: int = 100, seed: int = 42) -> dict:
+    """How much do val-tuned thresholds -- and the test score -- move? (A7.4)
+
+    Threshold tuning is a fit like any other, and MTAT's validation split is 977
+    clips drawn from 14 artists. If resampling those 977 clips moves the tuned
+    operating point a lot, then the tuned test number carries a variance term
+    that a single point estimate hides entirely.
+
+    Each of ``n_boot`` replicates resamples the validation rows **with
+    replacement**, re-tunes all thresholds on that replicate, and applies them
+    unchanged to the *fixed* test split. What comes back is the per-tag
+    threshold spread and the resulting test macro-F1 distribution, alongside the
+    fixed-0.5 baseline for comparison.
+    """
+    val_y_true, val_y_score = _as_2d(val_y_true), _as_2d(val_y_score)
+    test_y_true, test_y_score = _as_2d(test_y_true), _as_2d(test_y_score)
+    n_val, n_tags = val_y_true.shape
+    rng = np.random.default_rng(int(seed))
+
+    point = tune_thresholds(val_y_true, val_y_score)
+    draws = np.empty((int(n_boot), n_tags), dtype=np.float64)
+    macros = np.empty(int(n_boot), dtype=np.float64)
+    for b in range(int(n_boot)):
+        idx = rng.integers(0, n_val, size=n_val)
+        draws[b] = tune_thresholds(val_y_true[idx], val_y_score[idx])
+        macros[b] = macro_f1(test_y_true, test_y_score, draws[b])
+
+    finite = macros[np.isfinite(macros)]
+    lo, hi = (np.percentile(finite, [2.5, 97.5]) if finite.size else (np.nan, np.nan))
+    return {
+        "n_boot": int(n_boot),
+        "n_val_rows": int(n_val),
+        "n_tags": int(n_tags),
+        "threshold_std_per_tag": draws.std(axis=0).tolist(),
+        "threshold_mean_per_tag": draws.mean(axis=0).tolist(),
+        "threshold_std_mean": float(draws.std(axis=0).mean()),
+        "threshold_std_max": float(draws.std(axis=0).max()),
+        "point_thresholds": np.asarray(point, dtype=float).tolist(),
+        "test_macro_f1_point": float(macro_f1(test_y_true, test_y_score, point)),
+        "test_macro_f1_fixed_half": float(macro_f1(test_y_true, test_y_score, 0.5)),
+        "test_macro_f1_mean": float(finite.mean()) if finite.size else float("nan"),
+        "test_macro_f1_std": float(finite.std()) if finite.size else float("nan"),
+        "test_macro_f1_min": float(finite.min()) if finite.size else float("nan"),
+        "test_macro_f1_max": float(finite.max()) if finite.size else float("nan"),
+        "test_macro_f1_spread": float(finite.max() - finite.min()) if finite.size else float("nan"),
+        "test_macro_f1_ci95": [float(lo), float(hi)],
+    }
 
 
 def silhouette(emb, labels) -> float:

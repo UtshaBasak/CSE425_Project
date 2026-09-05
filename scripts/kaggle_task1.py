@@ -53,7 +53,8 @@ SWEEP = [
 
 
 def run_one(freeze_mode: str, text_source: str, corpus: str, vocab: str,
-            model: str, epochs: int, seed: int, batch: int, dry_run: bool) -> dict:
+            model: str, epochs: int, seed: int, batch: int, dry_run: bool,
+            workers: int = 2) -> dict:
     from src.train import main as train_main
 
     tag = f"{corpus}_{text_source}_{freeze_mode}"
@@ -71,7 +72,8 @@ def run_one(freeze_mode: str, text_source: str, corpus: str, vocab: str,
         f"train.epochs={epochs}",
         f"train.batch_size={batch}",
         "train.grad_accum_steps=1",
-        "train.num_workers=2",
+        f"train.num_workers={workers}",
+        "--run-tag", tag,
     ]
     LOGGER.info("=== %s ===", tag)
     if dry_run:
@@ -80,12 +82,10 @@ def run_one(freeze_mode: str, text_source: str, corpus: str, vocab: str,
 
     train_main(argv)
 
-    # keep each run's output rather than letting the next one overwrite it
+    # --run-tag writes straight to the per-run filename, so nothing overwrites
     results = project_root() / "results"
-    src = results / f"task1_seed{seed}.json"
     dst = results / f"task1_seed{seed}_{tag}.json"
-    if src.exists():
-        shutil.copy2(src, dst)
+    if dst.exists():
         payload = json.loads(dst.read_text(encoding="utf-8"))
         return {"tag": tag, "macro_f1": payload["test"].get("macro_f1"),
                 "micro_f1": payload["test"].get("micro_f1"),
@@ -102,6 +102,9 @@ def main(argv=None) -> int:
     parser.add_argument("--batch", type=int, default=32)
     parser.add_argument("--only", nargs="*", default=None,
                         help="run only these freeze modes")
+    parser.add_argument("--workers", type=int, default=2,
+                        help="DataLoader workers; 0 avoids CPU contention when "
+                             "something else is running on the same machine")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args(argv)
 
@@ -114,7 +117,7 @@ def main(argv=None) -> int:
         try:
             summary.append(run_one(freeze_mode, text_source, corpus, vocab,
                                    args.model, args.epochs, args.seed,
-                                   args.batch, args.dry_run))
+                                   args.batch, args.dry_run, args.workers))
         except Exception as exc:
             LOGGER.error("%s/%s/%s failed: %s", corpus, text_source, freeze_mode, exc)
             summary.append({"tag": f"{corpus}_{text_source}_{freeze_mode}",

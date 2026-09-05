@@ -33,7 +33,8 @@ from .bert_encoder import (FREEZE_MODES, BertTagClassifier, BertTextEncoder,
 from .contrastive import DualEncoder, build_similarity_matrix, symmetric_info_nce
 from .datasets import (MusicGraphDataset, TextTagDataset, alternating_loader,
                        collate_texts, make_loader)
-from .fusion_model import GNNBertFusion, masked_multitask_loss
+from .fusion_model import (GNNBertFusion, masked_genre_loss,
+                           masked_multitask_loss)
 from .gnn_model import GNNClassifier, GNNEncoder
 from .splits import apply_text_source, assert_no_leakage
 from pathlib import Path as _Path  # noqa: E402
@@ -64,6 +65,7 @@ LOGGER = get_logger("gbmc.train")
 TAG_DATASETS = ("mtat",)                    # corpora that carry the tag vocabulary
 EMOTION_DATASETS = ("deam",)                # corpora that carry valence/arousal
 CAPTION_DATASETS = ("musiccaps",)           # corpora with free-text captions
+GENRE_DATASETS = ("fma",)                   # the only corpus with a genre label
 
 
 def target_freeze_mode(cfg) -> str:
@@ -101,7 +103,7 @@ def corpora_for(cfg, kind: str) -> tuple:
     reason that has nothing to do with the model.
     """
     defaults = {"tag": TAG_DATASETS, "emotion": EMOTION_DATASETS,
-                "caption": CAPTION_DATASETS}
+                "caption": CAPTION_DATASETS, "genre": GENRE_DATASETS}
     value = cfg.get("data", {}).get(f"{kind}_corpora") if cfg else None
     return tuple(value) if value else defaults[kind]
 
@@ -373,7 +375,7 @@ def collect_scores(model, loader, device, cfg, task: int, tokenizer=None):
     max_length = int(cfg["bert"]["max_length"])
 
     scores, targets, valence_p, arousal_p, valence_t, arousal_t = [], [], [], [], [], []
-    embeddings, genres, track_ids, texts = [], [], [], []
+    embeddings, genres, track_ids, texts, genre_logits = [], [], [], [], []
 
     for batch in loader:
         batch = batch.to(device)
@@ -389,8 +391,11 @@ def collect_scores(model, loader, device, cfg, task: int, tokenizer=None):
             else:
                 out = model(batch, ids, mask)
 
-        scores.append(torch.sigmoid(out["tag_logits"].float()).cpu().numpy())
-        targets.append(_batch_tags(batch, out["tag_logits"].shape).cpu().numpy())
+        if out.get("tag_logits") is not None:
+            scores.append(torch.sigmoid(out["tag_logits"].float()).cpu().numpy())
+            targets.append(_batch_tags(batch, out["tag_logits"].shape).cpu().numpy())
+        if out.get("genre_logits") is not None:
+            genre_logits.append(out["genre_logits"].float().cpu().numpy())
         if out.get("valence") is not None:
             valence_p.append(out["valence"].float().cpu().numpy())
             arousal_p.append(out["arousal"].float().cpu().numpy())
@@ -408,6 +413,7 @@ def collect_scores(model, loader, device, cfg, task: int, tokenizer=None):
     return {
         "scores": _cat(scores),
         "targets": _cat(targets),
+        "genre_logits": _cat(genre_logits) if genre_logits else None,
         "valence_pred": _cat(valence_p),
         "arousal_pred": _cat(arousal_p),
         "valence_true": _cat(valence_t),
@@ -494,10 +500,54 @@ def run_task1(cfg, args, bundle: DataBundle, device) -> dict:
 # --------------------------------------------------------------------------- #
 # task 2 -- GNN on audio graphs
 # --------------------------------------------------------------------------- #
+def task2_target(cfg) -> str:
+    """``genre`` (FMA-small, 8-way single label) or ``tags`` (MTAT multi-label).
+
+    The PDF deliverable for Task 2 is genre classification on FMA-small, so that
+    is the headline. MTAT multi-label tagging is kept as a second domain rather
+    than dropped: it is the only corpus here whose label space the fusion tasks
+    also use, so it is what makes Task 2 and Task 3 comparable.
+    """
+    target = str(cfg.get("data", {}).get("task2_target", "genre")).lower()
+    if target not in ("genre", "tags"):
+        raise ValueError(f"data.task2_target must be 'genre' or 'tags', got {target!r}")
+    return target
+
+
+def genre_names(cfg, manifest) -> list:
+    """Ordered FMA-small genre names, index i == ``y_genre == i``."""
+    configured = cfg.get("data", {}).get("genre_names")
+    if configured:
+        return list(configured)
+    labels = sorted({int(v) for v in manifest.get("y_genre", []) if int(v) >= 0})
+    return [f"genre_{i}" for i in labels]
+
+
 def run_task2(cfg, args, bundle: DataBundle, device) -> dict:
     gnn_cfg = cfg["gnn"]
+    target = task2_target(cfg)
+    corpora = (corpora_for(cfg, "genre") if target == "genre"
+               else corpora_for(cfg, "tag"))
+
+    if target == "genre":
+        frame = bundle.manifest[bundle.manifest["dataset"].isin(corpora)]
+        names = genre_names(cfg, frame)
+        n_genres = len(names)
+        if n_genres < 2:
+            raise RuntimeError(
+                f"task2_target=genre but {corpora} carries {n_genres} genre "
+                "label(s); check y_genre in the manifest"
+            )
+        LOGGER.info("task 2 target=genre: %d classes over %s (%d clips)",
+                    n_genres, ",".join(corpora), len(frame))
+    else:
+        names, n_genres = [], 0
+
     model = GNNClassifier(
-        n_tags=len(bundle.tag_vocab),
+        # genre-only builds no tag head, so trainable_params describes the model
+        # that is actually trained
+        n_tags=0 if target == "genre" else len(bundle.tag_vocab),
+        n_genres=n_genres,
         in_dim=int(cfg["graph"]["node_feat_dim"]),
         hidden_dim=int(gnn_cfg["hidden_dim"]),
         num_layers=int(gnn_cfg["num_layers"]),
@@ -509,7 +559,7 @@ def run_task2(cfg, args, bundle: DataBundle, device) -> dict:
     ).to(device)
 
     loaders = {
-        split: make_loader(bundle.dataset(split, corpora_for(cfg, 'tag')), cfg,
+        split: make_loader(bundle.dataset(split, corpora), cfg,
                            shuffle=(split == "train"), seed=args.seed,
                            num_workers=args.num_workers)
         for split in ("train", "val", "test")
@@ -517,12 +567,18 @@ def run_task2(cfg, args, bundle: DataBundle, device) -> dict:
 
     def step(batch):
         out = model(batch)
+        if target == "genre":
+            return masked_genre_loss(out, batch, cfg)
         out.setdefault("valence", None)
         out.setdefault("arousal", None)
         return masked_multitask_loss(out, batch, cfg)
 
     return _fit(model, loaders, cfg, args, device, task=2, step_fn=step,
-                tokenizer=None, tag_vocab=bundle.tag_vocab,
+                tokenizer=None,
+                tag_vocab=names if target == "genre" else bundle.tag_vocab,
+                early_stop_metric="genre_macro_f1" if target == "genre" else None,
+                extra_result={"task2_target": target, "corpora": list(corpora),
+                              "genre_names": names},
                 provenance=bundle.provenance,
                 text_source=bundle.text_source)
 
@@ -794,6 +850,9 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
             )
             val_metrics = tagging_metrics(collected, thresholds)
             val_metrics.update(emotion_metrics(collected))
+            if collected.get("genre_logits") is not None:
+                val_metrics.update(M.multiclass_metrics(
+                    collected["genres"], collected["genre_logits"], prefix="genre_"))
 
         epoch_record = {"epoch": epoch, "seconds": time.time() - epoch_start}
         epoch_record.update(train_stats)
@@ -840,11 +899,31 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         collected = collect_scores(model, loaders["test"], device, cfg, task, tokenizer)
         test_metrics = tagging_metrics(collected, best_thresholds)
         test_metrics.update(emotion_metrics(collected))
+        # A7.4: the bootstrap found the val-tuned operating point unstable on a
+        # 977-clip validation split, so the untuned number travels with it.
+        if best_thresholds is not None and collected["targets"].size:
+            test_metrics["macro_f1_fixed_half"] = M.macro_f1(
+                collected["targets"], collected["scores"], 0.5)
+            test_metrics["micro_f1_fixed_half"] = M.micro_f1(
+                collected["targets"], collected["scores"], 0.5)
         test_extra = {
             "knn_probe": M.knn_probe(collected["embeddings"], collected["genres"],
                                      int(cfg["eval"].get("knn_probe_k", 10)))
             if collected["embeddings"].size else float("nan"),
         }
+        if collected.get("genre_logits") is not None:
+            test_metrics.update(M.multiclass_metrics(
+                collected["genres"], collected["genre_logits"], prefix="genre_"))
+        # A7.4: keep the raw val/test score matrices of the *selected* model.
+        # Bootstrapping the threshold tuner needs them, and re-running training
+        # 100 times to get them would be absurd. The val pass is repeated here
+        # rather than cached from the loop because early stopping may have
+        # rolled the weights back to an earlier epoch.
+        if not args.dry_run:
+            val_collected = collect_scores(model, loaders["val"], device, cfg,
+                                           task, tokenizer)
+            _dump_scores(cfg, task, args.seed, tag_vocab, val_collected, collected,
+                         run_tag=getattr(args, "run_tag", None))
 
     result = {
         "task": task,
@@ -864,8 +943,12 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         "best_val_metric": stopper.best if np.isfinite(stopper.best) else None,
         "trainable_params": count_parameters(model),
         "n_tags": len(tag_vocab),
+        "tag_vocab": list(tag_vocab),
         "thresholds": None if best_thresholds is None else np.asarray(best_thresholds).tolist(),
         "threshold_source": "val",
+        # A7.2 compares models on compute, not parameter count, so both numbers
+        # have to travel with every result rather than being reconstructed later
+        "wall_clock_s": round(sum(float(h.get("seconds", 0.0)) for h in history), 1),
         "history": history,
         "test": test_metrics,
         "vram": vram,
@@ -873,12 +956,43 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
     result.update(test_extra)
     result.update(extra_result or {})
 
-    out_path = resolve_path(cfg["paths"]["results"]) / f"task{task}_seed{args.seed}.json"
+    suffix = f"_{args.run_tag}" if getattr(args, "run_tag", None) else ""
+    result["run_tag"] = getattr(args, "run_tag", None)
+    out_path = (resolve_path(cfg["paths"]["results"])
+                / f"task{task}_seed{args.seed}{suffix}.json")
     if not args.dry_run:
         save_json(result, out_path)
         LOGGER.info("wrote %s", out_path)
     tracker.close()
     return result
+
+
+def _dump_scores(cfg, task: int, seed: int, tag_vocab, val_collected,
+                 test_collected, run_tag: str | None = None):
+    """Persist val/test score matrices next to the result JSON (A7.4).
+
+    Threshold tuning is a fit to the validation split like any other, and MTAT's
+    val split is 977 clips from 14 artists. Quantifying how much the tuned
+    thresholds move under resampling needs the score matrices, not the summary
+    metrics, so they are written once per run and re-read by
+    ``scripts/threshold_bootstrap.py``.
+    """
+    out_dir = ensure_dir(resolve_path(cfg["paths"]["results"]) / "scores")
+    suffix = f"_{run_tag}" if run_tag else ""
+    path = out_dir / f"task{task}_seed{seed}{suffix}_scores.npz"
+    payload = dict(
+        val_y_true=val_collected["targets"], val_y_score=val_collected["scores"],
+        test_y_true=test_collected["targets"], test_y_score=test_collected["scores"],
+        tag_vocab=np.asarray(list(tag_vocab), dtype=object),
+    )
+    for split, collected in (("val", val_collected), ("test", test_collected)):
+        if collected.get("genre_logits") is not None:
+            payload[f"{split}_genre_logits"] = collected["genre_logits"]
+            payload[f"{split}_genre_true"] = collected["genres"]
+    np.savez_compressed(path, **payload)
+    LOGGER.info("wrote score matrices -> %s (val %s, test %s)", path,
+                val_collected["scores"].shape, test_collected["scores"].shape)
+    return path
 
 
 def _loader_len(loader) -> int:
@@ -910,6 +1024,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--precompute-text-embeddings", action="store_true",
                         help="freeze BERT and cache caption embeddings (Task 4 on 4 GB)")
     parser.add_argument("--num-workers", type=int, default=None)
+    parser.add_argument("--run-tag", default=None,
+                        help="suffix for the result and score filenames, so two "
+                             "configurations of the same task do not overwrite "
+                             "each other (e.g. --run-tag fma_genre)")
     return parser
 
 

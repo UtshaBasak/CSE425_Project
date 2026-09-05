@@ -713,30 +713,47 @@ def main(argv=None) -> int:
     }
 
     # ---- per-task summaries + seed aggregation ---------------------------- #
+    # One task can now have several reported domains -- Task 2 runs FMA-small
+    # genre and MTAT multi-label tagging -- so runs are grouped by (task,
+    # run_tag) before aggregation. Pooling them would average an 8-way accuracy
+    # against a 50-tag macro-F1 and call the result "task 2".
     metrics["tasks"] = {}
     for task, runs in sorted(results.items()):
-        flat = []
+        variants: dict[str, list[dict]] = {}
         for run in runs:
-            row = {"seed": run.get("seed")}
-            row.update({k: v for k, v in (run.get("test") or {}).items()
-                        if isinstance(v, (int, float))})
-            flat.append(row)
-        metrics["tasks"][f"task{task}"] = {
-            "n_runs": len(runs),
-            "per_seed": flat,
-            "aggregated": M.aggregate_seeds([{k: v for k, v in row.items() if k != "seed"}
-                                             for row in flat]),
-            "best_val_metric": [run.get("best_val_metric") for run in runs],
-            "threshold_source": sorted({run.get("threshold_source", "val") for run in runs}),
-        }
+            variants.setdefault(str(run.get("run_tag") or ""), []).append(run)
+        for run_tag, group in sorted(variants.items()):
+            flat = []
+            for run in group:
+                row = {"seed": run.get("seed")}
+                row.update({k: v for k, v in (run.get("test") or {}).items()
+                            if isinstance(v, (int, float))})
+                flat.append(row)
+            key = f"task{task}" if not run_tag else f"task{task}_{run_tag}"
+            metrics["tasks"][key] = {
+                "n_runs": len(group),
+                "run_tag": run_tag or None,
+                "per_seed": flat,
+                "aggregated": M.aggregate_seeds(
+                    [{k: v for k, v in row.items() if k != "seed"} for row in flat]),
+                "best_val_metric": [run.get("best_val_metric") for run in group],
+                "threshold_source": sorted({run.get("threshold_source", "val")
+                                            for run in group}),
+            }
     path = plot_f1_vs_epoch(results, plots_dir)
     if path:
         written_plots["f1_vs_epoch"] = str(path)
 
     # ---- per-tag table + error decomposition from the best tagging model --- #
-    tagging_task = next((t for t in (3, 2, 1) if results.get(t)), None)
+    # a genre run carries no per-tag thresholds, so it must not be chosen as the
+    # source of the per-tag table just because it sorts first
+    def _multilabel(runs):
+        return next((r for r in runs if r.get("thresholds")), None)
+
+    tagging_task = next((t for t in (3, 2, 1)
+                         if results.get(t) and _multilabel(results[t])), None)
     if tagging_task:
-        run = results[tagging_task][0]
+        run = _multilabel(results[tagging_task])
         thresholds = run.get("thresholds")
         model_scores = _rescore_from_checkpoint(bundle, cfg, device, tagging_task, run)
         if model_scores is not None:
