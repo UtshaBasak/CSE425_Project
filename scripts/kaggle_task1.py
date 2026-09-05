@@ -7,8 +7,16 @@ so it executes in the background against the 12-hour limit.
 
     !tar xzf /kaggle/input/<your-dataset>/kaggle_payload_task1.tar.gz -C /kaggle/working
     %cd /kaggle/working
-    !pip -q install torch-geometric
+    !pip -q install torch-geometric          # ~11 s; required, see below
     !python scripts/kaggle_task1.py --model bert-base-uncased --epochs 8
+
+**Internet must be ON** in the notebook sidebar (Kaggle disables it by default,
+and enabling it needs a phone-verified account). `bert-base-uncased` is fetched
+from HuggingFace at runtime, so without it the run dies at model load.
+
+**Keep the torch-geometric line.** Task 1 needs no graphs, but `src.train`
+imports the graph modules at module load, so the import fails without it. It is
+a pure-Python wheel and installs in about 11 seconds once torch is present.
 
 It runs the three freeze modes the report compares — `frozen_probe`, `top_n`,
 `full_ft` — and, for the headline MusicCaps configuration, both `caption_masked`
