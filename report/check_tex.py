@@ -53,6 +53,7 @@ KNOWN = {
     "epsilon", "infty", "partial", "nabla", "log", "exp", "max", "min",
     "argmax", "argmin", "mathbb", "mathbf", "operatorname", "top", "bot",
     "Delta", "Sigma", "Omega", "Phi", "Psi", "Lambda", "Gamma", "verbatim",
+    "appendix",
     "emph", "ldots", "cdots", "textrm", "textsc", "hfill", "vspace", "hspace",
 }
 

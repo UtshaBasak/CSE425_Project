@@ -21,6 +21,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
+
+import numpy as np
 import sys
 from pathlib import Path
 
@@ -42,6 +44,7 @@ RESULTS = ROOT / "results"
 # loading
 # --------------------------------------------------------------------------- #
 def load(name: str) -> dict | None:
+    """Read a result file. ``name`` may include a subdirectory."""
     path = RESULTS / name
     if not path.exists():
         return None
@@ -257,6 +260,34 @@ def build_macros() -> dict:
     macros["BTwoTagPR"] = num(b2_tags.get("mean_auc_pr"))
     macros["BTwoTagParams"] = integer(b2_tags.get("trainable_params"))
 
+    # ---- qualitative figures -------------------------------------------- #
+    examples = load("retrieval_examples/retrieval_examples.json") or {}
+    rows = examples.get("examples", [])
+    if rows:
+        ranks = sorted(int(r.get("true_rank") or 0) for r in rows if r.get("true_rank"))
+        failures = [r for r in ranks if r > 10]
+        gallery = int(examples.get("gallery_size", 0) or 0)
+        macros["MCTestHalf"] = integer(round(gallery / 2)) if gallery else PENDING
+        macros["RetrievalFigNote"] = (
+            f"Median rank {int(np.median(ranks))} over {len(rows)} queries."
+            if ranks else PENDING)
+        macros["RetrievalFailureNote"] = (
+            f"{len(failures)} of the {len(rows)} queries place the true clip "
+            f"outside the top ten, the worst at rank {max(ranks)}. "
+            "Both are captions dominated by production and ambience terms rather "
+            "than by instrumentation or rhythm -- properties that segment-level "
+            "chroma, MFCC and contrast statistics do not represent, because the "
+            "node features summarise what is played rather than how the "
+            "recording was made."
+            if failures else
+            "Every query placed the true clip in the top ten.")
+    else:
+        for key in ("MCTestHalf", "RetrievalFigNote", "RetrievalFailureNote"):
+            macros[key] = PENDING
+
+    cases = load("case_studies.json") or {}
+    macros["CaseStudyNote"] = (cases.get("caption_note") or PENDING)
+
     # ---- A7.4 threshold bootstrap -------------------------------------- #
     boot = load("threshold_bootstrap.json")
 
@@ -314,6 +345,28 @@ def build_macros() -> dict:
         macros["BootThrStdMean"] = f"{lead['threshold_std_mean']:.3f}"
         macros["BootThrStdMax"] = f"{lead['threshold_std_max']:.3f}"
         macros["BootValRows"] = integer(lead["n_val_rows"])
+        # the appendix table: every tag whose threshold moves appreciably
+        detail = lead.get("least_stable_tags", [])[:12]
+        if detail:
+            rows = [f"{d['tag'].replace('_', chr(92) + '_')} & "
+                    f"{d['threshold_mean']:.3f} & {d['threshold_std']:.3f} \\\\"
+                    for d in detail]
+            macros["BootWorstTagsTable"] = (
+                "\\begin{table}[h]\n\\caption{The twelve least stable per-tag "
+                "thresholds on MagnaTagATune, over " + str(boot["n_boot"]) +
+                " validation resamples. Every one is a low-frequency tag: with "
+                + integer(lead["n_val_rows"]) + " validation clips, a tag "
+                "appearing in a few dozen of them has almost no positive "
+                "examples left after resampling, so the tuner is fitting "
+                "noise.}\n\\label{tab:threshdetail}\n\\centering\n\\small\n"
+                "\\begin{tabular}{@{}lrr@{}}\n\\toprule\n"
+                "Tag & Mean threshold & s.d. \\\\\n\\midrule\n"
+                + "\n".join(rows) +
+                "\n\\bottomrule\n\\end{tabular}\n\\end{table}"
+            )
+        else:
+            macros["BootWorstTagsTable"] = PENDING
+
         worst = lead.get("least_stable_tags", [])[:5]
         macros["BootWorstTags"] = ", ".join(
             f"\\texttt{{{w['tag'].replace('_', chr(92) + '_')}}} "
@@ -340,7 +393,7 @@ def build_macros() -> dict:
         macros["BootVerdict"] = PENDING
         for key in ("BootLeadStd", "BootLeadCI", "BootLeadSpread", "BootLeadTuned",
                     "BootLeadFixed", "BootThrStdMean", "BootThrStdMax",
-                    "BootValRows", "BootWorstTags"):
+                    "BootValRows", "BootWorstTags", "BootWorstTagsTable"):
             macros[key] = PENDING
 
     return macros

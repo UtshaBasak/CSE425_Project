@@ -230,3 +230,22 @@ Format:
                         a section collecting the four protocol findings as one failure mode rather than scattered
                         footnotes, the full limitations list, and a reproducibility statement with exact commands.
                         Report 7.4 pages of a 6-10 limit.
+
+[2026-09-06 05:47] NOTE   PHASE C begins. Resumed with the C1 block still executing: Task 1 MTAT metadata on epoch 3/8 at
+                        1147 s/epoch. Measured cost of bert-base on this GPU is ~68 ms/row, which is what makes the C4
+                        sweep ~26 h at full budget - decision rule 3.6 will fire and the budget will be set from the
+                        Task 3 timing probe rather than guessed.
+[2026-09-06 05:48] DONE   C queue chained in strict priority order behind C1: C2 Task 3 headline (bert-base, MTAT,
+                        cross_attention, seed 42) then C3 Task 4 headline + retrieval export + listening study. C3 is not
+                        allowed to wait behind the ablation sweep because it opens the human-eval gate.
+[2026-09-06 05:52] DONE   Section 5 compression decided and wired BEFORE the content lands, not after check_tex fires.
+                        Ten retrieval examples -> one multi-panel figure; three case studies -> one three-column figure;
+                        per-tag threshold detail -> appendix (\appendix scaffolding added, counted separately).
+                        scripts/make_compact_figures.py renders the retrieval panel as stems on a log rank axis: it shows
+                        which queries failed AND by how far, which ten prose blocks do not, at a tenth of the page cost.
+                        Rendered on synthetic data first and fixed three defects only visible once drawn - rank-1 bars are
+                        invisible on a log axis, the legend collided with a value label, and "failure" mislabelled rank 12
+                        of 2,503 (now "outside top-10").
+[2026-09-06 05:52] DONE   Related work now names MuLan alongside CLAP, with the scale gap made explicit: MuLan trains on
+                        ~44M audio-text pairs against our 2,095, four orders of magnitude, which is the right frame for
+                        reading the retrieval numbers.
