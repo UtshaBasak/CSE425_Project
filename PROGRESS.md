@@ -1,7 +1,11 @@
 # PROGRESS
 
 Last session ended: 2026-09-06 (phase A7)
-Currently resuming at: Phase B
+Currently resuming at: Phase B0
+
+A7's code is complete and pushed; its final runs (Task 1 sweep runs 4-5, then B2
+on both domains) were still executing when Phase B began, so B0 started with the
+work that does not contend for the GPU.
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -353,6 +357,86 @@ rather than being folded into Phase B.
 The 0.774 chord-validation figure keeps its caveat unchanged: it is measured on
 MIDI-derived chroma, validates the template-matching step in isolation, and is
 not an audio-domain chord accuracy.
+
+
+---
+
+# PHASE B
+
+## The noise floor governs every ablation from here on
+
+A7.4 measured a **tuned test macro-F1 spread of 0.0288** across 100 validation
+resamples on MTAT. That is not a footnote on the tagging tables; it is a
+measurement floor for the project. **Any difference below ~0.029 macro-F1 on
+MTAT is indistinguishable from validation-split noise.**
+
+Consequences, applied without exception to every ablation table:
+
+1. tuned **and** fixed-0.5 columns;
+2. 3 seeds, mean +- sd, on **every** row, not just headline rows;
+3. a "delta vs best" column and the 0.0288 figure stated in the caption;
+4. no claimed ordering between rows whose intervals overlap -- "within noise of
+   each other", said plainly.
+
+## Phase B0 - gaps to close before Task 3
+
+- [x] **B0.1 structural controls wired.** `graph.rewire` applies
+  degree-preserving double-edge swaps at load time, seeded per track id with
+  `crc32` (not `hash`, which Python randomises per process -- that would have
+  made the control silently irreproducible between runs). The edge-type ablation
+  needs no new code: `graph.temporal_edges` / `graph.similarity_edges` are
+  already honoured at build time and `MusicGraphDataset` builds on the fly, so
+  `--override` is enough. Four tests, including one that asserts the rewiring is
+  identical across dataset instances, changes the topology, and preserves every
+  degree. **Runs queued behind the A7 pipeline** -- both are GPU jobs.
+
+- [x] **B0.2 the 0.3692 -> 0.3737 change is NOT the vocabulary fix.** Checked
+  rather than asserted:
+
+  | | epochs | best epoch | macro-F1 | micro-F1 | AUC-PR | params |
+  |---|---|---|---|---|---|---|
+  | old | 10 (cap) | **8** | 0.3692 | 0.4124 | 0.3915 | 432,690 |
+  | new | 30 (cap) | 11, stopped 14 | 0.3737 | 0.4102 | 0.3939 | 432,690 |
+
+  The old run's best epoch was 8 of a 10-epoch cap, i.e. it was **still
+  improving when the budget ran out**. The new run reached epoch 11 before
+  early stopping. Same architecture, same parameter count. The A7.3 finding
+  stands: MTAT's top-50 *set* is identical train-only, only the frequency
+  ordering moved, and macro-F1, micro-F1 and AUC-PR are all invariant to a
+  permutation of the tag columns.
+
+  The honest reading is stronger than "three more epochs helped": **+0.0045 is
+  six times below the 0.0288 noise floor, and micro-F1 moved the other way
+  (-0.0022).** The two runs are indistinguishable. Reported as such.
+
+- [ ] **B0.3 B2-vs-GNN framing prepared.** B2 is now a 3.43M-parameter
+  short-chunk CNN on a full-resolution cache and may beat the GNN's 42.3% on
+  FMA-small genre. If it does it is the headline finding and stays that way --
+  the GNN will not be re-tuned until it wins. The comparison is then about
+  **representation granularity** (96-dim pooled segment statistics at ~1 s
+  against full-resolution spectrograms), not about graphs. **B4 is the control
+  that isolates structure**, because it uses the same 96-dim features without
+  it, so the Task 2 discussion is built on the B4 -> GNN delta with B2 as an
+  upper reference. Awaiting the B2 runs.
+
+- [ ] **B0.4 Task 1 attention examples** must come from a corrected-vocabulary
+  run. Blocked on the sweep finishing.
+
+- [x] **B0.5 mood label sets defined in `config.yaml`**, not at plot time.
+  Worth recording: of 15 proposed affect words, **7 are not in MTAT's top-50 at
+  all** (`sad`, `happy`, `mellow`, `calm`, `dark`, `upbeat`, `eerie`). The
+  surviving MTAT set -- soft, hard, ambient, quiet, loud, slow, fast, weird --
+  is really texture and dynamics rather than affect, so the DEAM
+  valence/arousal quadrants carry the actual mood story and the MTAT panel is
+  labelled for what it is. Clips matching no mood tag are drawn in grey and
+  **excluded** from the k-NN probe rather than pooled into an "other" class,
+  which would inflate it.
+
+- [x] **B0.6 page guard active.** `check_tex.py` now fails (non-zero exit) above
+  10 pages, counts anything after `\appendix` separately, and writes the split
+  into the header block. Three tests: fires at 12 pages, passes at 7, and does
+  not count appendix material against the limit.
+
 
 ### Why Task 1 needs no graphs
 

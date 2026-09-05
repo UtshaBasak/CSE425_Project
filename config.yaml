@@ -60,8 +60,16 @@ segmentation:
 graph:
   knn_k: 4                    # k-NN, NOT a fixed cosine threshold tau
   add_self_loops: true
+  # B0.1 edge-type ablation runs through these two flags: both true is the
+  # headline, similarity_edges=false is temporal-only, temporal_edges=false is
+  # similarity-only. They are honoured at graph-build time, and MusicGraphDataset
+  # builds on the fly, so an --override is enough -- no cache rebuild.
   temporal_edges: true
   similarity_edges: true
+  # B0.1 structural control. Degree-preserving double-edge swaps, seeded per
+  # track so a clip is rewired identically in every epoch. If macro-F1 survives
+  # this, the topology carried no signal and the GNN is a pooled-feature MLP.
+  rewire: false
   node_feat_dim: 96           # asserted at build time
   chord_vocab_size: 25        # 12 roots x {maj, min} + N.C.
   chord_feat_dim: 13          # [vocab index / 24] + aggregated 12-bin chroma
@@ -241,6 +249,32 @@ baselines:
   # ~24 min it gives up over 30 epochs is not worth losing a two-hour run to.
   cnn_workers: 2
   cnn_use_accumulation: false # batch 32 fits; turn on if the card gets smaller
+
+# ---------------------------------------------------------------------------
+# B0.5 -- mood labels for the t-SNE panels.
+#
+# Neither corpus ships a mood field, so both colourings are DEFINED here rather
+# than chosen at plot time, where the temptation is to pick whichever subset
+# makes the picture look cleanest.
+#
+# MTAT: an explicit subset of the top-50 tags that denote affect rather than
+# instrumentation or genre. Checked against the vocabulary actually on disk --
+# sad, happy, mellow, calm, dark, upbeat, eerie was proposed and dropped because
+# it is not in the current top-50. A clip is coloured by its FIRST matching mood
+# tag in this order, and clips with none are drawn in grey and excluded from the
+# k-NN probe rather than lumped into an "other" class that would inflate it.
+#
+# DEAM: valence/arousal split at the 1-9 scale midpoint (5.0) into the four
+# standard affect quadrants.
+# ---------------------------------------------------------------------------
+mood:
+  mtat_tags: [soft, hard, ambient, quiet, loud, slow, fast, weird]
+  deam_midpoint: 5.0
+  deam_quadrants:
+    - {name: "high valence / high arousal", valence: high, arousal: high}
+    - {name: "low valence / high arousal",  valence: low,  arousal: high}
+    - {name: "low valence / low arousal",   valence: low,  arousal: low}
+    - {name: "high valence / low arousal",  valence: high, arousal: low}
 
 synthetic:
   n_tracks: 200
