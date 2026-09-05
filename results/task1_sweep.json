@@ -1,0 +1,9 @@
+[
+  {
+    "tag": "musiccaps_caption_masked_frozen_probe",
+    "macro_f1": 0.26366973878774275,
+    "micro_f1": 0.2643991355820727,
+    "mean_auc_pr": 0.24133775762379078,
+    "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_masked_frozen_probe.json"
+  }
+]

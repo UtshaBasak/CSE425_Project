@@ -97,3 +97,52 @@ Format:
                         runner are ready; this is a one-step manual action for the operator. See PROGRESS.md.
 [2026-09-05 13:10] GATE   PHASE A COMPLETE except A6.4 (blocked on Kaggle credentials, which this environment does not have).
                         10 of 11 exit criteria pass; the 11th is the operator action documented in PROGRESS.md.
+
+[2026-09-06 01:25] DONE   A7.0 Real Kaggle output imported (Save & Run All this time, not Quick Save). All five test metrics are
+                        identical to the values recovered from the console log, and the runs now carry their real per-tag
+                        thresholds and history. The recovered stubs are gone; nothing in results/ is second-hand any more.
+[2026-09-06 01:26] DONE   A7.0 Added output/ and *.zip to the PARENT .gitignore - the downloaded notebook output is 863 MB,
+                        836 MB of which is BERT checkpoints.
+[2026-09-06 01:32] FIX    A7.3 CONFIRMED LEAK. build_musiccaps_tag_vocab counted aspect frequencies over the whole
+                        musiccaps-public.csv (5,521 clips), so the test split helped choose the label space. Restricting the
+                        count to the 2,095 train clips swaps 7 of the 50 tags: in calming/classical/joyful/keyboard/lively/
+                        melodic singing/no other instruments, out e-guitar/fun/keyboard harmony/loud/poor audio quality/
+                        spirited/youthful. Every MusicCaps Task 1 number is therefore invalidated and re-run.
+[2026-09-06 01:32] NOTE   A7.3 Audited the MTAT vocabulary the same way: reduce_to_top_k_tags was also reading all 25,863
+                        annotation rows. Restricting it to the 16,881 train rows leaves the top-50 SET identical - only the
+                        frequency ordering moves. MTAT-scored results (Task 2, B2, B4) are therefore NOT invalidated. Fixed
+                        anyway for provenance, and both vocab files now record split_used/n_clips_counted.
+[2026-09-06 01:34] DONE   A7.3 Six provenance tests added, including one that asserts train-only and all-split selection still
+                        DISAGREE - without it the other five would pass whether or not the fix were in place.
+[2026-09-06 01:28] DONE   A7.2 Measured before building: decode+mel is 0.226 s/clip single-threaded, and gzip-4 with the HDF5
+                        shuffle filter compresses float16 log-mel 1.63x at 2.2 ms/clip to read back. That takes the full-
+                        resolution cache from 9.5 GB to ~5.8 GB, which fits the 12 GB free on this disk.
+[2026-09-06 02:05] DONE   A7.2 scripts/build_mel_cache.py writes mels_full_{corpus}.h5 at the native 43.07 frames/second.
+                        MTAT: 21,358 clips, 4.0 GB. The old cache was mean-pooled to 256 columns (8.8 fps), so a 3 s window
+                        was 26 columns wide - that is the input B2 was being asked to convolve over.
+[2026-09-06 02:00] DONE   A7.2 MelCNN rebuilt as the standard short-chunk CNN (7 conv blocks, 3.43M params for tagging,
+                        2.89M for genre). target_params now RAISES rather than silently accepting - parameter matching to the
+                        GNN's 432,690 is what produced the 0.1654, and the constraint should not be reachable by accident.
+                        ChunkedMelDataset serves random 3 s excerpts in training and 9 evenly-spaced ones at inference, with
+                        per-chunk PROBABILITIES averaged (not logits: a logit average lets one confident chunk dominate).
+[2026-09-06 01:54] DONE   A7.1 FMA-small 8-way genre wired end to end as the Task 2 headline: masked_genre_loss (-1 rows
+                        excluded, never trained as class 0), M.multiclass_metrics (accuracy IS legitimate here - single label,
+                        8 near-balanced classes, chance 12.5%), GNNClassifier accepts n_tags=0 so the parameter count
+                        describes the model actually trained. One-epoch smoke: 38.8% test accuracy, 30 s/epoch.
+[2026-09-06 01:55] DONE   A7.4 _fit now dumps val/test score matrices to results/scores/*.npz. Bootstrapping the threshold
+                        tuner needs the raw scores of the SELECTED model, and re-running training 100 times to get them would
+                        be absurd. The val pass is repeated after early stopping rolls the weights back, not cached from the
+                        loop, or the matrices would belong to the wrong epoch.
+[2026-09-06 01:56] DONE   A7.4 scripts/threshold_bootstrap.py + M.bootstrap_thresholds. Decision rule fixed IN ADVANCE:
+                        spread > 0.02 in test macro-F1 means tuned numbers may not stand alone and every table carries the
+                        fixed-0.5 number beside them. The verdict is written into the JSON so it cannot be reinterpreted later.
+[2026-09-06 02:01] FIX    A7.x --run-tag added to src.train. Two configurations of the same task were writing to the same
+                        result file; the genre smoke run overwrote the MTAT Task 2 result and it had to be restored from git.
+[2026-09-06 02:01] DONE   A7.x Task 1 sweep re-launched LOCALLY against the corrected vocabulary. This GPU is sm_75, so the
+                        runs that had to go to Kaggle for wall-clock reasons can be reproduced here; ~2 min/epoch against
+                        Kaggle's 12 s while the mel cache build competes for CPU. First log line confirms the freeze-mode fix
+                        is live: "freeze_mode=frozen_probe -> 0 trainable" where the Kaggle run said "full_ft -> 109482240".
+[2026-09-06 02:10] DONE   A7.x report/final_report.tex started in IEEEtran two-column form, with report/fill_report.py
+                        injecting every number from results/*.json into an AUTOGEN macro block. The prose contains no
+                        literal figures, so a stale number cannot survive a re-run. Missing results render as \textit{pending}
+                        and the script names them, rather than leaving a plausible-looking placeholder.
