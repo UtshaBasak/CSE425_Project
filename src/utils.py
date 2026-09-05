@@ -339,15 +339,50 @@ def _json_default(obj):
 # device / AMP / VRAM
 # --------------------------------------------------------------------------- #
 def get_device(pref: str = "cuda"):
-    """Honour the preference, falling back to CPU with a warning."""
+    """Honour the preference, failing fast on a GPU this torch cannot drive.
+
+    ``torch.cuda.is_available()`` returns True for a GPU whose architecture the
+    installed torch was never compiled for; the failure only surfaces later as
+    ``CUDA error: no kernel image is available for execution on the device``,
+    once per run, with no hint about the cause. Kaggle hits this exactly: its
+    P100 accelerator is sm_60 (Pascal) and recent torch builds ship sm_70 and
+    up, so every run in a sweep dies the same cryptic way.
+
+    Checking the capability up front turns five confusing failures into one
+    actionable message.
+    """
     import torch
 
     pref = (pref or "cuda").lower()
-    if pref.startswith("cuda"):
-        if torch.cuda.is_available():
-            return torch.device(pref)
+    if not pref.startswith("cuda"):
+        return torch.device(pref)
+    if not torch.cuda.is_available():
         LOGGER.warning("CUDA requested but unavailable; falling back to CPU.")
         return torch.device("cpu")
+
+    index = 0 if ":" not in pref else int(pref.split(":")[1])
+    major, minor = torch.cuda.get_device_capability(index)
+    capability = major * 10 + minor
+    built_for = sorted(
+        int(arch.split("_")[1])
+        for arch in torch.cuda.get_arch_list()
+        if arch.startswith("sm_")
+    )
+    # Only the "too old" case is a hard failure: a device newer than anything
+    # listed can usually JIT from the embedded PTX.
+    if built_for and capability < min(built_for):
+        name = torch.cuda.get_device_name(index)
+        archs = ", ".join(f"sm_{a}" for a in built_for)
+        raise RuntimeError(
+            f"{name} is compute capability sm_{capability}, but this PyTorch "
+            f"({torch.__version__}) only has kernels for sm_{min(built_for)} and "
+            f"newer ({archs}).\n"
+            "Every CUDA call would fail with 'no kernel image is available for "
+            "execution on the device'.\n"
+            "On Kaggle: Settings -> Accelerator -> GPU T4 x2 (sm_75). The P100 "
+            "is sm_60 and is no longer supported by current torch builds.\n"
+            "Otherwise pass --device cpu, or install a torch built for this GPU."
+        )
     return torch.device(pref)
 
 

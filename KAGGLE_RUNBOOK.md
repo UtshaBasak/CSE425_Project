@@ -63,9 +63,16 @@ cell handles both the extracted tree and a surviving archive.
 
 **Code → New Notebook**, then in the right-hand sidebar:
 
+> **Do not pick P100.** It is compute capability sm_60 (Pascal), and the PyTorch
+> on current Kaggle images ships kernels for sm_70 and newer only. Every CUDA
+> call then fails with `no kernel image is available for execution on the
+> device`, once per run, after the model has already downloaded. T4 is sm_75 and
+> works. `get_device()` now checks this at startup and says so explicitly rather
+> than letting the whole sweep die cryptically.
+
 | Setting | Value |
 |---|---|
-| Accelerator | **GPU P100** (T4 x2 also fine; the code uses one GPU) |
+| Accelerator | **GPU T4 x2** — *not* P100 (see below; the code uses one GPU) |
 | Internet | **On** ← the step everyone misses |
 | Persistence | Files only (optional) |
 | Add Data | your `gbmc-task1-payload` dataset |
@@ -187,6 +194,7 @@ currently reads `[TBD — Kaggle]` for the B3/T1 row.
 | Symptom | Cause | Fix |
 |---|---|---|
 | Dies at model load, `OSError`/connection error | Internet is Off | Sidebar → Internet On (needs phone verification) |
+| `CUDA error: no kernel image is available for execution on the device` | Accelerator is **P100** (sm_60); current torch needs sm_70+ | Sidebar → Accelerator → **GPU T4 x2**, then Run All again. No re-upload needed. |
 | `ModuleNotFoundError: torch_geometric` | dropped the pip line | Put it back; it costs 11 s |
 | `FileNotFoundError: features.h5` | payload predates the Task 1 fix | Rebuild with `make kaggle-payload` |
 | `/bin/bash: line 1: slug: No such file or directory` | the literal `<slug>` placeholder was left in; bash read `<` as redirection | Use the Cell 1 above — it needs no slug |
