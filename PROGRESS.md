@@ -485,6 +485,89 @@ B0.1 controls, because all three want the same GPU.
   failure.
 
 
+
+## Phase B2 - Task 4 retrieval (18 marks)
+
+- [x] **B2.2 chance reference.** `random_retrieval_reference` is folded into
+  every `retrieval_metrics` payload, so no table can report R@K without it.
+  Against the 2,503-clip gallery, chance R@10 is 0.4%: an R@10 of 0.05 reads as
+  failure in isolation and as 12x chance beside the reference. The multiple is
+  reported too.
+- [x] **B2.3 zero-shot** (`scripts/zero_shot_eval.py`): four prompt templates,
+  per-template macro-F1, the spread, and a template ensemble, all with
+  thresholds tuned on val. The MusicCaps corpus and vocabulary are **pinned** -
+  an `--override` that would change them is refused, because the supervised
+  reference is the Task 3 MusicCaps run and comparing against an MTAT-vocabulary
+  model would be two different problems. Runs whose recorded `tag_vocab` does
+  not match are skipped with a warning.
+- [x] **B2.4 ten examples with >= 2 failures** already existed from Phase A
+  (`export_retrieval_examples`); it selects the two worst-ranked queries
+  deliberately.
+- [ ] **B2.1 dual encoder run** - queued.
+
+## Phase B3 - analysis
+
+- [x] Mood colouring now comes from the B0.5 config rather than literals. The
+  DEAM midpoint was hardcoded at 5, correct for a 1-9 scale and silently wrong
+  for any other range. Quadrant names are stored **in the order of the index the
+  code assigns**, not in circumplex order - the latter would have mislabelled
+  the legend, which a scatter plot never reveals.
+- [x] A third t-SNE panel for MTAT mood tags, reported separately because it is
+  a different construct (texture and dynamics, not affect). Clips matching no
+  mood tag are excluded from the k-NN probe, not pooled into an "other" class
+  that would be trivially separable and inflate it.
+- [x] t-SNE already carries k-NN probe and silhouette; `S_graph` real-vs-rewired
+  plotting already exists and now has real rewired runs to consume.
+- [ ] Three case studies on the **MusicCaps** Task 3 model - queued.
+
+## Phase B4 - human evaluation
+
+- [x] `scripts/make_listening_page.py` writes `sheet_key.json`, a self-contained
+  HTML page with the clips embedded as base64, and the form question list in
+  page order. Self-contained because a page referencing local paths breaks the
+  moment it is emailed, and hosting the clips would publish copyrighted audio.
+  No rating widgets - ratings go to a form so responses land in one CSV.
+  Controls use **real audio** from an unrelated clip; a silent control is
+  identifiable without listening and would measure attention to silence.
+- [x] `scripts/analyse_human_eval.py` adapts the wide Google Forms export to
+  long format, keyed on the **clip number parsed from the question text**, not
+  column order. An off-by-one there would swap real pairs with controls and
+  invert the headline finding, so it refuses a mismatched export rather than
+  guessing. It states plainly when control discrimination is too small for the
+  study to be informative.
+- [ ] Awaiting `data/human_eval/raw_responses.csv` - a hard human dependency.
+
+## Phase B6 - submission artifacts
+
+- [x] **Demo notebook: 16.7 s on CPU**, zero errors, against a 2-minute budget -
+  and measured while a training job was competing for the same cores, so the
+  clean figure is lower.
+- [x] **Fresh-clone test run, and it found three real defects**, none visible
+  from the working tree: `data/raw/` and `results/retrieval_examples/` are
+  absent from a checkout, so the prescribed-tree test failed on a clone (for a
+  grader that is indistinguishable from a broken repo); and the two MusicCaps
+  vocabulary tests failed rather than skipped without the gitignored raw CSV,
+  which reports "the code is broken" when the truth is "the corpus is absent".
+  Fixed; the clone now runs **198 passed, 5 skipped**.
+- [x] All 20 committed sample graphs verified in the clone: they load, carry
+  provenance `real`, and match the frozen contract.
+
+## Phase B7 - report
+
+- [x] A named subsection on the measurement floor and what it forbids, stating
+  explicitly what refusing to rank costs and why it is still the stronger claim.
+- [x] A section collecting the four protocol findings - non-disjoint canonical
+  split, vocabulary chosen using test annotations, files that existed but did
+  not decode, unstable operating point - as instances of one failure mode rather
+  than as scattered footnotes.
+- [x] Limitations expanded to the full list, led by the floor and the B2/GNN
+  input-granularity asymmetry.
+- [x] Reproducibility section: hardware, seeds, train-only provenance rules,
+  threshold discipline, exact commands.
+- Report is **7.4 pages** of a 6-10 limit; `check_tex.py` clean apart from
+  macros pending on runs in flight.
+
+
 ### Why Task 1 needs no graphs
 
 Task 1 is text-only, so the payload is 3.4 MB rather than the ~1.4 GB a
