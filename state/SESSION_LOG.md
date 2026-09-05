@@ -146,3 +146,25 @@ Format:
                         injecting every number from results/*.json into an AUTOGEN macro block. The prose contains no
                         literal figures, so a stale number cannot survive a re-run. Missing results render as \textit{pending}
                         and the script names them, rather than leaving a plausible-looking placeholder.
+
+[2026-09-06 04:29] NOTE   PHASE B begins. A7's code is pushed; its runs (Task 1 sweep 4-5 of 5, then B2) were still executing,
+                        so B0 started with the work that does not contend for the GPU.
+[2026-09-06 04:28] DONE   B0.1 graph.rewire wired into MusicGraphDataset. Seeded per track with crc32, NOT hash - Python
+                        randomises string hashing per process, so a hash-seeded control would silently differ between runs
+                        and measure nothing. Edge-type ablation needed no new code: graph.temporal_edges/similarity_edges
+                        are already honoured at build time and graphs are built on the fly, so --override suffices.
+[2026-09-06 04:32] FIX    B0.1 rewiring on the fly cost 43.7 s/epoch against a 9.5 s baseline - millions of Python-level
+                        double-edge swaps per epoch recomputing an identical answer. Cached edge_index/edge_attr per track:
+                        epoch 1 now 39.5 s, epochs 2-3 back to 8.7 s. Over 6 runs x 30 epochs that is ~1.7 h saved.
+[2026-09-06 04:20] DONE   B0.2 verified rather than asserted: the old MTAT Task 2 run's best epoch was 8 of a 10-epoch CAP,
+                        i.e. still improving when the budget ran out; the new run reached epoch 11 before early stopping.
+                        Same architecture, same parameter count. So 0.3692 -> 0.3737 is the epoch budget, NOT the vocabulary
+                        fix - A7.3's finding that MTAT's top-50 set is unchanged still stands. Stronger reading: +0.0045 is
+                        six times below the 0.0288 noise floor and micro-F1 moved the OTHER way (-0.0022). Indistinguishable.
+[2026-09-06 04:25] DONE   B0.5 mood sets in config.yaml. Of 15 proposed affect words, 7 are absent from MTAT's top-50
+                        (sad, happy, mellow, calm, dark, upbeat, eerie). What survives - soft/hard/ambient/quiet/loud/slow/
+                        fast/weird - is texture and dynamics, not affect, so DEAM quadrants carry the mood story and the
+                        MTAT panel is labelled for what it actually is. No-mood clips are grey and EXCLUDED from the k-NN
+                        probe rather than pooled into an "other" class that would inflate it.
+[2026-09-06 04:27] DONE   B0.6 check_tex.py fails non-zero above 10 pages and counts anything after \appendix separately.
+                        Three tests: fires at 12 pages, passes at 7, appendix material not charged to the limit.

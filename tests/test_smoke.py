@@ -1824,3 +1824,104 @@ def test_report_macros_never_invent_a_number():
     assert fill_report.seconds(None) == fill_report.PENDING
     assert fill_report.num(0.12345) == "0.1235"
     assert fill_report.integer(1234567) == "1{,}234{,}567"
+
+
+# --------------------------------------------------------------------------- #
+# B0.6 -- the page limit is a submission requirement, so it must fail loudly
+# --------------------------------------------------------------------------- #
+def _tex(body: str) -> str:
+    return ("\\documentclass[conference]{IEEEtran}\n\\begin{document}\n"
+            + body + "\n\\end{document}\n")
+
+
+def test_page_guard_fires_above_the_limit(tmp_path):
+    from report import check_tex
+
+    path = tmp_path / "long.tex"
+    # ~12 pages of prose at the module's own words-per-page constant
+    path.write_text(_tex("word " * int(check_tex.WORDS_PER_PAGE * 12)),
+                    encoding="utf-8")
+
+    est = check_tex.estimate(path)
+    assert est["total_pages"] > check_tex.PAGE_LIMIT[1]
+    assert est["over_limit"]
+    problems = check_tex.check(path)
+    assert any("OVER the" in p for p in problems), (
+        f"a 12-page draft was not flagged: {problems}"
+    )
+    assert check_tex.main(["--tex", str(path)]) != 0, "exit code did not fail"
+
+
+def test_page_guard_passes_inside_the_limit(tmp_path):
+    from report import check_tex
+
+    path = tmp_path / "ok.tex"
+    path.write_text(_tex("word " * int(check_tex.WORDS_PER_PAGE * 7)),
+                    encoding="utf-8")
+    assert not check_tex.estimate(path)["over_limit"]
+    assert not any("OVER the" in p for p in check_tex.check(path))
+
+
+def test_appendix_material_is_counted_separately(tmp_path):
+    """The planned response to overflow is an appendix, so it must not count."""
+    from report import check_tex
+
+    main_body = "word " * int(check_tex.WORDS_PER_PAGE * 8)
+    overflow = "word " * int(check_tex.WORDS_PER_PAGE * 6)
+
+    without = tmp_path / "without.tex"
+    without.write_text(_tex(main_body + overflow), encoding="utf-8")
+    assert check_tex.estimate(without)["over_limit"], "14 pages should be over"
+
+    with_appendix = tmp_path / "with.tex"
+    with_appendix.write_text(_tex(main_body + "\n\\appendix\n" + overflow),
+                             encoding="utf-8")
+    est = check_tex.estimate(with_appendix)
+    assert est["has_appendix"]
+    assert not est["over_limit"], "appendix material was counted against the limit"
+    assert est["appendix_pages"] > 5
+
+
+def test_rewiring_control_is_reproducible_across_dataset_instances(tmp_path):
+    """B0.1: the control must be identical run to run, or it measures nothing.
+
+    Python randomises string hashing per process, so a track-id-seeded rewire
+    built on `hash()` would silently differ between runs.
+    """
+    import numpy as np
+    import pandas as pd
+
+    from src.datasets import MusicGraphDataset
+    from src.graph_builder import build_segment_graph
+    from src.utils import load_config, project_root
+
+    cfg = load_config(project_root() / "config.yaml")
+    cfg["graph"]["rewire"] = True
+
+    feats = np.random.default_rng(0).normal(size=(12, 96)).astype(np.float32)
+    graph = build_segment_graph(feats, cfg, track_id="t0", n_tags=4)
+    graph_dir = tmp_path / "graphs"
+    graph_dir.mkdir()
+    torch.save(graph, graph_dir / "t0.pt")
+
+    frame = pd.DataFrame([{"track_id": "t0", "artist_id": "a", "split": "train",
+                           "dataset": "mtat", "y_tags": "[]", "y_genre": -1}])
+    first = MusicGraphDataset(frame, cfg=cfg, graph_dir=graph_dir,
+                              tag_vocab=["a", "b", "c", "d"])[0]
+    second = MusicGraphDataset(frame, cfg=cfg, graph_dir=graph_dir,
+                               tag_vocab=["a", "b", "c", "d"])[0]
+    assert torch.equal(first.edge_index, second.edge_index), (
+        "the rewiring differs between dataset instances; it is not reproducible"
+    )
+
+    # and it must actually have changed something
+    plain_cfg = load_config(project_root() / "config.yaml")
+    plain = MusicGraphDataset(frame, cfg=plain_cfg, graph_dir=graph_dir,
+                              tag_vocab=["a", "b", "c", "d"])[0]
+    assert not torch.equal(first.edge_index, plain.edge_index), (
+        "graph.rewire=true left the topology untouched"
+    )
+    # degrees preserved: that is what makes it a control rather than a lesion
+    def degrees(d):
+        return np.bincount(d.edge_index[0].numpy(), minlength=int(d.num_nodes))
+    assert sorted(degrees(first).tolist()) == sorted(degrees(plain).tolist())
