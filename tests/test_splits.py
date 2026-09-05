@@ -214,6 +214,8 @@ def test_musiccaps_vocab_matches_a_train_only_recount():
     cfg = load_config(project_root() / "config.yaml")
     if not musiccaps_train_ytids(cfg):
         pytest.skip("MusicCaps manifest not built yet")
+    if not (project_root() / cfg["datasets"]["musiccaps"]["csv"]).exists():
+        pytest.skip("MusicCaps CSV not present (it is gitignored raw data)")
 
     rebuilt, coverage = build_musiccaps_tag_vocab(cfg, k=len(saved["tags"]),
                                                   split="train")
@@ -238,6 +240,8 @@ def test_counting_every_split_would_change_the_musiccaps_vocabulary():
     cfg = load_config(project_root() / "config.yaml")
     if not musiccaps_train_ytids(cfg):
         pytest.skip("MusicCaps manifest not built yet")
+    if not (project_root() / cfg["datasets"]["musiccaps"]["csv"]).exists():
+        pytest.skip("MusicCaps CSV not present (it is gitignored raw data)")
 
     train_only, _ = build_musiccaps_tag_vocab(cfg, k=50, split="train")
     all_splits, _ = build_musiccaps_tag_vocab(cfg, k=50, split="all")
