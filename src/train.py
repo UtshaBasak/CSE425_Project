@@ -169,11 +169,45 @@ class DataBundle:
             self.manifest = apply_text_source(self.manifest, cfg)
         self.text_source = str(cfg.get("data", {}).get("text_source", "caption_masked"))
 
+        # B1.2: train-only valence/arousal statistics, cached beside the splits
+        # and injected into cfg so the loss and the metrics both see them.
+        self.emotion_stats = self._emotion_stats()
+        if self.emotion_stats:
+            cfg.setdefault("multitask", {})["emotion_stats"] = self.emotion_stats
+
         # the assertion the whole pipeline hangs on
         assert_no_leakage(self.manifest)
         # Recorded so every checkpoint and result JSON carries its own
         # provenance; evaluate.py refuses to build a report from synthetic ones.
         self.provenance = SYNTHETIC if synthetic else detect_provenance(self.manifest)
+
+    def _emotion_stats(self) -> dict:
+        """Train-split valence/arousal statistics, computed once and cached.
+
+        Cached to disk rather than recomputed per run so that every run in a
+        seed sweep standardises against exactly the same numbers -- a per-run
+        recompute would be identical here, but only because the split is fixed,
+        and relying on that is how a subtle inconsistency gets in later.
+        """
+        from .splits import compute_emotion_stats
+
+        emotion = corpora_for(self.cfg, "emotion")
+        rows = self.manifest[self.manifest["dataset"].isin(list(emotion))]
+        if not len(rows):
+            return {}
+
+        path = resolve_path(self.cfg["paths"]["splits"]) / "emotion_stats.json"
+        if path.exists():
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if payload.get("split") != "train":
+                raise RuntimeError(
+                    f"{path} was not computed on the train split; refusing to run"
+                )
+            return payload
+
+        stats = compute_emotion_stats(rows, split="train")
+        save_json(stats, path)
+        return stats
 
     def text_dataset(self, split: str, datasets=None) -> TextTagDataset:
         """Text + labels only, for the tasks that never touch audio.
@@ -454,13 +488,33 @@ def tagging_metrics(collected: dict, thresholds=None, prefix: str = "") -> dict:
     }
 
 
-def emotion_metrics(collected: dict, prefix: str = "") -> dict:
+def emotion_metrics(collected: dict, prefix: str = "", cfg=None) -> dict:
+    """MAE / RMSE / R2 on the **original 1-9 scale**.
+
+    The model is trained on standardised targets (B1.2), so its raw output is in
+    standard-deviation units. An MAE of 0.8 sd means nothing to a reader who
+    knows DEAM is a 1-9 scale, so predictions are inverted here before scoring.
+    R2 is invariant to the affine transform and reads the same either way; MAE
+    and RMSE are not, which is exactly why this cannot be skipped.
+    """
     if collected["valence_true"].size == 0:
         return {}
-    out = M.regression_metrics(collected["valence_true"], collected["valence_pred"],
+    mt = (cfg or {}).get("multitask", {}) or {}
+    stats = (mt.get("emotion_stats") or {}) if mt.get("standardise_targets", True) else {}
+
+    def unscale(values, name):
+        scale = stats.get(name)
+        if not scale:
+            return values
+        return values * float(scale["std"]) + float(scale["mean"])
+
+    out = M.regression_metrics(collected["valence_true"],
+                               unscale(collected["valence_pred"], "valence"),
                                prefix=f"{prefix}valence_")
-    out.update(M.regression_metrics(collected["arousal_true"], collected["arousal_pred"],
+    out.update(M.regression_metrics(collected["arousal_true"],
+                                    unscale(collected["arousal_pred"], "arousal"),
                                     prefix=f"{prefix}arousal_"))
+    out[f"{prefix}emotion_target_scale"] = "raw 1-9" if not stats else "standardised"
     return out
 
 
@@ -613,8 +667,11 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
                              seed=args.seed, num_workers=args.num_workers)
     emo_loader = make_loader(bundle.dataset("train", corpora_for(cfg, "emotion")), cfg, shuffle=True,
                              seed=args.seed + 1, num_workers=args.num_workers)
+    ratio = tuple(cfg.get("multitask", {}).get("batch_ratio", (4, 1)))
+    LOGGER.info("task 3 alternating %d tag : %d emotion batches (DEAM is ~1:14 "
+                "the size of MTAT)", ratio[0], ratio[1])
     loaders = {
-        "train": _AlternatingTrainLoader(tag_loader, emo_loader),
+        "train": _AlternatingTrainLoader(tag_loader, emo_loader, ratio=ratio),
         "val": make_loader(bundle.dataset("val"), cfg, shuffle=False, seed=args.seed,
                            num_workers=args.num_workers),
         "test": make_loader(bundle.dataset("test"), cfg, shuffle=False, seed=args.seed,
@@ -630,23 +687,42 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
 
     return _fit(model, loaders, cfg, args, device, task=3, step_fn=step,
                 tokenizer=tokenizer, tag_vocab=bundle.tag_vocab,
+                # B1.2: emotion is auxiliary, so selection follows the tagging
+                # metric. Early-stopping on a blended score would let a
+                # collapsing tag head hide behind a good regression fit.
+                early_stop_metric="macro_f1",
+                extra_result={"batch_ratio": list(ratio),
+                              "fusion_mode": str(fusion_cfg["mode"]),
+                              "emotion_stats": bundle.emotion_stats},
                 provenance=bundle.provenance,
                 text_source=bundle.text_source)
 
 
 class _AlternatingTrainLoader:
-    """Wraps :func:`alternating_loader` so it can be re-iterated per epoch."""
+    """Wraps :func:`alternating_loader` so it can be re-iterated per epoch.
 
-    def __init__(self, loader_a, loader_b):
+    The ratio is not decoration. DEAM has ~1,200 training tracks against MTAT's
+    16,881, roughly 1:14. Alternating one-for-one would show the emotion head
+    every DEAM track fourteen times per MTAT epoch, which overfits it hard while
+    the tag head sees each example once. ``multitask.batch_ratio`` sets how many
+    tag batches pass between emotion batches; the value used is recorded in the
+    result payload so the table can state it.
+    """
+
+    def __init__(self, loader_a, loader_b, ratio=(4, 1)):
         self.loader_a = loader_a
         self.loader_b = loader_b
+        self.ratio = tuple(int(v) for v in ratio)
 
     def __iter__(self):
-        for batch, _tag in alternating_loader(self.loader_a, self.loader_b):
+        for batch, _tag in alternating_loader(self.loader_a, self.loader_b,
+                                              ratio=self.ratio):
             yield batch
 
     def __len__(self):
-        return len(self.loader_a) + len(self.loader_b)
+        n_a, n_b = self.ratio
+        # the emotion loader is cycled, so length follows the tag loader
+        return len(self.loader_a) + max(1, len(self.loader_a) * n_b // max(n_a, 1))
 
 
 # --------------------------------------------------------------------------- #
@@ -849,7 +925,7 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
                 if bool(cfg["eval"].get("tune_thresholds", True)) else None
             )
             val_metrics = tagging_metrics(collected, thresholds)
-            val_metrics.update(emotion_metrics(collected))
+            val_metrics.update(emotion_metrics(collected, cfg=cfg))
             if collected.get("genre_logits") is not None:
                 val_metrics.update(M.multiclass_metrics(
                     collected["genres"], collected["genre_logits"], prefix="genre_"))
@@ -860,8 +936,9 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
         history.append(epoch_record)
         tracker.log(epoch_record, step=epoch)
         LOGGER.info(
-            "task %d epoch %d/%d | loss %.4f | val %s=%s | %.1fs",
+            "task %d epoch %d/%d | loss %.4f%s | val %s=%s | %.1fs",
             task, epoch, epochs, train_stats.get("train_loss_total", float("nan")),
+            _loss_breakdown(train_stats),
             metric_key, _fmt(val_metrics.get(metric_key)), epoch_record["seconds"],
         )
         vram = log_vram(f"task{task}_epoch{epoch}")
@@ -898,7 +975,7 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
     else:
         collected = collect_scores(model, loaders["test"], device, cfg, task, tokenizer)
         test_metrics = tagging_metrics(collected, best_thresholds)
-        test_metrics.update(emotion_metrics(collected))
+        test_metrics.update(emotion_metrics(collected, cfg=cfg))
         # A7.4: the bootstrap found the val-tuned operating point unstable on a
         # 977-clip validation split, so the untuned number travels with it.
         if best_thresholds is not None and collected["targets"].size:
@@ -993,6 +1070,27 @@ def _dump_scores(cfg, task: int, seed: int, tag_vocab, val_collected,
     LOGGER.info("wrote score matrices -> %s (val %s, test %s)", path,
                 val_collected["scores"].shape, test_collected["scores"].shape)
     return path
+
+
+def _loss_breakdown(train_stats: dict) -> str:
+    """The per-term losses, inline in the epoch line (B1.2).
+
+    Task 3 optimises tagging and emotion together against very different
+    amounts of data. If one term collapses -- the emotion head overfitting its
+    1,200 DEAM tracks, or the tag head starved of gradient -- the total loss can
+    keep falling while the model quietly stops learning one of its two jobs.
+    Printing the terms separately makes that visible while the run is still
+    going, rather than after it finishes.
+    """
+    parts = []
+    for key, label in (("train_loss_tags", "tag"),
+                       ("train_loss_valence", "val"),
+                       ("train_loss_arousal", "aro"),
+                       ("train_loss_genre", "genre")):
+        value = train_stats.get(key)
+        if isinstance(value, (int, float)) and np.isfinite(value) and value:
+            parts.append(f"{label} {value:.3f}")
+    return f" ({', '.join(parts)})" if parts else ""
 
 
 def _loader_len(loader) -> int:

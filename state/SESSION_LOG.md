@@ -168,3 +168,26 @@ Format:
                         probe rather than pooled into an "other" class that would inflate it.
 [2026-09-06 04:27] DONE   B0.6 check_tex.py fails non-zero above 10 pages and counts anything after \appendix separately.
                         Three tests: fires at 12 pages, passes at 7, appendix material not charged to the limit.
+
+[2026-09-06 04:36] DONE   B1.2 DEAM imbalance handled explicitly. multitask.batch_ratio [4,1] wired through
+                        _AlternatingTrainLoader - 1:1 would show the emotion head every one of ~1,200 DEAM tracks fourteen
+                        times per MTAT epoch while the tag head sees each example once.
+[2026-09-06 04:35] DONE   B1.2 valence/arousal standardised with TRAIN-split statistics (valence mean 4.901 sd 1.206,
+                        arousal mean 4.861 sd 1.273 over 1,277 tracks), cached to data/splits/emotion_stats.json.
+                        Raw 1-9 targets give squared errors of 4-10 against per-tag BCE near 0.2; auto_balance reacts to
+                        that after the fact, standardising removes it at the source. CRITICAL companion change: predictions
+                        are INVERTED before MAE/RMSE so the report stays on the 1-9 scale. R2 is affine-invariant, MAE is
+                        not - a test asserts the inversion happens and that skipping it looks wrong.
+[2026-09-06 04:38] DONE   B1.2 per-term losses now print inline in the epoch line (tag / val / aro). Task 3 optimises two
+                        jobs against very different data volumes; the total can keep falling while one head quietly stops
+                        learning, and that is invisible without the breakdown.
+[2026-09-06 04:38] DONE   B1.2 Task 3 early-stops on the TAGGING metric with emotion auxiliary, per the PDF's L_aux framing.
+                        A blended criterion would let a collapsing tag head hide behind a good regression fit.
+[2026-09-06 04:39] DONE   B1.3 scripts/fusion_ablation.py. Two documented budgets (distilbert + reduced epochs held
+                        IDENTICAL across all seven modes for the sweep; bert-base full budget for the headline rows), and
+                        the budget is stamped into every result file so the two tables cannot be silently merged.
+                        summarise() applies the noise-floor rule mechanically: delta-vs-best column, every row inside
+                        0.0288 flagged, and it REFUSES to name a best_mode when the top rows overlap. Three tests cover it,
+                        including one asserting no winner is named among indistinguishable rows.
+[2026-09-06 04:40] NOTE   Task 3 validated end to end on CPU with --dry-run: emotion stats computed, 4:1 alternation active,
+                        epoch completes. 197 fast tests pass.

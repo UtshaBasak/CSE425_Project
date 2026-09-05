@@ -1925,3 +1925,130 @@ def test_rewiring_control_is_reproducible_across_dataset_instances(tmp_path):
     def degrees(d):
         return np.bincount(d.edge_index[0].numpy(), minlength=int(d.num_nodes))
     assert sorted(degrees(first).tolist()) == sorted(degrees(plain).tolist())
+
+
+# --------------------------------------------------------------------------- #
+# B1.2 -- DEAM imbalance and target scale
+# --------------------------------------------------------------------------- #
+def test_emotion_stats_refuse_any_split_but_train():
+    import pandas as pd
+
+    from src.splits import compute_emotion_stats
+
+    frame = pd.DataFrame([{"split": "train", "y_valence": 5.0, "y_arousal": 5.0}])
+    with pytest.raises(ValueError, match="train split"):
+        compute_emotion_stats(frame, split="test")
+
+
+def test_emotion_stats_use_train_rows_only():
+    import numpy as np
+    import pandas as pd
+
+    from src.splits import compute_emotion_stats
+
+    frame = pd.DataFrame(
+        [{"split": "train", "y_valence": 4.0, "y_arousal": 4.0}] * 10
+        + [{"split": "test", "y_valence": 9.0, "y_arousal": 9.0}] * 10
+    )
+    stats = compute_emotion_stats(frame)
+    assert stats["valence"]["n"] == 10
+    assert stats["valence"]["mean"] == pytest.approx(4.0), (
+        "test-split targets leaked into the training target scale"
+    )
+
+
+def test_emotion_metrics_are_reported_on_the_original_scale():
+    """The model predicts standard deviations; the table must show 1-9 units."""
+    import numpy as np
+
+    from src.train import emotion_metrics
+
+    stats = {"valence": {"mean": 5.0, "std": 2.0},
+             "arousal": {"mean": 5.0, "std": 2.0}}
+    cfg = {"multitask": {"emotion_stats": stats, "standardise_targets": True}}
+
+    truth = np.array([7.0, 3.0, 5.0])          # raw 1-9 targets
+    standardised = (truth - 5.0) / 2.0         # what a perfect model outputs
+    collected = {
+        "valence_true": truth, "valence_pred": standardised,
+        "arousal_true": truth, "arousal_pred": standardised,
+    }
+    out = emotion_metrics(collected, cfg=cfg)
+    assert out["valence_mae"] == pytest.approx(0.0, abs=1e-9), (
+        "predictions were scored without inverting the standardisation"
+    )
+
+    # and without the stats the same predictions must look wrong, which is the
+    # whole reason the inversion cannot be skipped
+    naive = emotion_metrics(collected, cfg={"multitask": {}})
+    assert naive["valence_mae"] > 1.0
+
+
+def test_alternating_loader_honours_the_batch_ratio():
+    """1:1 shows the emotion head each DEAM track ~14x per MTAT epoch."""
+    from src.datasets import alternating_loader
+
+    tags = [f"t{i}" for i in range(40)]
+    emotions = [f"e{i}" for i in range(5)]
+
+    pairs = list(alternating_loader(tags, emotions, ratio=(4, 1)))
+    kinds = [k for _, k in pairs]
+    n_tag = kinds.count("a")
+    n_emotion = kinds.count("b")
+    assert n_tag == 40
+    assert n_emotion == pytest.approx(10, abs=2), (
+        f"expected ~1 emotion batch per 4 tag batches, got {n_emotion} per {n_tag}"
+    )
+
+    one_to_one = list(alternating_loader(tags, emotions, ratio=(1, 1)))
+    assert sum(1 for _, k in one_to_one if k == "b") > n_emotion, (
+        "the ratio had no effect"
+    )
+
+
+# --------------------------------------------------------------------------- #
+# B1.3 -- the noise floor governs what the ablation may claim
+# --------------------------------------------------------------------------- #
+def _ablation_rows(mode, values):
+    return [{"mode": mode, "corpus": "mtat", "seed": seed,
+             "macro_f1": v, "macro_f1_fixed_half": v - 0.08}
+            for seed, v in zip((42, 1337, 2024), values)]
+
+
+def test_ablation_refuses_to_name_a_winner_inside_the_noise_floor():
+    from scripts.fusion_ablation import NOISE_FLOOR, summarise
+
+    rows = (_ablation_rows("cross_attention", [0.402, 0.400, 0.398])
+            + _ablation_rows("late_concat", [0.394, 0.391, 0.393])
+            + _ablation_rows("early_concat", [0.389, 0.392, 0.390]))
+    out = summarise(rows, "mtat")
+    assert not out["separable"]
+    assert out["best_mode"] is None, "a winner was named among indistinguishable rows"
+    assert set(out["modes_within_noise_of_best"]) == {
+        "cross_attention", "late_concat", "early_concat"}
+    assert "NOT separable" in out["verdict"]
+    assert str(NOISE_FLOOR) in out["verdict"]
+
+
+def test_ablation_does_report_an_ordering_when_the_gap_is_real():
+    from scripts.fusion_ablation import summarise
+
+    rows = (_ablation_rows("cross_attention", [0.470, 0.472, 0.468])
+            + _ablation_rows("late_concat", [0.394, 0.391, 0.393]))
+    out = summarise(rows, "mtat")
+    assert out["separable"] and out["best_mode"] == "cross_attention"
+
+
+def test_ablation_reports_seed_spread_on_every_row():
+    """Single-run rows are exactly where small deltas get over-interpreted."""
+    from scripts.fusion_ablation import summarise
+
+    rows = (_ablation_rows("cross_attention", [0.40, 0.42, 0.38])
+            + _ablation_rows("gated", [0.30, 0.30, 0.30]))
+    out = summarise(rows, "mtat")
+    for row in out["rows"]:
+        assert row["n_seeds"] == 3
+        assert row["macro_f1_sd"] is not None
+        assert row["fixed_half_mean"] is not None, "fixed-0.5 column missing"
+    spread = next(r for r in out["rows"] if r["mode"] == "cross_attention")
+    assert spread["macro_f1_sd"] > 0.01

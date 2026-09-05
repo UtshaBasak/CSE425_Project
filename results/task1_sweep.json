@@ -5,5 +5,19 @@
     "micro_f1": 0.2643991355820727,
     "mean_auc_pr": 0.24133775762379078,
     "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_masked_frozen_probe.json"
+  },
+  {
+    "tag": "musiccaps_caption_masked_top_n",
+    "macro_f1": 0.3297552001783531,
+    "micro_f1": 0.34339745679817407,
+    "mean_auc_pr": 0.3577439915943341,
+    "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_masked_top_n.json"
+  },
+  {
+    "tag": "musiccaps_caption_masked_full_ft",
+    "macro_f1": 0.3706605092991918,
+    "micro_f1": 0.4139631456008305,
+    "mean_auc_pr": 0.38411103654827206,
+    "result_file": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\task1_seed42_musiccaps_caption_masked_full_ft.json"
   }
 ]

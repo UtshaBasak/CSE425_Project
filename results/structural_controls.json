@@ -1,0 +1,42 @@
+[
+  {
+    "tag": "genre_baseline",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "genre_rewired",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "genre_temporal_only",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "genre_similarity_only",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "tags_baseline",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "tags_rewired",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "tags_temporal_only",
+    "seed": 42,
+    "dry_run": true
+  },
+  {
+    "tag": "tags_similarity_only",
+    "seed": 42,
+    "dry_run": true
+  }
+]

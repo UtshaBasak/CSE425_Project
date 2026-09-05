@@ -132,6 +132,16 @@ multitask:
   beta_arousal: 1.0
   auto_balance: true          # rescale by running loss magnitude
   ema_decay: 0.98             # smoothing for the running loss magnitudes
+  # B1.2 -- DEAM has ~1,200 train tracks against MTAT's 16,881, about 1:14.
+  # One-for-one alternation shows the emotion head every DEAM track fourteen
+  # times per MTAT epoch and it overfits hard while the tag head sees each
+  # example once. 4 tag batches : 1 emotion batch, recorded in every result.
+  batch_ratio: [4, 1]
+  # Targets are standardised with train-split statistics before the MSE (see
+  # src.splits.compute_emotion_stats) and predictions are inverted again before
+  # MAE/RMSE are reported, so the numbers stay on DEAM's original 1-9 scale.
+  # Written to data/splits/emotion_stats.json on first use.
+  standardise_targets: true
 
 train:
   batch_size: 8
