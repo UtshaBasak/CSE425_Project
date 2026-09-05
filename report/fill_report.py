@@ -109,6 +109,49 @@ def dig(payload, *path, default=None):
     return node
 
 
+def current_vocab(name: str) -> list:
+    """The tag vocabulary on disk right now, for the given source."""
+    filename = ("musiccaps_tag_vocab.json" if name == "musiccaps" else "tag_vocab.json")
+    path = ROOT / "data" / "splits" / filename
+    if not path.exists():
+        return []
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    return list(payload["tags"] if isinstance(payload, dict) else payload)
+
+
+def fresh(payload: dict, vocab_source: str, label: str) -> dict:
+    """Return the payload only if it was scored against the current vocabulary.
+
+    A7.3 changed 7 of the 50 MusicCaps tags. Results produced before that are
+    not stale in a cosmetic sense -- they were scored against a label space that
+    test-split annotations helped choose, which is the leak the phase exists to
+    remove. If the sweep re-running them dies part way, the old files are still
+    on disk and would be picked up silently, mixing corrected and leaked numbers
+    in one table. So they are refused, loudly, and render as pending instead.
+
+    Results predating the `tag_vocab` field cannot be verified either way, and
+    are treated as unverifiable rather than assumed good.
+    """
+    if not payload:
+        return {}
+    want = current_vocab(vocab_source)
+    got = payload.get("tag_vocab")
+    if not want:
+        return payload
+    if got is None:
+        LOGGER.warning("%s: no tag_vocab recorded, cannot verify it was scored "
+                       "against the current vocabulary -- treating as pending",
+                       label)
+        return {}
+    if list(got) != want:
+        overlap = len(set(got) & set(want))
+        LOGGER.warning("%s: scored against a DIFFERENT %s vocabulary "
+                       "(%d/%d tags in common) -- refusing it; re-run the sweep",
+                       label, vocab_source, overlap, len(want))
+        return {}
+    return payload
+
+
 def find_baseline(payload, name_contains: str) -> dict:
     for entry in dig(payload, "baselines", default=[]) or []:
         if name_contains in str(entry.get("baseline", "")):
@@ -160,7 +203,7 @@ def build_macros() -> dict:
     }
     payloads = {}
     for prefix, filename in runs.items():
-        payload = load(filename) or {}
+        payload = fresh(load(filename) or {}, "musiccaps", filename)
         payloads[prefix] = payload
         macros[f"{prefix}F"] = num(dig(payload, "test", "macro_f1"))
         macros[f"{prefix}Micro"] = num(dig(payload, "test", "micro_f1"))
@@ -176,7 +219,8 @@ def build_macros() -> dict:
         macros["LeakGap"] = macros["LeakPct"] = PENDING
 
     # ---- Task 1 on MTAT metadata (the like-for-like B3 row) ------------ #
-    mtat = load("task1_seed42_mtat_metadata_full_ft.json") or {}
+    mtat = fresh(load("task1_seed42_mtat_metadata_full_ft.json") or {}, "mtat",
+                 "task1 mtat_metadata")
     macros["TOneMtatF"] = num(dig(mtat, "test", "macro_f1"))
     macros["TOneMtatMicro"] = num(dig(mtat, "test", "micro_f1"))
     macros["TOneMtatPR"] = num(dig(mtat, "test", "mean_auc_pr"))
@@ -190,7 +234,8 @@ def build_macros() -> dict:
     macros["TTwoGenreParams"] = integer(genre.get("trainable_params"))
     macros["TTwoGenreTime"] = seconds(genre.get("wall_clock_s"))
 
-    tags = load("task2_seed42_mtat_tags.json") or load("task2_seed42.json") or {}
+    tags = fresh(load("task2_seed42_mtat_tags.json") or load("task2_seed42.json") or {},
+                 "mtat", "task2 mtat_tags")
     macros["TTwoTagF"] = num(dig(tags, "test", "macro_f1"))
     macros["TTwoTagMicro"] = num(dig(tags, "test", "micro_f1"))
     macros["TTwoTagPR"] = num(dig(tags, "test", "mean_auc_pr"))

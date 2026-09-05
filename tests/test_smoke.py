@@ -1779,3 +1779,48 @@ def test_task2_target_is_validated():
     cfg["data"]["task2_target"] = "nonsense"
     with pytest.raises(ValueError, match="task2_target"):
         task2_target(cfg)
+
+
+# --------------------------------------------------------------------------- #
+# A7.3 -- a result scored against the old vocabulary must not reach the report
+# --------------------------------------------------------------------------- #
+def test_report_refuses_results_from_a_different_tag_vocabulary(monkeypatch):
+    """The failure mode this guards is silent, which is why it needs a test.
+
+    A7.3 changed 7 of the 50 MusicCaps tags. If the re-run sweep dies part way,
+    the pre-A7.3 result files are still on disk and would be picked up without
+    complaint, mixing corrected and leaked numbers inside one table.
+    """
+    from report import fill_report
+
+    monkeypatch.setattr(fill_report, "current_vocab",
+                        lambda source: ["a", "b", "c"])
+
+    matching = {"test": {"macro_f1": 0.5}, "tag_vocab": ["a", "b", "c"]}
+    assert fill_report.fresh(matching, "musiccaps", "ok") == matching
+
+    different = {"test": {"macro_f1": 0.9}, "tag_vocab": ["a", "b", "z"]}
+    assert fill_report.fresh(different, "musiccaps", "changed") == {}, (
+        "a result scored against a different label space was accepted"
+    )
+
+    # order matters too: the vocabulary order fixes the column index per tag
+    reordered = {"test": {"macro_f1": 0.5}, "tag_vocab": ["c", "b", "a"]}
+    assert fill_report.fresh(reordered, "musiccaps", "reordered") == {}
+
+    unverifiable = {"test": {"macro_f1": 0.5}}          # predates the field
+    assert fill_report.fresh(unverifiable, "musiccaps", "old") == {}, (
+        "a result with no recorded vocabulary was assumed good"
+    )
+
+
+def test_report_macros_never_invent_a_number():
+    """A missing result must render as pending, not as a plausible default."""
+    from report import fill_report
+
+    assert fill_report.num(None) == fill_report.PENDING
+    assert fill_report.num(float("nan")) == fill_report.PENDING
+    assert fill_report.integer(None) == fill_report.PENDING
+    assert fill_report.seconds(None) == fill_report.PENDING
+    assert fill_report.num(0.12345) == "0.1235"
+    assert fill_report.integer(1234567) == "1{,}234{,}567"
