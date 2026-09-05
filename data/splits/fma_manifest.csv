@@ -1,7 +1,7 @@
 track_id,artist_id,audio_path,text,split,y_genre,y_tags,y_valence,y_arousal,duration_s
 fma_000002,awol,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000002.mp3,Food by AWOL. genre: Hip-Hop.,train,3,[],,,30.0
 fma_000005,awol,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000005.mp3,This World by AWOL. genre: Hip-Hop.,train,3,[],,,30.0
-fma_000010,kurt_vile,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000010.mp3,Freeway by Kurt Vile. genre: Pop.,train,6,[],,,30.0
+fma_000010,kurt_vile,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000010.mp3,Freeway by Kurt Vile. genre: Pop.,test,6,[],,,30.0
 fma_000140,alec_k_redfearn_the_eyesores,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000140.mp3,Queen Of The Wires by Alec K. Redfearn & the Eyesores. genre: Folk.,train,2,[],,,30.0
 fma_000141,alec_k_redfearn_the_eyesores,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000141.mp3,Ohio by Alec K. Redfearn & the Eyesores. genre: Folk.,train,2,[],,,30.0
 fma_000148,contradiction,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\000\000148.mp3,Blackout 2 by Contradiction. genre: Experimental.,val,1,[],,,30.0
@@ -1252,7 +1252,7 @@ fma_031389,amy_sayer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_s
 fma_031390,amy_sayer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031390.mp3,Hands of Time by Amy Sayer. genre: Folk.,train,2,[],,,30.0
 fma_031391,amy_sayer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031391.mp3,More Love by Amy Sayer. genre: Folk.,train,2,[],,,30.0
 fma_031392,amy_sayer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031392.mp3,Siren Song by Amy Sayer. genre: Folk.,train,2,[],,,30.0
-fma_031568,nameless_dancers,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031568.mp3,Morning News by Nameless Dancers. genre: Electronic.,val,0,[],,,30.0
+fma_031568,nameless_dancers,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031568.mp3,Morning News by Nameless Dancers. genre: Electronic.,train,0,[],,,30.0
 fma_031807,fuck_buddies,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031807.mp3,Oh Eve by Fuck Buddies. genre: Folk.,train,2,[],,,30.0
 fma_031887,louise_ebrel_and_ifig_flatres,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031887.mp3,Gavotte by Louise Ebrel and Ifig Flatres. genre: International.,train,5,[],,,30.0
 fma_031888,louise_ebrel_and_ifig_flatres,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\031\031888.mp3,Pach Pi by Louise Ebrel and Ifig Flatres. genre: International.,train,5,[],,,30.0
@@ -2429,7 +2429,7 @@ fma_056802,podington_bear,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\
 fma_056803,podington_bear,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056803.mp3,Operatives by Podington Bear. genre: Electronic.,train,0,[],,,30.0
 fma_056804,podington_bear,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056804.mp3,Mutinee by Podington Bear. genre: Electronic.,train,0,[],,,30.0
 fma_056805,podington_bear,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056805.mp3,Origami by Podington Bear. genre: Electronic.,train,0,[],,,30.0
-fma_056874,beat_culture,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056874.mp3,Midori by Beat Culture. genre: Electronic.,val,0,[],,,30.0
+fma_056874,beat_culture,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056874.mp3,Midori by Beat Culture. genre: Electronic.,train,0,[],,,30.0
 fma_056888,john_king,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056888.mp3,soloVIOLA by John King. genre: Experimental.,train,1,[],,,30.0
 fma_056895,lame_drivers,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056895.mp3,(as Puppen) by Lame Drivers. genre: Pop.,test,6,[],,,30.0
 fma_056929,jack_ruby,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\056\056929.mp3,Hit and Run by Jack Ruby. genre: Rock.,test,7,[],,,30.0
@@ -3250,8 +3250,8 @@ fma_072456,the_blind_shake,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma
 fma_072468,frenic,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072468.mp3,Money Ain't No Women by Frenic. genre: Hip-Hop.,train,3,[],,,30.0
 fma_072476,bj_rn_gorden,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072476.mp3,"Model, Job, Metro, Time Square by Björn & Gorden. genre: Pop.",train,6,[],,,30.0
 fma_072477,fhernando,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072477.mp3,Last Days of Disco by Fhernando. genre: Electronic.,train,0,[],,,30.0
-fma_072513,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072513.mp3,Friendship by Zero V. genre: Rock.,val,7,[],,,30.0
-fma_072514,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072514.mp3,Wonders by Zero V. genre: Pop.,val,6,[],,,30.0
+fma_072513,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072513.mp3,Friendship by Zero V. genre: Rock.,train,7,[],,,30.0
+fma_072514,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072514.mp3,Wonders by Zero V. genre: Pop.,train,6,[],,,30.0
 fma_072562,howie_mitchell_ruth_meyer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072562.mp3,Greensleeves by Howie Mitchell & Ruth Meyer. genre: Folk.,train,2,[],,,30.0
 fma_072565,howie_mitchell_ruth_meyer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072565.mp3,Brahms Lullaby by Howie Mitchell & Ruth Meyer. genre: Folk.,train,2,[],,,30.0
 fma_072570,howie_mitchell_ruth_meyer,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\072\072570.mp3,Dona Nobis Pacem by Howie Mitchell & Ruth Meyer. genre: Folk.,train,2,[],,,30.0
@@ -3373,7 +3373,7 @@ fma_074372,pitch_feather,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\f
 fma_074373,julianne_marx_and_craig_olson,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074373.mp3,To Drive the Cold Winter Away by Julianne Marx and Craig Olson. genre: Experimental.,train,1,[],,,30.0
 fma_074374,roslyn,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074374.mp3,O Holy Night by Roslyn. genre: Experimental.,test,1,[],,,30.0
 fma_074375,songs_for_sunday_parlours,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074375.mp3,winter stories by songs for sunday parlours. genre: Experimental.,train,1,[],,,30.0
-fma_074376,ikos_david_clifton_with_the_choirs_of_peterborough_cathedral,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074376.mp3,How Far Is It To Bethlehem by IKOS David Clifton with the choirs of Peterborough Cathedral. genre: Experimental.,val,1,[],,,30.0
+fma_074376,ikos_david_clifton_with_the_choirs_of_peterborough_cathedral,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074376.mp3,How Far Is It To Bethlehem by IKOS David Clifton with the choirs of Peterborough Cathedral. genre: Experimental.,train,1,[],,,30.0
 fma_074377,ann_alee,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074377.mp3,"Infant Holy, Infant Lowly by Ann Alee. genre: Experimental.",train,1,[],,,30.0
 fma_074378,the_hohohos,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074378.mp3,Deck the Halls by The HoHoHos!. genre: Experimental.,train,1,[],,,30.0
 fma_074380,rene_wilson,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\074\074380.mp3,Santa Clause Forgot Me by Rene Wilson. genre: Experimental.,train,1,[],,,30.0
@@ -4469,7 +4469,6 @@ fma_099041,the_polish_ambassador,B:\CSE425_Project\gnn-bert-music-context\data\r
 fma_099093,the_impossebulls,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099093.mp3,Time Is Running Away (Destroy Everything) by The Impossebulls. genre: Hip-Hop.,test,3,[],,,30.0
 fma_099095,the_impossebulls,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099095.mp3,Blaque Gloves by The Impossebulls. genre: Hip-Hop.,test,3,[],,,30.0
 fma_099096,the_impossebulls,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099096.mp3,1Nation (One Fam) by The Impossebulls. genre: Hip-Hop.,test,3,[],,,30.0
-fma_099134,pontic_firebird,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099134.mp3,Halay by Pontic Firebird. genre: Electronic.,train,0,[],,,30.0
 fma_099135,pontic_firebird,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099135.mp3,Yietierre by Pontic Firebird. genre: Electronic.,train,0,[],,,30.0
 fma_099214,julian_winter,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099214.mp3,Broad Boardwalk by Julian Winter. genre: Experimental.,train,1,[],,,30.0
 fma_099260,distemper,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\099\099260.mp3,Happy end by Distemper. genre: Rock.,train,7,[],,,30.0
@@ -4902,7 +4901,6 @@ fma_108883,plusplus,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_sm
 fma_108884,plusplus,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108884.mp3,Plantopia by Plusplus. genre: Instrumental.,train,4,[],,,30.0
 fma_108885,plusplus,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108885.mp3,The Rolling Hills of England by Plusplus. genre: Instrumental.,train,4,[],,,30.0
 fma_108906,fabian_measures,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108906.mp3,Did you know? (Curiouser and curiouser) by Fabian Measures. genre: Instrumental.,train,4,[],,,30.0
-fma_108925,awkward_girls,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108925.mp3,Epic Adventure by Awkward Girls. genre: Rock.,train,7,[],,,30.0
 fma_108957,the_mystery_artist,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108957.mp3,Travels by The Mystery Artist. genre: Rock.,train,7,[],,,30.0
 fma_108961,the_mystery_artist,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108961.mp3,Mr. Person by The Mystery Artist. genre: Rock.,train,7,[],,,30.0
 fma_108962,the_mystery_artist,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\108\108962.mp3,Unquietness by The Mystery Artist. genre: Rock.,train,7,[],,,30.0
@@ -6964,7 +6962,6 @@ fma_133275,movie_theater,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\f
 fma_133276,movie_theater,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133276.mp3,Love by Movie Theater. genre: Rock.,train,7,[],,,30.0
 fma_133293,an_eel,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133293.mp3,Mucky's Happy Resort by {AN} Eel. genre: Experimental.,train,1,[],,,30.0
 fma_133294,ag_davis,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133294.mp3,Jazz Got Fuck'd by AG Davis. genre: Experimental.,train,1,[],,,30.0
-fma_133297,balog_and_matthies,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133297.mp3,(piano & mosesa7C) by Balog and Matthies. genre: Experimental.,train,1,[],,,30.0
 fma_133332,zilmrah,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133332.mp3,Suspended Animation by Zilmrah. genre: Experimental.,train,1,[],,,30.0
 fma_133333,ziurmuzik_and_nick_endee_ocitned,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133333.mp3,Alien Samba Kollage and Subversive Intentions Symphodrone Mix by Ziurmuzik and Nick Endee Ocitned. genre: Experimental.,train,1,[],,,30.0
 fma_133431,trg_banks,B:\CSE425_Project\gnn-bert-music-context\data\raw\fma\fma_small\133\133431.mp3,David Hemmings by TRG Banks. genre: Instrumental.,val,4,[],,,30.0

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "project": "gnn-bert-music-context",
-  "phase": "A1",
-  "current_step": "A1.1",
+  "phase": "A3",
+  "current_step": "A3.1",
   "sessions": 2,
   "completed": [
     "A0.1",
@@ -11,20 +11,36 @@
     "A0.4",
     "A0.5",
     "A0.6",
-    "GATE_A0"
+    "GATE_A0",
+    "A1.1",
+    "A1.3",
+    "A2.1",
+    "A2.2",
+    "A2.3",
+    "GATE_A2"
   ],
   "artifacts": {
     "manifests": {
       "mtat": "data/splits/mtat_manifest.csv",
       "fma": "data/splits/fma_manifest.csv",
       "deam": "data/splits/deam_manifest.csv",
-      "musiccaps": "data/splits/musiccaps_manifest.csv"
+      "musiccaps": "data/splits/musiccaps_manifest.csv",
+      "lmd": "data/splits/lmd_manifest.csv",
+      "mtat_literature": "data/splits/mtat_manifest_literature.csv"
     },
     "feature_caches": {},
     "graph_dirs": {},
     "norm_stats": {},
     "checkpoints": {}
   },
-  "long_jobs": {},
-  "notes": "Gate A0 passed (pytest 148). OPEN for A2: cross-corpus artist leakage on the concatenated manifest (39 artists)."
+  "long_jobs": {
+    "musiccaps_retry": {
+      "status": "RUNNING",
+      "started": "2026-09-05 06:03",
+      "log": "logs/mc_retry.log",
+      "total": 2740,
+      "note": "resumable; re-run the manifest builder when it finishes"
+    }
+  },
+  "notes": "Gate A2 passed. MusicCaps recovery still running: pre-recovery gallery 1481, growing. Re-run src.splits at the end of Phase A."
 }

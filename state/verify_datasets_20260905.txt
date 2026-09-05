@@ -1,0 +1,26 @@
+05:50:42 | INFO    | gbmc.splits | tag vocabulary: 188 raw -> 133 after synonym merge -> top 50 kept (most frequent guitar @ 4861 clips, least no beat @ 242)
+05:50:48 | INFO    | gbmc.splits | MusicCaps survival train: 1300/2663 (48.8%)
+05:50:48 | INFO    | gbmc.splits | MusicCaps survival eval (Task 4 gallery): 1481/2858 (51.8%)
+05:50:48 | INFO    | gbmc.splits | wrote 2781 rows -> B:\CSE425_Project\gnn-bert-music-context\data\splits\musiccaps_manifest.csv
+
+============================================================
+DATASET VERIFICATION
+============================================================
+dataset          nominal  actual   survival  decoded  status
+---------------  -------  -------  --------  -------  ------
+MagnaTagATune     25,863   25,863  100.0%    30/30    OK    
+FMA-small          8,000    8,000  100.0%    30/30    OK    
+DEAM               1,802    1,802  100.0%    30/30    OK    
+MusicCaps          5,521    2,781   50.4%    -/-      OK    
+Lakh MIDI Clean   17,256   17,184   99.6%    -/-      OK    
+---------------  -------  -------  --------  -------  ------
+
+MusicCaps survival by split (the Task 4 gallery size):
+  train   1,300 / 2,663   ( 48.8%)
+  eval    1,481 / 2,858   ( 51.8%)
+  -> retrieval gallery size = 1,481
+  status counts: missing=2,740, ok=2,781
+
+All five corpora are present.
+
+report written to B:\CSE425_Project\gnn-bert-music-context\data\splits\dataset_verification.json

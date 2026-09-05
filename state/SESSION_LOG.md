@@ -33,3 +33,13 @@ Format:
 [2026-09-05 05:50] DONE   A0.6 Xtext locked - MTAT text was the tag string (degenerate); now metadata-only. MusicCaps stripping fires on 2779/2781
                         captions, retains 72% of words. data.text_source key + sidecars. Manifests rebuilt. 14 tests.
 [2026-09-05 05:50] GATE   A0 PASSED - pytest 148/148 green.
+[2026-09-05 05:53] START  A1.2 musiccaps --retry-failed (2740 ids, 4 workers) — expect 1-3h, resumable, writes musiccaps_download_log.csv
+[2026-09-05 05:57] START  A2 rebuild all manifests + cross-corpus reconciliation + LMD inventory
+[2026-09-05 06:03] DONE   A1.1 verify_datasets on real data - archived to state/verify_datasets_20260905.txt. All 5 corpora present.
+[2026-09-05 06:03] INFO   A1.2 ffmpeg was NOT installed (yt-dlp cannot trim without it). Installed Gyan.FFmpeg 9.0.1 via winget; also fixed
+                        binary discovery so yt-dlp is found beside the venv interpreter. Retry pass then launched.
+[2026-09-05 06:03] DONE   A1.3 FMA errata - 3 truncated tracks excluded (99134, 108925, 133297). not_found.pickle audio/clips lists do not
+                        overlap fma_small; a size sweep of the disk independently found exactly the same 3. Manifest now 7,997.
+[2026-09-05 06:03] DONE   A2   All 5 manifests + both MTAT variants. Fixed the cross-corpus artist leak found in A0.1: 39 artists spanned
+                        corpora, 52 rows moved (deam 46, fma 6). Combined leakage assertion now passes across all 4 training corpora.
+[2026-09-05 06:03] GATE   A2 PASSED - pytest 148/148 green.

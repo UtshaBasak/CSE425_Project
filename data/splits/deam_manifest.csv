@@ -14,11 +14,11 @@ deam_19,who_s_panda,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio
 deam_20,stevie_s_amp_shack,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\20.mp3,Blues Shuffle in A One Take Improv Exercise by Stevie's Amp Shack. genre: Blues.,val,-1,[],5.4,6.5,45.0
 deam_21,cian_nugent,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\21.mp3,My War Blues by Cian Nugent. genre: Blues.,train,-1,[],6.6,6.3,45.0
 deam_22,the_new_mystikal_troubadours,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\22.mp3,The Holy Feele by The New Mystikal Troubadours. genre: Blues.,train,-1,[],4.0,4.8,45.0
-deam_24,bombay_laughing_club,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\24.mp3,Workin Boy Blues by Bombay Laughing Club. genre: Blues.,test,-1,[],5.3,3.9,45.0
+deam_24,bombay_laughing_club,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\24.mp3,Workin Boy Blues by Bombay Laughing Club. genre: Blues.,train,-1,[],5.3,3.9,45.0
 deam_25,the_jon_spencer_blues_explosion,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\25.mp3,RL Got Soul by The Jon Spencer Blues Explosion. genre: Blues.,train,-1,[],7.9,4.7,45.0
 deam_31,short_hand,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\31.mp3,All is Right by Short Hand. genre: Blues.,train,-1,[],4.7,3.8,45.0
 deam_32,the_agrarians,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\32.mp3,Princely & Comely by The Agrarians. genre: Blues.,test,-1,[],4.2,3.3,45.0
-deam_35,olima_anditi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\35.mp3,Apoli by Olima Anditi. genre: Blues.,test,-1,[],4.8,6.5,45.0
+deam_35,olima_anditi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\35.mp3,Apoli by Olima Anditi. genre: Blues.,train,-1,[],4.8,6.5,45.0
 deam_37,the_jon_spencer_blues_explosion,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\37.mp3,Afro by The Jon Spencer Blues Explosion. genre: Blues.,train,-1,[],6.6,5.3,45.0
 deam_39,barrence_whitfield_and_the_savages,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\39.mp3,Ramblin' Rose by Barrence Whitfield and The Savages. genre: Blues.,train,-1,[],7.3,5.4,45.0
 deam_40,chuck_prophet,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\40.mp3,You And Me Baby (Holding On) (Live @ KEXP) by Chuck Prophet. genre: Blues.,test,-1,[],4.6,4.8,45.0
@@ -113,7 +113,7 @@ deam_137,aaron_dunn_sonatina_no_1_in_c_major,B:\CSE425_Project\gnn-bert-music-co
 deam_138,silver_process,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\138.mp3,Encounters With Abusive Men by Silver Process. genre: Classical.,test,-1,[],3.8,2.4,45.0
 deam_140,jared_c_balogh,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\140.mp3,Shaking Off The Rust by Jared C. Balogh. genre: Classical.,train,-1,[],4.2,4.5,45.0
 deam_142,circus_marcus_aux_puces_n_2,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\142.mp3,Carosello by Circus Marcus-Aux puces nº2. genre: Classical.,train,-1,[],4.6,4.8,45.0
-deam_143,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\143.mp3,Aux puces nº5 by Circus Marcus. genre: Classical.,val,-1,[],4.0,4.9,45.0
+deam_143,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\143.mp3,Aux puces nº5 by Circus Marcus. genre: Classical.,test,-1,[],4.0,4.9,45.0
 deam_144,krackatoa,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\144.mp3,The Passing of Time by krackatoa. genre: Classical.,train,-1,[],3.4,4.7,45.0
 deam_145,kevin_macleod,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\145.mp3,The Forest and the Trees by Kevin MacLeod. genre: Classical.,train,-1,[],3.1,5.4,45.0
 deam_146,marcel_pequel,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\146.mp3,Nine by Marcel Pequel. genre: Classical.,val,-1,[],2.4,3.5,45.0
@@ -131,7 +131,7 @@ deam_158,peter_rudenko,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\au
 deam_159,silver_process,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\159.mp3,Awaken From A Nightmare by Silver Process. genre: Classical.,test,-1,[],3.8,3.1,45.0
 deam_160,advent_chamber_orchestra_bughici,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\160.mp3,Suite for Violin 9 Hora vivace by Advent Chamber Orchestra-Bughici. genre: Classical.,val,-1,[],3.5,3.5,45.0
 deam_161,mit_concert_choir,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\161.mp3,O Fortuna by MIT Concert Choir. genre: Classical.,train,-1,[],6.3,3.5,45.0
-deam_162,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\162.mp3,Le bal de Rémy by Circus Marcus. genre: Classical.,val,-1,[],3.7,4.6,45.0
+deam_162,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\162.mp3,Le bal de Rémy by Circus Marcus. genre: Classical.,test,-1,[],3.7,4.6,45.0
 deam_163,jared_c_balogh,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\163.mp3,Caught In A Realm by Jared C. Balogh. genre: Classical.,train,-1,[],3.6,4.5,45.0
 deam_164,silver_process_skid,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\164.mp3,Row Night by Silver Process-Skid. genre: Classical.,train,-1,[],4.1,2.9,45.0
 deam_166,dexter_britain,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\166.mp3,Stop It (Instrumental) by Dexter Britain. genre: Classical.,train,-1,[],3.1,4.2,45.0
@@ -156,18 +156,18 @@ deam_185,kevin_macleod,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\au
 deam_186,dexter_britain,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\186.mp3,Nights Tale by Dexter Britain. genre: Classical.,train,-1,[],3.7,4.0,45.0
 deam_187,evgeny_grinko,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\187.mp3,Other Child Room by Evgeny Grinko. genre: Classical.,train,-1,[],2.5,3.7,45.0
 deam_188,lee_maddeford,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\188.mp3,Tom's Lullaby (with Les Gauchers Orchestra) by Lee Maddeford. genre: Classical.,train,-1,[],4.0,3.3,45.0
-deam_189,sl_inte,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\189.mp3,Wild Rover with Bellevue Chamber Chorus by Sláinte. genre: Classical.,train,-1,[],6.5,7.1,45.0
+deam_189,sl_inte,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\189.mp3,Wild Rover with Bellevue Chamber Chorus by Sláinte. genre: Classical.,test,-1,[],6.5,7.1,45.0
 deam_190,kevin_macleod,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\190.mp3,Virtutes Instrumenti by Kevin MacLeod. genre: Classical.,train,-1,[],2.8,3.1,45.0
 deam_191,kimiko_ishizaka,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\191.mp3,Variatio 14 a 2 Clav by Kimiko Ishizaka. genre: Classical.,val,-1,[],5.1,6.3,45.0
 deam_192,steven_arntson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\192.mp3,Lucky by Steven Arntson. genre: Classical.,train,-1,[],5.8,6.1,45.0
 deam_193,matthew_mehlan,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\193.mp3,Hands by Matthew Mehlan. genre: Classical.,train,-1,[],4.1,3.0,45.0
 deam_194,jamie_evans,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\194.mp3,Reminiscence by Jamie Evans. genre: Classical.,train,-1,[],2.7,4.7,45.0
 deam_195,rebecca_foon,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\195.mp3,Golden Alley Reprise by Rebecca Foon. genre: Classical.,train,-1,[],4.2,2.7,45.0
-deam_196,lanark,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\196.mp3,Borodin Butterfly by Lanark. genre: Classical.,test,-1,[],4.3,4.5,45.0
+deam_196,lanark,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\196.mp3,Borodin Butterfly by Lanark. genre: Classical.,train,-1,[],4.3,4.5,45.0
 deam_197,marcel_pequel,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\197.mp3,Eight by Marcel Pequel. genre: Classical.,val,-1,[],2.2,2.8,45.0
 deam_198,lee_rosevere,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\198.mp3,Red Danube by Lee Rosevere. genre: Classical.,train,-1,[],1.9,3.3,45.0
 deam_199,john_harrison_with_the_wichita_state_university_chamber_players,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\199.mp3,Spring Mvt 1 Allegro by John Harrison with the Wichita State University Chamber Players. genre: Classical.,train,-1,[],5.3,5.7,45.0
-deam_201,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\201.mp3,Les crocodiles mangent aussi les bonshommes Wizzards by Circus Marcus. genre: Classical.,val,-1,[],3.7,4.8,45.0
+deam_201,circus_marcus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\201.mp3,Les crocodiles mangent aussi les bonshommes Wizzards by Circus Marcus. genre: Classical.,test,-1,[],3.7,4.8,45.0
 deam_202,chance_s_end,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\202.mp3,God Rest Ye Merry Gentlemen by Chance's end. genre: Classical.,test,-1,[],4.6,5.2,45.0
 deam_203,jared_c_balogh,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\203.mp3,WATCHING IT SNOW WHILE THINKING OF YOU by Jared C. Balogh. genre: Classical.,train,-1,[],3.5,4.8,45.0
 deam_204,joe_merolla,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\204.mp3,Sinfonia di Violoncello e AM RadioFinitura by Joe Merolla. genre: Classical.,train,-1,[],3.6,2.2,45.0
@@ -201,7 +201,7 @@ deam_232,advent_chamber_orchestra_dvorak,B:\CSE425_Project\gnn-bert-music-contex
 deam_233,jared_c_balogh,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\233.mp3,HURRY UP AND RAIN by Jared C. Balogh. genre: Classical.,train,-1,[],4.7,4.5,45.0
 deam_234,jessica_pavone,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\234.mp3,Dedicated to Leroy Jenkins by Jessica Pavone. genre: Classical.,train,-1,[],3.5,3.9,45.0
 deam_235,steven_arntson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\235.mp3,Flight of the Moth by Steven Arntson. genre: Classical.,train,-1,[],3.0,3.7,45.0
-deam_236,chuck_bettis_joe_merolla,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\236.mp3,Transmutation Of Metals by Chuck Bettis & Joe Merolla. genre: Classical.,test,-1,[],2.5,2.4,45.0
+deam_236,chuck_bettis_joe_merolla,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\236.mp3,Transmutation Of Metals by Chuck Bettis & Joe Merolla. genre: Classical.,train,-1,[],2.5,2.4,45.0
 deam_237,steven_arntson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\237.mp3,Birth by Steven Arntson. genre: Classical.,train,-1,[],4.2,3.9,45.0
 deam_238,kevin_macleod_j_s_bach_prelude_in_c,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\238.mp3,BWV 846 by Kevin MacLeod-J. S. Bach  Prelude in C. genre: Classical.,train,-1,[],3.0,4.6,45.0
 deam_239,marcel_pequel,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\239.mp3,Seven by Marcel Pequel. genre: Classical.,val,-1,[],2.3,3.3,45.0
@@ -224,7 +224,7 @@ deam_262,scott_joplin,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\aud
 deam_264,peter_case,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\264.mp3,House Rent Jump by Peter Case. genre: Country.,test,-1,[],5.3,5.5,45.0
 deam_265,george_p_watson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\265.mp3,Emmet's Cuckoo Song by George P. Watson. genre: Country.,train,-1,[],4.5,6.4,45.0
 deam_266,jason_shaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\266.mp3,SOLO ACOUSTIC GUITAR by Jason Shaw. genre: Country.,train,-1,[],3.6,4.8,45.0
-deam_269,paper_navy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\269.mp3,Swan Song by Paper Navy. genre: Country.,test,-1,[],4.3,4.8,45.0
+deam_269,paper_navy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\269.mp3,Swan Song by Paper Navy. genre: Country.,train,-1,[],4.3,4.8,45.0
 deam_270,john_h_glover_kind,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\270.mp3,I Do Like To Be Beside The Seaside (1907 piano roll) by John H. Glover-Kind. genre: Country.,val,-1,[],6.1,7.1,45.0
 deam_272,jason_shaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\272.mp3,JENNY'S THEME by Jason Shaw. genre: Country.,train,-1,[],5.9,6.4,45.0
 deam_273,shake_that_little_foot,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\273.mp3,Western Country by Shake That Little Foot. genre: Country.,train,-1,[],5.4,7.2,45.0
@@ -266,7 +266,7 @@ deam_313,jason_shaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio
 deam_314,austin_leonard_jones,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\314.mp3,Ox Driving Song by Austin Leonard Jones. genre: Country.,train,-1,[],5.8,5.9,45.0
 deam_315,shake_that_little_foot,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\315.mp3,Scotland the Brave by Shake That Little Foot. genre: Country.,train,-1,[],6.4,7.5,45.0
 deam_316,kenny_tudrick,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\316.mp3,The River by Kenny Tudrick. genre: Country.,test,-1,[],2.8,3.5,45.0
-deam_317,waylon_thornton,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\317.mp3,Rose Water by Waylon Thornton. genre: Country.,val,-1,[],6.1,4.3,45.0
+deam_317,waylon_thornton,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\317.mp3,Rose Water by Waylon Thornton. genre: Country.,test,-1,[],6.1,4.3,45.0
 deam_318,dr_frankenstein,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\318.mp3,Emergency Exit by Dr. Frankenstein. genre: Country.,val,-1,[],5.9,5.9,45.0
 deam_319,lucas_gonze,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\319.mp3,Frog In The Well by Lucas Gonze. genre: Country.,train,-1,[],4.5,6.6,45.0
 deam_320,stompin_riff_raffs,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\320.mp3,99 Chicks by Stompin' Riff Raffs. genre: Country.,train,-1,[],7.4,6.6,45.0
@@ -320,33 +320,33 @@ deam_371,stapleton_brothers_call_of_the_whip_poor,B:\CSE425_Project\gnn-bert-mus
 deam_372,qqq,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\372.mp3,Runaway Puppy by QQQ. genre: Country.,test,-1,[],3.6,4.8,45.0
 deam_374,the_crevulators,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\374.mp3,Gambler's Blues by The Crevulators. genre: Country.,train,-1,[],7.0,4.9,45.0
 deam_375,mr_mrs_smith,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\375.mp3,Bit a Bullet by Mr. & Mrs. Smith. genre: Country.,train,-1,[],1.9,2.8,45.0
-deam_376,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\376.mp3,Night Owl by Broke For Free. genre: Electronic.,train,-1,[],5.0,5.9,45.0
+deam_376,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\376.mp3,Night Owl by Broke For Free. genre: Electronic.,test,-1,[],5.0,5.9,45.0
 deam_378,graphiqs_groove,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\378.mp3,Deep Sky Blue by Graphiqs Groove. genre: Electronic.,train,-1,[],5.5,5.9,45.0
 deam_379,lj_kruzer,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\379.mp3,Chantiers Navals 412 by LJ Kruzer. genre: Electronic.,train,-1,[],1.9,2.9,45.0
 deam_380,macaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\380.mp3,Five Minutes at the Rainforest Cafe by Macaw. genre: Electronic.,train,-1,[],5.6,4.8,45.0
 deam_381,hot_fire_them_never_love_no_bans,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\381.mp3,DnB Mix (Germany) by Hot Fire-Them Never Love No Bans. genre: Electronic.,test,-1,[],6.0,6.7,45.0
 deam_383,neuroleptic_trio,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\383.mp3,Neuroleptic trio instrumental 5 by Neuroleptic Trio. genre: Electronic.,train,-1,[],4.2,3.6,45.0
 deam_384,ghost_hunter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\384.mp3,Whirlwind Dance by Ghost Hunter. genre: Electronic.,train,-1,[],3.6,4.1,45.0
-deam_386,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\386.mp3,As Colorful As Ever by Broke For Free. genre: Electronic.,train,-1,[],5.0,5.5,45.0
-deam_387,risey,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\387.mp3,Memories Of Thailand (Beat Doctor's 'stuck in Britain' remix) by Risey. genre: Electronic.,train,-1,[],6.2,6.2,45.0
+deam_386,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\386.mp3,As Colorful As Ever by Broke For Free. genre: Electronic.,test,-1,[],5.0,5.5,45.0
+deam_387,risey,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\387.mp3,Memories Of Thailand (Beat Doctor's 'stuck in Britain' remix) by Risey. genre: Electronic.,val,-1,[],6.2,6.2,45.0
 deam_390,beat_culture,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\390.mp3,Midori by Beat Culture. genre: Electronic.,train,-1,[],5.7,6.2,45.0
 deam_391,morphamish,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\391.mp3,Another Position (original mix) by Morphamish. genre: Electronic.,train,-1,[],5.5,6.1,45.0
-deam_392,ghostly_dust_machine,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\392.mp3,Ode To A Baby Snowstorm by Ghostly Dust Machine. genre: Electronic.,val,-1,[],3.4,4.8,45.0
+deam_392,ghostly_dust_machine,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\392.mp3,Ode To A Baby Snowstorm by Ghostly Dust Machine. genre: Electronic.,train,-1,[],3.4,4.8,45.0
 deam_393,max_tundra,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\393.mp3,Lysine by Max Tundra. genre: Electronic.,test,-1,[],6.0,6.4,45.0
 deam_395,foniqz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\395.mp3,Spectrum (Subdiffusion Mix) by Foniqz. genre: Electronic.,train,-1,[],6.7,6.2,45.0
-deam_397,lucky_dragons,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\397.mp3,Mercy by Lucky Dragons. genre: Electronic.,train,-1,[],7.0,7.0,45.0
+deam_397,lucky_dragons,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\397.mp3,Mercy by Lucky Dragons. genre: Electronic.,test,-1,[],7.0,7.0,45.0
 deam_399,dexter_britain,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\399.mp3,Waking Up (Instrumental) by Dexter Britain. genre: Electronic.,train,-1,[],6.7,7.0,45.0
 deam_400,asthmatic_astronaut,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\400.mp3,Run The Tape by Asthmatic Astronaut. genre: Electronic.,test,-1,[],5.1,5.6,45.0
-deam_401,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\401.mp3,Something Elated by Broke For Free. genre: Electronic.,train,-1,[],5.5,6.4,45.0
-deam_402,patrick_lee,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\402.mp3,Quittin' Time by Patrick Lee. genre: Electronic.,val,-1,[],7.1,7.1,45.0
+deam_401,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\401.mp3,Something Elated by Broke For Free. genre: Electronic.,test,-1,[],5.5,6.4,45.0
+deam_402,patrick_lee,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\402.mp3,Quittin' Time by Patrick Lee. genre: Electronic.,train,-1,[],7.1,7.1,45.0
 deam_403,daddy_scrabble,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\403.mp3,Flying pea v by Daddy_Scrabble. genre: Electronic.,train,-1,[],5.1,5.2,45.0
-deam_404,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\404.mp3,Calm The Fuck Down by Broke For Free. genre: Electronic.,train,-1,[],6.9,6.8,45.0
+deam_404,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\404.mp3,Calm The Fuck Down by Broke For Free. genre: Electronic.,test,-1,[],6.9,6.8,45.0
 deam_405,kevin_macleod,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\405.mp3,Presenterator by Kevin MacLeod. genre: Electronic.,train,-1,[],6.1,7.4,45.0
 deam_406,smersh,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\406.mp3,My God Those Legs by Smersh. genre: Electronic.,val,-1,[],5.3,4.3,45.0
 deam_407,digi_g_alessio_ekiti_son_feat_valeska,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\407.mp3,april deegee rmx by Digi G'Alessio-ekiti son feat valeska. genre: Electronic.,train,-1,[],4.3,4.5,45.0
 deam_408,eel,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\408.mp3,snow world under the white moon by EeL. genre: Electronic.,train,-1,[],6.6,6.1,45.0
 deam_410,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\410.mp3,Twinkling by Zero V. genre: Electronic.,train,-1,[],3.8,5.1,45.0
-deam_415,phoniandflore,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\415.mp3,Dubsteady by Phoniandflore. genre: Electronic.,test,-1,[],6.0,5.2,45.0
+deam_415,phoniandflore,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\415.mp3,Dubsteady by Phoniandflore. genre: Electronic.,train,-1,[],6.0,5.2,45.0
 deam_416,bitbasic,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\416.mp3,Please Mind the Dubstep by Bitbasic. genre: Electronic.,train,-1,[],5.5,5.2,45.0
 deam_419,antiphon,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\419.mp3,over and under by Antiphon. genre: Electronic.,train,-1,[],3.3,4.0,45.0
 deam_420,casetofoane,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\420.mp3,90 by Casetofoane. genre: Electronic.,train,-1,[],4.5,5.4,45.0
@@ -360,20 +360,20 @@ deam_429,chris_zabriskie,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\
 deam_430,vitus_von_degen,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\430.mp3,Black Gloves by Vitus Von Degen. genre: Electronic.,train,-1,[],4.0,2.9,45.0
 deam_431,dub_terminator,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\431.mp3,Dub steps by Dub Terminator. genre: Electronic.,train,-1,[],6.1,5.5,45.0
 deam_432,pierlo,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\432.mp3,Barbarian by Pierlo. genre: Electronic.,train,-1,[],5.3,5.3,45.0
-deam_435,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\435.mp3,Warm Up Suit by Broke For Free. genre: Electronic.,train,-1,[],4.5,5.9,45.0
-deam_436,digi_g_alessio,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\436.mp3,raw instrumental pt by Digi G'Alessio. genre: Electronic.,train,-1,[],4.3,5.2,45.0
+deam_435,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\435.mp3,Warm Up Suit by Broke For Free. genre: Electronic.,test,-1,[],4.5,5.9,45.0
+deam_436,digi_g_alessio,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\436.mp3,raw instrumental pt by Digi G'Alessio. genre: Electronic.,val,-1,[],4.3,5.2,45.0
 deam_437,psychadelik_pedestrian,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\437.mp3,Night Beach by Psychadelik Pedestrian. genre: Electronic.,train,-1,[],5.2,4.3,45.0
 deam_440,immortal_beats,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\440.mp3,Oh Wee by Immortal Beats. genre: Electronic.,train,-1,[],5.3,6.3,45.0
 deam_441,m_w_d,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\441.mp3,Singing Forest by M.W.D.. genre: Electronic.,test,-1,[],4.6,5.1,45.0
 deam_442,volfoniq_memori_amentu_segretu,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\442.mp3,Arrogalla remix feat Andrea Congia] by Volfoniq-Memori [Amentu Segretu. genre: Electronic.,train,-1,[],4.1,4.5,45.0
 deam_444,augustus_bro_gallery_six,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\444.mp3,People Living And Leaving Big Citys by Augustus Bro & Gallery Six. genre: Electronic.,train,-1,[],2.3,2.5,45.0
-deam_445,bacalao,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\445.mp3,Casual Graphic Designer by Bacalao. genre: Electronic.,test,-1,[],2.4,4.6,45.0
+deam_445,bacalao,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\445.mp3,Casual Graphic Designer by Bacalao. genre: Electronic.,train,-1,[],2.4,4.6,45.0
 deam_448,anitek,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\448.mp3,Destination by Anitek. genre: Electronic.,train,-1,[],6.7,6.5,45.0
 deam_449,orbique,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\449.mp3,simple by Orbique. genre: Electronic.,train,-1,[],3.6,3.8,45.0
 deam_450,ghosts,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\450.mp3,Grief And Sleep by Ghosts. genre: Electronic.,train,-1,[],4.1,5.0,45.0
 deam_451,thick_business,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\451.mp3,Smoothest Runes by Thick Business. genre: Electronic.,train,-1,[],4.9,4.4,45.0
 deam_452,yacht_shangri,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\452.mp3,La (instrumental) by YACHT-Shangri. genre: Electronic.,train,-1,[],5.45,6.75,45.0
-deam_453,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\453.mp3,Only Instrumental by Broke For Free. genre: Electronic.,train,-1,[],4.6,5.6,45.0
+deam_453,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\453.mp3,Only Instrumental by Broke For Free. genre: Electronic.,test,-1,[],4.6,5.6,45.0
 deam_454,wake,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\454.mp3,Steppin by Wake. genre: Electronic.,train,-1,[],5.0,4.8,45.0
 deam_455,music_for_your_plants,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\455.mp3,Expedition Chant Cup by Music For Your Plants. genre: Electronic.,train,-1,[],5.4,5.7,45.0
 deam_456,stickfigure,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\456.mp3,Crack in Time by Stickfigure. genre: Electronic.,train,-1,[],6.1,2.3,45.0
@@ -387,8 +387,8 @@ deam_464,plurabelle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio
 deam_466,fanas,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\466.mp3,Forever falling up by Fanas. genre: Electronic.,train,-1,[],6.6,5.9,45.0
 deam_467,peter_sharp,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\467.mp3,Runtime error by Peter Sharp. genre: Electronic.,train,-1,[],5.7,6.8,45.0
 deam_468,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\468.mp3,Hiss by Zero V. genre: Electronic.,train,-1,[],3.6,3.4,45.0
-deam_469,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\469.mp3,Knock Knock by Broke For Free. genre: Electronic.,train,-1,[],5.1,5.3,45.0
-deam_472,listen_with_sarah,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\472.mp3,I by Listen With Sarah. genre: Electronic.,val,-1,[],6.5,5.2,45.0
+deam_469,broke_for_free,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\469.mp3,Knock Knock by Broke For Free. genre: Electronic.,test,-1,[],5.1,5.3,45.0
+deam_472,listen_with_sarah,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\472.mp3,I by Listen With Sarah. genre: Electronic.,train,-1,[],6.5,5.2,45.0
 deam_473,illocanblo,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\473.mp3,SmurfPulser by Illocanblo. genre: Electronic.,train,-1,[],7.1,5.5,45.0
 deam_475,morphamish_mako,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\475.mp3,Ooo by Morphamish + MAKO. genre: Electronic.,train,-1,[],5.6,5.0,45.0
 deam_477,decktonic,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\477.mp3,Night Drive by Decktonic. genre: Electronic.,train,-1,[],7.1,7.2,45.0
@@ -396,7 +396,7 @@ deam_478,zero_v,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\478
 deam_479,jiony,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\479.mp3,Not Found (Invisible) by Jiony. genre: Electronic.,train,-1,[],4.5,5.7,45.0
 deam_480,lee_rosevere_chapter_seven_re,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\480.mp3,entry by Lee Rosevere-Chapter Seven - Re. genre: Electronic.,train,-1,[],2.7,4.1,45.0
 deam_481,dexter_britain,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\481.mp3,Seeing The Future by Dexter Britain. genre: Electronic.,train,-1,[],3.4,4.7,45.0
-deam_482,julian_winter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\482.mp3,LA by Julian Winter. genre: Electronic.,val,-1,[],1.9,3.5,45.0
+deam_482,julian_winter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\482.mp3,LA by Julian Winter. genre: Electronic.,train,-1,[],1.9,3.5,45.0
 deam_484,beat_doctor,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\484.mp3,Got Me (club mix) by Beat Doctor. genre: Electronic.,train,-1,[],6.4,6.5,45.0
 deam_485,psychadelik_pedestrian,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\485.mp3,Coral Reef by Psychadelik Pedestrian. genre: Electronic.,train,-1,[],2.6,3.7,45.0
 deam_486,pulselooper,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\486.mp3,Neurociencia by Pulselooper. genre: Electronic.,train,-1,[],6.2,5.7,45.0
@@ -407,12 +407,12 @@ deam_490,apes_on_tapes,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\au
 deam_492,m_pex,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\492.mp3,Beryllos by M-PeX. genre: Electronic.,test,-1,[],4.4,4.8,45.0
 deam_493,general_fuzz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\493.mp3,summer by General Fuzz. genre: Electronic.,train,-1,[],3.7,4.9,45.0
 deam_494,deltason,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\494.mp3,Garden Theme by Deltason. genre: Electronic.,train,-1,[],3.7,4.1,45.0
-deam_496,adubter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\496.mp3,OutroDub by Adubter. genre: Electronic.,val,-1,[],4.7,5.9,45.0
+deam_496,adubter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\496.mp3,OutroDub by Adubter. genre: Electronic.,test,-1,[],4.7,5.9,45.0
 deam_497,flex_vector,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\497.mp3,The Beat Goes On by Flex Vector. genre: Electronic.,train,-1,[],6.2,5.7,45.0
 deam_498,altered_carbon,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\498.mp3,Drown by Altered Carbon. genre: Electronic.,train,-1,[],2.9,2.8,45.0
 deam_499,isle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\499.mp3,Bayview by Isle. genre: Electronic.,train,-1,[],3.6,3.6,45.0
 deam_500,music_for_your_plants,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\500.mp3,القذافي الأمازون الحرس by Music For Your Plants. genre: Electronic.,train,-1,[],6.0,5.2,45.0
-deam_501,possimiste,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\501.mp3,Behind The Seas by Possimiste. genre: Folk.,val,-1,[],2.5,4.4,45.0
+deam_501,possimiste,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\501.mp3,Behind The Seas by Possimiste. genre: Folk.,train,-1,[],2.5,4.4,45.0
 deam_502,the_rope_river_blues_band,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\502.mp3,Capulet by The Rope River Blues Band. genre: Folk.,train,-1,[],4.8,4.6,45.0
 deam_503,plushgoolash,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\503.mp3,Big Gay Water Fight by Plushgoolash. genre: Folk.,train,-1,[],5.8,6.4,45.0
 deam_504,sam_shalabi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\504.mp3,Rebetikaud by Sam Shalabi. genre: Folk.,train,-1,[],4.8,4.0,45.0
@@ -437,7 +437,7 @@ deam_535,black_twig_pickers_and_steve_gunn,B:\CSE425_Project\gnn-bert-music-cont
 deam_536,steven_arntson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\536.mp3,Don't You Want to Go to HeavenUncle Sam by Steven Arntson. genre: Folk.,train,-1,[],5.1,4.5,45.0
 deam_537,astral_social_club,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\537.mp3,Efoumernam Ena Vradi by Astral Social Club. genre: Folk.,train,-1,[],5.0,2.6,45.0
 deam_540,steve_gunn,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\540.mp3,Trouba by Steve Gunn. genre: Folk.,test,-1,[],4.1,4.4,45.0
-deam_544,rho,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\544.mp3,Day Into Night by Rho. genre: Folk.,val,-1,[],4.8,4.5,45.0
+deam_544,rho,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\544.mp3,Day Into Night by Rho. genre: Folk.,train,-1,[],4.8,4.5,45.0
 deam_547,mr_mrs_smith,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\547.mp3,It's all right by Mr. & Mrs. Smith. genre: Folk.,train,-1,[],3.4,4.8,45.0
 deam_550,michael_chapman_the_woodpiles,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\550.mp3,Titanic by Michael Chapman & The Woodpiles. genre: Folk.,train,-1,[],4.2,5.9,45.0
 deam_551,moore_sons,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\551.mp3,Harmless Blues by Moore & Sons. genre: Folk.,train,-1,[],3.2,4.0,45.0
@@ -467,7 +467,7 @@ deam_598,jahzzar,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\59
 deam_600,joe_mazzola,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\600.mp3,32 Ford by Joe Mazzola. genre: Folk.,train,-1,[],3.5,4.0,45.0
 deam_605,the_simple_carnival,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\605.mp3,Flirt by The Simple Carnival. genre: Folk.,val,-1,[],4.4,6.0,45.0
 deam_606,jahzzar,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\606.mp3,Ice Cream by Jahzzar. genre: Folk.,train,-1,[],4.1,5.6,45.0
-deam_607,james_blackshaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\607.mp3,Past Has Not Passed by James Blackshaw. genre: Folk.,test,-1,[],4.4,6.1,45.0
+deam_607,james_blackshaw,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\607.mp3,Past Has Not Passed by James Blackshaw. genre: Folk.,train,-1,[],4.4,6.1,45.0
 deam_608,daniel_padden,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\608.mp3,Adinatisa O Kaymenos by Daniel Padden. genre: Folk.,train,-1,[],2.9,3.8,45.0
 deam_609,m_pex,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\609.mp3,Eter by M-PeX. genre: Folk.,test,-1,[],5.3,5.55,45.0
 deam_610,jahzzar,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\610.mp3,Shine by Jahzzar. genre: Folk.,train,-1,[],6.3,6.5,45.0
@@ -532,7 +532,7 @@ deam_686,sergi_boal,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio
 deam_687,the_underscore_orkestra,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\687.mp3,Balancing Act Chosen Kale Mazel Tov by The Underscore Orkestra. genre: Jazz.,train,-1,[],7.3,7.4,45.0
 deam_688,lee_maddeford,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\688.mp3,Irresistible Yvette (with Les Gauchers Quintet) by Lee Maddeford. genre: Jazz.,train,-1,[],4.3,5.0,45.0
 deam_689,antony_raijekov_ambient,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\689.mp3,M (2003) by Antony Raijekov-Ambient. genre: Jazz.,val,-1,[],3.8,4.6,45.0
-deam_690,ann_alee,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\690.mp3,Infant Holy Infant Lowly by Ann Alee. genre: Jazz.,val,-1,[],2.4,4.4,45.0
+deam_690,ann_alee,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\690.mp3,Infant Holy Infant Lowly by Ann Alee. genre: Jazz.,train,-1,[],2.4,4.4,45.0
 deam_691,nature,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\691.mp3,Hard Time Killing Floor Blues by Nature. genre: Jazz.,test,-1,[],5.0,3.7,45.0
 deam_692,breuss_arrizabalaga_quintet_nfamoudou,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\692.mp3,Boudougou by Breuss Arrizabalaga Quintet-Nfamoudou. genre: Jazz.,train,-1,[],6.9,6.1,45.0
 deam_693,mystic_morrison_visions,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\693.mp3,Impressive by Mystic Morrison Visions. genre: Jazz.,train,-1,[],6.2,5.3,45.0
@@ -596,7 +596,7 @@ deam_763,jahzzar,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\76
 deam_764,sleeping_policemen,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\764.mp3,Vogelbird by Sleeping Policemen. genre: Pop.,train,-1,[],6.3,7.5,45.0
 deam_767,windom_earle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\767.mp3,kirblooey by Windom Earle. genre: Pop.,train,-1,[],5.2,6.5,45.0
 deam_769,amanda,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\769.mp3,Chaos by AMANDA. genre: Pop.,train,-1,[],6.2,5.0,45.0
-deam_773,u_s_girls,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\773.mp3,The Island Song by U.S. Girls. genre: Pop.,test,-1,[],4.5,4.7,45.0
+deam_773,u_s_girls,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\773.mp3,The Island Song by U.S. Girls. genre: Pop.,train,-1,[],4.5,4.7,45.0
 deam_775,ghost_hunter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\775.mp3,In The Early Months Of The Emergency by Ghost Hunter. genre: Pop.,train,-1,[],3.7,4.4,45.0
 deam_776,ghost_hunter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\776.mp3,Through The Haze Of The Green Glasses by Ghost Hunter. genre: Pop.,train,-1,[],3.5,4.5,45.0
 deam_777,the_strangers,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\777.mp3,A Little Too Fast by The Strangers. genre: Pop.,train,-1,[],6.2,5.1,45.0
@@ -608,10 +608,10 @@ deam_784,benjamin_bret,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\au
 deam_787,coverclub_nl_schotel_van_de_dag,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\787.mp3,Ride The Tide by coverclub.nl-Schotel van de Dag. genre: Pop.,train,-1,[],6.1,6.3,45.0
 deam_789,austin_leonard_jones,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\789.mp3,No Slow Dancing by Austin Leonard Jones. genre: Pop.,train,-1,[],3.9,5.2,45.0
 deam_790,sycamore_drive,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\790.mp3,City Sounds by Sycamore Drive. genre: Pop.,train,-1,[],7.2,5.4,45.0
-deam_791,lezet,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\791.mp3,West Bank by Lezet. genre: Pop.,val,-1,[],2.7,4.6,45.0
+deam_791,lezet,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\791.mp3,West Bank by Lezet. genre: Pop.,train,-1,[],2.7,4.6,45.0
 deam_794,two_bicycles,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\794.mp3,Window #3 by Two Bicycles. genre: Pop.,train,-1,[],2.5,4.2,45.0
-deam_795,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\795.mp3,Simon Cowell by Ergo Phizmiz. genre: Pop.,val,-1,[],2.2,3.5,45.0
-deam_796,learning_music,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\796.mp3,Ghost Transference by Learning Music. genre: Pop.,val,-1,[],5.2,5.1,45.0
+deam_795,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\795.mp3,Simon Cowell by Ergo Phizmiz. genre: Pop.,train,-1,[],2.2,3.5,45.0
+deam_796,learning_music,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\796.mp3,Ghost Transference by Learning Music. genre: Pop.,train,-1,[],5.2,5.1,45.0
 deam_797,monday_night_fever,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\797.mp3,Sunday Lovers by Monday Night Fever. genre: Pop.,train,-1,[],4.9,5.4,45.0
 deam_798,casetofoane,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\798.mp3,Waha by Casetofoane. genre: Pop.,train,-1,[],6.5,5.9,45.0
 deam_799,ducktails,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\799.mp3,Beach Point Pleasant by Ducktails. genre: Pop.,train,-1,[],4.1,5.6,45.0
@@ -628,7 +628,7 @@ deam_813,my_bubba_mi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audi
 deam_814,etc,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\814.mp3,re bitterfly by etc.. genre: Pop.,train,-1,[],6.1,5.3,45.0
 deam_815,plurabelle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\815.mp3,LightLivid by Plurabelle. genre: Pop.,train,-1,[],5.5,5.9,45.0
 deam_818,mir_belle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\818.mp3,In Fielder by Miró Belle. genre: Pop.,train,-1,[],5.9,6.8,45.0
-deam_819,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\819.mp3,Tilly's Punctured Romancer by Ergo Phizmiz. genre: Pop.,val,-1,[],4.0,5.7,45.0
+deam_819,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\819.mp3,Tilly's Punctured Romancer by Ergo Phizmiz. genre: Pop.,train,-1,[],4.0,5.7,45.0
 deam_820,plurabelle,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\820.mp3,Wallflower by Plurabelle. genre: Pop.,train,-1,[],6.4,6.4,45.0
 deam_823,gringo_star,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\823.mp3,You Want It by Gringo Star. genre: Pop.,train,-1,[],4.8,4.8,45.0
 deam_824,sycamore_drive,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\824.mp3,Untold Story by Sycamore Drive. genre: Pop.,train,-1,[],7.2,7.0,45.0
@@ -640,13 +640,13 @@ deam_831,casetofoane,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audi
 deam_833,casetofoane,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\833.mp3,Rocky 5000 by Casetofoane. genre: Pop.,train,-1,[],5.0,5.8,45.0
 deam_834,keshco,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\834.mp3,Fly By Night by Keshco. genre: Pop.,train,-1,[],4.7,4.3,45.0
 deam_836,the_scallions,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\836.mp3,Memories Are Made of This by The Scallions. genre: Pop.,train,-1,[],7.1,5.7,45.0
-deam_839,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\839.mp3,Fun With Petroleum by Ergo Phizmiz. genre: Pop.,val,-1,[],5.7,4.4,45.0
+deam_839,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\839.mp3,Fun With Petroleum by Ergo Phizmiz. genre: Pop.,train,-1,[],5.7,4.4,45.0
 deam_841,kurt_vile,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\841.mp3,Nicotine Blues by Kurt Vile. genre: Pop.,test,-1,[],4.2,4.7,45.0
 deam_844,gustav_tax_n,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\844.mp3,Wizball by Gustav Taxén. genre: Pop.,val,-1,[],3.8,3.4,45.0
 deam_845,christian_vestergaard,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\845.mp3,The Great Giana Sisters (Piano cover) by Christian Vestergaard. genre: Pop.,test,-1,[],5.1,4.0,45.0
 deam_846,flora,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\846.mp3,High Buildings by Flora. genre: Pop.,train,-1,[],6.0,5.5,45.0
 deam_848,shirley_and_spinoza_half,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\848.mp3,Eating Baby Lions Nightmare by Shirley and Spinoza-Half. genre: Pop.,val,-1,[],2.2,2.7,45.0
-deam_850,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\850.mp3,Strange Things by Ergo Phizmiz. genre: Pop.,val,-1,[],3.6,3.1,45.0
+deam_850,ergo_phizmiz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\850.mp3,Strange Things by Ergo Phizmiz. genre: Pop.,train,-1,[],3.6,3.1,45.0
 deam_851,how_how_tetrolux,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\851.mp3,Etam Etamski by How How-Tetrolux. genre: Pop.,train,-1,[],5.0,4.4,45.0
 deam_852,andrea_baroni,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\852.mp3,Erebus (piano) by Andrea Baroni. genre: Pop.,val,-1,[],4.5,4.7,45.0
 deam_854,my_bubba_mi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\854.mp3,Through & Through by My Bubba & Mi. genre: Pop.,train,-1,[],2.9,3.8,45.0
@@ -666,20 +666,20 @@ deam_871,sycamore_drive,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\a
 deam_872,cranston,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\872.mp3,Ticking Away by Cranston. genre: Pop.,train,-1,[],3.4,5.5,45.0
 deam_873,yacht,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\873.mp3,Summer Song (Instrumental) by YACHT. genre: Pop.,test,-1,[],6.8,7.0,45.0
 deam_874,black_math,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\874.mp3,This Love's Got to Change by Black Math. genre: Pop.,train,-1,[],6.3,4.4,45.0
-deam_876,et,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\876.mp3,Kopeika by et_. genre: Rock.,val,-1,[],6.3,6.7,45.0
+deam_876,et,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\876.mp3,Kopeika by et_. genre: Rock.,train,-1,[],6.3,6.7,45.0
 deam_879,state_shirt,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\879.mp3,Computer by State Shirt. genre: Rock.,train,-1,[],5.6,6.0,45.0
 deam_880,hogan_grip,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\880.mp3,Stance Gives You Balance by Hogan Grip. genre: Rock.,train,-1,[],4.9,3.8,45.0
 deam_882,jahzzar,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\882.mp3,The last ones by Jahzzar. genre: Rock.,train,-1,[],5.3,5.2,45.0
 deam_884,ghost_hunter,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\884.mp3,Old White Eye by Ghost Hunter. genre: Rock.,train,-1,[],5.5,5.0,45.0
 deam_886,krackatoa,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\886.mp3,Mariachi Bandits of Gatling Gun Ridge by krackatoa. genre: Rock.,train,-1,[],5.9,5.4,45.0
-deam_887,kraus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\887.mp3,Happening for Lulu by Kraus. genre: Rock.,val,-1,[],5.1,5.6,45.0
+deam_887,kraus,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\887.mp3,Happening for Lulu by Kraus. genre: Rock.,train,-1,[],5.1,5.6,45.0
 deam_889,the_freak_fandango_orchestra,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\889.mp3,Requiem for a Fish by The Freak Fandango Orchestra. genre: Rock.,train,-1,[],6.9,7.2,45.0
 deam_890,holy_coast,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\890.mp3,The Beach! The Beach! by Holy Coast. genre: Rock.,train,-1,[],3.6,4.7,45.0
 deam_891,gillicuddy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\891.mp3,Jupiter The Blue by Gillicuddy. genre: Rock.,train,-1,[],3.4,5.5,45.0
 deam_892,paneye,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\892.mp3,North Sea Radio by Paneye. genre: Rock.,train,-1,[],3.9,2.9,45.0
 deam_893,tyrannic_toy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\893.mp3,Blackroad by Tyrannic Toy. genre: Rock.,train,-1,[],7.3,3.3,45.0
 deam_897,reed_blue_exteenager,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\897.mp3,arriba by reed blue & exteenager. genre: Rock.,train,-1,[],4.9,4.3,45.0
-deam_898,room_for_a_ghost,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\898.mp3,No by Room For A Ghost. genre: Rock.,test,-1,[],6.4,5.5,45.0
+deam_898,room_for_a_ghost,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\898.mp3,No by Room For A Ghost. genre: Rock.,train,-1,[],6.4,5.5,45.0
 deam_899,linus_akesson,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\899.mp3,One Man And His Piano by Linus Akesson. genre: Rock.,train,-1,[],5.3,6.3,45.0
 deam_902,arrogalla_remixes_dadub,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\902.mp3,Naramiddu poita (feat by Arrogalla remixes Dadub. genre: Rock.,train,-1,[],7.0,3.3,45.0
 deam_903,vivian_girls,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\903.mp3,Wild Eyes (live @ WFMU) by Vivian Girls. genre: Rock.,test,-1,[],5.9,5.6,45.0
@@ -699,33 +699,33 @@ deam_931,halloween,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\
 deam_932,and_you_will_know_us_by_the_trail_of_dead,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\932.mp3,Crowning Of A Heart (Live @ KEXP) by …And You Will Know Us By The Trail Of Dead. genre: Rock.,train,-1,[],4.5,4.9,45.0
 deam_934,lame_drivers,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\934.mp3,Other Side by Lame Drivers. genre: Rock.,test,-1,[],6.2,6.4,45.0
 deam_936,dumbo_gets_mad,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\936.mp3,Plumy Tale by Dumbo Gets Mad. genre: Rock.,train,-1,[],5.4,4.7,45.0
-deam_938,milk_music,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\938.mp3,Thrashing In The Unknown by Milk Music. genre: Rock.,train,-1,[],7.3,4.2,45.0
+deam_938,milk_music,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\938.mp3,Thrashing In The Unknown by Milk Music. genre: Rock.,val,-1,[],7.3,4.2,45.0
 deam_939,richard_there,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\939.mp3,You should go on by Richard There. genre: Rock.,val,-1,[],6.2,2.7,45.0
 deam_941,morphamish_tekkerz,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\941.mp3,Get My Fix (Morphamish Mix) by Morphamish+ Tekkerz. genre: Rock.,train,-1,[],7.2,5.9,45.0
 deam_942,pajaro,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\942.mp3,Santa Leone by Pajaro. genre: Rock.,train,-1,[],4.8,4.1,45.0
 deam_944,shark,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\944.mp3,Hey Grrl by Shark. genre: Rock.,train,-1,[],7.1,6.5,45.0
 deam_945,the_ghost_of_29_megacycles,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\945.mp3,Leelo (Part 1) by The Ghost Of 29 Megacycles. genre: Rock.,train,-1,[],2.3,2.8,45.0
-deam_949,waylon_thornton,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\949.mp3,Favorite Secrets by Waylon Thornton. genre: Rock.,val,-1,[],5.7,6.1,45.0
+deam_949,waylon_thornton,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\949.mp3,Favorite Secrets by Waylon Thornton. genre: Rock.,test,-1,[],5.7,6.1,45.0
 deam_952,glass_boy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\952.mp3,Monday at 12 by Glass Boy. genre: Rock.,val,-1,[],4.2,3.7,45.0
 deam_954,doron_deutsch,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\954.mp3,Bruce Lee (acoustic Jam) by Doron Deutsch. genre: Rock.,train,-1,[],5.1,5.5,45.0
 deam_955,everlone,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\955.mp3,Blind Eyes by Everlone. genre: Rock.,train,-1,[],3.8,5.6,45.0
 deam_956,end_s_not_near,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\956.mp3,Indian Summer by end's not near. genre: Rock.,train,-1,[],4.5,5.4,45.0
 deam_957,un_automne_lob_nor,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\957.mp3,boss A by un automne à Lob-Nor. genre: Rock.,test,-1,[],2.8,4.7,45.0
 deam_958,trailblazer,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\958.mp3,(Untitled 1) by Trailblazer. genre: Rock.,test,-1,[],5.5,5.1,45.0
-deam_959,springtide,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\959.mp3,Indyair by springtide. genre: Rock.,val,-1,[],6.2,6.4,45.0
+deam_959,springtide,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\959.mp3,Indyair by springtide. genre: Rock.,train,-1,[],6.2,6.4,45.0
 deam_960,anamanaguchi,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\960.mp3,Helix Nebula by Anamanaguchi. genre: Rock.,train,-1,[],7.7,7.7,45.0
 deam_961,james_beaudreau,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\961.mp3,Union Square by James Beaudreau. genre: Rock.,train,-1,[],5.6,5.5,45.0
 deam_962,ice_age,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\962.mp3,Rotting Heights by Ice Age. genre: Rock.,train,-1,[],7.4,3.4,45.0
 deam_964,j_walker_the_crossguards,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\964.mp3,Driftin' Around by J.Walker & The Crossguards. genre: Rock.,train,-1,[],7.6,7.0,45.0
 deam_967,daniel_johnston,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\967.mp3,I Had A Dream by Daniel Johnston. genre: Rock.,train,-1,[],2.8,4.4,45.0
 deam_968,abe_sada_black,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\968.mp3,Bar Trombone by Abe Sada-Black. genre: Rock.,test,-1,[],3.8,3.2,45.0
-deam_970,pharaos,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\970.mp3,The Pharaos' Theme by Pharaos. genre: Rock.,test,-1,[],6.6,6.6,45.0
+deam_970,pharaos,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\970.mp3,The Pharaos' Theme by Pharaos. genre: Rock.,train,-1,[],6.6,6.6,45.0
 deam_973,mount_carmel,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\973.mp3,Swagg's & Elliot by Mount Carmel. genre: Rock.,train,-1,[],6.5,4.6,45.0
 deam_974,karl_blau,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\974.mp3,Crucial Contact by Karl Blau. genre: Rock.,train,-1,[],4.1,4.2,45.0
 deam_976,glass_boy,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\976.mp3,Merry Christmas by Glass Boy. genre: Rock.,val,-1,[],6.2,5.9,45.0
 deam_977,black_math,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\977.mp3,Suck City by Black Math. genre: Rock.,train,-1,[],7.3,3.5,45.0
 deam_978,krackatoa,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\978.mp3,Absolutely Gorgeous by krackatoa. genre: Rock.,train,-1,[],7.7,6.1,45.0
-deam_979,rue_royale,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\979.mp3,Deck the Halls by Rue Royale. genre: Rock.,val,-1,[],3.1,5.5,45.0
+deam_979,rue_royale,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\979.mp3,Deck the Halls by Rue Royale. genre: Rock.,test,-1,[],3.1,5.5,45.0
 deam_980,mahjongg,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\980.mp3,Tell The Police The Truth by Mahjongg. genre: Rock.,val,-1,[],5.8,4.3,45.0
 deam_981,morphamish,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\981.mp3,Bottums Up by Morphamish. genre: Rock.,train,-1,[],6.7,6.6,45.0
 deam_983,yacht,B:\CSE425_Project\gnn-bert-music-context\data\raw\deam\audio\983.mp3,Tripped & Fell In Love (instrumental) by YACHT. genre: Rock.,test,-1,[],4.8,6.3,45.0

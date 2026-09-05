@@ -1,0 +1,136 @@
+{
+  "datasets": {
+    "mtat": {
+      "rows": 21361,
+      "artists": 229,
+      "per_split": {
+        "test": {
+          "clips": 3500,
+          "artists": 42
+        },
+        "train": {
+          "clips": 16884,
+          "artists": 173
+        },
+        "val": {
+          "clips": 977,
+          "artists": 14
+        }
+      },
+      "artist_disjoint_moved": 3465,
+      "cross_corpus_moved": 0,
+      "errata_excluded": 0
+    },
+    "fma": {
+      "rows": 7997,
+      "artists": 2305,
+      "per_split": {
+        "test": {
+          "clips": 801,
+          "artists": 204
+        },
+        "train": {
+          "clips": 6401,
+          "artists": 1886
+        },
+        "val": {
+          "clips": 795,
+          "artists": 215
+        }
+      },
+      "artist_disjoint_moved": 0,
+      "cross_corpus_moved": 6,
+      "errata_excluded": 3
+    },
+    "deam": {
+      "rows": 1802,
+      "artists": 1469,
+      "per_split": {
+        "test": {
+          "clips": 275,
+          "artists": 227
+        },
+        "train": {
+          "clips": 1277,
+          "artists": 1012
+        },
+        "val": {
+          "clips": 250,
+          "artists": 230
+        }
+      },
+      "artist_disjoint_moved": 0,
+      "cross_corpus_moved": 46,
+      "errata_excluded": 0
+    },
+    "musiccaps": {
+      "rows": 3059,
+      "artists": 3059,
+      "per_split": {
+        "test": {
+          "clips": 1633,
+          "artists": 1633
+        },
+        "train": {
+          "clips": 1284,
+          "artists": 1284
+        },
+        "val": {
+          "clips": 142,
+          "artists": 142
+        }
+      },
+      "artist_disjoint_moved": 0,
+      "cross_corpus_moved": 0,
+      "errata_excluded": 0
+    },
+    "lmd": {
+      "rows": 17164,
+      "artists": 2189,
+      "per_split": {
+        "validation_only": {
+          "clips": 17164,
+          "artists": 2189
+        }
+      },
+      "artist_disjoint_moved": 0,
+      "cross_corpus_moved": 0,
+      "errata_excluded": 0
+    },
+    "mtat_literature": {
+      "rows": 21361,
+      "artists": 229,
+      "per_split": {
+        "test": {
+          "clips": 4392,
+          "artists": 75
+        },
+        "train": {
+          "clips": 15431,
+          "artists": 190
+        },
+        "val": {
+          "clips": 1538,
+          "artists": 26
+        }
+      },
+      "artist_disjoint_moved": 0,
+      "cross_corpus_moved": 0,
+      "errata_excluded": 0
+    }
+  },
+  "tag_vocab_size": 50,
+  "musiccaps_survival": {
+    "status_counts": {
+      "ok": 3059,
+      "missing": 2462
+    },
+    "train_nominal": 2663,
+    "train_survivors": 1426,
+    "train_survival_rate": 0.535486293653774,
+    "eval_nominal": 2858,
+    "eval_survivors": 1633,
+    "eval_survival_rate": 0.5713785864240728,
+    "retrieval_gallery_size": 1633
+  }
+}

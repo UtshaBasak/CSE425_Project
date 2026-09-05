@@ -28,7 +28,8 @@ from typing import Iterable, Sequence
 import numpy as np
 import pandas as pd
 
-from .utils import atomic_write_text, ensure_dir, get_logger, resolve_path
+from .utils import (atomic_write_text, ensure_dir, get_logger, load_config,
+                    resolve_path)
 
 LOGGER = get_logger("gbmc.splits")
 
@@ -40,6 +41,11 @@ __all__ = [
     "build_deam_splits",
     "build_musiccaps_splits",
     "build_musiccaps_manifest",
+    "fma_errata_ids",
+    "FMA_SMALL_TRUNCATED",
+    "reconcile_across_corpora",
+    "build_lmd_inventory",
+    "split_summary",
     "reduce_to_top_k_tags",
     "assert_no_leakage",
     "enforce_artist_disjoint",
@@ -299,6 +305,54 @@ def build_mtat_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
     return frame
 
 
+#: The three FMA-small tracks that ship truncated (~1-2 KB instead of ~1 MB) and
+#: cannot be decoded. Long-documented in the FMA issue tracker; confirmed on this
+#: disk by A1.3. Listed explicitly so the exclusion is auditable even if a future
+#: copy of the dataset has them repaired.
+FMA_SMALL_TRUNCATED = {99134, 108925, 133297}
+
+
+def fma_errata_ids(cfg, min_bytes: int = 50_000) -> dict:
+    """Track ids to exclude from the FMA manifest, and why.
+
+    Three sources, because no single one is complete:
+
+    * ``not_found.pickle`` shipped with fma_metadata (its ``audio``/``clips``
+      lists cover the medium/large subsets, so they usually miss fma_small);
+    * :data:`FMA_SMALL_TRUNCATED`, the known-bad small-subset files;
+    * a size sweep of what is actually on this disk, which catches a partial
+      download that neither list knows about.
+    """
+    paths = cfg["datasets"]["fma"]
+    audio_root = resolve_path(paths["audio"])
+    meta_dir = resolve_path(paths["metadata"])
+    out: dict = {"not_found_audio": set(), "not_found_clips": set(),
+                 "known_truncated": set(FMA_SMALL_TRUNCATED), "undersized": set()}
+
+    pickle_path = meta_dir / "not_found.pickle"
+    if pickle_path.exists():
+        try:
+            import pickle
+
+            with open(pickle_path, "rb") as fh:
+                payload = pickle.load(fh)
+            out["not_found_audio"] = {int(x) for x in payload.get("audio", [])}
+            out["not_found_clips"] = {int(x) for x in payload.get("clips", [])}
+        except Exception as exc:  # pragma: no cover - malformed errata
+            LOGGER.warning("could not read %s: %s", pickle_path, exc)
+
+    if audio_root.exists():
+        for path in audio_root.rglob("*.mp3"):
+            try:
+                if path.stat().st_size < int(min_bytes):
+                    out["undersized"].add(int(path.stem))
+            except (OSError, ValueError):
+                continue
+
+    out["excluded"] = set().union(*(v for k, v in out.items() if k != "excluded"))
+    return out
+
+
 def build_fma_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
     """FMA-small manifest using the official ``set.split`` column."""
     paths = cfg["datasets"]["fma"]
@@ -314,11 +368,19 @@ def build_fma_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
     genres = sorted(subset[("track", "genre_top")].dropna().unique())
     genre_index = {g: i for i, g in enumerate(genres)}
 
-    rows = []
+    errata = fma_errata_ids(cfg)
+    excluded = errata["excluded"]
+
+    rows, skipped_errata = [], 0
     for track_id, record in subset.iterrows():
         split_raw = str(record[("set", "split")])
         split = {"training": "train", "validation": "val", "test": "test"}.get(split_raw)
         if split is None:
+            continue
+        if int(track_id) in excluded:
+            # A1.3: a truncated mp3 would decode to silence or throw mid-extraction;
+            # either way it is not a data point.
+            skipped_errata += 1
             continue
         genre = record[("track", "genre_top")]
         tid = int(track_id)
@@ -345,6 +407,13 @@ def build_fma_splits(cfg, validate_audio: bool = False) -> pd.DataFrame:
     if len(frame) and bool(cfg.get("splits", {}).get("enforce_artist_disjoint", True)):
         frame = enforce_artist_disjoint(frame)
     frame.attrs["genres"] = genres
+    frame.attrs["errata_excluded"] = skipped_errata
+    LOGGER.info(
+        "FMA errata: excluded %d track(s) — %d known-truncated, %d undersized on "
+        "disk, %d from not_found.pickle audio, %d from not_found.pickle clips",
+        skipped_errata, len(errata["known_truncated"]), len(errata["undersized"]),
+        len(errata["not_found_audio"]), len(errata["not_found_clips"]),
+    )
     LOGGER.info("FMA manifest: %d tracks, %d genres %s", len(frame), len(genres),
                 dict(frame["split"].value_counts()) if len(frame) else {})
     return frame
@@ -653,6 +722,10 @@ def enforce_artist_disjoint(frame: pd.DataFrame, artist_column: str = "artist_id
     spanning = counts.groupby(artist_column)[split_column].nunique()
     spanning = set(spanning[spanning > 1].index)
     if not spanning:
+        # record the zero explicitly: a frame that inherits attrs from a later
+        # combined repair would otherwise report that repair's count as its own
+        out.attrs["artist_disjoint_moved"] = 0
+        out.attrs["artist_disjoint_artists"] = 0
         return out
 
     counts = counts[counts[artist_column].isin(spanning)].copy()
@@ -664,6 +737,8 @@ def enforce_artist_disjoint(frame: pd.DataFrame, artist_column: str = "artist_id
     before = out.loc[mask, split_column].copy()
     out.loc[mask, split_column] = out.loc[mask, artist_column].map(winner)
     moved = int((out.loc[mask, split_column] != before).sum())
+    out.attrs["artist_disjoint_moved"] = moved
+    out.attrs["artist_disjoint_artists"] = len(spanning)
     LOGGER.info(
         "artist-disjointness repair: %d artists spanned splits; moved %d of %d "
         "clips (%.2f%% of the corpus) so no artist appears twice",
@@ -761,30 +836,199 @@ def assert_no_leakage(manifest, id_column: str = "track_id",
     )
 
 
-def build_all_splits(cfg, validate_audio: bool = False) -> dict[str, pd.DataFrame]:
-    """Build and persist every dataset manifest that has data on disk."""
+def build_all_splits(cfg, validate_audio: bool = False,
+                     reconcile: bool = True) -> "dict[str, pd.DataFrame]":
+    """Build, reconcile and persist every dataset manifest that has data on disk.
+
+    Three things happen here that do not happen in the individual builders:
+
+    1. **Both MTAT variants** are written. The repaired, artist-disjoint split is
+       the headline; the unrepaired canonical folder split is kept under a
+       separate name so the literature-comparable number can be cited with its
+       caveat.
+    2. **Cross-corpus reconciliation.** Every corpus assigns splits on its own,
+       so an artist can be leak-free within MTAT and still appear in FMA-train
+       and DEAM-test. See :func:`reconcile_across_corpora`.
+    3. **The leakage assertion runs on the concatenation**, not just per corpus,
+       because that is the object Task 3 and the evaluation actually load.
+    """
     splits_dir = ensure_dir(cfg["paths"]["splits"])
+    frames: dict = {}
+
+    # --- MTAT, unrepaired: the canonical folder split, for citation only ----- #
+    literature_cfg = load_config(cfg.get("_config_path", "config.yaml"),
+                                 {"splits.enforce_artist_disjoint": False})
+    try:
+        mtat_literature = build_mtat_splits(literature_cfg, validate_audio)
+    except Exception as exc:
+        LOGGER.warning("could not build the unrepaired MTAT variant: %s", exc)
+        mtat_literature = pd.DataFrame(columns=MANIFEST_COLUMNS)
+    if len(mtat_literature):
+        write_manifest(mtat_literature, splits_dir / "mtat_manifest_literature.csv")
+        overlap = (
+            mtat_literature.groupby("artist_id")["split"].nunique().pipe(lambda x: x[x > 1])
+        )
+        LOGGER.info(
+            "MTAT literature variant persisted UNREPAIRED: %d artists span splits. "
+            "Cite it only with that caveat.", len(overlap),
+        )
+
     builders = {
         "mtat": lambda: build_mtat_splits(cfg, validate_audio),
         "fma": lambda: build_fma_splits(cfg, validate_audio),
         "deam": lambda: build_deam_splits(cfg, validate_audio),
         "musiccaps": lambda: build_musiccaps_splits(cfg, verify_decode=validate_audio),
     }
-    out: dict[str, pd.DataFrame] = {}
     for name, builder in builders.items():
         try:
-            frame = builder()
-        except Exception as exc:  # a missing corpus must not stop the others
+            frames[name] = builder()
+        except Exception as exc:      # a missing corpus must not stop the others
             LOGGER.warning("could not build %s manifest: %s", name, exc)
-            continue
+            frames[name] = pd.DataFrame(columns=MANIFEST_COLUMNS)
+
+    if reconcile:
+        frames = reconcile_across_corpora(frames)
+
+    for name, frame in frames.items():
         if len(frame):
             assert_no_leakage(frame)
             write_manifest(frame, splits_dir / f"{name}_manifest.csv")
-        out[name] = frame
+
+    # the object every downstream loader actually sees
+    combined = [f for f in frames.values() if len(f)]
+    if combined:
+        assert_no_leakage(pd.concat(combined, ignore_index=True))
+        LOGGER.info("combined leakage check passed across %d corpora", len(combined))
+
+    # the fifth corpus: inventory only, never trained on
+    try:
+        lmd = build_lmd_inventory(cfg)
+        if len(lmd):
+            write_manifest(lmd, splits_dir / "lmd_manifest.csv")
+        frames["lmd"] = lmd
+    except Exception as exc:
+        LOGGER.warning("could not inventory Lakh MIDI: %s", exc)
+
+    frames["mtat_literature"] = mtat_literature
+    return frames
+
+
+# --------------------------------------------------------------------------- #
+# A2 -- cross-corpus reconciliation, the LMD inventory, and the summary payload
+# --------------------------------------------------------------------------- #
+def reconcile_across_corpora(frames: "dict[str, pd.DataFrame]") -> "dict[str, pd.DataFrame]":
+    """Make artist ids disjoint across the *concatenation* of all manifests.
+
+    Each corpus assigns its own splits independently, so a manifest can be
+    perfectly leak-free on its own while the same artist sits in FMA-train and
+    DEAM-test. That is a live problem, not a formality: Task 3 trains on MTAT and
+    DEAM jointly and Task 4 evaluates on MusicCaps, so the model can meet in
+    training what it is later tested on.
+
+    Whole artists are moved into their majority split, exactly as
+    :func:`enforce_artist_disjoint` does within a corpus, and the per-dataset
+    move counts are logged.
+    """
+    present = {name: frame for name, frame in frames.items()
+               if frame is not None and len(frame)}
+    if len(present) < 2:
+        return frames
+
+    combined = pd.concat(
+        [frame.assign(_corpus=name) for name, frame in present.items()],
+        ignore_index=True,
+    )
+    before = combined["split"].copy()
+    repaired = enforce_artist_disjoint(combined)
+    moved = repaired["split"] != before
+    if not moved.any():
+        LOGGER.info("cross-corpus reconciliation: no artist spans corpora; nothing moved")
+        return frames
+
+    per_corpus = repaired.loc[moved].groupby("_corpus").size().to_dict()
+    LOGGER.info(
+        "cross-corpus reconciliation: moved %d of %d rows so no artist spans two "
+        "splits anywhere (%s)",
+        int(moved.sum()), len(repaired),
+        ", ".join(f"{k}: {v}" for k, v in sorted(per_corpus.items())) or "none",
+    )
+
+    out = dict(frames)
+    for name in present:
+        part = repaired[repaired["_corpus"] == name].drop(columns=["_corpus"])
+        # start from the corpus's own attrs, not the combined frame's, so the
+        # within-corpus and cross-corpus move counts stay separate numbers
+        part.attrs.clear()
+        part.attrs.update(present[name].attrs)
+        part.attrs["cross_corpus_moved"] = int(per_corpus.get(name, 0))
+        out[name] = part.reset_index(drop=True)
     return out
 
 
+def build_lmd_inventory(cfg) -> pd.DataFrame:
+    """Inventory the Lakh MIDI Clean subset.
 
+    Not a training corpus -- it carries no audio and no labels, and is used only
+    to bound the chord estimator (see :func:`~src.chords.validate_against_lmd`).
+    It gets a manifest anyway so the fifth dataset is auditable: which files were
+    present, and which artist each belongs to (the Clean subset encodes
+    ``artist/title.mid`` in the path).
+    """
+    root = resolve_path(cfg["datasets"]["lmd"]["root"])
+    if not root.exists():
+        LOGGER.warning("Lakh MIDI directory not found: %s", root)
+        return pd.DataFrame(columns=MANIFEST_COLUMNS)
+
+    rows = []
+    for path in sorted(root.rglob("*.mid")) + sorted(root.rglob("*.midi")):
+        try:
+            artist = path.relative_to(root).parts[0]
+        except (ValueError, IndexError):
+            artist = "unknown"
+        rows.append({
+            "track_id": f"lmd_{_slug(artist)}_{_slug(path.stem)}"[:120],
+            "artist_id": _slug(artist) or "lmd_unknown",
+            "audio_path": str(path),          # a MIDI path, not audio
+            "text": f"{path.stem} by {artist}",
+            "split": "validation_only",       # never train/val/test: not a training corpus
+            "y_genre": -1,
+            "y_tags": json.dumps([]),
+            "y_valence": np.nan,
+            "y_arousal": np.nan,
+            "duration_s": np.nan,
+            "dataset": "lmd",
+        })
+    frame = pd.DataFrame(rows)
+    # de-duplicate: the Clean subset ships several arrangements per title
+    frame = frame.drop_duplicates("track_id").reset_index(drop=True)
+    LOGGER.info("LMD inventory: %d MIDI files across %d artists (chord validation only)",
+                len(frame), frame["artist_id"].nunique() if len(frame) else 0)
+    return frame
+
+
+def split_summary(frames: "dict[str, pd.DataFrame]", extra: dict | None = None) -> dict:
+    """Per-split clip and artist counts, plus the repair counts, for the report."""
+    summary: dict = {"datasets": {}}
+    for name, frame in frames.items():
+        if frame is None or not len(frame):
+            summary["datasets"][name] = {"rows": 0}
+            continue
+        per_split = {}
+        for split, group in frame.groupby("split"):
+            per_split[str(split)] = {
+                "clips": int(len(group)),
+                "artists": int(group["artist_id"].nunique()),
+            }
+        summary["datasets"][name] = {
+            "rows": int(len(frame)),
+            "artists": int(frame["artist_id"].nunique()),
+            "per_split": per_split,
+            "artist_disjoint_moved": int(frame.attrs.get("artist_disjoint_moved", 0)),
+            "cross_corpus_moved": int(frame.attrs.get("cross_corpus_moved", 0)),
+            "errata_excluded": int(frame.attrs.get("errata_excluded", 0)),
+        }
+    summary.update(extra or {})
+    return summary
 
 
 # --------------------------------------------------------------------------- #
@@ -978,18 +1222,21 @@ def main(argv=None) -> int:
     """CLI: build every manifest that has data on disk."""
     import argparse
 
-    from .utils import load_config, parse_overrides, save_json
+    from .utils import load_json, load_config, parse_overrides, save_json
 
     parser = argparse.ArgumentParser(description="Build dataset manifests and splits.")
     parser.add_argument("--config", default="config.yaml")
     parser.add_argument("--validate-audio", action="store_true",
                         help="check that every referenced file exists and decodes "
                              "(slow, but the only honest way to size a split)")
+    parser.add_argument("--no-reconcile", action="store_true",
+                        help="skip cross-corpus artist reconciliation (not advised)")
     parser.add_argument("--override", nargs="*", default=[])
     args = parser.parse_args(argv)
 
     cfg = load_config(args.config, parse_overrides(args.override))
-    frames = build_all_splits(cfg, validate_audio=args.validate_audio)
+    frames = build_all_splits(cfg, validate_audio=args.validate_audio,
+                              reconcile=not args.no_reconcile)
 
     vocab: list[str] = []
     if len(frames.get("mtat", [])):
@@ -1004,15 +1251,29 @@ def main(argv=None) -> int:
                        "merge_synonyms": bool(cfg["tags"]["merge_synonyms"])},
                       ensure_dir(cfg["paths"]["splits"]) / "tag_vocab.json")
 
-    summary = {
-        name: {
-            "rows": int(len(frame)),
-            "splits": frame["split"].value_counts().to_dict() if len(frame) else {},
-        }
-        for name, frame in frames.items()
-    }
-    summary["tag_vocab_size"] = len(vocab)
-    print(json.dumps(summary, indent=2))
+    summary = split_summary(frames, extra={"tag_vocab_size": len(vocab)})
+
+    # MusicCaps survival travels with the split counts: the eval survivor count
+    # IS the Task 4 gallery size, and R@K is meaningless without it.
+    log_path = resolve_path(cfg["paths"]["splits"]) / "musiccaps_download_log.csv"
+    if log_path.exists():
+        summary["musiccaps_survival"] = musiccaps_survival_summary(pd.read_csv(log_path))
+
+    save_json(summary, resolve_path(cfg["paths"]["splits"]) / "splits_summary.json")
+
+    # A2 asks for these in results/metrics.json; merge rather than clobber so a
+    # later `python -m src.evaluate` does not lose them and vice versa.
+    metrics_path = resolve_path(cfg["paths"]["results"]) / "metrics.json"
+    metrics = {}
+    if metrics_path.exists():
+        try:
+            metrics = load_json(metrics_path)
+        except Exception:
+            metrics = {}
+    metrics["splits"] = summary
+    save_json(metrics, metrics_path)
+
+    print(json.dumps(summary, indent=2, default=str))
     return 0
 
 
