@@ -34,6 +34,8 @@ from .datasets import MusicGraphDataset, alternating_loader, collate_texts, make
 from .fusion_model import GNNBertFusion, masked_multitask_loss
 from .gnn_model import GNNClassifier, GNNEncoder
 from .splits import apply_text_source, assert_no_leakage
+from pathlib import Path as _Path  # noqa: E402
+
 from .utils import (
     SYNTHETIC,
     atomic_torch_save,
@@ -89,16 +91,31 @@ class DataBundle:
         else:
             self.manifest, self.tag_vocab, self.genres = _load_real_manifests(cfg)
             self.graph_dir = None
-            self.h5_path = resolve_path(cfg["paths"]["processed"]) / "features.h5"
-            self.mel_h5 = resolve_path(cfg["paths"]["processed"]) / "mels.h5"
-            stats_path = resolve_path(cfg["paths"]["processed"]) / "norm_stats.json"
-            self.norm_stats = (
-                json.loads(stats_path.read_text(encoding="utf-8")) if stats_path.exists() else None
-            )
-            if self.norm_stats and self.norm_stats.get("split") != "train":
-                raise RuntimeError(
-                    "norm_stats.json was not computed on the train split; refusing to run"
-                )
+            processed = resolve_path(cfg["paths"]["processed"])
+            corpora = sorted({str(d) for d in self.manifest.get("dataset", [])})
+
+            # one cache per corpus; fall back to the shared file if that is what
+            # exists, so an older extraction still loads
+            self.h5_path, self.mel_h5, self.norm_stats = {}, {}, {}
+            for name in corpora:
+                features = processed / f"features_{name}.h5"
+                mels = processed / f"mels_{name}.h5"
+                stats = processed / f"norm_stats_{name}.json"
+                self.h5_path[name] = features if features.exists() else processed / "features.h5"
+                self.mel_h5[name] = mels if mels.exists() else processed / "mels.h5"
+                stats_path = stats if stats.exists() else processed / "norm_stats.json"
+                if stats_path.exists():
+                    payload = json.loads(stats_path.read_text(encoding="utf-8"))
+                    if payload.get("split") != "train":
+                        raise RuntimeError(
+                            f"{stats_path} was not computed on the train split; "
+                            "refusing to run"
+                        )
+                    self.norm_stats[name] = payload
+            missing = [n for n in corpora if not _Path(self.h5_path[n]).exists()]
+            if missing:
+                LOGGER.warning("no feature cache for %s -- those rows will fail to load",
+                               missing)
 
         # A0.6: swap `text` for the configured Xtext variant before anything
         # tokenises it. Doing it here means every task, every script and every

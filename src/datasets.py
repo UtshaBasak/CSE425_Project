@@ -99,8 +99,16 @@ class MusicGraphDataset(Dataset):
                 self.manifest["dataset"].isin(list(datasets))
             ].reset_index(drop=True)
 
-        self.h5_path = str(resolve_path(h5_path)) if h5_path else None
+        # Extraction writes one cache per corpus (features_mtat.h5, ...), so
+        # h5_path may be a single path or a {dataset: path} mapping. Per-corpus
+        # files keep a corrupt container from costing every dataset at once.
+        if isinstance(h5_path, dict):
+            self.h5_path = {k: str(resolve_path(v)) for k, v in h5_path.items() if v}
+        else:
+            self.h5_path = str(resolve_path(h5_path)) if h5_path else None
         self.graph_dir = resolve_path(graph_dir) if graph_dir else None
+        # norm_stats may likewise be per-dataset: statistics are computed on each
+        # corpus's own train split, never pooled across corpora.
         self.norm_stats = norm_stats
         self.tag_vocab = list(tag_vocab) if tag_vocab is not None else self._infer_vocab()
         self.tag_index = {tag: i for i, tag in enumerate(self.tag_vocab)}
@@ -127,26 +135,45 @@ class MusicGraphDataset(Dataset):
         return len(self.manifest)
 
     # -- storage ---------------------------------------------------------- #
-    def _handle(self):
-        """Open this worker's own read-only HDF5 handle on first use."""
-        if self._store is None and self.h5_path:
+    def _handle(self, dataset: str = ""):
+        """Open this worker's own read-only HDF5 handle on first use.
+
+        Handles are cached per corpus. h5py handles do not survive a fork, so
+        ``__getstate__`` drops them and each dataloader worker opens its own.
+        """
+        if self._store is None:
+            self._store = {}
+        if not self.h5_path:
+            return None
+
+        key = dataset if isinstance(self.h5_path, dict) else "__single__"
+        if key not in self._store:
             import h5py
 
-            self._store = h5py.File(self.h5_path, "r")
-        return self._store
+            path = (self.h5_path.get(dataset) if isinstance(self.h5_path, dict)
+                    else self.h5_path)
+            self._store[key] = h5py.File(path, "r") if path else None
+        return self._store[key]
 
     def __getstate__(self):
         state = self.__dict__.copy()
         state["_store"] = None      # never pickle an h5py handle to a worker
         return state
 
+    def _stats_for(self, dataset: str):
+        """Per-corpus normalisation statistics, or the single shared set."""
+        if isinstance(self.norm_stats, dict) and "mean" not in self.norm_stats:
+            return self.norm_stats.get(dataset)
+        return self.norm_stats
+
     def _load_features(self, track_id: str, row) -> np.ndarray:
         if "features" in row and isinstance(row["features"], np.ndarray):
             return row["features"]
-        store = self._handle()
+        dataset = str(row.get("dataset", ""))
+        store = self._handle(dataset)
         if store is None or track_id not in store:
             raise KeyError(
-                f"no cached features for {track_id!r}; run "
+                f"no cached features for {track_id!r} (dataset={dataset!r}); run "
                 "`python -m src.audio_features` / make features first"
             )
         # h5py slices straight off disk -- the cache is never fully resident
@@ -184,10 +211,11 @@ class MusicGraphDataset(Dataset):
             return data
 
         feats = self._load_features(track_id, row)
-        if self.norm_stats is not None:
+        stats = self._stats_for(dataset_name)
+        if stats is not None:
             from .audio_features import apply_norm
 
-            feats = apply_norm(feats, self.norm_stats)
+            feats = apply_norm(feats, stats)
 
         tags = row["y_tags"] if "y_tags" in row else []
         has_tag_labels = dataset_name in {"mtat", "musiccaps"} or bool(tags)
@@ -244,7 +272,10 @@ class MelSpecDataset(Dataset):
         if split is not None and "split" in self.manifest.columns:
             self.manifest = self.manifest[self.manifest["split"] == split].reset_index(drop=True)
         self.cfg = cfg
-        self.h5_path = str(resolve_path(h5_path)) if h5_path else None
+        if isinstance(h5_path, dict):
+            self.h5_path = {k: str(resolve_path(v)) for k, v in h5_path.items() if v}
+        else:
+            self.h5_path = str(resolve_path(h5_path)) if h5_path else None
         self.key_suffix = key_suffix
         self.n_frames = int(n_frames)
         self.n_mels = int(cfg["audio"]["n_mels"]) if cfg else 128
@@ -260,17 +291,24 @@ class MelSpecDataset(Dataset):
         state["_store"] = None
         return state
 
-    def _handle(self):
-        if self._store is None and self.h5_path:
+    def _handle(self, dataset: str = ""):
+        if self._store is None:
+            self._store = {}
+        if not self.h5_path:
+            return None
+        key = dataset if isinstance(self.h5_path, dict) else "__single__"
+        if key not in self._store:
             import h5py
 
-            self._store = h5py.File(self.h5_path, "r")
-        return self._store
+            path = (self.h5_path.get(dataset) if isinstance(self.h5_path, dict)
+                    else self.h5_path)
+            self._store[key] = h5py.File(path, "r") if path else None
+        return self._store[key]
 
     def __getitem__(self, index: int):
         row = self.manifest.iloc[index]
         track_id = str(row["track_id"])
-        store = self._handle()
+        store = self._handle(str(row.get("dataset", "")))
         key = f"{track_id}{self.key_suffix}"
         if store is None or key not in store:
             raise KeyError(f"no cached mel spectrogram for {key!r}")

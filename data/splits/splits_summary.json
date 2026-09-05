@@ -64,20 +64,20 @@
       "errata_excluded": 0
     },
     "musiccaps": {
-      "rows": 3059,
-      "artists": 3059,
+      "rows": 5043,
+      "artists": 5043,
       "per_split": {
         "test": {
-          "clips": 1633,
-          "artists": 1633
+          "clips": 2634,
+          "artists": 2634
         },
         "train": {
-          "clips": 1284,
-          "artists": 1284
+          "clips": 2169,
+          "artists": 2169
         },
         "val": {
-          "clips": 142,
-          "artists": 142
+          "clips": 240,
+          "artists": 240
         }
       },
       "artist_disjoint_moved": 0,
@@ -122,15 +122,15 @@
   "tag_vocab_size": 50,
   "musiccaps_survival": {
     "status_counts": {
-      "ok": 3059,
-      "missing": 2462
+      "ok": 5043,
+      "missing": 478
     },
     "train_nominal": 2663,
-    "train_survivors": 1426,
-    "train_survival_rate": 0.535486293653774,
+    "train_survivors": 2409,
+    "train_survival_rate": 0.904618850920015,
     "eval_nominal": 2858,
-    "eval_survivors": 1633,
-    "eval_survival_rate": 0.5713785864240728,
-    "retrieval_gallery_size": 1633
+    "eval_survivors": 2634,
+    "eval_survival_rate": 0.9216235129461162,
+    "retrieval_gallery_size": 2634
   }
 }
