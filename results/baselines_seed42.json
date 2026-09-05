@@ -48,11 +48,12 @@
       "total_params": 416154,
       "target_params": 432690,
       "baseline": "B2_mel_cnn",
-      "macro_f1": 0.1647616520799301,
-      "micro_f1": 0.1583835387895078,
-      "mean_auc_pr": 0.1260430943419513,
+      "macro_f1": 0.16540460424412756,
+      "micro_f1": 0.17591333854272592,
+      "mean_auc_pr": 0.12522681591146867,
       "threshold_source": "val",
-      "epochs": 10
+      "epochs": 25,
+      "mel_normalised": true
     }
   ],
   "note": "accuracy is deliberately absent -- see src/metrics.py"

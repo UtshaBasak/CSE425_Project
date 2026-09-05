@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "project": "gnn-bert-music-context",
-  "phase": "A6",
-  "current_step": "A6.2",
+  "phase": "A-complete",
+  "current_step": "A6.4 (operator) then Phase B",
   "sessions": 2,
   "completed": [
     "A0.1",
@@ -33,7 +33,9 @@
     "A4.5",
     "GATE_A4",
     "A5.1",
-    "A6.1"
+    "A6.1",
+    "A6.2",
+    "A6.3"
   ],
   "artifacts": {
     "manifests": {
@@ -87,5 +89,18 @@
       "graphs": 107952
     }
   },
-  "notes": "Gate A3 passed. Task 4 gallery is 2503 after decode verification (was 1481 pre-recovery, 2634 before verification)."
+  "notes": "Phase A complete bar A6.4. Task 2 beats the no-graph control B4 by +0.045 macro-F1. B2 is weak because of our pooled mel cache, not the CNN.",
+  "blocked": {
+    "A6.4": "needs Kaggle credentials/browser; payload + runner ready"
+  },
+  "headline_results": {
+    "task2_gnn_macro_f1": 0.3692,
+    "b4_pca_mlp_macro_f1": 0.3239,
+    "b2_mel_cnn_macro_f1": 0.1654,
+    "b1_random_macro_f1": 0.0634,
+    "b1_majority_macro_f1": 0.0,
+    "b1_majority_element_accuracy": 0.9356,
+    "task4_gallery": 2503,
+    "mtat_test_clips": 3500
+  }
 }

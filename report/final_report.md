@@ -138,7 +138,8 @@ AMP everywhere; batch 8 × 4 accumulation = effective 32. Three seeds
 (42, 1337, 2024); all results reported as mean ± sd.
 
 **Fairness measures.** B2's channel widths are searched so its parameter count
-matches the Task 2 GNN ([TBD] vs [TBD] parameters). Thresholds are tuned on
+matches the Task 2 GNN (416,154 vs 432,690, 96.2%), and it gets the same
+metric code, the same threshold protocol and a larger epoch budget. Thresholds are tuned on
 validation, frozen, then applied once to test. Normalisation statistics come
 from the train split only. Splits are artist-disjoint and asserted at the top of
 every run.
@@ -147,15 +148,36 @@ every run.
 
 ### 6.1 Tagging (macro-F1, micro-F1, AUC-PR — never accuracy)
 
+MTAT test split, 3,500 clips, 50 tags, seed 42. Thresholds tuned on validation
+and frozen before test was touched once.
+
 | Model | macro-F1 | micro-F1 | AUC-PR | params |
 |---|---|---|---|---|
-| B1 random (train prior) | [TBD] | [TBD] | [TBD] | 0 |
-| B1 majority | [TBD] | [TBD] | [TBD] | 0 |
-| B2 mel CNN (param-matched) | [TBD] | [TBD] | [TBD] | [TBD] |
-| B3 / T1 BERT-only | [TBD] | [TBD] | [TBD] | [TBD] |
-| B4 PCA + MLP | [TBD] | [TBD] | [TBD] | [TBD] |
-| T2 GNN | [TBD] | [TBD] | [TBD] | [TBD] |
-| T3 fusion | [TBD] | [TBD] | [TBD] | [TBD] |
+| B1 majority | 0.0000 | 0.0000 | 0.0644 | 0 |
+| B1 random (train prior) | 0.0634 | 0.1038 | 0.0669 | 0 |
+| B2 mel CNN (param-matched) | 0.1654 | 0.1759 | 0.1252 | 416,154 |
+| B4 PCA + MLP | 0.3239 | 0.3167 | 0.3067 | — |
+| **T2 GNN** | **0.3692** | **0.4124** | **0.3915** | 432,690 |
+| B3 / T1 BERT-only | [TBD — Kaggle] | [TBD] | [TBD] | [TBD] |
+| T3 fusion | [TBD — Phase B] | [TBD] | [TBD] | [TBD] |
+
+**What the audio-only rows say.** B4 mean-pools the *same* 96-dim segment
+features and feeds them to an MLP, so it is the "do you even need a graph?"
+control. The GNN beats it by **+0.0453 macro-F1**, and that gap — not the gap to
+random — is the graph's actual contribution.
+
+**B2 needs a caveat, and it is our fault, not the CNN's.** At 0.1654 it lands
+below B4 on the same audio, which is not a credible architecture result. It was
+given a parameter-matched capacity (416,154 vs 432,690, 96.2%), the same metric
+code, train-split input standardisation, and **2.5x the epoch budget**; macro-F1
+moved from 0.1648 to 0.1654, i.e. not at all. Undertraining and conditioning are
+therefore ruled out. The remaining difference is the *input*: to keep the cache
+affordable the mel patch is time-pooled to 256 frames across the whole track,
+which preserves coarse structure but removes the fine spectro-temporal texture a
+CNN exploits, while the GNN's per-segment MFCC/chroma/contrast statistics survive
+pooling intact. **Do not report this as evidence that GNNs beat CNNs.** Either
+re-extract a full-resolution mel cache (~8 GB for MTAT) and retrain, or state
+this limitation next to the number.
 
 > Note for the discussion: the majority baseline reaches ~94.6% element accuracy
 > on MTAT while scoring ~0.00 macro-F1. That contrast is why accuracy is absent
