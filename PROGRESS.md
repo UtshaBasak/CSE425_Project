@@ -240,6 +240,16 @@ bert-base above batch 32 (or seq 256) needs `bert.gradient_checkpointing: true`.
 
 ### A6.4 — what is blocked, and exactly what to do
 
+**Full step-by-step: see `KAGGLE_RUNBOOK.md`.** Summary below.
+
+A blocking bug was found and fixed on 2026-09-05 by simulating Kaggle (extracting
+the payload into a clean directory and running there): Task 1 loaded rows through
+the graph dataset, which opens the HDF5 caches the payload deliberately omits, so
+the run died ~30 s in on `FileNotFoundError: features.h5`. Task 1 now reads text
+straight from the manifests. Also verified: `src.train` genuinely requires
+torch-geometric to import even for Task 1, so the `pip install` line must stay
+(11 s, pure-Python wheel).
+
 Launching a Kaggle run needs Kaggle credentials and a browser session, neither of
 which exists in this environment. Everything that *can* be prepared is prepared,
 and the local dry run confirms the path works end to end (frozen probe, 1 epoch,
