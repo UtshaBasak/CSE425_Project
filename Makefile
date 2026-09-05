@@ -28,6 +28,10 @@ help:
 	@echo "  all-tasks     train all four, all seeds from config.eval.seeds"
 	@echo "  baselines     B1 random/majority, B2 CNN, B4 PCA+MLP"
 	@echo "  evaluate      regenerate every table and plot into results/"
+	@echo "  graph-sanity  A4.4 gate: do similarity edges reach repeated sections?"
+	@echo "  probe-env     A0.2 check BERT checkpoints load with working attentions"
+	@echo "  probe-vram    A0.4 measure real peak VRAM per config on this GPU"
+	@echo "  kaggle-payload build the upload archive (graphs + text, never mel caches)"
 	@echo "  test          pytest"
 	@echo "  clean         remove caches, checkpoints and generated results"
 
@@ -51,7 +55,20 @@ features:
 	$(PYTHON) -m src.audio_features --config $(CONFIG)
 
 graphs:
+	$(PYTHON) scripts/build_graphs.py --config $(CONFIG) --kinds segment chord hetero
 	$(PYTHON) scripts/export_sample_graphs.py --config $(CONFIG) --n 20
+
+graph-sanity:
+	$(PYTHON) scripts/graph_sanity.py --config $(CONFIG) --dataset mtat --n 5 --strict
+
+probe-env:
+	$(PYTHON) scripts/probe_env.py
+
+probe-vram:
+	$(PYTHON) scripts/probe_vram.py --amp on
+
+kaggle-payload:
+	$(PYTHON) scripts/make_kaggle_payload.py
 
 synthetic:
 	$(PYTHON) -m src.synthetic --config $(CONFIG)

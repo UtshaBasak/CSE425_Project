@@ -267,7 +267,8 @@ class MelSpecDataset(Dataset):
     """
 
     def __init__(self, manifest, cfg=None, h5_path=None, tag_vocab=None,
-                 split: str | None = None, n_frames: int = 256, key_suffix: str = ""):
+                 split: str | None = None, n_frames: int = 256, key_suffix: str = "",
+                 mel_stats: dict | None = None):
         self.manifest = _read_manifest(manifest)
         if split is not None and "split" in self.manifest.columns:
             self.manifest = self.manifest[self.manifest["split"] == split].reset_index(drop=True)
@@ -281,6 +282,9 @@ class MelSpecDataset(Dataset):
         self.n_mels = int(cfg["audio"]["n_mels"]) if cfg else 128
         self.tag_vocab = list(tag_vocab) if tag_vocab is not None else []
         self.tag_index = {t: i for i, t in enumerate(self.tag_vocab)}
+        # dB-scale mel is ~[-80, 0]; standardising it puts B2 on the same footing
+        # as every other model here, which all consume normalised features.
+        self.mel_stats = mel_stats
         self._store = None
 
     def __len__(self) -> int:
@@ -315,6 +319,10 @@ class MelSpecDataset(Dataset):
         mel = np.asarray(store[key][...], dtype=np.float32)
         if mel.shape[0] != self.n_mels and mel.shape[-1] == self.n_mels:
             mel = mel.T
+
+        if self.mel_stats is not None:
+            mel = ((mel - float(self.mel_stats["mean"]))
+                   / max(float(self.mel_stats["std"]), 1e-6)).astype(np.float32)
 
         # centre-crop / edge-pad to a fixed width so the batch is rectangular
         width = mel.shape[1]

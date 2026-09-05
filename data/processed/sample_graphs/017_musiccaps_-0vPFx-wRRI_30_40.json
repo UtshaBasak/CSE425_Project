@@ -1,0 +1,21 @@
+{
+  "track_id": "musiccaps_-0vPFx-wRRI_30_40",
+  "artist_id": "yt_-0vPFx-wRRI",
+  "dataset": "musiccaps",
+  "provenance": "real",
+  "split": "test",
+  "num_nodes": 5,
+  "num_edges": 25,
+  "num_self_loops": 5,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 4.0,
+  "min_degree": 4,
+  "temporal_edges": 8,
+  "mean_edge_cosine": 0.8365802764892578,
+  "n_positive_tags": 0,
+  "y_genre": -1,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "a male voice is singing a melody with changing tempos while snipping his fingers rhythmically. The recording sounds like it has been recorded in an empty room. This song may be playing, practicing snipping and singing along."
+}

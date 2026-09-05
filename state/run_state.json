@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "project": "gnn-bert-music-context",
-  "phase": "A3",
-  "current_step": "A3.2-A3.5",
+  "phase": "A6",
+  "current_step": "A6.2",
   "sessions": 2,
   "completed": [
     "A0.1",
@@ -19,7 +19,21 @@
     "A2.3",
     "GATE_A2",
     "A1.2",
-    "A3.1"
+    "A3.1",
+    "A3.2",
+    "A4.4",
+    "A3.3",
+    "A3.4",
+    "A3.5",
+    "A3.6",
+    "GATE_A3",
+    "A4.1",
+    "A4.2",
+    "A4.3",
+    "A4.5",
+    "GATE_A4",
+    "A5.1",
+    "A6.1"
   ],
   "artifacts": {
     "manifests": {
@@ -30,9 +44,24 @@
       "lmd": "data/splits/lmd_manifest.csv",
       "mtat_literature": "data/splits/mtat_manifest_literature.csv"
     },
-    "feature_caches": {},
-    "graph_dirs": {},
-    "norm_stats": {},
+    "feature_caches": {
+      "mtat": "data/processed/features_mtat.h5",
+      "fma": "data/processed/features_fma.h5",
+      "musiccaps": "data/processed/features_musiccaps.h5",
+      "deam": "data/processed/features_deam.h5"
+    },
+    "graph_dirs": {
+      "mtat": "data/processed/graphs/mtat",
+      "fma": "data/processed/graphs/fma",
+      "musiccaps": "data/processed/graphs/musiccaps",
+      "deam": "data/processed/graphs/deam"
+    },
+    "norm_stats": {
+      "mtat": "data/processed/norm_stats_mtat.json",
+      "fma": "data/processed/norm_stats_fma.json",
+      "musiccaps": "data/processed/norm_stats_musiccaps.json",
+      "deam": "data/processed/norm_stats_deam.json"
+    },
     "checkpoints": {}
   },
   "long_jobs": {
@@ -44,18 +73,19 @@
       "gallery_after": 2634
     },
     "extraction": {
-      "status": "RUNNING",
-      "started": "2026-09-05 07:06",
-      "log": "logs/extract_all.log",
-      "order": [
-        "mtat",
-        "fma",
-        "musiccaps",
-        "deam"
-      ],
-      "total_tracks": 36203,
-      "note": "item-level resumable; safe to restart"
+      "status": "DONE",
+      "tracks": 35984,
+      "failures": {
+        "mtat": 3,
+        "fma": 3,
+        "musiccaps": 206,
+        "deam": 0
+      }
+    },
+    "build_graphs": {
+      "status": "DONE",
+      "graphs": 107952
     }
   },
-  "notes": "Extraction running. MusicCaps recovery complete: gallery 1481 -> 2634. A4.4 gate tooling trialled and passing on DEAM."
+  "notes": "Gate A3 passed. Task 4 gallery is 2503 after decode verification (was 1481 pre-recovery, 2634 before verification)."
 }

@@ -43,21 +43,49 @@ def _source(cfg, synthetic: bool, limit: int):
         files = sorted(graphs.glob("*.pt"))[:limit]
         return [torch.load(f, weights_only=False) for f in files], "synthetic"
 
+    # Prefer the pre-built per-corpus graph directories, and spread the sample
+    # across corpora: a deliverable drawn entirely from MTAT would show none of
+    # the label-sentinel variety the contract is built around.
+    graph_root = resolve_path(cfg["paths"]["processed"]) / "graphs"
+    corpora = [d.name for d in sorted(graph_root.glob("*"))
+               if (d / "segment").is_dir()] if graph_root.exists() else []
+    if corpora:
+        per_corpus = max(1, limit // max(len(corpora), 1))
+        graphs = []
+        for name in corpora:
+            files = sorted((graph_root / name / "segment").glob("*.pt"))[:per_corpus]
+            graphs += [torch.load(f, weights_only=False) for f in files]
+        # top up from the largest corpus if integer division left us short
+        if len(graphs) < limit and corpora:
+            extra = sorted((graph_root / corpora[0] / "segment").glob("*.pt"))
+            for f in extra[per_corpus:]:
+                if len(graphs) >= limit:
+                    break
+                graphs.append(torch.load(f, weights_only=False))
+        LOGGER.info("sampled %d graphs across %d corpora: %s",
+                    len(graphs), len(corpora), ", ".join(corpora))
+        return graphs[:limit], "real"
+
     from src.datasets import MusicGraphDataset
 
     splits_dir = resolve_path(cfg["paths"]["splits"])
-    h5_path = resolve_path(cfg["paths"]["processed"]) / "features.h5"
+    processed = resolve_path(cfg["paths"]["processed"])
     frames = [pd.read_csv(p) for p in sorted(splits_dir.glob("*_manifest.csv"))]
-    if not frames or not h5_path.exists():
+    caches = {p.stem.replace("features_", ""): p
+              for p in processed.glob("features_*.h5")}
+    if not frames or not caches:
         raise FileNotFoundError(
-            "no feature cache at data/processed/features.h5 (or no manifests). "
+            "no feature caches in data/processed/ (or no manifests). "
             "Run `make splits && make features`, or pass --synthetic."
         )
     manifest = pd.concat(frames, ignore_index=True)
-    stats_path = resolve_path(cfg["paths"]["processed"]) / "norm_stats.json"
-    stats = json.loads(stats_path.read_text(encoding="utf-8")) if stats_path.exists() else None
+    stats = {}
+    for name in caches:
+        path = processed / f"norm_stats_{name}.json"
+        if path.exists():
+            stats[name] = json.loads(path.read_text(encoding="utf-8"))
 
-    dataset = MusicGraphDataset(manifest, cfg=cfg, h5_path=h5_path, norm_stats=stats)
+    dataset = MusicGraphDataset(manifest, cfg=cfg, h5_path=caches, norm_stats=stats)
     graphs, i = [], 0
     while len(graphs) < limit and i < len(dataset):
         try:

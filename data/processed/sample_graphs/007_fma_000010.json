@@ -1,0 +1,21 @@
+{
+  "track_id": "fma_000010",
+  "artist_id": "kurt_vile",
+  "dataset": "fma",
+  "provenance": "real",
+  "split": "test",
+  "num_nodes": 18,
+  "num_edges": 114,
+  "num_self_loops": 18,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.333333333333333,
+  "min_degree": 4,
+  "temporal_edges": 34,
+  "mean_edge_cosine": 0.9648150205612183,
+  "n_positive_tags": -1,
+  "y_genre": 6,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "Freeway by Kurt Vile. genre: Pop."
+}

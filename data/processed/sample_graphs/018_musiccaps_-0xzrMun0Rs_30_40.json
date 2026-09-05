@@ -1,0 +1,21 @@
+{
+  "track_id": "musiccaps_-0xzrMun0Rs_30_40",
+  "artist_id": "yt_-0xzrMun0Rs",
+  "dataset": "musiccaps",
+  "provenance": "real",
+  "split": "test",
+  "num_nodes": 5,
+  "num_edges": 25,
+  "num_self_loops": 5,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 4.0,
+  "min_degree": 4,
+  "temporal_edges": 8,
+  "mean_edge_cosine": 0.8629196882247925,
+  "n_positive_tags": 1,
+  "y_genre": -1,
+  "y_valence": NaN,
+  "y_arousal": NaN,
+  "text": "This song contains digital drums playing a simple groove along with two guitars. One strumming chords along with the snare the other one playing a melody on top. An e-bass is playing the footnote while a piano is playing a major and minor c"
+}

@@ -1,7 +1,7 @@
 # PROGRESS
 
 Last session ended: (in progress)
-Currently resuming at: A3.2-A3.5 (extraction running)
+Currently resuming at: A6.2 (B2 re-run) then A6.3/A6.4
 
 Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` skipped.
 
@@ -29,24 +29,28 @@ Status markers: `[ ]` todo, `[~]` in progress, `[x]` done, `[!]` blocked, `[-]` 
 
 ## Phase A3 — Feature extraction (LONG)
 - [x] A3.1 Train-only norm stats plan verified
-- [~] A3.2 MTAT extracted (background job running)
-- [~] A3.3 FMA-small extracted (background job running)
-- [~] A3.4 MusicCaps extracted (background job running)
-- [~] A3.5 DEAM extracted (background job running)
-- [ ] A3.6 Norm stats computed + persisted
+- [x] A3.2 MTAT extracted — 21,358/21,361 (3 unreadable mp3s)
+- [x] A3.3 FMA-small extracted — 7,994/7,994
+- [x] A3.4 MusicCaps extracted — 4,830 after decode verification
+- [x] A3.5 DEAM extracted — 1,802/1,802, 0 failures
+- [x] A3.6 Norm stats computed + persisted (per corpus, train-only, tested)
+
+## Phase A3 GATE: PASSED — 4 caches, 100% coverage, train-only norm stats
 
 ## Phase A4 — Graphs
-- [ ] A4.1 Segment graphs, all datasets
-- [ ] A4.2 Chord graphs
-- [ ] A4.3 Hetero graphs
-- [ ] A4.4 GATE: visual inspection of 5 real graphs
-- [ ] A4.5 Export 20 REAL sample graphs
+- [x] A4.1 Segment graphs, all datasets — 35,984
+- [x] A4.2 Chord graphs — 35,984
+- [x] A4.3 Hetero graphs — 35,984
+- [x] A4.4 GATE: PASSED on real MTAT — long-range 0.858, repeat recall 0.900
+- [x] A4.5 Export 20 REAL sample graphs — all 4 corpora
+
+## Phase A4 GATE: PASSED — A4.4 sanity gate green, 20 real sample graphs committed
 
 ## Phase A5 — EDA
-- [ ] A5.1 eda.ipynb executed on real data
+- [x] A5.1 eda.ipynb executed on real data — 0 errors
 
 ## Phase A6 — First real runs
-- [ ] A6.1 Task 2 on FMA-small (local GPU)
+- [x] A6.1 Task 2 on real MTAT (local GPU) — macro-F1 0.3692
 - [ ] A6.2 CNN baseline B2 (local GPU)
 - [ ] A6.3 Kaggle payload built
 - [ ] A6.4 Task 1 launched on Kaggle
@@ -140,3 +144,77 @@ Extraction chain (mtat → fma → musiccaps → deam, 36,203 tracks, 6 workers)
 running in the background at ~190 tracks/min; ETA ~3 h from 07:06. Item-level
 resumable, so an interrupted session just restarts it. Loaders were updated to
 read the per-corpus caches.
+
+---
+
+## Phase B handoff (draft — finalise at the Phase A exit gate)
+
+### What Phase B has to produce
+
+| Item | Depends on | Notes |
+|---|---|---|
+| Task 3 fusion + multi-task DEAM | A3 caches, A4 graphs | alternating MTAT/DEAM batches; the masked loss is already written and tested |
+| Task 4 contrastive retrieval | MusicCaps graphs | gallery is **2,634**; use `--precompute-text-embeddings` |
+| Ablation: 7 fusion modes + rewired control | Task 3 | `src.evaluate --ablation-epochs N` already drives this |
+| t-SNE by genre and mood + k-NN probe + silhouette | Task 3 embeddings | the probe numbers are the evidence, not the picture |
+| 3 case studies, >= 1 a failure | Task 3, GATv2 | `attention_viz.generate_case_studies` picks the worst example by measured F1 |
+| 10 retrieval examples, >= 2 failures | Task 4 | `evaluate.export_retrieval_examples` |
+| Human eval: 5 listeners | Task 4 | **has a hard human dependency — line the raters up now** |
+| 3-seed repeats on the headline rows | everything | seeds 42 / 1337 / 2024; cut non-headline seeds first if time runs short |
+
+### Decisions already locked, do not relitigate
+
+- **`Xtext`**: MusicCaps headline uses `caption_masked`; the raw caption is the
+  leakage demo only; MTAT uses metadata. `data.text_source` selects it.
+- **Splits**: artist-disjoint within *and* across corpora. The unrepaired MTAT
+  variant exists solely for a cited comparison.
+- **Thresholds**: tuned on val, frozen, applied once to test.
+- **Norm stats**: per corpus, train split only, provenance asserted by test.
+- **Never report accuracy** for multi-label tagging.
+
+### Routing, from the measured VRAM table
+
+Everything fits on the 1650. The binding constraint is wall-clock, not memory:
+three freeze modes across three seeds is what needs Kaggle, not any single run.
+bert-base above batch 32 (or seq 256) needs `bert.gradient_checkpointing: true`.
+
+### Known caveats to carry into the report
+
+1. MusicCaps attrition is **not random**; survivors are a biased sample even at
+   91% recovery.
+2. The chord agreement figure (0.774) is measured on MIDI-derived chroma and
+   bounds template matching in isolation — it says nothing about audio.
+3. MTAT val is thin after the artist-disjoint repair: 977 clips, 14 artists.
+   Expect noisy validation curves and say so.
+4. The mel cache is time-pooled to 256 frames; B2 sees the whole track at ~0.12 s
+   resolution, which is finer than the GNN's ~1 s segments.
+
+### A3 findings
+
+- **A3.4 caught the failure mode the spec names.** 206 MusicCaps files are
+  ~352-byte truncated stubs left by the *original* download. They pass
+  `Path.exists()` and a non-zero size check, and only fail when something tries
+  to decode them. Decode verification existed in `build_musiccaps_manifest` but
+  had never actually run on real data, because `verify_datasets` passed
+  `verify_decode=False` by default. Rebuilt with `--validate-audio`:
+
+  | | rows | Task 4 gallery |
+  |---|---|---|
+  | one download pass | 2,781 | 1,481 |
+  | after `--retry-failed` | 5,043 | 2,634 |
+  | **after decode verification** | **4,830** | **2,503** |
+
+  The last row is the one to report. The middle row was never real.
+
+- **Windows spawn + torch = WinError 1455.** MusicCaps and DEAM extraction died
+  because every `ProcessPoolExecutor` worker re-imported the parent module, which
+  pulled in torch via `src.utils`, and six copies of torch exhausted the commit
+  limit. Extraction workers need numpy and librosa only, so torch is now imported
+  lazily inside the functions that use it. This also makes every CLI start faster.
+
+- **Manifests are pruned to cached keys.** Three MTAT and three FMA rows exist on
+  disk but do not decode; they are now absent from the manifest rather than
+  raising a KeyError inside a dataloader worker.
+
+- Extraction totals: MTAT 21,358 · FMA 7,994 · MusicCaps 4,830 · DEAM 1,802 =
+  **35,984 tracks**, ~2h20 wall clock at ~196 tracks/min on 6 workers.

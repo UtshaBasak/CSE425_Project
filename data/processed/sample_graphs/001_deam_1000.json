@@ -1,0 +1,21 @@
+{
+  "track_id": "deam_1000",
+  "artist_id": "republic_of_lights_got_you_surrounded",
+  "dataset": "deam",
+  "provenance": "real",
+  "split": "train",
+  "num_nodes": 19,
+  "num_edges": 115,
+  "num_self_loops": 19,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.052631578947368,
+  "min_degree": 4,
+  "temporal_edges": 36,
+  "mean_edge_cosine": 0.8607132434844971,
+  "n_positive_tags": -1,
+  "y_genre": -1,
+  "y_valence": 6.800000190734863,
+  "y_arousal": 5.599999904632568,
+  "text": "Single by Republic Of Lights-Got You Surrounded. genre: Rock."
+}

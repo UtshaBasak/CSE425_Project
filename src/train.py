@@ -58,9 +58,24 @@ from .utils import (
 
 LOGGER = get_logger("gbmc.train")
 
-TAG_DATASETS = ("mtat", "musiccaps")        # corpora that carry the tag vocabulary
+# Defaults; config.data.{tag,emotion,caption}_corpora override them per run.
+TAG_DATASETS = ("mtat",)                    # corpora that carry the tag vocabulary
 EMOTION_DATASETS = ("deam",)                # corpora that carry valence/arousal
-CAPTION_DATASETS = ("musiccaps", "deam")    # corpora with free-text captions
+CAPTION_DATASETS = ("musiccaps",)           # corpora with free-text captions
+
+
+def corpora_for(cfg, kind: str) -> tuple:
+    """Which corpora a task should draw from, per config.
+
+    Mixing corpora with different label vocabularies is not free: MusicCaps
+    aspects barely intersect the MTAT top-50, so pooling them hands most
+    MusicCaps rows an all-negative label vector and drags macro-F1 down for a
+    reason that has nothing to do with the model.
+    """
+    defaults = {"tag": TAG_DATASETS, "emotion": EMOTION_DATASETS,
+                "caption": CAPTION_DATASETS}
+    value = cfg.get("data", {}).get(f"{kind}_corpora") if cfg else None
+    return tuple(value) if value else defaults[kind]
 
 
 # --------------------------------------------------------------------------- #
@@ -166,11 +181,18 @@ def _load_real_manifests(cfg):
         )
     manifest = pd.concat(frames, ignore_index=True)
 
-    vocab_path = splits_dir / "tag_vocab.json"
+    source = str(cfg.get("tags", {}).get("vocab_source", "mtat"))
+    vocab_path = (splits_dir / "musiccaps_tag_vocab.json" if source == "musiccaps"
+                  else splits_dir / "tag_vocab.json")
+    if not vocab_path.exists():
+        LOGGER.warning("no vocabulary at %s; falling back to tag_vocab.json", vocab_path)
+        vocab_path = splits_dir / "tag_vocab.json"
     if vocab_path.exists():
         with open(vocab_path, "r", encoding="utf-8") as fh:
             payload = json.load(fh)
         tag_vocab = list(payload["tags"] if isinstance(payload, dict) else payload)
+        LOGGER.info("tag vocabulary: %d tags from %s (tags.vocab_source=%s)",
+                    len(tag_vocab), vocab_path.name, source)
     else:
         pool: set[str] = set()
         for value in manifest.get("y_tags", []):
@@ -408,7 +430,7 @@ def run_task1(cfg, args, bundle: DataBundle, device) -> dict:
     ).to(device)
 
     loaders = {
-        split: make_loader(bundle.dataset(split, TAG_DATASETS), cfg,
+        split: make_loader(bundle.dataset(split, corpora_for(cfg, 'tag')), cfg,
                            shuffle=(split == "train"), seed=args.seed,
                            num_workers=args.num_workers)
         for split in ("train", "val", "test")
@@ -444,7 +466,7 @@ def run_task2(cfg, args, bundle: DataBundle, device) -> dict:
     ).to(device)
 
     loaders = {
-        split: make_loader(bundle.dataset(split, TAG_DATASETS), cfg,
+        split: make_loader(bundle.dataset(split, corpora_for(cfg, 'tag')), cfg,
                            shuffle=(split == "train"), seed=args.seed,
                            num_workers=args.num_workers)
         for split in ("train", "val", "test")
@@ -488,9 +510,9 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
 
     # Task 3 alternates tag-bearing and emotion-bearing batches so both heads
     # get gradient inside every optimiser window.
-    tag_loader = make_loader(bundle.dataset("train", TAG_DATASETS), cfg, shuffle=True,
+    tag_loader = make_loader(bundle.dataset("train", corpora_for(cfg, "tag")), cfg, shuffle=True,
                              seed=args.seed, num_workers=args.num_workers)
-    emo_loader = make_loader(bundle.dataset("train", EMOTION_DATASETS), cfg, shuffle=True,
+    emo_loader = make_loader(bundle.dataset("train", corpora_for(cfg, "emotion")), cfg, shuffle=True,
                              seed=args.seed + 1, num_workers=args.num_workers)
     loaders = {
         "train": _AlternatingTrainLoader(tag_loader, emo_loader),
@@ -551,7 +573,8 @@ def run_task4(cfg, args, bundle: DataBundle, device) -> dict:
 
     precompute = bool(args.precompute_text_embeddings or con_cfg.get("precompute_text", False))
     datasets = {
-        split: bundle.dataset(split, CAPTION_DATASETS) for split in ("train", "val", "test")
+        split: bundle.dataset(split, corpora_for(cfg, "caption"))
+        for split in ("train", "val", "test")
     }
     # contrastive wants the biggest batch that fits; precomputed text is what
     # makes cfg.contrastive.batch_size reachable on 4 GB

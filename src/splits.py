@@ -916,6 +916,57 @@ def build_all_splits(cfg, validate_audio: bool = False,
 # --------------------------------------------------------------------------- #
 # A2 -- cross-corpus reconciliation, the LMD inventory, and the summary payload
 # --------------------------------------------------------------------------- #
+def build_musiccaps_tag_vocab(cfg, k: int = 50) -> tuple[list, dict]:
+    """Top-k MusicCaps aspects, because the MTAT vocabulary does not fit them.
+
+    Measured on the real corpus: of MusicCaps' 10.7 aspects per clip, only
+    **0.52** appear in the MTAT top-50, and **62% of clips match none of it at
+    all**. Training the Task 1 headline against the MTAT vocabulary would
+    therefore hand most rows an all-negative label vector -- the model would
+    learn to predict nothing and score near-zero macro-F1 for a reason that has
+    nothing to do with the model.
+
+    MusicCaps aspects are free text (12,023 distinct strings), so this takes the
+    k most frequent after case and whitespace normalisation. Coverage is
+    returned alongside so the choice is auditable rather than assumed.
+    """
+    paths = cfg["datasets"]["musiccaps"]
+    csv_path = resolve_path(paths["csv"])
+    if not csv_path.exists():
+        return [], {}
+
+    source = pd.read_csv(csv_path)
+    counts: dict[str, int] = {}
+    per_clip: list[list[str]] = []
+    for record in source.itertuples(index=False):
+        aspects = [re.sub(r"\s+", " ", str(a).strip().lower())
+                   for a in _parse_aspect_list(getattr(record, "aspect_list", ""))]
+        aspects = [a for a in aspects if a]
+        per_clip.append(aspects)
+        for aspect in set(aspects):
+            counts[aspect] = counts.get(aspect, 0) + 1
+
+    vocab = [a for a, _ in sorted(counts.items(), key=lambda kv: (-kv[1], kv[0]))[: int(k)]]
+    chosen = set(vocab)
+    hits = [sum(1 for a in aspects if a in chosen) for aspects in per_clip]
+    coverage = {
+        "n_distinct_aspects": len(counts),
+        "vocab_size": len(vocab),
+        "mean_aspects_per_clip": float(np.mean([len(a) for a in per_clip])) if per_clip else 0.0,
+        "mean_labels_per_clip": float(np.mean(hits)) if hits else 0.0,
+        "clips_with_no_label": int(sum(1 for h in hits if h == 0)),
+        "clips_with_no_label_pct": float(100.0 * sum(1 for h in hits if h == 0) / max(len(hits), 1)),
+        "most_frequent": vocab[:10],
+    }
+    LOGGER.info(
+        "MusicCaps tag vocabulary: %d distinct aspects -> top %d; mean %.2f labels "
+        "per clip, %.1f%% of clips left with none",
+        coverage["n_distinct_aspects"], len(vocab),
+        coverage["mean_labels_per_clip"], coverage["clips_with_no_label_pct"],
+    )
+    return vocab, coverage
+
+
 def reconcile_across_corpora(frames: "dict[str, pd.DataFrame]") -> "dict[str, pd.DataFrame]":
     """Make artist ids disjoint across the *concatenation* of all manifests.
 
@@ -1004,6 +1055,37 @@ def build_lmd_inventory(cfg) -> pd.DataFrame:
     LOGGER.info("LMD inventory: %d MIDI files across %d artists (chord validation only)",
                 len(frame), frame["artist_id"].nunique() if len(frame) else 0)
     return frame
+
+
+def prune_to_cache(cfg, datasets=("mtat", "fma", "deam", "musiccaps")) -> dict:
+    """Drop manifest rows that have no cached features, and say how many.
+
+    A row that exists on disk but does not decode survives the manifest build
+    (which only checks existence) and then raises a KeyError deep inside a
+    dataloader worker. Pruning here means the manifest states what is actually
+    usable, which is what every downstream count should be based on.
+    """
+    import h5py
+
+    processed = resolve_path(cfg["paths"]["processed"])
+    splits_dir = resolve_path(cfg["paths"]["splits"])
+    report: dict = {}
+    for name in datasets:
+        manifest_path = splits_dir / f"{name}_manifest.csv"
+        h5_path = processed / f"features_{name}.h5"
+        if not manifest_path.exists() or not h5_path.exists():
+            continue
+        frame = pd.read_csv(manifest_path)
+        with h5py.File(h5_path, "r") as store:
+            cached = set(store.keys())
+        keep = frame["track_id"].astype(str).isin(cached)
+        dropped = int((~keep).sum())
+        if dropped:
+            write_manifest(frame[keep], manifest_path)
+            LOGGER.info("%s: pruned %d row(s) with no cached features (%d remain)",
+                        name, dropped, int(keep.sum()))
+        report[name] = {"kept": int(keep.sum()), "dropped": dropped}
+    return report
 
 
 def split_summary(frames: "dict[str, pd.DataFrame]", extra: dict | None = None) -> dict:
@@ -1229,6 +1311,8 @@ def main(argv=None) -> int:
     parser.add_argument("--validate-audio", action="store_true",
                         help="check that every referenced file exists and decodes "
                              "(slow, but the only honest way to size a split)")
+    parser.add_argument("--prune-to-cache", action="store_true",
+                        help="drop manifest rows with no cached features")
     parser.add_argument("--no-reconcile", action="store_true",
                         help="skip cross-corpus artist reconciliation (not advised)")
     parser.add_argument("--override", nargs="*", default=[])
@@ -1237,6 +1321,12 @@ def main(argv=None) -> int:
     cfg = load_config(args.config, parse_overrides(args.override))
     frames = build_all_splits(cfg, validate_audio=args.validate_audio,
                               reconcile=not args.no_reconcile)
+    pruned = prune_to_cache(cfg) if args.prune_to_cache else {}
+    if pruned:
+        frames = {name: (pd.read_csv(resolve_path(cfg["paths"]["splits"]) /
+                                     f"{name}_manifest.csv")
+                         if name in pruned else frame)
+                  for name, frame in frames.items()}
 
     vocab: list[str] = []
     if len(frames.get("mtat", [])):
@@ -1251,7 +1341,24 @@ def main(argv=None) -> int:
                        "merge_synonyms": bool(cfg["tags"]["merge_synonyms"])},
                       ensure_dir(cfg["paths"]["splits"]) / "tag_vocab.json")
 
-    summary = split_summary(frames, extra={"tag_vocab_size": len(vocab)})
+    # MusicCaps needs its own vocabulary; see build_musiccaps_tag_vocab for why
+    mc_vocab, mc_coverage = [], {}
+    if len(frames.get("musiccaps", [])):
+        try:
+            mc_vocab, mc_coverage = build_musiccaps_tag_vocab(
+                cfg, k=int(cfg["tags"]["top_k"]))
+            if mc_vocab:
+                save_json({"tags": mc_vocab, "top_k": int(cfg["tags"]["top_k"]),
+                           "source": "musiccaps_aspect_list", "coverage": mc_coverage},
+                          ensure_dir(cfg["paths"]["splits"]) / "musiccaps_tag_vocab.json")
+        except Exception as exc:
+            LOGGER.warning("could not build the MusicCaps vocabulary: %s", exc)
+
+    summary = split_summary(frames, extra={
+        "tag_vocab_size": len(vocab),
+        "musiccaps_tag_vocab_size": len(mc_vocab),
+        "musiccaps_vocab_coverage": mc_coverage,
+    })
 
     # MusicCaps survival travels with the split counts: the eval survivor count
     # IS the Task 4 gallery size, and R@K is meaningless without it.

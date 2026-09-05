@@ -1,0 +1,21 @@
+{
+  "track_id": "deam_10",
+  "artist_id": "arne_bang_huseby",
+  "dataset": "deam",
+  "provenance": "real",
+  "split": "train",
+  "num_nodes": 19,
+  "num_edges": 119,
+  "num_self_loops": 19,
+  "node_feat_dim": 96,
+  "edge_attr_dim": 2,
+  "mean_degree": 5.2631578947368425,
+  "min_degree": 4,
+  "temporal_edges": 36,
+  "mean_edge_cosine": 0.8261382579803467,
+  "n_positive_tags": -1,
+  "y_genre": -1,
+  "y_valence": 4.0,
+  "y_arousal": 4.699999809265137,
+  "text": "Stormy Blues by Arne Bang Huseby. genre: Blues."
+}

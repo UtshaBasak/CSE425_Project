@@ -1,0 +1,38 @@
+{
+  "n_graphs": 20,
+  "files": [
+    "000_deam_10.pt",
+    "001_deam_1000.pt",
+    "002_deam_1001.pt",
+    "003_deam_1002.pt",
+    "004_deam_1003.pt",
+    "005_fma_000002.pt",
+    "006_fma_000005.pt",
+    "007_fma_000010.pt",
+    "008_fma_000140.pt",
+    "009_fma_000141.pt",
+    "010_mtat_10.pt",
+    "011_mtat_10009.pt",
+    "012_mtat_10011.pt",
+    "013_mtat_10015.pt",
+    "014_mtat_10019.pt",
+    "015_musiccaps_-0Gj8-vB1q4_30_40.pt",
+    "016_musiccaps_-0SdAVK79lg_30_40.pt",
+    "017_musiccaps_-0vPFx-wRRI_30_40.pt",
+    "018_musiccaps_-0xzrMun0Rs_30_40.pt",
+    "019_musiccaps_-1UWSisR2zo_30_40.pt"
+  ],
+  "contract": {
+    "x": "[num_nodes, 96] float32",
+    "edge_index": "[2, num_edges] int64, COO, bidirectional",
+    "edge_attr": "[num_edges, 2] float32 = [is_temporal, cosine_sim]",
+    "y_tags": "[1, num_tags] float32, -1 = label absent for this dataset",
+    "y_genre": "[1] int64, -1 = unavailable",
+    "y_valence": "[1] float32, nan = unavailable",
+    "y_arousal": "[1] float32, nan = unavailable",
+    "provenance": "str, 'real' or 'synthetic'"
+  },
+  "provenance": [
+    "real"
+  ]
+}

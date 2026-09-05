@@ -1,0 +1,59 @@
+{
+  "seed": 42,
+  "synthetic": false,
+  "device": "cuda",
+  "gnn_reference_params": 432690,
+  "n_tags": 50,
+  "baselines": [
+    {
+      "baseline": "B1_random",
+      "n_repeats": 5,
+      "n_test": 3500,
+      "n_tags": 50,
+      "macro_f1": 0.06338962913367527,
+      "macro_f1_std": 0.002973988011236299,
+      "micro_f1": 0.10376683190757421,
+      "micro_f1_std": 0.0019305073287130855,
+      "mean_auc_pr": 0.06686636260436846,
+      "mean_auc_pr_std": 0.0008465373329659771,
+      "mean_train_prior": 0.0650364314910254
+    },
+    {
+      "baseline": "B1_majority",
+      "macro_f1": 0.0,
+      "micro_f1": 0.0,
+      "mean_auc_pr": 0.0644,
+      "n_test": 3500,
+      "n_tags": 50,
+      "n_tags_predicted_positive": 0,
+      "element_accuracy_do_not_report": 0.9356
+    },
+    {
+      "baseline": "B4_pca_mlp",
+      "macro_f1": 0.32385639503515945,
+      "micro_f1": 0.31666099580356133,
+      "mean_auc_pr": 0.30669118026364606,
+      "n_test": 3500,
+      "n_tags": 50,
+      "n_components": 96,
+      "explained_variance": 0.9999999999999999,
+      "threshold_source": "val",
+      "n_train": 16881
+    },
+    {
+      "model": "MelCNN",
+      "base_channels": 13,
+      "n_blocks": 5,
+      "trainable_params": 416154,
+      "total_params": 416154,
+      "target_params": 432690,
+      "baseline": "B2_mel_cnn",
+      "macro_f1": 0.1647616520799301,
+      "micro_f1": 0.1583835387895078,
+      "mean_auc_pr": 0.1260430943419513,
+      "threshold_source": "val",
+      "epochs": 10
+    }
+  ],
+  "note": "accuracy is deliberately absent -- see src/metrics.py"
+}

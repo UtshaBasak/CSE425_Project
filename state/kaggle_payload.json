@@ -1,0 +1,14 @@
+{
+  "archive": "C:\\Users\\User\\AppData\\Local\\Temp\\payload_test.tar.gz",
+  "size_mb": 3.5,
+  "uncompressed_mb": 26.2,
+  "n_files": 34,
+  "files_by_extension": {
+    ".csv": 9,
+    ".json": 4,
+    ".py": 19,
+    ".txt": 1,
+    ".yaml": 1
+  },
+  "excluded": "mel and feature caches, audio, checkpoints, synthetic artifacts"
+}

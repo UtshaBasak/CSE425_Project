@@ -52,3 +52,35 @@ Format:
                         and 256 frames over 30 s is finer than the 32 GNN segments, so B2 is not disadvantaged.
 [2026-09-05 07:30] DONE   A4.4 gate tooling written and trialled on real DEAM audio: long-range fraction 0.781, repeat recall 0.821. PASS.
                         Formal gate re-runs on MTAT once its extraction finishes.
+[2026-09-05 08:58] DONE   A3.2 MTAT extracted - 21,358/21,361 written, 3 failed (unreadable mp3s, known MTAT zero-byte clips).
+                        Train norm stats: 303,858 segments, 96 dims, split=train. Wall clock ~1h46 at ~196 tracks/min on 6 workers.
+[2026-09-05 08:58] GATE   A4.4 PASSED on real MTAT - long-range fraction 0.858, repeat recall 0.900, mean similarity lag 5.76 segments,
+                        0 tracks with isolated nodes. Similarity edges genuinely connect repeated sections; the graph is not a chain.
+[2026-09-05 09:18] FIX    A3.4/A3.5 failed with WinError 1455 (paging file): every spawned worker re-imported torch via src.utils.
+                        Made torch a lazy import in utils; extraction workers now load only numpy+librosa. Re-running musiccaps+deam.
+[2026-09-05 09:30] START  A2 rebuild with --validate-audio (206 MusicCaps files are 352-byte stubs that pass an existence check)
+[2026-09-05 09:32] START  A4.1-A4.3 build_graphs (segment+chord+hetero, 35,984 tracks) — resumable, skips existing .pt
+[2026-09-05 09:34] DONE   A3.3 FMA extracted - 7,994/7,997 (3 known-truncated already excluded upstream). Train norm stats: 117,808 segments.
+[2026-09-05 09:34] DONE   A3.4 MusicCaps extracted - 4,837 written, 206 FAILED: those files are ~352-byte truncated stubs from the ORIGINAL
+                        download that pass an existence check but do not decode. Exactly the case the spec warns about.
+[2026-09-05 09:34] DONE   A3.5 DEAM extracted - 1,802/1,802, 0 failures. Train norm stats: 24,263 segments.
+[2026-09-05 09:34] FIX    Decode verification had never actually run on real data (verify_decode defaulted to False through verify_datasets).
+                        Rebuilt manifests with --validate-audio: MusicCaps usable 5,043 -> 4,830, Task 4 gallery 2,634 -> 2,503.
+[2026-09-05 09:34] DONE   A3.6 Per-corpus train-only norm stats persisted for all four corpora; provenance asserted by test.
+[2026-09-05 09:34] DONE   Manifests pruned to cached keys (mtat -3, fma -3) so every listed row is loadable.
+[2026-09-05 09:34] GATE   A3 PASSED - four caches complete, 100% manifest/cache coverage, norm stats train-only.
+[2026-09-05 10:03] START  A5.1 execute eda.ipynb on real data
+[2026-09-05 10:06] START  A6.1 Task 2 GNN on real MTAT, GPU, 10 epochs, batch 64
+[2026-09-05 10:15] START  A6.2 baselines B1/B2/B4 on real MTAT, same budget as Task 2 (batch 64, 10 epochs)
+[2026-09-05 10:52] START  A6.2b B2 re-run with train-only mel standardisation + 25 epochs (0.165 was below B4, i.e. undertrained)
+[2026-09-05 11:08] DONE   A4.1-A4.3 graphs built - segment/chord/hetero for all 4 corpora, 35,984 x 3 = 107,952 .pt files, 0 failures.
+[2026-09-05 11:08] DONE   A4.5 exported 20 REAL sample graphs spanning all 4 corpora; all 96-dim, all provenance=real, no isolated nodes.
+[2026-09-05 11:08] FINDING MTAT top-50 vocabulary does not fit MusicCaps: 0.52 of 10.7 aspects match, 62% of clips get NO positive label.
+                        Built a MusicCaps-native top-50 aspect vocabulary (2.83 labels/clip, 9.5% empty) + tags.vocab_source config key.
+[2026-09-05 11:08] DONE   A5.1 eda.ipynb executed on real data, 0 errors. Shows the three-stage MusicCaps story and the A4.4 verdict.
+[2026-09-05 11:08] DONE   A6.1 Task 2 GNN on real MTAT - test macro-F1 0.3692, micro-F1 0.4124, AUC-PR 0.3915 (3,500 clips, 432,690 params).
+                        VRAM peak 37 MB, matching the A0.4 prediction of ~56 MB reserved.
+[2026-09-05 11:08] DONE   A6.2 baselines - B1 random 0.0634, B1 majority 0.0000 at 93.6% element accuracy, B4 PCA+MLP 0.3239.
+[2026-09-05 11:08] FIX    A6.2 B2 first came out at 0.1648, BELOW B4 on the same audio - undertrained, not an architectural finding.
+                        Cause: B2 was the only model fed unstandardised input (raw dB, ~[-80,0]). Added train-only mel
+                        standardisation and raised its budget to 25 epochs. Re-running; both numbers will be reported.
