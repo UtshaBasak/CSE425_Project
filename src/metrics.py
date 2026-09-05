@@ -27,6 +27,7 @@ __all__ = [
     "macro_roc_auc",
     "regression_metrics",
     "retrieval_metrics",
+    "random_retrieval_reference",
     "graph_coherence_score",
     "knn_probe",
     "multiclass_metrics",
@@ -268,6 +269,32 @@ def regression_metrics(y_true, y_pred, prefix: str = "") -> dict:
 # --------------------------------------------------------------------------- #
 # retrieval (Task 4)
 # --------------------------------------------------------------------------- #
+def random_retrieval_reference(gallery_size: int, ks=(1, 5, 10)) -> dict:
+    """What a retrieval model that has learned nothing would score (B2.2).
+
+    Without this row, R@10 = 0.05 reads as a failure. Against a gallery of
+    2,503 it is 125x chance, which is a different sentence entirely. Every
+    retrieval table needs the reference alongside the gallery size, because the
+    two together are what make R@K interpretable at all.
+
+    For a uniformly random ranking of ``N`` candidates containing exactly one
+    correct item: ``R@K = K / N``; the true rank is uniform on ``1..N`` so the
+    median is ``(N + 1) / 2``; and ``MRR`` is the harmonic number ``H_N / N``,
+    which for large ``N`` is close to ``(ln N + 0.5772) / N``.
+    """
+    n = int(gallery_size)
+    if n <= 0:
+        return {"gallery_size": 0}
+    harmonic = float(np.sum(1.0 / np.arange(1, n + 1)))
+    out = {"gallery_size": n, "reference": "uniform random ranking"}
+    for k in ks:
+        out[f"random_R@{k}"] = float(min(k, n) / n)
+    out["random_medR"] = float((n + 1) / 2)
+    out["random_meanR"] = float((n + 1) / 2)
+    out["random_MRR"] = float(harmonic / n)
+    return out
+
+
 def retrieval_metrics(sim: np.ndarray, ks: Sequence[int] = (1, 5, 10)) -> dict:
     """R@K, median rank and MRR in both directions for a square-ish sim matrix.
 
@@ -306,6 +333,15 @@ def retrieval_metrics(sim: np.ndarray, ks: Sequence[int] = (1, 5, 10)) -> dict:
     for k in ks:
         out[f"mean_R@{k}"] = float((out[f"g2t_R@{k}"] + out[f"t2g_R@{k}"]) / 2)
     out["mean_MRR"] = float((out["g2t_MRR"] + out["t2g_MRR"]) / 2)
+
+    # B2.2: the chance reference travels with the numbers rather than being
+    # looked up later, so no table can report R@K without it.
+    reference = random_retrieval_reference(int(sim.shape[1]), ks)
+    out.update({k: v for k, v in reference.items() if k.startswith("random_")})
+    for k in ks:
+        chance = reference.get(f"random_R@{k}", 0.0)
+        if chance > 0:
+            out[f"mean_R@{k}_vs_chance"] = float(out[f"mean_R@{k}"] / chance)
     return out
 
 
