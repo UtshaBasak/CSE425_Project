@@ -2052,3 +2052,118 @@ def test_ablation_reports_seed_spread_on_every_row():
         assert row["fixed_half_mean"] is not None, "fixed-0.5 column missing"
     spread = next(r for r in out["rows"] if r["mode"] == "cross_attention")
     assert spread["macro_f1_sd"] > 0.01
+
+
+# --------------------------------------------------------------------------- #
+# B4 -- the Google Forms adapter. An off-by-one here would silently swap real
+# pairs with controls and invert the headline finding, so it is tested hard.
+# --------------------------------------------------------------------------- #
+def _sheet_key(n_items=4, n_controls=2):
+    items = []
+    for i in range(n_items + n_controls):
+        control = i >= n_items
+        items.append({
+            "number": i + 1,
+            "item_id": f"{'control' if control else 'item'}_{i:03d}",
+            "caption": f"caption {i}",
+            "is_control": control,
+            "query_track_id": f"q{i}",
+            "retrieved_track_id": f"r{i}",
+        })
+    return {"scale": {"min": 1, "max": 5}, "items": items,
+            "n_items": n_items, "n_controls": n_controls}
+
+
+def test_forms_adapter_maps_clip_numbers_not_column_order():
+    """Google Forms column order is not guaranteed; the number is the anchor."""
+    import pandas as pd
+
+    from scripts.analyse_human_eval import to_long
+
+    key = _sheet_key()
+    # deliberately shuffled column order, and a timestamp column in the way
+    responses = pd.DataFrame([{
+        "Timestamp": "2026/09/06 10:00",
+        "Clip 3: how well does the description match the audio?": 5,
+        "Clip 1: how well does the description match the audio?": 4,
+        "Clip 6: how well does the description match the audio?": 1,
+        "Clip 2: how well does the description match the audio?": 4,
+        "Clip 5: how well does the description match the audio?": 2,
+        "Clip 4: how well does the description match the audio?": 5,
+    }])
+    long = to_long(responses, key)
+    assert len(long) == 6
+    by_number = dict(zip(long["clip_number"], long["rating"]))
+    assert by_number[3] == 5 and by_number[6] == 1
+
+    # clips 5 and 6 are the controls in this key, and must be labelled as such
+    controls = set(long[long["is_control"]]["clip_number"])
+    assert controls == {5, 6}, f"control flags did not follow the key: {controls}"
+
+
+def test_forms_adapter_refuses_a_mismatched_export():
+    """Guessing here would produce a plausible, wrong answer."""
+    import pandas as pd
+
+    from scripts.analyse_human_eval import to_long
+
+    key = _sheet_key()
+    responses = pd.DataFrame([{"Timestamp": "x", "Clip 1: ...": 4, "Clip 2: ...": 3}])
+    with pytest.raises(SystemExit, match="could not"):
+        to_long(responses, key)
+
+
+def test_forms_adapter_drops_out_of_scale_and_blank_answers():
+    import numpy as np
+    import pandas as pd
+
+    from scripts.analyse_human_eval import to_long
+
+    key = _sheet_key(n_items=2, n_controls=1)
+    responses = pd.DataFrame([{
+        "Timestamp": "x",
+        "Clip 1: q": 4, "Clip 2: q": 99, "Clip 3: q": np.nan,
+    }])
+    long = to_long(responses, key)
+    assert list(long["clip_number"]) == [1], "an out-of-scale or blank rating was kept"
+
+
+def test_forms_adapter_gives_each_respondent_its_own_rater_id():
+    import pandas as pd
+
+    from scripts.analyse_human_eval import to_long
+
+    key = _sheet_key(n_items=2, n_controls=0)
+    responses = pd.DataFrame([
+        {"Timestamp": "a", "Clip 1: q": 5, "Clip 2: q": 4},
+        {"Timestamp": "b", "Clip 1: q": 2, "Clip 2: q": 1},
+    ])
+    long = to_long(responses, key)
+    assert long["rater_id"].nunique() == 2
+    assert len(long) == 4
+
+
+def test_control_discrimination_flags_an_uninformative_study():
+    """If controls score as highly as real pairs the study says nothing."""
+    import numpy as np
+    import pandas as pd
+
+    from src.human_eval import compute_agreement
+
+    rows = []
+    for rater in range(5):
+        for item in range(8):
+            rows.append({"item_id": f"i{item}", "rater": f"r{rater}",
+                         "rating": 4.0, "is_control": item >= 6})
+    stats = compute_agreement(pd.DataFrame(rows))
+    assert stats["control_discrimination"] == pytest.approx(0.0, abs=1e-9)
+
+    # and the opposite case must be detected too
+    rows = []
+    for rater in range(5):
+        for item in range(8):
+            control = item >= 6
+            rows.append({"item_id": f"i{item}", "rater": f"r{rater}",
+                         "rating": 1.5 if control else 4.5, "is_control": control})
+    stats = compute_agreement(pd.DataFrame(rows))
+    assert stats["control_discrimination"] == pytest.approx(3.0, abs=1e-9)

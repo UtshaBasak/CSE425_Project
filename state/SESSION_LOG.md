@@ -191,3 +191,28 @@ Format:
                         including one asserting no winner is named among indistinguishable rows.
 [2026-09-06 04:40] NOTE   Task 3 validated end to end on CPU with --dry-run: emotion stats computed, 4:1 alternation active,
                         epoch completes. 197 fast tests pass.
+
+[2026-09-06 04:48] DONE   B2.2 random_retrieval_reference folded into every retrieval_metrics payload, so no table can
+                        report R@K without its chance row. Gallery 2,503 -> chance R@10 = 0.4%; an R@10 of 0.05 reads as
+                        failure alone and as 12x chance beside the reference. The multiple is reported too.
+[2026-09-06 04:50] DONE   B2.3 scripts/zero_shot_eval.py: 4 prompt templates, per-template macro-F1, spread, and a template
+                        ensemble, all with thresholds tuned on val. The MusicCaps corpus/vocabulary are PINNED - an
+                        --override that would change them is refused, because the supervised reference is the Task 3
+                        MusicCaps run and comparing against an MTAT-vocabulary model would be two different problems.
+                        Runs whose recorded tag_vocab does not match are skipped with a warning.
+[2026-09-06 04:52] DONE   B3 t-SNE mood colouring driven by the B0.5 config instead of literals. The DEAM midpoint was
+                        hardcoded at 5 - correct for a 1-9 scale and silently wrong for any other range. Added a third
+                        panel for MTAT mood tags, reported separately because it is a different construct (texture, not
+                        affect). Quadrant names reordered in config to match the index the code assigns; keeping them in
+                        circumplex order would have mislabelled the legend, which a plot never reveals.
+[2026-09-06 04:55] DONE   B4 listening study: scripts/make_listening_page.py writes sheet_key.json, a self-contained HTML
+                        page with base64-embedded 10 s MP3s (numbered, no rating widgets - ratings go to a form), and the
+                        form question list in page order. Controls use REAL audio from an unrelated clip; a silent control
+                        would be identifiable without listening.
+[2026-09-06 04:56] DONE   B4 scripts/analyse_human_eval.py adapts the wide Google Forms export to long format keyed on the
+                        CLIP NUMBER in the question text, not column order. An off-by-one here would swap real pairs with
+                        controls and invert the headline finding, so it REFUSES a mismatched export rather than guessing.
+                        Five tests, including shuffled columns, out-of-scale answers, and an uninformative-study case.
+[2026-09-06 04:56] NOTE   Corrected-vocabulary leakage gap: raw 0.5670 vs masked 0.3707 = +0.1963 (53% relative), against
+                        +0.2214 (62%) under the leaked vocabulary. The leak was inflating the gap itself - masked went up,
+                        raw went down. 202 fast tests pass.
