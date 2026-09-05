@@ -27,6 +27,7 @@ LOGGER = get_logger("gbmc.data")
 
 __all__ = [
     "MusicGraphDataset",
+    "TextTagDataset",
     "MelSpecDataset",
     "make_loader",
     "alternating_loader",
@@ -256,6 +257,81 @@ def _float_or_nan(value):
         return float(value)
     except (TypeError, ValueError):
         return float("nan")
+
+
+class TextTagDataset(Dataset):
+    """Text and tag labels only -- no audio, no features, no graphs.
+
+    Task 1 (and baseline B3) predict tags from text alone, so making them read
+    the HDF5 feature cache just to build a graph nobody looks at is both wasteful
+    and a portability trap: the caches are gigabytes and are deliberately left
+    out of the Kaggle payload, so a graph-backed loader fails at the first batch
+    on any machine that only has the manifests.
+
+    Items are returned as :class:`~torch_geometric.data.Data` so that the rest of
+    the training loop -- ``batch.to(device)``, ``collate_texts``,
+    ``masked_multitask_loss`` -- works unchanged against one code path. ``x`` is
+    a 1x1 placeholder purely so PyG collation has a defined node count; nothing
+    reads it.
+    """
+
+    def __init__(self, manifest, cfg=None, tag_vocab: Sequence[str] | None = None,
+                 split: str | None = None, datasets: Sequence[str] | None = None,
+                 text_column: str = "text"):
+        self.cfg = cfg
+        self.manifest = _read_manifest(manifest)
+        if split is not None and "split" in self.manifest.columns:
+            self.manifest = self.manifest[self.manifest["split"] == split].reset_index(drop=True)
+        if datasets is not None and "dataset" in self.manifest.columns:
+            self.manifest = self.manifest[
+                self.manifest["dataset"].isin(list(datasets))
+            ].reset_index(drop=True)
+        self.text_column = text_column
+        self.tag_vocab = list(tag_vocab or [])
+        self.tag_index = {tag: i for i, tag in enumerate(self.tag_vocab)}
+
+    def __len__(self) -> int:
+        return len(self.manifest)
+
+    @property
+    def n_tags(self) -> int:
+        return len(self.tag_vocab)
+
+    def __getitem__(self, index: int):
+        from torch_geometric.data import Data
+
+        row = self.manifest.iloc[index]
+        dataset_name = str(row.get("dataset", ""))
+        tags = row["y_tags"] if "y_tags" in row else []
+
+        # Same sentinel rule as everywhere else: a corpus that carries no tag
+        # vocabulary gets -1, never a row of confident zeros.
+        if self.tag_vocab:
+            has_labels = dataset_name in {"mtat", "musiccaps"} or bool(tags)
+            if has_labels:
+                vector = np.zeros(len(self.tag_vocab), dtype=np.float32)
+                for tag in tags:
+                    idx = self.tag_index.get(tag)
+                    if idx is not None:
+                        vector[idx] = 1.0
+            else:
+                vector = np.full(len(self.tag_vocab), -1.0, dtype=np.float32)
+        else:
+            vector = np.full(1, -1.0, dtype=np.float32)
+
+        data = Data(x=torch.zeros(1, 1))          # placeholder; never read
+        data.num_nodes = 1
+        data.y_tags = torch.from_numpy(vector).float().unsqueeze(0)
+        data.y_genre = torch.tensor([_int_or_none(row.get("y_genre"))], dtype=torch.long)
+        data.y_valence = torch.tensor([_float_or_nan(row.get("y_valence"))], dtype=torch.float32)
+        data.y_arousal = torch.tensor([_float_or_nan(row.get("y_arousal"))], dtype=torch.float32)
+        data.track_id = str(row["track_id"])
+        data.artist_id = str(row.get("artist_id", ""))
+        data.dataset = dataset_name
+        data.provenance = str(row.get("provenance", REAL))
+        data.split = str(row.get("split", ""))
+        data.text = str(row.get(self.text_column, "") or "")
+        return data
 
 
 class MelSpecDataset(Dataset):

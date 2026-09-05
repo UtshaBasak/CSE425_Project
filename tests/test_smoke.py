@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import io
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -1327,3 +1328,108 @@ def test_pooled_log_mel_is_fixed_width_regardless_of_duration():
         mel = pooled_log_mel(rng.normal(0, 0.1, sr * seconds).astype(np.float32),
                              sr, cfg, n_frames=256)
         assert mel.shape[1] == 256, f"{seconds}s track gave {mel.shape[1]} frames"
+
+
+# --------------------------------------------------------------------------- #
+# Task 1 must run from manifests alone -- no audio, no HDF5, no graphs.
+#
+# Regression guard: Task 1 previously loaded rows through MusicGraphDataset,
+# which builds a segment graph per item and therefore opens the feature cache.
+# The Kaggle payload deliberately ships no caches, so the run died at the first
+# batch on FileNotFoundError.
+# --------------------------------------------------------------------------- #
+def _text_manifest(tmp_path):
+    import pandas as pd
+
+    rows = [
+        {"track_id": "musiccaps_a", "artist_id": "yt_a", "audio_path": "",
+         "text": "a mellow piano ballad", "split": "train", "y_genre": -1,
+         "y_tags": '["piano", "mellow"]', "y_valence": None, "y_arousal": None,
+         "duration_s": 10.0, "dataset": "musiccaps", "provenance": "real"},
+        {"track_id": "musiccaps_b", "artist_id": "yt_b", "audio_path": "",
+         "text": "fast distorted guitar", "split": "val", "y_genre": -1,
+         "y_tags": '["guitar"]', "y_valence": None, "y_arousal": None,
+         "duration_s": 10.0, "dataset": "musiccaps", "provenance": "real"},
+        {"track_id": "deam_c", "artist_id": "art_c", "audio_path": "",
+         "text": "an orchestral piece", "split": "train", "y_genre": -1,
+         "y_tags": "[]", "y_valence": 5.0, "y_arousal": 4.0,
+         "duration_s": 45.0, "dataset": "deam", "provenance": "real"},
+    ]
+    return pd.DataFrame(rows)
+
+
+def test_text_dataset_needs_no_feature_cache(tmp_path):
+    from src.datasets import TextTagDataset
+
+    ds = TextTagDataset(_text_manifest(tmp_path), cfg=load_config("config.yaml"),
+                        tag_vocab=["piano", "mellow", "guitar"], split="train")
+    assert len(ds) == 2
+    item = ds[0]
+    assert item.text == "a mellow piano ballad"
+    assert item.y_tags.shape == (1, 3)
+    assert item.y_tags[0, 0] == 1.0 and item.y_tags[0, 1] == 1.0
+    assert item.y_tags[0, 2] == 0.0
+
+
+def test_text_dataset_keeps_the_sentinel_rule(tmp_path):
+    """A corpus with no tag vocabulary gets -1, never confident zeros."""
+    from src.datasets import TextTagDataset
+
+    ds = TextTagDataset(_text_manifest(tmp_path), cfg=load_config("config.yaml"),
+                        tag_vocab=["piano", "mellow", "guitar"], split="train",
+                        datasets=["deam"])
+    assert len(ds) == 1
+    assert torch.all(ds[0].y_tags == -1), "DEAM row should be all -1, not zeros"
+    assert float(ds[0].y_valence) == 5.0
+
+
+def test_text_dataset_batches_through_the_normal_loader(tmp_path):
+    from src.datasets import TextTagDataset, make_loader
+
+    cfg = load_config("config.yaml")
+    ds = TextTagDataset(_text_manifest(tmp_path), cfg=cfg,
+                        tag_vocab=["piano", "mellow", "guitar"])
+    loader = make_loader(ds, cfg, shuffle=False, seed=0, batch_size=3, num_workers=0)
+    batch = next(iter(loader))
+    assert batch.y_tags.shape == (3, 3)
+    assert isinstance(batch.text, list) and len(batch.text) == 3
+    assert len(batch.track_id) == 3
+
+
+def test_task1_uses_the_text_only_loader():
+    """Structural guard: run_task1 must not go through the graph dataset."""
+    from src.utils import project_root
+
+    source = (project_root() / "src" / "train.py").read_text(encoding="utf-8")
+    start = source.index("def run_task1(")
+    body = source[start:source.index("def run_task2(")]
+    assert "bundle.text_dataset(" in body, "Task 1 is not using the text-only loader"
+    assert "bundle.dataset(" not in body, (
+        "Task 1 still builds graphs, so it needs the HDF5 caches and will fail "
+        "anywhere they are absent (e.g. the Kaggle payload)"
+    )
+
+
+def test_kaggle_payload_carries_what_task1_needs(tmp_path):
+    """The payload must contain manifests + vocab + code, and NO caches."""
+    from src.utils import load_config, project_root, resolve_path
+
+    cfg = load_config("config.yaml")
+    sys.path.insert(0, str(project_root() / "scripts"))
+    import importlib.util as _u
+
+    spec = _u.spec_from_file_location(
+        "mkp", project_root() / "scripts" / "make_kaggle_payload.py")
+    mkp = _u.module_from_spec(spec)
+    spec.loader.exec_module(mkp)
+
+    files = mkp.collect(project_root(), cfg, include_graphs=False)
+    names = {str(p.relative_to(project_root())).replace("\\", "/") for p in files}
+
+    assert any(n.endswith("musiccaps_manifest.csv") for n in names)
+    assert any(n.endswith("musiccaps_tag_vocab.json") for n in names)
+    assert any(n.endswith("musiccaps_text_variants.csv") for n in names)
+    assert "config.yaml" in names and "src/train.py" in names
+    # the whole point: no gigabyte caches
+    assert not [n for n in names if n.endswith((".h5", ".hdf5"))], "cache leaked into payload"
+    assert not [n for n in names if n.endswith(".mp3")], "audio leaked into payload"

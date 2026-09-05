@@ -30,7 +30,8 @@ import torch.nn.functional as F
 from . import metrics as M
 from .bert_encoder import BertTagClassifier, BertTextEncoder, load_tokenizer
 from .contrastive import DualEncoder, build_similarity_matrix, symmetric_info_nce
-from .datasets import MusicGraphDataset, alternating_loader, collate_texts, make_loader
+from .datasets import (MusicGraphDataset, TextTagDataset, alternating_loader,
+                       collate_texts, make_loader)
 from .fusion_model import GNNBertFusion, masked_multitask_loss
 from .gnn_model import GNNClassifier, GNNEncoder
 from .splits import apply_text_source, assert_no_leakage
@@ -144,6 +145,20 @@ class DataBundle:
         # Recorded so every checkpoint and result JSON carries its own
         # provenance; evaluate.py refuses to build a report from synthetic ones.
         self.provenance = SYNTHETIC if synthetic else detect_provenance(self.manifest)
+
+    def text_dataset(self, split: str, datasets=None) -> TextTagDataset:
+        """Text + labels only, for the tasks that never touch audio.
+
+        Keeps Task 1 runnable from the manifests alone, which is what makes the
+        Kaggle payload 3 MB instead of gigabytes.
+        """
+        return TextTagDataset(
+            self.manifest,
+            cfg=self.cfg,
+            tag_vocab=self.tag_vocab,
+            split=split,
+            datasets=datasets,
+        )
 
     def dataset(self, split: str, datasets=None) -> MusicGraphDataset:
         return MusicGraphDataset(
@@ -429,8 +444,9 @@ def run_task1(cfg, args, bundle: DataBundle, device) -> dict:
         gradient_checkpointing=bool(cfg["bert"].get("gradient_checkpointing", False)),
     ).to(device)
 
+    # Task 1 is text-only: no audio, no feature cache, no graphs.
     loaders = {
-        split: make_loader(bundle.dataset(split, corpora_for(cfg, 'tag')), cfg,
+        split: make_loader(bundle.text_dataset(split, corpora_for(cfg, 'tag')), cfg,
                            shuffle=(split == "train"), seed=args.seed,
                            num_workers=args.num_workers)
         for split in ("train", "val", "test")

@@ -1,0 +1,15 @@
+{
+  "source": "C:\\Users\\User\\AppData\\Local\\Temp\\claude\\b--CSE425-Project\\15222d64-48b5-467e-889b-6417a85513e3\\scratchpad\\fakerun",
+  "imported": [],
+  "skipped_existing": [],
+  "rejected": [
+    [
+      "task1_seed98.json",
+      "thresholds from test"
+    ],
+    [
+      "task1_seed99.json",
+      "synthetic provenance"
+    ]
+  ]
+}
