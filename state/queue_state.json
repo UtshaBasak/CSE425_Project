@@ -43,6 +43,10 @@
     "C6 compact figures": {
       "error": "produced no artifact",
       "minutes": 0.0
+    },
+    "C6 genre confusion figure": {
+      "error": "produced no artifact",
+      "minutes": 0.0
     }
   },
   "started": 1788656262.3632622
