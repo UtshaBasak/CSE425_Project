@@ -285,3 +285,4 @@ Format:
                         waiter is live, waiting for the in-flight Task 1 sweep before starting the runner.
 [2026-09-06 06:57] QUEUE  started with 21 step(s)
 [2026-09-06 07:44] DONE   C1 C1a baselines B1/B2/B4 in 46.7 min
+[2026-09-06 08:05] DONE   C1 C1b structural controls in 20.8 min
