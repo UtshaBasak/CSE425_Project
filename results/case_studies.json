@@ -1,0 +1,42 @@
+{
+  "n_cases": 3,
+  "corpus": "musiccaps",
+  "model": "task3_seed42_musiccaps_cross_attention",
+  "n_failures": 1,
+  "caption_note": "All three come from the MusicCaps fusion model and are scored against the MusicCaps aspect vocabulary. The two successes are both captions whose content words describe \\emph{recording conditions} rather than musical content --- ``amateur recording'', and ``low quality, noisy, mono'' at confidences of 1.00, 1.00 and 0.96 --- which is consistent with the segment features carrying spectral character more readily than musical structure. The failure is more informative than a wrong answer would be: for a clip described as a triangle wave with randomly placed samples, the model's top prediction \\emph{is} the correct tag, \\texttt{instrumental}, but at 0.11 against that tag's validation-tuned threshold of 0.46. The representation ranked it first and the operating point rejected it, which is a calibration failure rather than a perceptual one and is exactly the instability Section~\\ref{sec:thresholds} quantifies.",
+  "cases": [
+    {
+      "case": 0,
+      "track_id": "musiccaps_-SD43H5B5hE_520_530",
+      "is_failure": false,
+      "example_f1": 1.0,
+      "predicted_top": "amateur recording (0.55)",
+      "true_tags": [
+        "amateur recording"
+      ]
+    },
+    {
+      "case": 1,
+      "track_id": "musiccaps_05JAmKFVy44_20_30",
+      "is_failure": false,
+      "example_f1": 1.0,
+      "predicted_top": "low quality (1.00), noisy (1.00), mono (0.96)",
+      "true_tags": [
+        "low quality",
+        "noisy",
+        "mono"
+      ]
+    },
+    {
+      "case": 2,
+      "track_id": "musiccaps_zzNdwF40ID8_70_80",
+      "is_failure": true,
+      "example_f1": 0.0,
+      "predicted_top": "instrumental (0.11)",
+      "true_tags": [
+        "instrumental"
+      ],
+      "why": "the correct tag is ranked first but scores 0.11 against its validation-tuned threshold of 0.46, so the operating point rejects a prediction the representation got right"
+    }
+  ]
+}

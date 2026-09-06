@@ -866,9 +866,27 @@ def main(argv=None) -> int:
         )
         if metrics["bert_attention_examples"]:
             written_plots["bert_attention"] = metrics["bert_attention_examples"][0]["plot"]
+        # The case-study model is the MusicCaps fusion run, so its data has to
+        # be MusicCaps too -- same corpus, same vocabulary, same text source --
+        # or the tag names in the figure belong to a different label space than
+        # the head that produced them.
+        case_cfg = load_config(cfg.get("_config_path", "config.yaml"), {
+            "data.tag_corpora": ["musiccaps"],
+            "data.caption_corpora": ["musiccaps"],
+            "data.text_source": "caption_masked",
+            "tags.vocab_source": "musiccaps",
+        })
+        case_cfg["device"] = str(device)
+        try:
+            case_bundle = DataBundle(case_cfg, args.synthetic)
+        except Exception as exc:                                  # noqa: BLE001
+            LOGGER.warning("could not build a MusicCaps bundle for the case "
+                           "studies (%s); skipping rather than running them on "
+                           "the wrong corpus", exc)
+            case_bundle = None
         metrics["case_studies"] = generate_case_studies(
-            bundle, cfg, device, seed, plots_dir, n_cases=3
-        )
+            case_bundle, case_cfg, device, seed, plots_dir, n_cases=3
+        ) if case_bundle is not None else []
         if metrics["case_studies"]:
             written_plots["case_study"] = metrics["case_studies"][0]["graph_plot"]
     except Exception as exc:
