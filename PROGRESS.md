@@ -1,7 +1,7 @@
 # PROGRESS
 
-Last session ended: 2026-09-06 (phase A7)
-Currently resuming at: Phase B0
+Last session ended: 2026-09-06 (phase C, running unattended)
+Currently resuming at: whatever `state/queue_state.json` says is unfinished
 
 A7's code is complete and pushed; its final runs (Task 1 sweep runs 4-5, then B2
 on both domains) were still executing when Phase B began, so B0 started with the
@@ -377,6 +377,75 @@ Consequences, applied without exception to every ablation table:
 3. a "delta vs best" column and the 0.0288 figure stated in the caption;
 4. no claimed ordering between rows whose intervals overlap -- "within noise of
    each other", said plainly.
+
+
+---
+
+# PHASE C — execution
+
+## The plan changed: C4 moved to Kaggle
+
+`bert-base` measures **68 ms/row** on this GTX 1650. The seven-mode x three-seed
+fusion ablation is 21 runs, which at that rate is **~26 h locally** — and Phase C
+decision rule 3.6 would then have forced cutting rows out of the ablation table.
+
+Moving C4 to a two-T4 Kaggle session avoids the cut *and* frees the local GPU, so
+C5–C7 run in parallel with the sweep instead of queueing behind it. The revised
+local order is **C1 → C2 → C3 → C5 → C6 → C7**, with C4 merged in on import.
+
+| | |
+|---|---|
+| Payload | `kaggle_payload_ablation.tar.gz`, **105.0 MB** (237.6 MB raw, 71 files) |
+| Build | `make kaggle-payload-ablation` |
+| Instructions | `state/kaggle_c4_instructions.md` — one paste-able cell |
+| Runner | `scripts/kaggle_ablation.py --shard I --shards N` |
+| Merge | `scripts/import_kaggle_results.py <archive.zip>` |
+
+The payload carries the four `features_*.h5` caches rather than the exported
+`.pt` graphs, because Task 3 builds graphs on the fly from those — `DataBundle`
+sets `graph_dir=None` for real data — so a graph payload would be both larger
+(450 MB) and unusable. No mel caches, no checkpoints, no audio.
+
+**Sharding verified before upload.** Shard *i* takes every *N*th run from a
+fixed-order list; checked for 1–4 shards that every run appears in exactly one
+shard with no overlap, which matters because the two shards run as separate
+processes that cannot see each other. `--dry-run` prints the split.
+
+**Import is guarded three ways**: synthetic provenance refused, thresholds not
+from `val` refused, and — new — the ordered tag vocabulary is hashed into every
+result and a file whose hash matches no current vocabulary is refused. A7.3
+changed 7 of the 50 MusicCaps tags, so a pre-fix result is numerically fine and
+semantically incompatible, and nothing about the file would show it.
+
+## How the local queue runs now
+
+One process owns it: `scripts/run_queue.py`. The bash chains it replaces waited
+on log markers and twice produced **two waiters on one job, and so two
+concurrent training runs** — once corrupting a result file. A single sequential
+owner cannot do that.
+
+- **Watchdog, not halt.** A failed step is logged with its traceback, marked
+  `[!]`, and the queue moves on; failures are retried once at the end. One
+  failure must never idle the GPU for hours.
+- **Resume.** Each step declares the artifact that proves it finished — and
+  *freshness* is checked, not just existence: `baselines_seed42.json` exists
+  from before the A7.2 rework holding the old parameter-matched `B2_mel_cnn`,
+  and `structural_controls.json` exists holding a dry run. Skipping on existence
+  would have silently dropped two Task 2 deliverables.
+- **Commit and push after every step**, not every gate, so a dead session still
+  leaves results on GitHub.
+- **Estimates from measurement.** Each step records its real wall-clock and the
+  remaining estimate is rescaled by how the predictions are actually tracking.
+
+Live status, rewritten by the runner after every step, is in the QUEUE block
+below. `python scripts/run_queue.py --plan` shows it without running anything.
+
+## Estimates to watch
+
+- **C2** is the widest band (~200 min prior, extrapolated from 68 ms/row plus
+  GNN and HDF5 overhead). It gets tightened the moment the step completes.
+- **B2** was never timed; the 1.5–2.5 h band is a prior. Whether it held is
+  recorded in the queue table.
 
 ## Phase B0 - gaps to close before Task 3
 

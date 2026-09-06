@@ -2221,3 +2221,85 @@ def test_training_writes_a_tagged_checkpoint(tmp_path, monkeypatch):
             f"checkpoint path {pattern!r} has no run tag; ablation modes will "
             "overwrite each other"
         )
+
+
+# --------------------------------------------------------------------------- #
+# C4 -- sharding must be exact, and imports must be comparable
+# --------------------------------------------------------------------------- #
+def test_ablation_shards_cover_every_run_exactly_once():
+    """Two shards run in separate processes and cannot see each other.
+
+    Nothing coordinates them at runtime, so the split has to be correct by
+    construction or the sweep silently duplicates some runs and drops others.
+    """
+    from scripts.kaggle_ablation import build_runs, shard_of
+
+    runs = build_runs()
+    assert len(runs) == 21, f"expected 7 modes x 3 seeds, got {len(runs)}"
+
+    for shards in (1, 2, 3, 4):
+        seen, overlaps = set(), 0
+        for shard in range(shards):
+            mine = {r["index"] for r in shard_of(runs, shard, shards)}
+            overlaps += len(seen & mine)
+            seen |= mine
+        assert overlaps == 0, f"{shards} shards overlap on {overlaps} run(s)"
+        assert seen == {r["index"] for r in runs}, (
+            f"{shards} shards do not cover every run"
+        )
+
+
+def test_ablation_shard_rejects_an_out_of_range_index():
+    from scripts.kaggle_ablation import build_runs, shard_of
+
+    with pytest.raises(ValueError):
+        shard_of(build_runs(), shard=2, shards=2)
+
+
+def test_ablation_run_tags_are_unique_per_seed():
+    """Two runs sharing a tag and seed would overwrite each other's result."""
+    from scripts.kaggle_ablation import build_runs
+
+    keys = [(r["seed"], r["run_tag"]) for r in build_runs()]
+    assert len(keys) == len(set(keys)), "a (seed, run_tag) pair repeats"
+
+
+def test_vocabulary_hash_is_order_sensitive():
+    """Order fixes which column is which tag, so it must change the hash."""
+    from src.utils import vocabulary_hash
+
+    a = vocabulary_hash(["guitar", "drum", "vocal"])
+    assert a == vocabulary_hash(["guitar", "drum", "vocal"])
+    assert a != vocabulary_hash(["drum", "guitar", "vocal"]), (
+        "a reordered vocabulary hashed the same; per-tag tables would silently "
+        "disagree while aggregate metrics matched"
+    )
+    assert a != vocabulary_hash(["guitar", "drum", "voice"])
+    assert vocabulary_hash([]) == ""
+
+
+def test_importer_refuses_a_foreign_vocabulary(tmp_path, monkeypatch):
+    """A pre-A7.3 result is numerically fine and semantically incompatible."""
+    import json as _json
+    import subprocess
+
+    from src.utils import project_root, vocabulary_hash
+
+    incoming = tmp_path / "incoming"
+    incoming.mkdir()
+    payload = {
+        "task": 3, "seed": 42, "provenance": "real", "threshold_source": "val",
+        "tag_vocab": ["not", "the", "real", "vocabulary"],
+        "tag_vocab_hash": vocabulary_hash(["not", "the", "real", "vocabulary"]),
+        "test": {"macro_f1": 0.99},
+    }
+    (incoming / "task3_seed42_bogus.json").write_text(_json.dumps(payload),
+                                                      encoding="utf-8")
+    result = subprocess.run(
+        [sys.executable, str(project_root() / "scripts" / "import_kaggle_results.py"),
+         str(incoming)],
+        capture_output=True, text=True, cwd=str(project_root()))
+    combined = result.stdout + result.stderr
+    assert "REFUSED" in combined, combined[-800:]
+    assert result.returncode == 2, "a rejected import should not exit clean"
+    assert not (project_root() / "results" / "task3_seed42_bogus.json").exists()

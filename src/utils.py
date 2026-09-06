@@ -34,6 +34,7 @@ __all__ = [
     "autocast_ctx",
     "log_vram",
     "find_checkpoint",
+    "vocabulary_hash",
     "get_logger",
     "AttrDict",
     "save_json",
@@ -558,3 +559,23 @@ def find_checkpoint(ckpt_dir, task: int, seed: int, run_tag: str | None = None,
     candidates = sorted(directory.glob(f"task{task}_seed{seed}_*_{kind}.pt"),
                         key=lambda q: q.stat().st_mtime, reverse=True)
     return candidates[0] if candidates else None
+
+
+def vocabulary_hash(tags) -> str:
+    """Stable 12-hex digest of an ordered tag vocabulary.
+
+    Ordered on purpose. The vocabulary order fixes which column belongs to which
+    tag, so two runs sharing a set but not an order produce per-tag tables that
+    disagree while their aggregate metrics look identical -- the kind of
+    mismatch that survives review because nothing about it looks wrong.
+
+    Used to decide whether a result computed elsewhere is comparable with the
+    local ones. A short digest rather than the full list because it travels in
+    every result payload.
+    """
+    import hashlib
+
+    if not tags:
+        return ""
+    joined = "\u0000".join(str(t) for t in tags)
+    return hashlib.sha256(joined.encode("utf-8")).hexdigest()[:12]

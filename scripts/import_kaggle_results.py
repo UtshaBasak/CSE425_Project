@@ -33,8 +33,10 @@ from src.utils import (  # noqa: E402
     detect_provenance,
     ensure_dir,
     get_logger,
+    load_json,
     project_root,
     save_json,
+    vocabulary_hash,
 )
 
 LOGGER = get_logger("gbmc.import_kaggle")
@@ -74,6 +76,20 @@ def main(argv=None) -> int:
     results_dir = ensure_dir(root / "results")
     source = _extract(Path(args.source).expanduser(), root / "state")
 
+    # the label spaces this project currently uses; anything scored against
+    # something else is not comparable with the local results and is refused
+    expected_hashes = {}
+    for name, source_name in (("mtat", "tag_vocab.json"),
+                              ("musiccaps", "musiccaps_tag_vocab.json")):
+        path = root / "data" / "splits" / source_name
+        if path.exists():
+            payload = load_json(path)
+            tags = payload["tags"] if isinstance(payload, dict) else payload
+            expected_hashes[vocabulary_hash(tags)] = name
+    LOGGER.info("accepting results against %d known vocabulary/vocabularies: %s",
+                len(expected_hashes),
+                ", ".join(f"{v}={k}" for k, v in expected_hashes.items()) or "none")
+
     candidates = sorted(source.rglob("task*_seed*.json")) + sorted(source.rglob("task1_sweep.json"))
     if not candidates:
         LOGGER.error("no task*_seed*.json found under %s -- is this the notebook output?", source)
@@ -95,6 +111,27 @@ def main(argv=None) -> int:
                 LOGGER.error("REFUSED %s: thresholds came from %r, not val",
                              path.name, source_of_thresholds)
                 rejected.append((path.name, f"thresholds from {source_of_thresholds}"))
+                continue
+
+            # C4: a result computed elsewhere is only comparable if it was
+            # scored against a label space this repository still uses. A7.3
+            # changed 7 of the 50 MusicCaps tags, so a run from before that is
+            # numerically fine and semantically incompatible -- and nothing
+            # about the file would reveal it.
+            incoming = payload.get("tag_vocab_hash")
+            if incoming is None and payload.get("tag_vocab"):
+                incoming = vocabulary_hash(payload["tag_vocab"])
+            if expected_hashes and incoming and incoming not in expected_hashes:
+                LOGGER.error("REFUSED %s: vocabulary hash %s matches no current "
+                             "vocabulary (known: %s)", path.name, incoming,
+                             ", ".join(sorted(expected_hashes)))
+                rejected.append((path.name, f"vocabulary hash {incoming} unknown"))
+                continue
+            if expected_hashes and not incoming:
+                LOGGER.error("REFUSED %s: records no vocabulary, so it cannot be "
+                             "shown comparable with the local results",
+                             path.name)
+                rejected.append((path.name, "no vocabulary recorded"))
                 continue
 
         target = results_dir / path.name
