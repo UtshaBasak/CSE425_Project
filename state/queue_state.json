@@ -26,6 +26,9 @@
     },
     "C5 Task 3 MusicCaps cross_attention": {
       "minutes": 19.7
+    },
+    "C6 zero-shot vs supervised": {
+      "minutes": 0.3
     }
   },
   "failed": {},
