@@ -1,21 +1,21 @@
 # Retrieval example 6 (success)
 
-**Query track**: `musiccaps_9gCeNCnWZhE_30_40`  
-**Caption**: This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.
+**Query track**: `musiccaps_SEDfsU63w8I_30_40`  
+**Caption**: This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.
 
 **Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_azyNUtTHvaE_30_40` (score 0.213)
+1. [--] `musiccaps_PcdpjUIa8l0_30_40` (score 0.329)
 
-    A is very clear and a pitched melody. She got a lot of reverb on her. A is supporting her. This song may be playing in a post-apocalyptic movie-scene.
+    someone is masterfully over an instrumental containing percussive elements with strings/sounds and a bass note on the kick. This audio is an amateur recording.
 
-2. [OK] `musiccaps_9gCeNCnWZhE_30_40` (score 0.210)
+2. [OK] `musiccaps_SEDfsU63w8I_30_40` (score 0.326)
 
-    This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a document
+    This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.
 
-3. [--] `musiccaps__gWEpDgPAho_100_110` (score 0.207)
+3. [--] `musiccaps_3zntWbS9XeI_70_80` (score 0.322)
 
-    A is kind of a calming in a while you can hear of and that seem not to belong to the song. This is an and not of the best audio-quality. This song may be playing in a cruel movie scene.
+    This audio clip features the end of an with a lot of. This additional gives the ending an feel. At the end of the clip, a chord is struck. There are no other in this. There are in this. This can be used to promote a pedal.
 

@@ -69,6 +69,31 @@ audio { width: 100%; }
 """
 
 
+def _raw_captions(cfg) -> dict:
+    """track_id -> the unmasked caption.
+
+    The retrieval examples carry whatever `data.text_source` the model was
+    trained on, which for MusicCaps is `caption_masked` -- the label terms are
+    stripped out, leaving "The recording features a song that consists,
+    alongside, rapping over, and all located in the right channel". That masking
+    exists so the *model* cannot read its own labels. A human asked whether a
+    description matches a recording needs the actual description, so the study
+    reads `caption_raw` from the text variants and refuses to fall back to the
+    masked text silently.
+    """
+    splits = project_root() / cfg["paths"]["splits"]
+    out = {}
+    for path in sorted(splits.glob("*_text_variants.csv")):
+        frame = pd.read_csv(path)
+        if "caption_raw" not in frame.columns:
+            continue
+        for track, caption in zip(frame["track_id"].astype(str),
+                                  frame["caption_raw"]):
+            if isinstance(caption, str) and caption.strip():
+                out[track] = caption.strip()
+    return out
+
+
 def _audio_lookup(cfg) -> dict:
     """track_id -> audio path, across every manifest that has one."""
     splits = project_root() / cfg["paths"]["splits"]
@@ -177,17 +202,32 @@ def main(argv=None) -> int:
                                      out_path=out_dir / "listening_sheet.csv")
 
     audio = _audio_lookup(cfg)
-    rows, missing = [], 0
+    raw_captions = _raw_captions(cfg)
+    if not raw_captions:
+        raise SystemExit(
+            "no caption_raw found in data/splits/*_text_variants.csv -- the "
+            "study must not show raters the masked caption, which has the "
+            "descriptive terms stripped out of it"
+        )
+    rows, missing, unmasked = [], 0, 0
     for position, record in enumerate(sheet.to_dict("records"), start=1):
         track = str(record.get("retrieved_track_id") or "")
         path = record.get("audio_path") or audio.get(track, "")
         embedded = _embed(str(path))
         if embedded is None:
             missing += 1
+        # the caption belongs to the QUERY, the audio to what was retrieved
+        query = str(record.get("query_track_id") or "")
+        caption = raw_captions.get(query)
+        if caption:
+            unmasked += 1
+        else:
+            caption = record["caption"]
+            LOGGER.warning("no raw caption for %s; showing the stored text", query)
         rows.append({
             "number": position,
             "item_id": record["item_id"],
-            "caption": record["caption"],
+            "caption": caption,
             "is_control": bool(record["is_control"]),
             "query_track_id": record.get("query_track_id", ""),
             "retrieved_track_id": track,
@@ -227,6 +267,13 @@ def main(argv=None) -> int:
     print(f"wrote {page_path.relative_to(project_root())} "
           f"({page_path.stat().st_size / 1e6:.1f} MB, {len(rows)} clips, "
           f"{sum(r['is_control'] for r in rows)} controls)")
+    print(f"captions: {unmasked}/{len(rows)} shown unmasked (caption_raw)")
+    if unmasked < len(rows):
+        print("WARNING: some clips fall back to the masked caption; raters "
+              "cannot judge a description with its descriptive terms removed")
+    if len(rows) < n_items + n_controls:
+        print(f"WARNING: {len(rows)} clips presented, {n_items + n_controls} "
+              "intended -- the retrieval export did not supply enough pairs")
     if missing:
         print(f"WARNING: {missing} clip(s) have no embeddable audio and show a "
               "placeholder; they will be dropped from the analysis")

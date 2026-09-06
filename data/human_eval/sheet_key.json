@@ -2,7 +2,7 @@
   "seed": 42,
   "n_items": 20,
   "n_controls": 4,
-  "n_presented": 14,
+  "n_presented": 24,
   "scale": {
     "min": 1,
     "max": 5,
@@ -15,116 +15,116 @@
   "items": [
     {
       "number": 1,
-      "item_id": "item_007",
-      "caption": "The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.",
-      "is_control": false,
-      "query_track_id": "musiccaps_tG5C-Smp-eY_30_40",
-      "retrieved_track_id": "musiccaps_KCytKo5LzCc_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\KCytKo5LzCc_30_40.mp3"
+      "item_id": "control_002",
+      "caption": "Sounds like a poorly recorded live sound check of an analog mono synthesizer. Low fidelity with ambient noise in the background.",
+      "is_control": true,
+      "query_track_id": "musiccaps_MsEoUVWS59M_30_40",
+      "retrieved_track_id": "musiccaps_An-4jPvUT14_60_70",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\An-4jPvUT14_60_70.mp3"
     },
     {
       "number": 2,
-      "item_id": "control_002",
-      "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
-      "is_control": true,
-      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
-      "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\_n3r2inlqBc_520_530.wav"
+      "item_id": "item_016",
+      "caption": "The song is a hardcore, fiery and intense rock song. There are layers of electric guitar that are overdriven and drums that are powerful. There's a breakdown section that sees snare rolls and a motif on the electric guitar.",
+      "is_control": false,
+      "query_track_id": "musiccaps_7L5HQ4AJyLc_20_30",
+      "retrieved_track_id": "musiccaps_BBmXMoI9Qus_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\BBmXMoI9Qus_30_40.mp3"
     },
     {
       "number": 3,
-      "item_id": "item_004",
-      "caption": "This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.",
+      "item_id": "item_012",
+      "caption": "This rap song features a male voice rapping in a foreign language. This is accompanied by programmed percussion playing a simple beat. The bass plays the root note of the chord in sets of 3 strokes. The same note is played through the song in sets of three. A repetitive plucked synth sound is played in loop. Quirky sounds are heard in the background. This song has a defiant mood. This song can be played in a gangster movie.",
       "is_control": false,
-      "query_track_id": "musiccaps_SEDfsU63w8I_30_40",
-      "retrieved_track_id": "musiccaps_PcdpjUIa8l0_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\PcdpjUIa8l0_30_40.mp3"
+      "query_track_id": "musiccaps_B1va1NqaA4o_30_40",
+      "retrieved_track_id": "musiccaps_R7gHB-YuUZM_170_180",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\R7gHB-YuUZM_170_180.mp3"
     },
     {
       "number": 4,
-      "item_id": "item_002",
-      "caption": "A this song with in. The song is with, and. The song is and in nature. The song has poor audio quality with like.",
-      "is_control": false,
-      "query_track_id": "musiccaps_An-4jPvUT14_60_70",
-      "retrieved_track_id": "musiccaps_eZE0RmJESFU_140_150",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\eZE0RmJESFU_140_150.wav"
-    },
-    {
-      "number": 5,
-      "item_id": "control_000",
-      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-      "is_control": true,
-      "query_track_id": "musiccaps__n3r2inlqBc_520_530",
-      "retrieved_track_id": "musiccaps_tG5C-Smp-eY_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\tG5C-Smp-eY_30_40.wav"
-    },
-    {
-      "number": 6,
       "item_id": "item_005",
-      "caption": "The features a, and. It and, almost like some old horror movie with.",
+      "caption": "The low quality video features a filtered male breathing sound effects, muffled male screaming sound effects, monster roar sound effects and wide strings rising melody. It sounds intense and suspenseful, almost like some old horror movie with low quality sound.",
       "is_control": false,
       "query_track_id": "musiccaps_VLjcIlZvkY0_30_40",
       "retrieved_track_id": "musiccaps_7TmKzUgWiRU_0_10",
       "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\7TmKzUgWiRU_0_10.mp3"
     },
     {
-      "number": 7,
-      "item_id": "control_003",
-      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-      "is_control": true,
-      "query_track_id": "musiccaps__n3r2inlqBc_520_530",
-      "retrieved_track_id": "musiccaps_VLjcIlZvkY0_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\VLjcIlZvkY0_30_40.wav"
-    },
-    {
-      "number": 8,
-      "item_id": "item_008",
-      "caption": "The song is. The song is with traditional instruments, piano and. The song is and energetic. The song is and has.",
-      "is_control": false,
-      "query_track_id": "musiccaps_Hnk45Z0EAxg_150_160",
-      "retrieved_track_id": "musiccaps_tG5C-Smp-eY_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\tG5C-Smp-eY_30_40.wav"
-    },
-    {
-      "number": 9,
-      "item_id": "item_009",
-      "caption": "The songs consists of singing over, and and hits. It sounds and.",
-      "is_control": false,
-      "query_track_id": "musiccaps_3bg0iy-ypcw_30_40",
-      "retrieved_track_id": "musiccaps_3R8xDvhJk54_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\3R8xDvhJk54_30_40.mp3"
-    },
-    {
-      "number": 10,
-      "item_id": "item_006",
-      "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
-      "is_control": false,
-      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
-      "retrieved_track_id": "musiccaps_azyNUtTHvaE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\azyNUtTHvaE_30_40.wav"
-    },
-    {
-      "number": 11,
-      "item_id": "control_001",
-      "caption": "This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.",
-      "is_control": true,
-      "query_track_id": "musiccaps__ALGXHquYkM_30_40",
-      "retrieved_track_id": "musiccaps_SEDfsU63w8I_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\SEDfsU63w8I_30_40.mp3"
-    },
-    {
-      "number": 12,
-      "item_id": "item_003",
-      "caption": "This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.",
+      "number": 5,
+      "item_id": "item_004",
+      "caption": "This music is instrumental. The tempo is medium with a melodic steel pan harmony. The audio quality however is inferior and amateur,so the music is muddled. There are ambient sounds of breeze and people talking , indicating that this is a live performance.",
       "is_control": false,
       "query_track_id": "musiccaps__ALGXHquYkM_30_40",
       "retrieved_track_id": "musiccaps_bYwoYjbPm-I_30_40",
       "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\bYwoYjbPm-I_30_40.wav"
     },
     {
+      "number": 6,
+      "item_id": "control_001",
+      "caption": "This rap song features a male voice rapping in a foreign language. This is accompanied by programmed percussion playing a simple beat. The bass plays the root note of the chord in sets of 3 strokes. The same note is played through the song in sets of three. A repetitive plucked synth sound is played in loop. Quirky sounds are heard in the background. This song has a defiant mood. This song can be played in a gangster movie.",
+      "is_control": true,
+      "query_track_id": "musiccaps_B1va1NqaA4o_30_40",
+      "retrieved_track_id": "musiccaps_T9dKp1EN4p8_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\T9dKp1EN4p8_30_40.mp3"
+    },
+    {
+      "number": 7,
+      "item_id": "item_008",
+      "caption": "The song is instrumental. The song is medium tempo with traditional percussion instruments , bongos, piano accompaniment and groovy bass line. The song is improvisational and energetic. The song is jazz fusion and has poor audio quality.",
+      "is_control": false,
+      "query_track_id": "musiccaps_Hnk45Z0EAxg_150_160",
+      "retrieved_track_id": "musiccaps_tG5C-Smp-eY_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\tG5C-Smp-eY_30_40.wav"
+    },
+    {
+      "number": 8,
+      "item_id": "item_007",
+      "caption": "Audio of a percussion instrument playing by itself. Sounds like a tambourine, riq, or pandeiro, playing a steady beat, alternating between a cymbal sound and a bongo drum sound.",
+      "is_control": false,
+      "query_track_id": "musiccaps_qlWEAm4AUTU_370_380",
+      "retrieved_track_id": "musiccaps_bqPCtwibgPg_440_450",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\bqPCtwibgPg_440_450.wav"
+    },
+    {
+      "number": 9,
+      "item_id": "item_010",
+      "caption": "A male ukulele player plays this emotional solo. The song is medium tempo with no other instrumentation than an ukulele playing. The song is emotional and poignant. The song is an instrumental tune.",
+      "is_control": false,
+      "query_track_id": "musiccaps_j3lH_Tevw5o_30_40",
+      "retrieved_track_id": "musiccaps_-f1DNyngKVY_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\-f1DNyngKVY_30_40.mp3"
+    },
+    {
+      "number": 10,
+      "item_id": "item_002",
+      "caption": "A male singer sings this hip hop song with backup singers in vocal harmony. The song is medium tempo with slick drumming rhythm, groovy bass line, and keyboard harmony. The song is story telling and emotional in nature. The song has poor audio quality with ambient noises like squeaking wheel tones.",
+      "is_control": false,
+      "query_track_id": "musiccaps_An-4jPvUT14_60_70",
+      "retrieved_track_id": "musiccaps_eZE0RmJESFU_140_150",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\eZE0RmJESFU_140_150.wav"
+    },
+    {
+      "number": 11,
+      "item_id": "control_000",
+      "caption": "A male singer sings this hip hop song with backup singers in vocal harmony. The song is medium tempo with slick drumming rhythm, groovy bass line, and keyboard harmony. The song is story telling and emotional in nature. The song has poor audio quality with ambient noises like squeaking wheel tones.",
+      "is_control": true,
+      "query_track_id": "musiccaps_An-4jPvUT14_60_70",
+      "retrieved_track_id": "musiccaps_pZgzjL5wbtA_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\pZgzjL5wbtA_30_40.wav"
+    },
+    {
+      "number": 12,
+      "item_id": "item_013",
+      "caption": "A male musician vocalises this energetic rhythm. The tempo is fast with rhythmic beats. The music has no instrumentation. It is youthful, energetic, groovy, enthusiastic and upbeat.This music is a Vocal percussion imitation.",
+      "is_control": false,
+      "query_track_id": "musiccaps_y9hdu9iMBG8_30_40",
+      "retrieved_track_id": "musiccaps_7ZXz3Xa7APs_0_10",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\7ZXz3Xa7APs_0_10.mp3"
+    },
+    {
       "number": 13,
-      "item_id": "item_000",
-      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
+      "item_id": "item_001",
+      "caption": "This audio contains videogame-sounds, sound-effects. You can hear water running/dripping, clicking sounds and other noises that sound like being in a big cave. This is an amateur recording.",
       "is_control": false,
       "query_track_id": "musiccaps__n3r2inlqBc_520_530",
       "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
@@ -132,12 +132,102 @@
     },
     {
       "number": 14,
-      "item_id": "item_001",
-      "caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
+      "item_id": "item_018",
+      "caption": "This is an instrumental progressive rock piece. The only instrument being played in the piece is a clean sounding electric guitar. There is a gently played guitar solo that gives a mellow aura. The atmosphere is dreamy. This piece could be used in the soundtrack of a movie or a TV show at a dream/flashback sequence. It could be playing in the background at a rock bar.",
+      "is_control": false,
+      "query_track_id": "musiccaps_bkzGHRpx5MM_30_40",
+      "retrieved_track_id": "musiccaps_uT-S_JC_GzU_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\uT-S_JC_GzU_30_40.wav"
+    },
+    {
+      "number": 15,
+      "item_id": "item_006",
+      "caption": "This is a live recording of a guitar being played through a high gain amp. The signal is clean at the beginning and switches to an overdrive or distortion tone. A humming noise is heard when the channel is switched to the distortion channel. There are no other instruments played in this clip apart from one guitar. The guitarist seems to be testing the clean and dirty channels of the guitar amplifier.",
+      "is_control": false,
+      "query_track_id": "musiccaps_SEDfsU63w8I_30_40",
+      "retrieved_track_id": "musiccaps_PcdpjUIa8l0_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\PcdpjUIa8l0_30_40.mp3"
+    },
+    {
+      "number": 16,
+      "item_id": "item_011",
+      "caption": "The Electro song features a widely spread intimate percussive elements, stuttering hi hats, soft shakers, synth pad chords, groovy bass and punchy snare and kick hits. It sounds relaxing, calming and kind of satisfying, as it literally sounds like liquid dripping through the stereo image.",
+      "is_control": false,
+      "query_track_id": "musiccaps_fYk2U9yJvps_30_40",
+      "retrieved_track_id": "musiccaps_xyAbP5XfGz8_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\xyAbP5XfGz8_30_40.wav"
+    },
+    {
+      "number": 17,
+      "item_id": "control_003",
+      "caption": "A male singer sings this hip hop song with backup singers in vocal harmony. The song is medium tempo with slick drumming rhythm, groovy bass line, and keyboard harmony. The song is story telling and emotional in nature. The song has poor audio quality with ambient noises like squeaking wheel tones.",
+      "is_control": true,
+      "query_track_id": "musiccaps_An-4jPvUT14_60_70",
+      "retrieved_track_id": "musiccaps_iP46w2o_HCk_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\iP46w2o_HCk_30_40.wav"
+    },
+    {
+      "number": 18,
+      "item_id": "item_009",
+      "caption": "The Hip Hip songs live performance consists of repetitive male vocal singing over repetitive piano melody, smooth bass, shimmering hi hats and soft kick and snare hits. It sounds jazzy and warm.",
+      "is_control": false,
+      "query_track_id": "musiccaps_3bg0iy-ypcw_30_40",
+      "retrieved_track_id": "musiccaps_3R8xDvhJk54_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\3R8xDvhJk54_30_40.mp3"
+    },
+    {
+      "number": 19,
+      "item_id": "item_014",
+      "caption": "The song has a generally cheerful, happy-go-lucky vibe to it. It's got a male vocalist who has a zesty and vibrant voice, as well as a female vocalist that brings power to the song as well. There's a brass motif that follows one of the phrases by the male vocalist, and the drumming is generally upbeat and jazzy.",
+      "is_control": false,
+      "query_track_id": "musiccaps_oSg1VJHiPOE_10_20",
+      "retrieved_track_id": "musiccaps_0LLlcPiatiU_210_220",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\0LLlcPiatiU_210_220.mp3"
+    },
+    {
+      "number": 20,
+      "item_id": "item_019",
+      "caption": "This is a salsa song with an upbeat and vibrant energy. It contains typical salsa instruments like the conga, the trumpet, and the piano. The percussion is upbeat and involves bongos and congas, and the singer is lively.",
+      "is_control": false,
+      "query_track_id": "musiccaps_RneRJ5ZnHlE_30_40",
+      "retrieved_track_id": "musiccaps_0JbGxIR8JTk_200_210",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\0JbGxIR8JTk_200_210.mp3"
+    },
+    {
+      "number": 21,
+      "item_id": "item_003",
+      "caption": "This is an instrumental flute piece. The flute is playing a solo while ambient samples of the wind and the birds singing can be heard in the background. There is also a very faint clattering bell-like percussion that can be heard. The piece is very relaxing. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
+      "is_control": false,
+      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
+      "retrieved_track_id": "musiccaps_azyNUtTHvaE_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\azyNUtTHvaE_30_40.wav"
+    },
+    {
+      "number": 22,
+      "item_id": "item_000",
+      "caption": "The music excerpt is split into two different songs. The first half features the type of turntable scratches that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
       "is_control": false,
       "query_track_id": "musiccaps_NmwmOY6iBFg_30_40",
       "retrieved_track_id": "musiccaps_NmwmOY6iBFg_30_40",
       "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\NmwmOY6iBFg_30_40.mp3"
+    },
+    {
+      "number": 23,
+      "item_id": "item_015",
+      "caption": "This song contains acoustic drums playing a simple rhythm along with an e-bass. The same rhythmic pattern gets played by an acoustic guitar and e-guitar strumming chords. In the background female voices are happily screaming to the sound of waves. This song may be playing for an advertisement.",
+      "is_control": false,
+      "query_track_id": "musiccaps_iP46w2o_HCk_30_40",
+      "retrieved_track_id": "musiccaps_We-bFXFjWaM_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\We-bFXFjWaM_30_40.wav"
+    },
+    {
+      "number": 24,
+      "item_id": "item_017",
+      "caption": "A oud is being played fast while a choir is singing a melody slowly moving down the scale. This song may be playing at a music reunion. This is an amateur recording.",
+      "is_control": false,
+      "query_track_id": "musiccaps_4Mo7tdV2LZk_30_40",
+      "retrieved_track_id": "musiccaps_mOn13E68Td0_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\mOn13E68Td0_30_40.wav"
     }
   ]
 }

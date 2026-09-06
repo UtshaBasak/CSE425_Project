@@ -22,7 +22,7 @@ import numpy as np  # noqa: E402
 import torch  # noqa: E402
 
 from .graph_builder import visualise_graph  # noqa: E402
-from .utils import autocast_ctx, ensure_dir, get_logger, resolve_path, set_seed  # noqa: E402
+from .utils import find_checkpoint, autocast_ctx, ensure_dir, get_logger, resolve_path, set_seed  # noqa: E402
 
 LOGGER = get_logger("gbmc.attnviz")
 
@@ -91,7 +91,8 @@ def plot_graph_attention(data, node_scores=None, edge_alpha=None, out_path=None,
 
 
 @torch.no_grad()
-def generate_bert_examples(bundle, cfg, device, seed: int, out_dir, n_examples: int = 5) -> list:
+def generate_bert_examples(bundle, cfg, device, seed: int, out_dir,
+                           n_examples: int = 5, run_tag: str | None = None) -> list:
     """Five Task 1 attention heatmaps over real caption text."""
     from .bert_encoder import BertTagClassifier, load_tokenizer
     from .datasets import collate_texts
@@ -105,13 +106,22 @@ def generate_bert_examples(bundle, cfg, device, seed: int, out_dir, n_examples: 
     model = BertTagClassifier(len(bundle.tag_vocab), cfg["bert"]["model_name"],
                               freeze_mode="frozen_probe",
                               output_attentions=True).to(device)
-    ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")) / \
-        f"task1_seed{seed}_best.pt"
-    if ckpt.exists():
+    # Checkpoints carry their run tag, so the bare name no longer exists and
+    # looking for it directly would draw attention maps from an untrained BERT
+    # -- which produces a perfectly presentable, meaningless figure.
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=1, seed=seed, run_tag=run_tag)
+    if ckpt is not None:
         from .evaluate import _load_compatible
 
+        LOGGER.info("attention examples from %s", ckpt.name)
         payload = torch.load(ckpt, map_location=device, weights_only=False)
         _load_compatible(model, payload["model_state"])
+    else:
+        LOGGER.warning("no Task 1 checkpoint for seed %s -- the attention maps "
+                       "would come from an untrained encoder; skipping", seed)
+        return []
     model.eval()
 
     dataset = bundle.dataset("test", TAG_DATASETS)
@@ -149,7 +159,8 @@ def generate_bert_examples(bundle, cfg, device, seed: int, out_dir, n_examples: 
 
 
 @torch.no_grad()
-def generate_case_studies(bundle, cfg, device, seed: int, out_dir, n_cases: int = 3) -> list:
+def generate_case_studies(bundle, cfg, device, seed: int, out_dir,
+                          n_cases: int = 3, run_tag: str | None = None) -> list:
     """Three Task 3 case studies -- at least one a documented failure.
 
     Each case pairs the caption cross-attention (which words the graph attended
@@ -174,15 +185,25 @@ def generate_case_studies(bundle, cfg, device, seed: int, out_dir, n_cases: int 
                           shared_dim=int(cfg["fusion"]["shared_dim"]),
                           n_heads=int(cfg["fusion"]["n_heads"]),
                           n_tags=len(bundle.tag_vocab)).to(device)
-    ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")) / \
-        f"task3_seed{seed}_best.pt"
-    if ckpt.exists():
+    # Phase C 4.3: the case studies must come from the MusicCaps fusion model.
+    # MTAT's text channel is title/album/artist metadata, so a token-alignment
+    # map over it shows a graph attending to an artist name -- uninformative by
+    # construction. The default tag therefore names the MusicCaps run.
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=3, seed=seed, run_tag=run_tag or "musiccaps_cross_attention")
+    if ckpt is not None:
         from .evaluate import _load_compatible
 
+        LOGGER.info("case studies from %s", ckpt.name)
         payload = torch.load(ckpt, map_location=device, weights_only=False)
         # the checkpoint's encoder is SAGE while this one is GATv2, so only the
         # name-and-shape compatible tensors are restored
         _load_compatible(model, payload["model_state"])
+    else:
+        LOGGER.warning("no Task 3 checkpoint for seed %s -- case studies from an "
+                       "untrained model would be meaningless; skipping", seed)
+        return []
     model.eval()
 
     from .train import TAG_DATASETS
