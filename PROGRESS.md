@@ -451,9 +451,9 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 11:28. **13 done, 4 failed, 8 remaining.**
+Updated 2026-09-06 11:33. **14 done, 4 failed, 7 remaining.**
 
-Estimated **1.0 h** of local GPU left, from 12 measured step(s) (estimates running 0.44x of prediction).
+Estimated **1.0 h** of local GPU left, from 13 measured step(s) (estimates running 0.44x of prediction).
 
 C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not sit in front of C5-C7 for a day. See `state/kaggle_c4_instructions.md`; merge with `scripts/import_kaggle_results.py`.
 
@@ -476,8 +476,8 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C7 Task 2 genre seed 1337 | C7 | [x] | 1.0 min |
 | C7 Task 2 genre seed 2024 | C7 | [x] | 1.1 min |
 | C7 Task 2 tags seed 1337 | C7 | [x] | 3.7 min |
-| C7 Task 2 tags seed 2024 | C7 | [~] | running |
-| C7 Task 4 seed 1337 | C7 | [ ] | ~20 min est. |
+| C7 Task 2 tags seed 2024 | C7 | [x] | 4.9 min |
+| C7 Task 4 seed 1337 | C7 | [~] | running |
 | C7 Task 4 seed 2024 | C7 | [ ] | ~20 min est. |
 | report fill + structural check | C7 | [ ] | ~0 min est. |
 
