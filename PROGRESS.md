@@ -451,9 +451,9 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 09:18. **4 done, 0 failed, 17 remaining.**
+Updated 2026-09-06 09:57. **5 done, 0 failed, 16 remaining.**
 
-Estimated **1.5 h** of local GPU left, from 4 measured step(s) (estimates running 0.35x of prediction).
+Estimated **1.8 h** of local GPU left, from 5 measured step(s) (estimates running 0.44x of prediction).
 
 C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not sit in front of C5-C7 for a day. See `state/kaggle_c4_instructions.md`; merge with `scripts/import_kaggle_results.py`.
 
@@ -463,22 +463,22 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C1b structural controls | C1 | [x] | 20.8 min |
 | C2 Task 3 headline (MTAT, bert-base) | C2 | [x] | 68.9 min |
 | C3 Task 4 headline (MusicCaps dual encoder) | C3 | [x] | 4.5 min |
-| C3 retrieval export | C3 | [~] | running |
-| C3 listening study | C3 | [ ] | ~2 min est. |
-| C5 Task 3 MusicCaps bert_only | C5 | [ ] | ~9 min est. |
-| C5 Task 3 MusicCaps gnn_only | C5 | [ ] | ~9 min est. |
-| C5 Task 3 MusicCaps cross_attention | C5 | [ ] | ~9 min est. |
-| C6 zero-shot vs supervised | C6 | [ ] | ~5 min est. |
-| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~11 min est. |
+| C3 retrieval export | C3 | [x] | 38.7 min |
+| C3 listening study | C3 | [~] | running |
+| C5 Task 3 MusicCaps bert_only | C5 | [ ] | ~11 min est. |
+| C5 Task 3 MusicCaps gnn_only | C5 | [ ] | ~11 min est. |
+| C5 Task 3 MusicCaps cross_attention | C5 | [ ] | ~11 min est. |
+| C6 zero-shot vs supervised | C6 | [ ] | ~7 min est. |
+| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~13 min est. |
 | C6 threshold bootstrap | C6 | [ ] | ~2 min est. |
 | C6 compact figures | C6 | [ ] | ~1 min est. |
 | C6 genre confusion figure | C6 | [ ] | ~1 min est. |
-| C7 Task 2 genre seed 1337 | C7 | [ ] | ~1 min est. |
-| C7 Task 2 genre seed 2024 | C7 | [ ] | ~1 min est. |
+| C7 Task 2 genre seed 1337 | C7 | [ ] | ~2 min est. |
+| C7 Task 2 genre seed 2024 | C7 | [ ] | ~2 min est. |
 | C7 Task 2 tags seed 1337 | C7 | [ ] | ~4 min est. |
 | C7 Task 2 tags seed 2024 | C7 | [ ] | ~4 min est. |
-| C7 Task 4 seed 1337 | C7 | [ ] | ~16 min est. |
-| C7 Task 4 seed 2024 | C7 | [ ] | ~16 min est. |
+| C7 Task 4 seed 1337 | C7 | [ ] | ~20 min est. |
+| C7 Task 4 seed 2024 | C7 | [ ] | ~20 min est. |
 | report fill + structural check | C7 | [ ] | ~0 min est. |
 
 <!-- QUEUE:END -->
