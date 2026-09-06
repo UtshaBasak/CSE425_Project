@@ -38,25 +38,41 @@
 % --- AUTOGEN:BEGIN ---------------------------------------------------------
 % Regenerate with: python report/fill_report.py
 % Every value below is read from results/*.json -- do not hand-edit.
-\newcommand{\BTwoGenreAcc}{\textit{pending}}
-\newcommand{\BTwoGenreF}{\textit{pending}}
-\newcommand{\BTwoGenreParams}{\textit{pending}}
-\newcommand{\BTwoGenreTime}{\textit{pending}}
-\newcommand{\BTwoTagF}{\textit{pending}}
-\newcommand{\BTwoTagFixed}{\textit{pending}}
-\newcommand{\BTwoTagMicro}{\textit{pending}}
-\newcommand{\BTwoTagPR}{\textit{pending}}
-\newcommand{\BTwoTagParams}{\textit{pending}}
+\newcommand{\BTwoGenreAcc}{46.3\%}
+\newcommand{\BTwoGenreF}{0.4435}
+\newcommand{\BTwoGenreParams}{2{,}887{,}368}
+\newcommand{\BTwoGenreTime}{16.5\,min}
+\newcommand{\BTwoTagF}{0.3711}
+\newcommand{\BTwoTagFixed}{0.1815}
+\newcommand{\BTwoTagMicro}{0.3975}
+\newcommand{\BTwoTagPR}{0.3734}
+\newcommand{\BTwoTagParams}{3{,}429{,}618}
 \newcommand{\BootLeadCI}{[0.3597, 0.3821]}
 \newcommand{\BootLeadFixed}{0.2910}
 \newcommand{\BootLeadSpread}{0.0288}
 \newcommand{\BootLeadStd}{0.0057}
 \newcommand{\BootLeadTuned}{0.3737}
-\newcommand{\BootRows}{task2\_seed42\_mtat\_tags & 0.3737 & 0.2910 & 0.0288 \\}
+\newcommand{\BootRows}{%
+b2\_seed42\_tags & 0.3444 & 0.1815 & 0.0420 \\
+task1\_seed42\_mtat\_metadata\_full\_ft & 0.1862 & 0.0900 & 0.0278 \\
+task1\_seed42\_musiccaps\_caption\_masked\_frozen\_probe & 0.2637 & 0.0692 & 0.0523 \\
+task1\_seed42\_musiccaps\_caption\_masked\_full\_ft & 0.3707 & 0.2982 & 0.0690 \\
+task1\_seed42\_musiccaps\_caption\_masked\_top\_n & 0.3298 & 0.2421 & 0.0473 \\
+task1\_seed42\_musiccaps\_caption\_raw\_full\_ft & 0.5670 & 0.5513 & 0.0553 \\
+task2\_seed42\_mtat\_tags & 0.3737 & 0.2910 & 0.0288 \\
+task2\_seed42\_tags\_baseline & 0.3591 & 0.2775 & 0.0305 \\
+task2\_seed42\_tags\_rewired & 0.3751 & 0.2823 & 0.0332 \\
+task2\_seed42\_tags\_similarity\_only & 0.3617 & 0.2764 & 0.0322 \\
+task2\_seed42\_tags\_temporal\_only & 0.3635 & 0.2726 & 0.0332 \\
+task3\_seed42\_mtat\_cross\_attention\_headline & 0.2479 & 0.2097 & 0.0253 \\
+task3\_seed42\_musiccaps\_bert\_only & 0.3073 & 0.2287 & 0.0551 \\
+task3\_seed42\_musiccaps\_cross\_attention & 0.3188 & 0.2401 & 0.0610 \\
+task3\_seed42\_musiccaps\_gnn\_only & 0.1120 & 0.0007 & 0.0116 \\
+}
 \newcommand{\BootThrStdMax}{0.245}
 \newcommand{\BootThrStdMean}{0.071}
 \newcommand{\BootValRows}{977}
-\newcommand{\BootVerdict}{The largest spread is 0.0288 macro-F1, above the 0.02 threshold fixed in advance. Tuned numbers are therefore reported alongside fixed-0.5 numbers throughout, and differences smaller than this spread are not interpreted.}
+\newcommand{\BootVerdict}{The largest spread is 0.0690 macro-F1, above the 0.02 threshold fixed in advance. Tuned numbers are therefore reported alongside fixed-0.5 numbers throughout, and differences smaller than this spread are not interpreted.}
 \newcommand{\BootWorstTags}{\texttt{choir} ($\sigma=0.24$), \texttt{chant} ($\sigma=0.23$), \texttt{india} ($\sigma=0.17$), \texttt{orchestra} ($\sigma=0.16$), \texttt{baroque} ($\sigma=0.12$)}
 \newcommand{\BootWorstTagsTable}{%
 \begin{table}[h]
@@ -87,7 +103,7 @@ fast & 0.257 & 0.095 \\
 \newcommand{\LeakGap}{$+$0.1963}
 \newcommand{\LeakPct}{53}
 \newcommand{\MCMaskedF}{0.3707}
-\newcommand{\MCMaskedFixed}{\textit{pending}}
+\newcommand{\MCMaskedFixed}{0.2982}
 \newcommand{\MCMaskedMicro}{0.4140}
 \newcommand{\MCMaskedPR}{0.3841}
 \newcommand{\MCMaskedParams}{109{,}520{,}690}
@@ -97,12 +113,12 @@ fast & 0.257 & 0.095 \\
 \newcommand{\MCProbePR}{0.2413}
 \newcommand{\MCProbeParams}{38{,}450}
 \newcommand{\MCRawF}{0.5670}
-\newcommand{\MCRawFixed}{\textit{pending}}
+\newcommand{\MCRawFixed}{0.5513}
 \newcommand{\MCRawMicro}{0.6341}
 \newcommand{\MCRawPR}{0.6182}
 \newcommand{\MCRawParams}{109{,}520{,}690}
 \newcommand{\MCTest}{2{,}503}
-\newcommand{\MCTestHalf}{\textit{pending}}
+\newcommand{\MCTestHalf}{1{,}252}
 \newcommand{\MCTopNF}{0.3298}
 \newcommand{\MCTopNMicro}{0.3434}
 \newcommand{\MCTopNPR}{0.3577}
@@ -112,10 +128,10 @@ fast & 0.257 & 0.095 \\
 \newcommand{\NBoot}{100}
 \newcommand{\NGraphs}{107{,}952}
 \newcommand{\NTracks}{35{,}984}
-\newcommand{\RetrievalFailureNote}{\textit{pending}}
-\newcommand{\RetrievalFigNote}{\textit{pending}}
+\newcommand{\RetrievalFailureNote}{2 of the 10 queries place the true clip outside the top ten, the worst at rank 2501. Both are captions dominated by production and ambience terms rather than by instrumentation or rhythm -- properties that segment-level chroma, MFCC and contrast statistics do not represent, because the node features summarise what is played rather than how the recording was made.}
+\newcommand{\RetrievalFigNote}{Median rank 3 over 10 queries.}
 \newcommand{\TOneMtatF}{0.1862}
-\newcommand{\TOneMtatFixed}{\textit{pending}}
+\newcommand{\TOneMtatFixed}{0.0900}
 \newcommand{\TOneMtatMicro}{0.1907}
 \newcommand{\TOneMtatPR}{0.2028}
 \newcommand{\TOneMtatParams}{109{,}520{,}690}
