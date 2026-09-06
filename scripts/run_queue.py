@@ -424,7 +424,12 @@ def main(argv=None) -> int:
         ok, error, minutes = run_step(step)
         log_path = ROOT / "logs" / f"queue_{step.phase}_{abs(hash(step.name)) % 10**6}.log"
 
-        if ok and (not step.produces or step.done()):
+        # `done()` is the *skip* test and returns False for `always` steps by
+        # design, so it cannot double as the *success* test -- that marked four
+        # successful C6 steps as failed and spent 45 minutes retrying them.
+        # Success means: the process exited clean and the artifacts are there.
+        produced = all(_artifact_ok(ROOT / rel) for rel in step.produces)
+        if ok and produced:
             state["completed"][step.name] = {"minutes": round(minutes, 1)}
             state["failed"].pop(step.name, None)
             _log(f"DONE   {step.phase} {step.name} in {minutes:.1f} min")
@@ -460,7 +465,7 @@ def main(argv=None) -> int:
         for step in retry:
             LOGGER.info("=== RETRY %s ===", step.name)
             ok, error, minutes = run_step(step)
-            if ok and (not step.produces or step.done()):
+            if ok and all(_artifact_ok(ROOT / rel) for rel in step.produces):
                 state["completed"][step.name] = {"minutes": round(minutes, 1),
                                                  "retried": True}
                 state["failed"].pop(step.name, None)
