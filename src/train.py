@@ -57,6 +57,7 @@ from .utils import (
     resolve_path,
     save_json,
     set_seed,
+    vocabulary_hash,
 )
 
 LOGGER = get_logger("gbmc.train")
@@ -964,6 +965,9 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
                                 extra={"thresholds": None if thresholds is None else
                                        np.asarray(thresholds).tolist(),
                                        "tag_vocab": list(tag_vocab),
+        # C4: lets a result produced on another machine be checked for
+        # comparability without shipping the vocabulary alongside it
+        "tag_vocab_hash": vocabulary_hash(tag_vocab),
                                        "provenance": provenance})
         if stopper.should_stop:
             LOGGER.info("early stop at epoch %d (best epoch %d, %s=%.4f)",

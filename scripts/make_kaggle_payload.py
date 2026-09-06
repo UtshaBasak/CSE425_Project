@@ -42,25 +42,48 @@ from src.utils import (  # noqa: E402
 
 LOGGER = get_logger("gbmc.kaggle")
 
-#: Patterns that must never enter the archive, whatever else is requested.
-EXCLUDE_SUBSTRINGS = ("mels_", "features_", "_synthetic_smoke", "/synthetic/",
-                      "\\synthetic\\", ".venv", "__pycache__", ".pt.tmp")
-EXCLUDE_SUFFIXES = (".h5", ".hdf5", ".mp3", ".wav", ".m4a", ".ckpt", ".pyc")
+#: Never, under any flag. Mel caches are 5.8 GB and feed a baseline that runs
+#: locally in minutes; audio and checkpoints have no business on a remote host.
+EXCLUDE_ALWAYS = ("mels_", "mels_full", "_synthetic_smoke", "/synthetic/",
+                  "\\synthetic\\", ".venv", "__pycache__", ".pt.tmp")
+EXCLUDE_SUFFIXES_ALWAYS = (".mp3", ".wav", ".m4a", ".flac", ".ckpt", ".pt",
+                           ".pth", ".safetensors", ".pyc")
+
+#: Excluded by default, admitted by --include-features. Tasks 2-4 build their
+#: graphs on the fly from these caches -- DataBundle sets graph_dir=None for
+#: real data -- so a Task 3 payload without them cannot load a single batch.
+#: Task 1 is text-only and does not need them, which is why they are opt-in.
+EXCLUDE_UNLESS_FEATURES = ("features_",)
+EXCLUDE_SUFFIXES_UNLESS_FEATURES = (".h5", ".hdf5")
 
 
-def _is_excluded(path: Path, root: Path) -> bool:
+def _is_excluded(path: Path, root: Path, include_features: bool = False) -> bool:
     rel = str(path.relative_to(root)).replace("\\", "/")
-    if path.suffix.lower() in EXCLUDE_SUFFIXES:
+    marked = f"/{rel}"
+    if path.suffix.lower() in EXCLUDE_SUFFIXES_ALWAYS:
         return True
-    return any(token.replace("\\", "/") in f"/{rel}" for token in EXCLUDE_SUBSTRINGS)
+    if any(token.replace("\\", "/") in marked for token in EXCLUDE_ALWAYS):
+        return True
+    if not include_features:
+        if path.suffix.lower() in EXCLUDE_SUFFIXES_UNLESS_FEATURES:
+            return True
+        if any(token in marked for token in EXCLUDE_UNLESS_FEATURES):
+            return True
+    return False
 
 
-def collect(root: Path, cfg, include_graphs: bool = True) -> list[Path]:
+def collect(root: Path, cfg, include_graphs: bool = True,
+            include_features: bool = False) -> list[Path]:
     """The exact file list, with the exclusions applied."""
     processed = resolve_path(cfg["paths"]["processed"])
     splits = resolve_path(cfg["paths"]["splits"])
 
     wanted: list[Path] = []
+    if include_features:
+        # what Tasks 2-4 actually read; the .pt graphs below are exports for
+        # inspection and are not on the training path for real data
+        wanted += sorted(processed.glob("features_*.h5"))
+        wanted += sorted(processed.glob("features_*.h5.keys.json"))
     if include_graphs and (processed / "graphs").exists():
         wanted += sorted((processed / "graphs").rglob("*.pt"))
         wanted += sorted((processed / "graphs").rglob("*.json"))
@@ -75,7 +98,8 @@ def collect(root: Path, cfg, include_graphs: bool = True) -> list[Path]:
     wanted += sorted((root / "scripts").rglob("*.py"))
     wanted.append(root / "requirements.txt")
 
-    return [p for p in wanted if p.exists() and not _is_excluded(p, root)]
+    return [p for p in wanted if p.exists()
+            and not _is_excluded(p, root, include_features)]
 
 
 def main(argv=None) -> int:
@@ -84,12 +108,16 @@ def main(argv=None) -> int:
     parser.add_argument("--out", default="kaggle_payload.tar.gz")
     parser.add_argument("--no-graphs", action="store_true",
                         help="metadata and code only (graphs not built yet)")
+    parser.add_argument("--include-features", action="store_true",
+                        help="ship features_*.h5, which Tasks 2-4 read to build "
+                             "graphs on the fly. Never ships mel caches.")
     parser.add_argument("--allow-synthetic", action="store_true")
     args = parser.parse_args(argv)
 
     cfg = load_config(args.config)
     root = project_root()
-    files = collect(root, cfg, include_graphs=not args.no_graphs)
+    files = collect(root, cfg, include_graphs=not args.no_graphs,
+                    include_features=args.include_features)
     if not files:
         LOGGER.error("nothing to package")
         return 1
@@ -132,9 +160,12 @@ def main(argv=None) -> int:
         "uncompressed_mb": round(total_bytes / 1024**2, 1),
         "n_files": len(files),
         "files_by_extension": dict(sorted(by_kind.items())),
-        "excluded": "mel and feature caches, audio, checkpoints, synthetic artifacts",
+        "includes_features": bool(args.include_features),
+        "excluded": ("mel caches, audio, checkpoints, synthetic artifacts"
+                     + ("" if args.include_features else ", feature caches")),
     }
-    save_json(manifest, root / "state" / "kaggle_payload.json")
+    stem = Path(out).stem.replace(".tar", "")
+    save_json(manifest, root / "state" / f"{stem}.json")
     print(json.dumps(manifest, indent=2))
     LOGGER.info("archive is %.1f MB -- record this in the session log", size_mb)
     return 0

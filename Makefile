@@ -13,7 +13,7 @@ EPOCHS ?=
 OVERRIDE := $(if $(EPOCHS),--override train.epochs=$(EPOCHS),)
 TRAIN    := $(PYTHON) -m src.train --config $(CONFIG) --device $(DEVICE) --seed $(SEED)
 
-.PHONY: report mel-cache vocab thresholds help setup verify-data splits features graphs smoke \
+.PHONY: report mel-cache vocab thresholds kaggle-payload-ablation help setup verify-data splits features graphs smoke \
         task1 task2 task3 task4 all-tasks baselines evaluate test lint clean clean-results
 
 help:
@@ -32,6 +32,7 @@ help:
 	@echo "  probe-env     A0.2 check BERT checkpoints load with working attentions"
 	@echo "  probe-vram    A0.4 measure real peak VRAM per config on this GPU"
 	@echo "  kaggle-payload build the upload archive (graphs + text, never mel caches)"
+	@echo "  kaggle-payload-ablation  C4 archive: feature caches + splits + code"
 	@echo "  mel-cache     A7.2 full-resolution mel cache for B2 (~5.8 GB, ~45 min)"
 	@echo "  vocab         A7.3 re-derive both tag vocabularies, train split only"
 	@echo "  thresholds    A7.4 bootstrap the val-tuned thresholds (100 replicates)"
@@ -110,6 +111,14 @@ baselines:
 
 evaluate:
 	$(PYTHON) -m src.evaluate --config $(CONFIG) --device $(DEVICE)
+
+# C4 runs the seven-mode fusion ablation on Kaggle rather than locally: 21 runs
+# at the local 68 ms/row would be ~26 h and would force cutting rows from the
+# table. Carries features_*.h5 because Task 3 builds its graphs from those on
+# the fly (DataBundle sets graph_dir=None for real data); never mel caches.
+kaggle-payload-ablation:
+	$(PYTHON) scripts/make_kaggle_payload.py --config $(CONFIG) --no-graphs \
+		--include-features --out kaggle_payload_ablation.tar.gz
 
 # ---- A7 -------------------------------------------------------------------
 # B2 reads mels_full_{corpus}.h5, not the 256-column pooled cache. Building it

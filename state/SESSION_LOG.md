@@ -258,3 +258,28 @@ Format:
                         Checkpoints now carry the tag; utils.find_checkpoint resolves exact tag -> untagged (older
                         artifacts) -> newest tagged, and returns None rather than a wrong-task file. Four tests, one of
                         which greps src/train.py to assert the write paths still interpolate the suffix.
+
+[2026-09-06 06:45] DONE   C4 PREPARED FOR KAGGLE, moving it off the local GPU entirely. bert-base measures 68 ms/row here,
+                        so 21 runs is ~26 h locally and decision rule 3.6 would have cut rows from the ablation table.
+                        Two T4s run two shards concurrently instead, and C5-C7 proceed locally in parallel.
+                        Payload kaggle_payload_ablation.tar.gz = 105.0 MB (237.6 MB raw, 71 files).
+[2026-09-06 06:41] NOTE   The payload carries features_*.h5, NOT the exported .pt graphs. Task 3 builds graphs on the fly
+                        (DataBundle sets graph_dir=None for real data), so a graph payload would be 450 MB AND unusable.
+                        Checked before building rather than after uploading.
+[2026-09-06 06:40] DONE   Sharding verified BEFORE upload: shard i takes every Nth run from a fixed-order list; for 1-4
+                        shards every run appears in exactly one shard with no overlap. This matters because the two shards
+                        are separate processes with no runtime coordination. Five tests cover it.
+[2026-09-06 06:43] DONE   Import guard extended: the ordered tag vocabulary is now hashed into every result, and the
+                        importer refuses any file whose hash matches no current vocabulary. A7.3 changed 7 of 50 MusicCaps
+                        tags, so a pre-fix result is numerically fine and semantically incompatible - and nothing about the
+                        file would reveal it. Hash is order-sensitive because order fixes which column is which tag.
+[2026-09-06 06:45] FIX    Replaced the bash chains with scripts/run_queue.py, one process owning the whole queue. The
+                        chains waited on log markers and twice produced two waiters on one job, hence two concurrent
+                        training runs, once corrupting a result. Watchdog not halt; resume; commit+push after EVERY step;
+                        wall-clock recorded per step and the remaining estimate rescaled from it.
+[2026-09-06 06:44] FIX    The resume check was skipping on file EXISTENCE, which would have silently dropped two Task 2
+                        deliverables: results/baselines_seed42.json exists from before the A7.2 rework holding the old
+                        parameter-matched B2_mel_cnn, and structural_controls.json exists holding a --dry-run. Steps now
+                        declare content that must be present for the artifact to count as fresh.
+[2026-09-06 06:45] NOTE   Local queue re-planned as C1 -> C2 -> C3 -> C5 -> C6 -> C7 = 11.1 h estimated. One handover
+                        waiter is live, waiting for the in-flight Task 1 sweep before starting the runner.
