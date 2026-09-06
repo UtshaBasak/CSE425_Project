@@ -5,6 +5,9 @@
     },
     "C1b structural controls": {
       "minutes": 20.8
+    },
+    "C2 Task 3 headline (MTAT, bert-base)": {
+      "minutes": 68.9
     }
   },
   "failed": {},
