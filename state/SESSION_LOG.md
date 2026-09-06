@@ -361,3 +361,10 @@ Format:
          OSError: [Errno 28] No space left on device
 
 [2026-09-06 11:40] DONE   C7 report fill + structural check in 0.0 min
+[2026-09-06 11:41] QUEUE  retrying 5 failed step(s) once
+[2026-09-06 12:19] BLOCKED C6 full evaluation (t-SNE, S_graph, case studies) failed on retry too: 
+[2026-09-06 12:24] BLOCKED C6 threshold bootstrap failed on retry too: 
+[2026-09-06 12:24] BLOCKED C6 compact figures failed on retry too: 
+[2026-09-06 12:24] BLOCKED C6 genre confusion figure failed on retry too: 
+[2026-09-06 12:28] BLOCKED C7 Task 4 seed 2024 failed on retry too: exit code 1
+[2026-09-06 12:28] QUEUE  finished: 16 done, 5 still failing (C6 full evaluation (t-SNE, S_graph, case studies), C6 threshold bootstrap, C6 compact figures, C6 genre confusion figure, C7 Task 4 seed 2024)

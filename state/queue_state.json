@@ -44,6 +44,9 @@
     },
     "C7 Task 4 seed 1337": {
       "minutes": 3.8
+    },
+    "report fill + structural check": {
+      "minutes": 0.0
     }
   },
   "failed": {
