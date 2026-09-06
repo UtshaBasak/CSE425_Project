@@ -451,7 +451,7 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 11:17. **10 done, 1 failed, 11 remaining.**
+Updated 2026-09-06 11:22. **10 done, 2 failed, 11 remaining.**
 
 Estimated **1.2 h** of local GPU left, from 9 measured step(s) (estimates running 0.44x of prediction).
 
@@ -470,8 +470,8 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C5 Task 3 MusicCaps cross_attention | C5 | [x] | 19.7 min |
 | C6 zero-shot vs supervised | C6 | [x] | 0.3 min |
 | C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [!] | produced no artifact |
-| C6 threshold bootstrap | C6 | [~] | running |
-| C6 compact figures | C6 | [ ] | ~1 min est. |
+| C6 threshold bootstrap | C6 | [!] | produced no artifact |
+| C6 compact figures | C6 | [~] | running |
 | C6 genre confusion figure | C6 | [ ] | ~1 min est. |
 | C7 Task 2 genre seed 1337 | C7 | [ ] | ~2 min est. |
 | C7 Task 2 genre seed 2024 | C7 | [ ] | ~2 min est. |

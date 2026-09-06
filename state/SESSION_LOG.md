@@ -324,3 +324,12 @@ Format:
          report fixed-0.5 numbers alongside tuned ones in all tables
          wrote B:\CSE425_Project\gnn-bert-music-context\results\threshold_bootstrap.json
 
+[2026-09-06 11:22] BLOCKED C6 C6 compact figures after 0.0 min: produced no artifact
+         last lines of queue_C6_395681.log:
+         $ B:\CSE425_Project\gnn-bert-music-context\.venv\Scripts\python.exe -u scripts/make_compact_figures.py
+         
+         11:22:24 | INFO    | gbmc.figures | wrote B:\CSE425_Project\gnn-bert-music-context\results\plots\retrieval_examples.png (10 examples, 2 failures, gallery 2503)
+         11:22:24 | INFO    | gbmc.figures | wrote B:\CSE425_Project\gnn-bert-music-context\results\plots\case_studies.png (3 panels)
+         retrieval: {'path': 'B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\retrieval_examples.png', 'n_examples': 10, 'n_failures': 2, 'gallery_size': 2503, 'median_rank': 3.5}
+         cases: {'path': 'B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_studies.png', 'n_panels': 3}
+
