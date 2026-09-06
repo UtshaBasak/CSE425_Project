@@ -954,7 +954,12 @@ def _fit(model, loaders, cfg, args, device, task: int, step_fn, tokenizer,
             best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
             best_thresholds = thresholds
         if not args.dry_run:
-            save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}{suffix}_last.pt",
+            # `_last` is a mid-training resume point that nothing reads back;
+            # tagging it made every run keep its own ~440 MB copy and filled the
+            # disk during the C7 seeds. One rolling file per task/seed is enough.
+            # `_best` stays tagged -- that one IS loaded, by name, and the
+            # ablation would otherwise overwrite itself.
+            save_checkpoint(model, ckpt_dir / f"task{task}_seed{args.seed}_last.pt",
                             epoch, epoch_record, cfg,
                             extra={"thresholds": None if thresholds is None else
                                    np.asarray(thresholds).tolist(),

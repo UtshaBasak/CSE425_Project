@@ -2209,17 +2209,35 @@ def test_find_checkpoint_returns_none_rather_than_the_wrong_task(tmp_path):
     assert find_checkpoint(tmp_path / "nope", task=3, seed=42) is None
 
 
-def test_training_writes_a_tagged_checkpoint(tmp_path, monkeypatch):
-    """The end-to-end guarantee: --run-tag reaches the checkpoint filename."""
+def test_the_best_checkpoint_is_tagged_and_the_last_one_is_not(tmp_path):
+    """Two different requirements that pull in opposite directions.
+
+    ``_best`` is loaded by name -- by the case studies, the zero-shot
+    comparison, evaluate -- so it must carry the run tag or the seven ablation
+    modes overwrite each other and a reader silently gets the wrong weights.
+
+    ``_last`` is a mid-training resume point that nothing reads back. Tagging it
+    too made every run keep its own ~440 MB copy, and the disk hit 100% during
+    the C7 seed runs. One rolling file per task and seed is correct there.
+    """
     import re
 
     source = (project_root() / "src" / "train.py").read_text(encoding="utf-8")
     saves = re.findall(r'save_checkpoint\(model, ckpt_dir / f"([^"]+)"', source)
     assert saves, "could not find the checkpoint writes in _fit"
-    for pattern in saves:
+
+    best = [p for p in saves if "_best" in p]
+    last = [p for p in saves if "_last" in p]
+    assert best and last, f"expected a best and a last write, got {saves}"
+    for pattern in best:
         assert "{suffix}" in pattern, (
-            f"checkpoint path {pattern!r} has no run tag; ablation modes will "
-            "overwrite each other"
+            f"{pattern!r} has no run tag; ablation modes will overwrite each "
+            "other and readers will load the wrong weights"
+        )
+    for pattern in last:
+        assert "{suffix}" not in pattern, (
+            f"{pattern!r} is tagged; nothing reads it back and one copy per run "
+            "fills the disk"
         )
 
 

@@ -368,3 +368,24 @@ Format:
 [2026-09-06 12:24] BLOCKED C6 genre confusion figure failed on retry too: 
 [2026-09-06 12:28] BLOCKED C7 Task 4 seed 2024 failed on retry too: exit code 1
 [2026-09-06 12:28] QUEUE  finished: 16 done, 5 still failing (C6 full evaluation (t-SNE, S_graph, case studies), C6 threshold bootstrap, C6 compact figures, C6 genre confusion figure, C7 Task 4 seed 2024)
+
+[2026-09-06 12:28] NOTE   Unattended queue finished: 16 of 21 steps done. Gate 1 reached 09:57. Measured wall-clock vs my
+                        priors: B2 baselines 46.7 min (prior 1.5-2.5 h - the band was too pessimistic), C2 Task 3 headline
+                        68.9 min (prior ~200 min - also pessimistic), C3 retrieval export 38.7 min (prior 10).
+[2026-09-06 14:25] FIX   Four of the five "failures" were MY BUG, not failed runs. run_queue used done() as both the skip
+                        test and the success test; done() returns False by design for always=True steps, so four
+                        successful C6 steps were marked failed and 45 min was spent retrying them. All four artifacts
+                        exist and are fresh. Success is now "process exited clean AND artifacts present".
+[2026-09-06 14:25] FIX   The fifth failure was real: OSError errno 28, disk full at 100%. Cause was my own checkpoint-
+                        tagging fix - runs stopped overwriting task{N}_seed{S}_last.pt and each kept its own ~440 MB copy,
+                        44 files / 6.1 GB. Nothing ever reads _last back; it is a mid-training resume point. Deleted them
+                        (freed 3.0 GB) and made _last a single rolling file again while _best stays tagged, because _best
+                        IS loaded by name and the ablation would otherwise overwrite itself. Test updated to assert both
+                        halves of that, since they pull in opposite directions.
+[2026-09-06 14:27] FIX   TASK 4 WAS DEGENERATE, NOT WEAK. 2,095 training pairs at contrastive batch 512 gives 4 steps per
+                        epoch; early stopping ended it at epoch 9, so the model got 36 optimiser steps and 15 SECONDS of
+                        training. Its InfoNCE loss never left 6.4 = ln(512), which is exactly chance, and test R@10 came
+                        out at 1.0x the random reference. Decision rule 3.5 covers a weak retrieval model; it does not
+                        cover an untrained one, and reporting 36 steps as "small-scale contrastive learning is hard" would
+                        have been wrong. Re-ran with epochs=150 and patience=15 (val R@10 on 232 clips is very noisy):
+                        loss 6.08 -> 2.23, val mean_R@10 0.0625 -> 0.1703, early stop at 57 with best at 42. Costs 8 min.
