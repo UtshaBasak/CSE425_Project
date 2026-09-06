@@ -333,3 +333,10 @@ Format:
          retrieval: {'path': 'B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\retrieval_examples.png', 'n_examples': 10, 'n_failures': 2, 'gallery_size': 2503, 'median_rank': 3.5}
          cases: {'path': 'B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_studies.png', 'n_panels': 3}
 
+[2026-09-06 11:22] BLOCKED C6 C6 genre confusion figure after 0.0 min: produced no artifact
+         last lines of queue_C6_345064.log:
+         $ B:\CSE425_Project\gnn-bert-music-context\.venv\Scripts\python.exe -u scripts/plot_genre_confusion.py
+         
+         11:22:28 | INFO    | gbmc.genreplot | wrote B:\CSE425_Project\gnn-bert-music-context\results\plots\genre_confusion.png (2 panel(s))
+         B:\CSE425_Project\gnn-bert-music-context\results\plots\genre_confusion.png
+

@@ -39,6 +39,10 @@
     "C6 threshold bootstrap": {
       "error": "produced no artifact",
       "minutes": 4.3
+    },
+    "C6 compact figures": {
+      "error": "produced no artifact",
+      "minutes": 0.0
     }
   },
   "started": 1788656262.3632622
