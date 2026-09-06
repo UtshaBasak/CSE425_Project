@@ -345,3 +345,18 @@ Format:
 [2026-09-06 11:28] DONE   C7 C7 Task 2 tags seed 1337 in 3.7 min
 [2026-09-06 11:33] DONE   C7 C7 Task 2 tags seed 2024 in 4.9 min
 [2026-09-06 11:37] DONE   C7 C7 Task 4 seed 1337 in 3.8 min
+[2026-09-06 11:40] BLOCKED C7 C7 Task 4 seed 2024 after 3.6 min: exit code 1
+         last lines of queue_C7_209196.log:
+                                    np.asarray(thresholds).tolist(),
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                    "provenance": provenance})
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+           File "B:\CSE425_Project\gnn-bert-music-context\src\train.py", line 354, in save_checkpoint
+             return atomic_torch_save(payload, path)
+           File "B:\CSE425_Project\gnn-bert-music-context\src\utils.py", line 308, in atomic_torch_save
+             return atomic_write_bytes(path, buffer.getvalue())
+           File "B:\CSE425_Project\gnn-bert-music-context\src\utils.py", line 293, in atomic_write_bytes
+             fh.write(payload)
+             ~~~~~~~~^^^^^^^^^
+         OSError: [Errno 28] No space left on device
+
