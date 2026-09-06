@@ -632,9 +632,20 @@ def export_retrieval_examples(bundle: DataBundle, cfg, device, seed: int,
     sim = build_similarity_matrix(torch.cat(graphs), torch.cat(texts))
     ranks = (sim > sim[np.arange(len(sim)), np.arange(len(sim))][:, None]).sum(axis=1) + 1
 
-    successes = list(np.argsort(ranks)[: max(1, n_examples - 2)])
+    # The figure wants the informative extremes; the listening study wants a
+    # representative sample. Selecting only best-and-worst for the study would
+    # bias the mean rating, and the injected controls guard against inattention,
+    # not against a skewed sample. So: the curated extremes first, then random
+    # draws to fill whatever else was asked for.
+    successes = list(np.argsort(ranks)[: max(1, min(n_examples, 10) - 2)])
     failures = list(np.argsort(-ranks)[:2])                  # the two worst queries
     chosen = successes + [i for i in failures if i not in successes]
+    if n_examples > len(chosen):
+        rng = np.random.default_rng(seed)
+        pool = [i for i in range(len(ranks)) if i not in set(chosen)]
+        extra = rng.choice(pool, size=min(n_examples - len(chosen), len(pool)),
+                           replace=False) if pool else []
+        chosen += [int(i) for i in extra]
 
     examples = []
     for i in chosen[:n_examples]:
@@ -642,6 +653,8 @@ def export_retrieval_examples(bundle: DataBundle, cfg, device, seed: int,
         examples.append({
             "query_track_id": ids[int(i)],
             "query_caption": captions[int(i)][:400],
+            "selection": ("worst" if int(i) in set(failures)
+                          else "best" if int(i) in set(successes) else "random"),
             "true_rank": int(ranks[int(i)]),
             "is_failure": bool(ranks[int(i)] > 5),
             "top3": [
@@ -827,8 +840,12 @@ def main(argv=None) -> int:
         p = plot_retrieval(retrieval, plots_dir)
         if p:
             written_plots["retrieval"] = str(p)
+    # 10 curated for the figure plus enough random draws that the listening
+    # study has 20 representative pairs to sample from
     metrics["retrieval_examples"] = export_retrieval_examples(
-        bundle, cfg, device, seed, examples_dir, int(cfg["eval"].get("retrieval_examples", 10))
+        bundle, cfg, device, seed, examples_dir,
+        int(cfg["eval"].get("retrieval_examples", 10))
+        + int(cfg["human_eval"].get("n_items", 20))
     )
 
     # ---- S_graph ----------------------------------------------------------- #
@@ -889,8 +906,14 @@ def _rescore_from_checkpoint(bundle, cfg, device, task: int, run: dict):
     from .fusion_model import GNNBertFusion
     from .gnn_model import GNNClassifier, GNNEncoder
 
-    ckpt = resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")) / \
-        f"task{task}_seed{run.get('seed', cfg.get('seed', 42))}_best.pt"
+    # Every checkpoint carries its run tag now, so the bare
+    # task{N}_seed{S}_best.pt name no longer exists and looking for it directly
+    # silently produced "scoring an untrained model" against a directory that
+    # held four perfectly good Task 3 checkpoints.
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=task, seed=int(run.get("seed", cfg.get("seed", 42))),
+        run_tag=run.get("run_tag"))
     tokenizer = load_tokenizer(cfg["bert"]["model_name"]) if task in (1, 3) else None
     n_tags = len(bundle.tag_vocab)
 
@@ -913,11 +936,14 @@ def _rescore_from_checkpoint(bundle, cfg, device, task: int, run: dict):
                               shared_dim=int(cfg["fusion"]["shared_dim"]),
                               n_heads=int(cfg["fusion"]["n_heads"]), n_tags=n_tags)
     model = model.to(device)
-    if ckpt.exists():
+    if ckpt is not None:
+        LOGGER.info("task %d: loading %s", task, ckpt.name)
         payload = torch.load(ckpt, map_location=device, weights_only=False)
         _load_compatible(model, payload["model_state"])
     else:
-        LOGGER.warning("no checkpoint at %s; scoring an untrained model", ckpt)
+        LOGGER.warning("no task %d checkpoint for seed %s; scoring an UNTRAINED "
+                       "model -- any number from this pass is meaningless",
+                       task, run.get("seed", cfg.get("seed", 42)))
 
     loader = make_loader(bundle.dataset("test", corpora_for(cfg, "tag")), cfg, shuffle=False,
                          seed=int(cfg.get("seed", 42)), num_workers=0)

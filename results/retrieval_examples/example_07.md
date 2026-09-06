@@ -1,21 +1,21 @@
 # Retrieval example 7 (success)
 
-**Query track**: `musiccaps_tG5C-Smp-eY_30_40`  
-**Caption**: The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.
+**Query track**: `musiccaps_qlWEAm4AUTU_370_380`  
+**Caption**: Audio of a playing by itself. Sounds like a, or, playing a, alternating between a sound and a sound.
 
 **Rank of the true match**: 3 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_KCytKo5LzCc_30_40` (score 0.433)
+1. [--] `musiccaps_bqPCtwibgPg_440_450` (score 0.434)
 
-    The recording features a of a 's and it consists of an singing over located in the right channel of the image, which makes the image. The recording is a bit and It sounds, and.
+    This audio is an. The tempo is medium with an rhythm with a giving instructions. The went from to. This clip is instructional audio on.
 
-2. [--] `musiccaps_afavVsmFWds_30_40` (score 0.362)
+2. [--] `musiccaps_tmpVzeD_M5s_40_50` (score 0.368)
 
-    The recording features a song that consists of singing over and located in the left channel of the - which makes the a bit. The consist of, and. At the end of the loop, there is a. It sounds and a bit overall.
+    This clip is an. The tempo is slow with the sound of an being. This is a on how to tune a.
 
-3. [OK] `musiccaps_tG5C-Smp-eY_30_40` (score 0.348)
+3. [OK] `musiccaps_qlWEAm4AUTU_370_380` (score 0.335)
 
-    The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.
+    Audio of a playing by itself. Sounds like a, or, playing a, alternating between a sound and a sound.
 

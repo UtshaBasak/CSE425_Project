@@ -16,3 +16,13 @@ Clip 11: how well does the description match the audio?
 Clip 12: how well does the description match the audio?
 Clip 13: how well does the description match the audio?
 Clip 14: how well does the description match the audio?
+Clip 15: how well does the description match the audio?
+Clip 16: how well does the description match the audio?
+Clip 17: how well does the description match the audio?
+Clip 18: how well does the description match the audio?
+Clip 19: how well does the description match the audio?
+Clip 20: how well does the description match the audio?
+Clip 21: how well does the description match the audio?
+Clip 22: how well does the description match the audio?
+Clip 23: how well does the description match the audio?
+Clip 24: how well does the description match the audio?
