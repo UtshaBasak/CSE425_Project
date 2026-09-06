@@ -309,3 +309,18 @@ Format:
            }
          }
 
+[2026-09-06 11:22] BLOCKED C6 C6 threshold bootstrap after 4.3 min: produced no artifact
+         last lines of queue_C6_753870.log:
+         task2_seed42_mtat_tags                  0.3737    0.2910     0.3710   0.0288   0.071  UNSTABLE
+         task2_seed42_tags_baseline              0.3591    0.2775     0.3604   0.0305   0.065  UNSTABLE
+         task2_seed42_tags_rewired               0.3751    0.2823     0.3673   0.0332   0.072  UNSTABLE
+         task2_seed42_tags_similarity_only       0.3617    0.2764     0.3611   0.0322   0.065  UNSTABLE
+         task2_seed42_tags_temporal_only         0.3635    0.2726     0.3626   0.0332   0.064  UNSTABLE
+         task3_seed42_mtat_cross_attention_hea   0.2479    0.2097     0.2487   0.0253   0.063  UNSTABLE
+         task3_seed42_musiccaps_bert_only        0.3073    0.2287     0.2986   0.0551   0.083  UNSTABLE
+         task3_seed42_musiccaps_cross_attentio   0.3188    0.2401     0.3033   0.0610   0.098  UNSTABLE
+         task3_seed42_musiccaps_gnn_only         0.1120    0.0007     0.1036   0.0116   0.027  stable
+         
+         report fixed-0.5 numbers alongside tuned ones in all tables
+         wrote B:\CSE425_Project\gnn-bert-music-context\results\threshold_bootstrap.json
+
