@@ -1,21 +1,21 @@
 # Retrieval example 6 (success)
 
-**Query track**: `musiccaps_z6SNngkMAug_30_40`  
-**Caption**: A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.
+**Query track**: `musiccaps_9gCeNCnWZhE_30_40`  
+**Caption**: This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.
 
-**Rank of the true match**: 4 of 2503
+**Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_vrMmkVV4SOE_30_40` (score 0.067)
+1. [--] `musiccaps_azyNUtTHvaE_30_40` (score 0.213)
 
-    An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.
+    A is very clear and a pitched melody. She got a lot of reverb on her. A is supporting her. This song may be playing in a post-apocalyptic movie-scene.
 
-2. [--] `musiccaps_CRDDdjDinYc_50_60` (score 0.058)
+2. [OK] `musiccaps_9gCeNCnWZhE_30_40` (score 0.210)
 
-    A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.
+    This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a document
 
-3. [--] `musiccaps_UoSID1KzWuI_30_40` (score 0.057)
+3. [--] `musiccaps__gWEpDgPAho_100_110` (score 0.207)
 
-    This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.
+    A is kind of a calming in a while you can hear of and that seem not to belong to the song. This is an and not of the best audio-quality. This song may be playing in a cruel movie scene.
 

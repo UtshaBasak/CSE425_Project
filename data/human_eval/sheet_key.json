@@ -16,128 +16,128 @@
     {
       "number": 1,
       "item_id": "item_007",
-      "caption": "A sings this vivacious. The is with, mandolin, groovy and lively pandeira beats. The is melodic, simple, bouncy, peppy, and joyful.",
+      "caption": "The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.",
       "is_control": false,
-      "query_track_id": "musiccaps_CP3phqztym0_30_40",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps_tG5C-Smp-eY_30_40",
+      "retrieved_track_id": "musiccaps_KCytKo5LzCc_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\KCytKo5LzCc_30_40.mp3"
     },
     {
       "number": 2,
       "item_id": "control_002",
-      "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmosphere in the piece, but it is also a bit in nature.",
+      "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
       "is_control": true,
-      "query_track_id": "musiccaps_P8nK4i8XscM_30_40",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
+      "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\_n3r2inlqBc_520_530.wav"
     },
     {
       "number": 3,
       "item_id": "item_004",
-      "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
+      "caption": "This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.",
       "is_control": false,
-      "query_track_id": "musiccaps_H4tyvJJzSDk_30_40",
-      "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\_n3r2inlqBc_520_530.wav"
+      "query_track_id": "musiccaps_SEDfsU63w8I_30_40",
+      "retrieved_track_id": "musiccaps_PcdpjUIa8l0_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\PcdpjUIa8l0_30_40.mp3"
     },
     {
       "number": 4,
       "item_id": "item_002",
-      "caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
+      "caption": "A this song with in. The song is with, and. The song is and in nature. The song has poor audio quality with like.",
       "is_control": false,
-      "query_track_id": "musiccaps_EC4GbkL3XvI_80_90",
-      "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\_n3r2inlqBc_520_530.wav"
+      "query_track_id": "musiccaps_An-4jPvUT14_60_70",
+      "retrieved_track_id": "musiccaps_eZE0RmJESFU_140_150",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\eZE0RmJESFU_140_150.wav"
     },
     {
       "number": 5,
       "item_id": "control_000",
-      "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
       "is_control": true,
-      "query_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "retrieved_track_id": "musiccaps_CP3phqztym0_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\CP3phqztym0_30_40.mp3"
+      "query_track_id": "musiccaps__n3r2inlqBc_520_530",
+      "retrieved_track_id": "musiccaps_tG5C-Smp-eY_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\tG5C-Smp-eY_30_40.wav"
     },
     {
       "number": 6,
       "item_id": "item_005",
-      "caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
+      "caption": "The features a, and. It and, almost like some old horror movie with.",
       "is_control": false,
-      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps_VLjcIlZvkY0_30_40",
+      "retrieved_track_id": "musiccaps_7TmKzUgWiRU_0_10",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\7TmKzUgWiRU_0_10.mp3"
     },
     {
       "number": 7,
       "item_id": "control_003",
-      "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
       "is_control": true,
-      "query_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "retrieved_track_id": "musiccaps_z6SNngkMAug_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\z6SNngkMAug_30_40.wav"
+      "query_track_id": "musiccaps__n3r2inlqBc_520_530",
+      "retrieved_track_id": "musiccaps_VLjcIlZvkY0_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\VLjcIlZvkY0_30_40.wav"
     },
     {
       "number": 8,
       "item_id": "item_008",
-      "caption": "This clip is an with like, an starting, or, and. This is an.",
+      "caption": "The song is. The song is with traditional instruments, piano and. The song is and energetic. The song is and has.",
       "is_control": false,
-      "query_track_id": "musiccaps_heZw1TTrtTU_80_90",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps_Hnk45Z0EAxg_150_160",
+      "retrieved_track_id": "musiccaps_tG5C-Smp-eY_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\tG5C-Smp-eY_30_40.wav"
     },
     {
       "number": 9,
       "item_id": "item_009",
-      "caption": "up with juxtaposed by and effects.",
+      "caption": "The songs consists of singing over, and and hits. It sounds and.",
       "is_control": false,
-      "query_track_id": "musiccaps_dcgwxlK3VVk_30_40",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps_3bg0iy-ypcw_30_40",
+      "retrieved_track_id": "musiccaps_3R8xDvhJk54_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\3R8xDvhJk54_30_40.mp3"
     },
     {
       "number": 10,
       "item_id": "item_006",
-      "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmosphere in the piece, but it is also a bit in nature.",
+      "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
       "is_control": false,
-      "query_track_id": "musiccaps_P8nK4i8XscM_30_40",
-      "retrieved_track_id": "musiccaps_w4Z1QuBOMWU_70_80",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\w4Z1QuBOMWU_70_80.wav"
+      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
+      "retrieved_track_id": "musiccaps_azyNUtTHvaE_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\azyNUtTHvaE_30_40.wav"
     },
     {
       "number": 11,
       "item_id": "control_001",
-      "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+      "caption": "This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.",
       "is_control": true,
-      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-      "retrieved_track_id": "musiccaps_H4tyvJJzSDk_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\H4tyvJJzSDk_30_40.mp3"
+      "query_track_id": "musiccaps__ALGXHquYkM_30_40",
+      "retrieved_track_id": "musiccaps_SEDfsU63w8I_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\SEDfsU63w8I_30_40.mp3"
     },
     {
       "number": 12,
       "item_id": "item_003",
-      "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+      "caption": "This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.",
       "is_control": false,
-      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-      "retrieved_track_id": "musiccaps_ypg2ItQIc2c_190_200",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\ypg2ItQIc2c_190_200.wav"
+      "query_track_id": "musiccaps__ALGXHquYkM_30_40",
+      "retrieved_track_id": "musiccaps_bYwoYjbPm-I_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\bYwoYjbPm-I_30_40.wav"
     },
     {
       "number": 13,
       "item_id": "item_000",
-      "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+      "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
       "is_control": false,
-      "query_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "retrieved_track_id": "musiccaps_vrMmkVV4SOE_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\vrMmkVV4SOE_30_40.wav"
+      "query_track_id": "musiccaps__n3r2inlqBc_520_530",
+      "retrieved_track_id": "musiccaps__n3r2inlqBc_520_530",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\_n3r2inlqBc_520_530.wav"
     },
     {
       "number": 14,
       "item_id": "item_001",
-      "caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
+      "caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
       "is_control": false,
-      "query_track_id": "musiccaps_fjj9NJX8GB0_400_410",
-      "retrieved_track_id": "musiccaps_B3lq6U4PDZo_30_40",
-      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\B3lq6U4PDZo_30_40.mp3"
+      "query_track_id": "musiccaps_NmwmOY6iBFg_30_40",
+      "retrieved_track_id": "musiccaps_NmwmOY6iBFg_30_40",
+      "audio_path": "B:\\CSE425_Project\\gnn-bert-music-context\\data\\raw\\musiccaps\\audio\\NmwmOY6iBFg_30_40.mp3"
     }
   ]
 }

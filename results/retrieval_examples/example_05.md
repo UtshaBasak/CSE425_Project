@@ -1,21 +1,21 @@
 # Retrieval example 5 (success)
 
-**Query track**: `musiccaps_P8nK4i8XscM_30_40`  
-**Caption**: This is the used as a. There is a and an beat playing the of "I'm a Barbie Girl". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as "I'm a Barbie Girl" but with different lyrics. There is an 8-bit related to the. There is a atmosphere in the piece, but it is also a bit in nature.
+**Query track**: `musiccaps_VLjcIlZvkY0_30_40`  
+**Caption**: The features a, and. It and, almost like some old horror movie with.
 
-**Rank of the true match**: 4 of 2503
+**Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_w4Z1QuBOMWU_70_80` (score 0.239)
+1. [--] `musiccaps_7TmKzUgWiRU_0_10` (score 0.273)
 
-    The song is an. The is with a guitarist traditional in a. The song has a groove and sounds delightful. The song has a.
+    This is a multi audio. There are several things happening. There’s an energetic song in the background with enthusiastic vocals, drumming and. There’s a loud whirring of an, like a, and a phone dial tone. The audio is loud, confusing, loud, and.
 
-2. [--] `musiccaps_KMQmM12G9Z4_110_120` (score 0.237)
+2. [OK] `musiccaps_VLjcIlZvkY0_30_40` (score 0.253)
 
-    A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.
+    The features a, and. It and, almost like some old horror movie with.
 
-3. [--] `musiccaps_vrMmkVV4SOE_30_40` (score 0.237)
+3. [--] `musiccaps_gTO00a-LFYs_10_20` (score 0.235)
 
-    An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.
+    This is. The tempo is with. There are sounds of and and a. The is, terrifying, dangerous and.
 

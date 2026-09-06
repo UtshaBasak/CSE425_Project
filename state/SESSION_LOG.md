@@ -389,3 +389,18 @@ Format:
                         cover an untrained one, and reporting 36 steps as "small-scale contrastive learning is hard" would
                         have been wrong. Re-ran with epochs=150 and patience=15 (val R@10 on 232 clips is very noisy):
                         loss 6.08 -> 2.23, val mean_R@10 0.0625 -> 0.1703, early stop at 57 with best at 42. Costs 8 min.
+
+[2026-09-06 15:31] DONE   Task 4 re-run complete, all three seeds. Test R@10 = 0.0135 +- 0.0006 against a chance reference
+                        of 0.0040 on the 2,503-clip gallery = 3.4x chance, median rank ~675. Consistent across seeds.
+                        That is decision rule 3.5: low but well above chance, with 2,095 training pairs as the limiting
+                        factor. The previous run's 1.0x chance was an untrained model, not this finding.
+[2026-09-06 15:43] FIX   ZERO-SHOT WAS SCORED ON A PARTLY RANDOM ENCODER. zero_shot_eval built its text tower from
+                        config.yaml, which defaults to distilbert (6 layers), while the Task 4 checkpoint is bert-base
+                        (12). load_state_dict(strict=False) left 96 tensors randomly initialised and returned a perfectly
+                        plausible number - the log said "96 parameter(s) missing" and nothing else would have shown it.
+                        Now reads the architecture from the checkpoint's own stored config, and RAISES rather than
+                        warning if anything fails to load. Corrected: ensemble macro-F1 0.0914, template spread 0.0051
+                        (below the 0.0288 floor, so phrasing is not the dominant effect), against the Task 3 MusicCaps
+                        supervised reference of 0.3188 -- a gap of 0.2274 on the same corpus, vocabulary and split.
+[2026-09-06 15:45] NOTE   Report now 9.0 pages + 0.1 appendix of a 6-10 limit. One macro pending (CaseStudyNote), which
+                        needs the three MusicCaps case studies from C6.

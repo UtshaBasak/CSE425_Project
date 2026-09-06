@@ -1,21 +1,21 @@
 # Retrieval example 2 (success)
 
-**Query track**: `musiccaps_EC4GbkL3XvI_80_90`  
-**Caption**: This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.
+**Query track**: `musiccaps_An-4jPvUT14_60_70`  
+**Caption**: A this song with in. The song is with, and. The song is and in nature. The song has poor audio quality with like.
 
-**Rank of the true match**: 3 of 2503
+**Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps__n3r2inlqBc_520_530` (score -0.016)
+1. [--] `musiccaps_eZE0RmJESFU_140_150` (score 0.415)
 
-    This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.
+    A with a and a funky. The is and the hi- is busy playing steady. plays a melody along with the male. The feature a male and duo singing in, while fill in the beat with short chords.
 
-2. [--] `musiccaps_D_QEW1Lnl2Q_30_40` (score -0.021)
+2. [OK] `musiccaps_An-4jPvUT14_60_70` (score 0.332)
 
-    The recording features of, and some. It is obviously a, but the is since it does not have much depth to it.
+    A this song with in. The song is with, and. The song is and in nature. The song has poor audio quality with like.
 
-3. [OK] `musiccaps_EC4GbkL3XvI_80_90` (score -0.022)
+3. [--] `musiccaps_l3pK8prEnrQ_590_600` (score 0.326)
 
-    This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.
+    A sings an melody. The is with heavily instrumentation and. The articulated and add intensity and dense layers to the giving it a, hallucinatory, and like vibe. This song is an / song.
 

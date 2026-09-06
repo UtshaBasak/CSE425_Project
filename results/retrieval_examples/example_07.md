@@ -1,21 +1,21 @@
 # Retrieval example 7 (success)
 
-**Query track**: `musiccaps_CP3phqztym0_30_40`  
-**Caption**: A sings this vivacious. The is with, mandolin, groovy and lively pandeira beats. The is melodic, simple, bouncy, peppy, and joyful.
+**Query track**: `musiccaps_tG5C-Smp-eY_30_40`  
+**Caption**: The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.
 
-**Rank of the true match**: 5 of 2503
+**Rank of the true match**: 3 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_vrMmkVV4SOE_30_40` (score 0.151)
+1. [--] `musiccaps_KCytKo5LzCc_30_40` (score 0.433)
 
-    An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.
+    The recording features a of a 's and it consists of an singing over located in the right channel of the image, which makes the image. The recording is a bit and It sounds, and.
 
-2. [--] `musiccaps_KMQmM12G9Z4_110_120` (score 0.147)
+2. [--] `musiccaps_afavVsmFWds_30_40` (score 0.362)
 
-    A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.
+    The recording features a song that consists of singing over and located in the left channel of the - which makes the a bit. The consist of, and. At the end of the loop, there is a. It sounds and a bit overall.
 
-3. [--] `musiccaps_-7B9tPuIP-w_450_460` (score 0.146)
+3. [OK] `musiccaps_tG5C-Smp-eY_30_40` (score 0.348)
 
-    A voice narrates a to the rhythm of a in the. The is with, keyboard accompaniment, and vocals. The plays softly in the as the speaks and burgeons when he stops. The is a and Roll and the is a.
+    The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.
 
