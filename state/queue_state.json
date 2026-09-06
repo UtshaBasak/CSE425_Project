@@ -20,6 +20,9 @@
     },
     "C5 Task 3 MusicCaps bert_only": {
       "minutes": 19.2
+    },
+    "C5 Task 3 MusicCaps gnn_only": {
+      "minutes": 2.2
     }
   },
   "failed": {},
