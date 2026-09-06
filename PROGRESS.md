@@ -451,25 +451,25 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 07:44. **1 done, 0 failed, 20 remaining.**
+Updated 2026-09-06 08:05. **2 done, 0 failed, 19 remaining.**
 
-Estimated **3.5 h** of local GPU left, from 1 measured step(s) (estimates running 0.39x of prediction).
+Estimated **3.7 h** of local GPU left, from 2 measured step(s) (estimates running 0.44x of prediction).
 
 C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not sit in front of C5-C7 for a day. See `state/kaggle_c4_instructions.md`; merge with `scripts/import_kaggle_results.py`.
 
 | Step | Phase | State | Wall-clock |
 |---|---|---|---|
 | C1a baselines B1/B2/B4 | C1 | [x] | 46.7 min |
-| C1b structural controls | C1 | [~] | running |
-| C2 Task 3 headline (MTAT, bert-base) | C2 | [ ] | ~78 min est. |
-| C3 Task 4 headline (MusicCaps dual encoder) | C3 | [ ] | ~18 min est. |
+| C1b structural controls | C1 | [x] | 20.8 min |
+| C2 Task 3 headline (MTAT, bert-base) | C2 | [~] | running |
+| C3 Task 4 headline (MusicCaps dual encoder) | C3 | [ ] | ~20 min est. |
 | C3 retrieval export | C3 | [ ] | ~4 min est. |
 | C3 listening study | C3 | [ ] | ~2 min est. |
-| C5 Task 3 MusicCaps bert_only | C5 | [ ] | ~10 min est. |
-| C5 Task 3 MusicCaps gnn_only | C5 | [ ] | ~10 min est. |
-| C5 Task 3 MusicCaps cross_attention | C5 | [ ] | ~10 min est. |
-| C6 zero-shot vs supervised | C6 | [ ] | ~6 min est. |
-| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~12 min est. |
+| C5 Task 3 MusicCaps bert_only | C5 | [ ] | ~11 min est. |
+| C5 Task 3 MusicCaps gnn_only | C5 | [ ] | ~11 min est. |
+| C5 Task 3 MusicCaps cross_attention | C5 | [ ] | ~11 min est. |
+| C6 zero-shot vs supervised | C6 | [ ] | ~7 min est. |
+| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~13 min est. |
 | C6 threshold bootstrap | C6 | [ ] | ~2 min est. |
 | C6 compact figures | C6 | [ ] | ~1 min est. |
 | C6 genre confusion figure | C6 | [ ] | ~1 min est. |
@@ -477,8 +477,8 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C7 Task 2 genre seed 2024 | C7 | [ ] | ~2 min est. |
 | C7 Task 2 tags seed 1337 | C7 | [ ] | ~4 min est. |
 | C7 Task 2 tags seed 2024 | C7 | [ ] | ~4 min est. |
-| C7 Task 4 seed 1337 | C7 | [ ] | ~18 min est. |
-| C7 Task 4 seed 2024 | C7 | [ ] | ~18 min est. |
+| C7 Task 4 seed 1337 | C7 | [ ] | ~20 min est. |
+| C7 Task 4 seed 2024 | C7 | [ ] | ~20 min est. |
 | report fill + structural check | C7 | [ ] | ~0 min est. |
 
 <!-- QUEUE:END -->

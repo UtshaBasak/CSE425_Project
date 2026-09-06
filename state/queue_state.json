@@ -2,6 +2,9 @@
   "completed": {
     "C1a baselines B1/B2/B4": {
       "minutes": 46.7
+    },
+    "C1b structural controls": {
+      "minutes": 20.8
     }
   },
   "failed": {},

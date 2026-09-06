@@ -286,3 +286,4 @@ Format:
 [2026-09-06 06:57] QUEUE  started with 21 step(s)
 [2026-09-06 07:44] DONE   C1 C1a baselines B1/B2/B4 in 46.7 min
 [2026-09-06 08:05] DONE   C1 C1b structural controls in 20.8 min
+[2026-09-06 09:14] DONE   C2 C2 Task 3 headline (MTAT, bert-base) in 68.9 min
