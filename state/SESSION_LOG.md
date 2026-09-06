@@ -290,3 +290,4 @@ Format:
 [2026-09-06 09:18] DONE   C3 C3 Task 4 headline (MusicCaps dual encoder) in 4.5 min
 [2026-09-06 09:57] DONE   C3 C3 retrieval export in 38.7 min
 [2026-09-06 09:57] DONE   C3 C3 listening study in 0.0 min
+[2026-09-06 10:16] DONE   C5 C5 Task 3 MusicCaps bert_only in 19.2 min
