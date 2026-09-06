@@ -292,3 +292,4 @@ Format:
 [2026-09-06 09:57] DONE   C3 C3 listening study in 0.0 min
 [2026-09-06 10:16] DONE   C5 C5 Task 3 MusicCaps bert_only in 19.2 min
 [2026-09-06 10:18] DONE   C5 C5 Task 3 MusicCaps gnn_only in 2.2 min
+[2026-09-06 10:38] DONE   C5 C5 Task 3 MusicCaps cross_attention in 19.7 min
