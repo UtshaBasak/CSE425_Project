@@ -3,7 +3,7 @@
 **Query track**: `musiccaps_fYk2U9yJvps_30_40`  
 **Caption**: The song features a widely spread, and and hits. It sounds relaxing, calming and kind of satisfying, as it literally sounds like dripping through the stereo image.
 
-**Rank of the true match**: 1277 of 2503
+**Rank of the true match**: 1278 of 2503
 
 ## Top 3 retrieved
 
@@ -11,7 +11,7 @@
 
     The 's sounds as if it's being played from a child's and recorded with a phone. The starts playing after a is being made and stops after a while to be activated again by the sound.
 
-2. [--] `musiccaps_NmwmOY6iBFg_30_40` (score 0.358)
+2. [--] `musiccaps_NmwmOY6iBFg_30_40` (score 0.357)
 
     The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.
 

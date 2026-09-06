@@ -1,21 +1,21 @@
 # Retrieval example 4 (success)
 
-**Query track**: `musiccaps__ALGXHquYkM_30_40`  
-**Caption**: This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.
+**Query track**: `musiccaps_VLjcIlZvkY0_30_40`  
+**Caption**: The features a, and. It and, almost like some old horror movie with.
 
 **Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_bYwoYjbPm-I_30_40` (score 0.322)
+1. [--] `musiccaps_7TmKzUgWiRU_0_10` (score 0.273)
 
-    This music is an. The is with an solo riff. The audio quality is inferior so the is, and. There is disturbance in the with the of and a man incessantly in the.
+    This is a multi audio. There are several things happening. There’s an energetic song in the background with enthusiastic vocals, drumming and. There’s a loud whirring of an, like a, and a phone dial tone. The audio is loud, confusing, loud, and.
 
-2. [OK] `musiccaps__ALGXHquYkM_30_40` (score 0.308)
+2. [OK] `musiccaps_VLjcIlZvkY0_30_40` (score 0.253)
 
-    This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.
+    The features a, and. It and, almost like some old horror movie with.
 
-3. [--] `musiccaps_LgKOnHwaCmg_30_40` (score 0.304)
+3. [--] `musiccaps_gTO00a-LFYs_10_20` (score 0.235)
 
-    The recording features a of and singing over it. There are some and, probably because it was recorded outside. The recording is, but it regardless.
+    This is. The tempo is with. There are sounds of and and a. The is, terrifying, dangerous and.
 

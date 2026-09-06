@@ -1,21 +1,21 @@
 # Retrieval example 0 (success)
 
-**Query track**: `musiccaps_NmwmOY6iBFg_30_40`  
-**Caption**: The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.
+**Query track**: `musiccaps__n3r2inlqBc_520_530`  
+**Caption**: This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.
 
 **Rank of the true match**: 1 of 2503
 
 ## Top 3 retrieved
 
-1. [OK] `musiccaps_NmwmOY6iBFg_30_40` (score 0.360)
+1. [OK] `musiccaps__n3r2inlqBc_520_530` (score 0.331)
 
-    The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.
+    This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.
 
-2. [--] `musiccaps_dbldb9tq8ng_30_40` (score 0.357)
+2. [--] `musiccaps_HU7oqkJeItQ_0_10` (score 0.292)
 
-    The song features a singing the same as the, followed by widely spread, kick hits, punchy, and crash. There is a at some point in the loop. The is what makes the image and therefore the song sounds in.
+    The recording a being aggressively. The recording is, and it sounds, but regardless, the is.
 
-3. [--] `musiccaps_fsTVRca31nI_30_40` (score 0.325)
+3. [--] `musiccaps_rUIGOcQMaSE_40_50` (score 0.290)
 
-    The music features a voice. The voice follows a with a sound. The bass is backing the. The beat is made first with ticking sounds but then it's played by a.
+    The contains, hits and. At the very end of the video there is a. Judging by the silence at the end, it could be said that this is an of the. It sounds, and, like any sound should sound like.
 

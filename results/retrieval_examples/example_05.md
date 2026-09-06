@@ -1,21 +1,21 @@
 # Retrieval example 5 (success)
 
-**Query track**: `musiccaps_VLjcIlZvkY0_30_40`  
-**Caption**: The features a, and. It and, almost like some old horror movie with.
+**Query track**: `musiccaps_SEDfsU63w8I_30_40`  
+**Caption**: This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.
 
 **Rank of the true match**: 2 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_7TmKzUgWiRU_0_10` (score 0.273)
+1. [--] `musiccaps_PcdpjUIa8l0_30_40` (score 0.329)
 
-    This is a multi audio. There are several things happening. There’s an energetic song in the background with enthusiastic vocals, drumming and. There’s a loud whirring of an, like a, and a phone dial tone. The audio is loud, confusing, loud, and.
+    someone is masterfully over an instrumental containing percussive elements with strings/sounds and a bass note on the kick. This audio is an amateur recording.
 
-2. [OK] `musiccaps_VLjcIlZvkY0_30_40` (score 0.253)
+2. [OK] `musiccaps_SEDfsU63w8I_30_40` (score 0.326)
 
-    The features a, and. It and, almost like some old horror movie with.
+    This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.
 
-3. [--] `musiccaps_gTO00a-LFYs_10_20` (score 0.235)
+3. [--] `musiccaps_3zntWbS9XeI_70_80` (score 0.322)
 
-    This is. The tempo is with. There are sounds of and and a. The is, terrifying, dangerous and.
+    This audio clip features the end of an with a lot of. This additional gives the ending an feel. At the end of the clip, a chord is struck. There are no other in this. There are in this. This can be used to promote a pedal.
 

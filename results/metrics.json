@@ -1211,300 +1211,300 @@
       "threshold": 0.19,
       "support": 698,
       "n_evaluated": 3500,
-      "precision": 0.19942857142857143,
-      "recall": 1.0,
-      "f1": 0.33253930443068125,
-      "auc_pr": 0.19417627025453682
+      "precision": 0.4347496206373293,
+      "recall": 0.8209169054441261,
+      "f1": 0.5684523809523809,
+      "auc_pr": 0.6581231961355537
     },
     {
       "tag_index": 1,
       "threshold": 0.45,
       "support": 527,
       "n_evaluated": 3500,
-      "precision": 0.13669590643274854,
-      "recall": 0.7096774193548387,
-      "f1": 0.22923689855960772,
-      "auc_pr": 0.10706111180842603
+      "precision": 0.6320582877959927,
+      "recall": 0.6584440227703985,
+      "f1": 0.6449814126394051,
+      "auc_pr": 0.6359624505982797
     },
     {
       "tag_index": 2,
       "threshold": 0.17,
       "support": 477,
       "n_evaluated": 3500,
-      "precision": 0.1362857142857143,
-      "recall": 1.0,
-      "f1": 0.23987930600955493,
-      "auc_pr": 0.12859353126566492
+      "precision": 0.29592760180995475,
+      "recall": 0.6855345911949685,
+      "f1": 0.4134007585335019,
+      "auc_pr": 0.35108479149765354
     },
     {
       "tag_index": 3,
       "threshold": 0.17,
       "support": 333,
       "n_evaluated": 3500,
-      "precision": 0.09514285714285714,
-      "recall": 1.0,
-      "f1": 0.17375423949908686,
-      "auc_pr": 0.07208485815077154
+      "precision": 0.2937720329024677,
+      "recall": 0.7507507507507507,
+      "f1": 0.4222972972972972,
+      "auc_pr": 0.38792099612838876
     },
     {
       "tag_index": 4,
       "threshold": 0.54,
       "support": 674,
       "n_evaluated": 3500,
-      "precision": 0.20614239181014427,
-      "recall": 0.6572700296735905,
-      "f1": 0.31385051363797384,
-      "auc_pr": 0.1826430896578794
+      "precision": 0.6803977272727273,
+      "recall": 0.7106824925816023,
+      "f1": 0.6952104499274311,
+      "auc_pr": 0.722761013675889
     },
     {
       "tag_index": 5,
       "threshold": 0.09,
       "support": 542,
       "n_evaluated": 3500,
-      "precision": 0.15485714285714286,
-      "recall": 1.0,
-      "f1": 0.2681840672934191,
-      "auc_pr": 0.1565261907630519
+      "precision": 0.33843797856049007,
+      "recall": 0.8154981549815498,
+      "f1": 0.4783549783549783,
+      "auc_pr": 0.46575140967966583
     },
     {
       "tag_index": 6,
       "threshold": 0.44,
       "support": 546,
       "n_evaluated": 3500,
-      "precision": 0.15622317596566523,
-      "recall": 1.0,
-      "f1": 0.2702301410541945,
-      "auc_pr": 0.21321616417369255
+      "precision": 0.45161290322580644,
+      "recall": 0.358974358974359,
+      "f1": 0.4,
+      "auc_pr": 0.42079394347097826
     },
     {
       "tag_index": 7,
       "threshold": 0.2,
       "support": 528,
       "n_evaluated": 3500,
-      "precision": 0.15085714285714286,
-      "recall": 1.0,
-      "f1": 0.2621648460774578,
-      "auc_pr": 0.19722887065822045
+      "precision": 0.3852813852813853,
+      "recall": 0.6742424242424242,
+      "f1": 0.4903581267217631,
+      "auc_pr": 0.43595089338687854
     },
     {
       "tag_index": 8,
       "threshold": 0.14,
       "support": 405,
       "n_evaluated": 3500,
-      "precision": 0.11571428571428571,
-      "recall": 1.0,
-      "f1": 0.20742637644046097,
-      "auc_pr": 0.1376465993207953
+      "precision": 0.1760772659732541,
+      "recall": 0.5851851851851851,
+      "f1": 0.27070245573957735,
+      "auc_pr": 0.17249145428552493
     },
     {
       "tag_index": 9,
       "threshold": 0.11,
       "support": 360,
       "n_evaluated": 3500,
-      "precision": 0.10285714285714286,
-      "recall": 1.0,
-      "f1": 0.18652849740932645,
-      "auc_pr": 0.06323910252766766
+      "precision": 0.4773413897280967,
+      "recall": 0.8777777777777778,
+      "f1": 0.6183953033268103,
+      "auc_pr": 0.8092888953023116
     },
     {
       "tag_index": 10,
       "threshold": 0.28,
       "support": 492,
       "n_evaluated": 3500,
-      "precision": 0.14057142857142857,
-      "recall": 1.0,
-      "f1": 0.24649298597194388,
-      "auc_pr": 0.09755570698253774
+      "precision": 0.436241610738255,
+      "recall": 0.5284552845528455,
+      "f1": 0.4779411764705882,
+      "auc_pr": 0.5023442817843259
     },
     {
       "tag_index": 11,
       "threshold": 0.2,
       "support": 181,
       "n_evaluated": 3500,
-      "precision": 0.05171428571428571,
-      "recall": 1.0,
-      "f1": 0.09834284161912525,
-      "auc_pr": 0.05022543101171439
+      "precision": 0.25190839694656486,
+      "recall": 0.5469613259668509,
+      "f1": 0.34494773519163763,
+      "auc_pr": 0.30766419669178485
     },
     {
       "tag_index": 12,
       "threshold": 0.46,
       "support": 386,
       "n_evaluated": 3500,
-      "precision": 0.11146869514335869,
-      "recall": 0.9870466321243523,
-      "f1": 0.20031545741324921,
-      "auc_pr": 0.10725144116800543
+      "precision": 0.7038461538461539,
+      "recall": 0.4740932642487047,
+      "f1": 0.5665634674922602,
+      "auc_pr": 0.633708702710954
     },
     {
       "tag_index": 13,
       "threshold": 0.25,
       "support": 231,
       "n_evaluated": 3500,
-      "precision": 0.066,
-      "recall": 1.0,
-      "f1": 0.12382739212007504,
-      "auc_pr": 0.17698887425563725
+      "precision": 0.48,
+      "recall": 0.2597402597402597,
+      "f1": 0.33707865168539325,
+      "auc_pr": 0.3440620386329192
     },
     {
       "tag_index": 14,
       "threshold": 0.2,
       "support": 344,
       "n_evaluated": 3500,
-      "precision": 0.09828571428571428,
-      "recall": 1.0,
-      "f1": 0.17898022892819979,
-      "auc_pr": 0.25694287904790947
+      "precision": 0.4462809917355372,
+      "recall": 0.7848837209302325,
+      "f1": 0.5690200210748156,
+      "auc_pr": 0.7633446296614061
     },
     {
       "tag_index": 15,
       "threshold": 0.11,
       "support": 401,
       "n_evaluated": 3500,
-      "precision": 0.11457142857142857,
-      "recall": 1.0,
-      "f1": 0.2055883106895668,
-      "auc_pr": 0.15610038754418049
+      "precision": 0.33228511530398325,
+      "recall": 0.7905236907730673,
+      "f1": 0.46789667896678966,
+      "auc_pr": 0.5478445659803327
     },
     {
       "tag_index": 16,
       "threshold": 0.29,
       "support": 457,
       "n_evaluated": 3500,
-      "precision": 0.13057142857142856,
-      "recall": 1.0,
-      "f1": 0.23098306798079352,
-      "auc_pr": 0.12764049692683987
+      "precision": 0.49271523178807947,
+      "recall": 0.8140043763676149,
+      "f1": 0.6138613861386139,
+      "auc_pr": 0.6013517838944366
     },
     {
       "tag_index": 17,
       "threshold": 0.26,
       "support": 273,
       "n_evaluated": 3500,
-      "precision": 0.078,
-      "recall": 1.0,
-      "f1": 0.14471243042671614,
-      "auc_pr": 0.08411008455491384
+      "precision": 0.2661290322580645,
+      "recall": 0.3626373626373626,
+      "f1": 0.3069767441860465,
+      "auc_pr": 0.23212715049878777
     },
     {
       "tag_index": 18,
       "threshold": 0.08,
       "support": 183,
       "n_evaluated": 3500,
-      "precision": 0.05228571428571428,
-      "recall": 1.0,
-      "f1": 0.09937550909584578,
-      "auc_pr": 0.08797759267136548
+      "precision": 0.13101604278074866,
+      "recall": 0.2677595628415301,
+      "f1": 0.17594254937163373,
+      "auc_pr": 0.11865099427664219
     },
     {
       "tag_index": 19,
       "threshold": 0.06,
       "support": 241,
       "n_evaluated": 3500,
-      "precision": 0.06885714285714285,
-      "recall": 1.0,
-      "f1": 0.1288425554664528,
-      "auc_pr": 0.06015625173665539
+      "precision": 0.19001919385796545,
+      "recall": 0.8215767634854771,
+      "f1": 0.308651597817615,
+      "auc_pr": 0.26412453711821815
     },
     {
       "tag_index": 20,
       "threshold": 0.35000000000000003,
       "support": 41,
       "n_evaluated": 3500,
-      "precision": 0.011717633609602743,
-      "recall": 1.0,
-      "f1": 0.023163841807909605,
-      "auc_pr": 0.009861405600894846
+      "precision": 0.2318840579710145,
+      "recall": 0.3902439024390244,
+      "f1": 0.2909090909090909,
+      "auc_pr": 0.2826248108241236
     },
     {
       "tag_index": 21,
       "threshold": 0.17,
       "support": 328,
       "n_evaluated": 3500,
-      "precision": 0.09371428571428571,
-      "recall": 1.0,
-      "f1": 0.17136886102403343,
-      "auc_pr": 0.06920403332022879
+      "precision": 0.6075697211155379,
+      "recall": 0.9298780487804879,
+      "f1": 0.7349397590361446,
+      "auc_pr": 0.8213359718701791
     },
     {
       "tag_index": 22,
       "threshold": 0.25,
       "support": 141,
       "n_evaluated": 3500,
-      "precision": 0.040285714285714286,
-      "recall": 1.0,
-      "f1": 0.07745124965668773,
-      "auc_pr": 0.04049601678452453
+      "precision": 0.5203252032520326,
+      "recall": 0.9078014184397163,
+      "f1": 0.6614987080103358,
+      "auc_pr": 0.8969092081346713
     },
     {
       "tag_index": 23,
       "threshold": 0.23,
       "support": 141,
       "n_evaluated": 3500,
-      "precision": 0.040285714285714286,
-      "recall": 1.0,
-      "f1": 0.07745124965668773,
-      "auc_pr": 0.03035681258550927
+      "precision": 0.2328042328042328,
+      "recall": 0.3120567375886525,
+      "f1": 0.26666666666666666,
+      "auc_pr": 0.20839222609436975
     },
     {
       "tag_index": 24,
       "threshold": 0.3,
       "support": 193,
       "n_evaluated": 3500,
-      "precision": 0.055142857142857146,
-      "recall": 1.0,
-      "f1": 0.10452206877877065,
-      "auc_pr": 0.06666950055747814
+      "precision": 0.30434782608695654,
+      "recall": 0.47150259067357514,
+      "f1": 0.3699186991869919,
+      "auc_pr": 0.2949100604258187
     },
     {
       "tag_index": 25,
       "threshold": 0.18,
       "support": 126,
       "n_evaluated": 3500,
-      "precision": 0.036,
-      "recall": 1.0,
-      "f1": 0.06949806949806948,
-      "auc_pr": 0.07906380796698008
+      "precision": 0.19230769230769232,
+      "recall": 0.35714285714285715,
+      "f1": 0.25,
+      "auc_pr": 0.16828856180396992
     },
     {
       "tag_index": 26,
       "threshold": 0.06,
       "support": 142,
       "n_evaluated": 3500,
-      "precision": 0.04057142857142857,
-      "recall": 1.0,
-      "f1": 0.07797913234486546,
-      "auc_pr": 0.03619651551912539
+      "precision": 0.11914893617021277,
+      "recall": 0.19718309859154928,
+      "f1": 0.14854111405835543,
+      "auc_pr": 0.12835135778874132
     },
     {
       "tag_index": 27,
       "threshold": 0.08,
       "support": 172,
       "n_evaluated": 3500,
-      "precision": 0.04914285714285714,
-      "recall": 1.0,
-      "f1": 0.09368191721132897,
-      "auc_pr": 0.04131388727709645
+      "precision": 0.23148148148148148,
+      "recall": 0.7267441860465116,
+      "f1": 0.35112359550561795,
+      "auc_pr": 0.3438126390505102
     },
     {
       "tag_index": 28,
       "threshold": 0.13,
       "support": 117,
       "n_evaluated": 3500,
-      "precision": 0.033428571428571426,
-      "recall": 1.0,
-      "f1": 0.0646944982029306,
-      "auc_pr": 0.05381014147179945
+      "precision": 0.17329545454545456,
+      "recall": 0.5213675213675214,
+      "f1": 0.2601279317697228,
+      "auc_pr": 0.18609740755834359
     },
     {
       "tag_index": 29,
       "threshold": 0.17,
       "support": 186,
       "n_evaluated": 3500,
-      "precision": 0.053142857142857144,
-      "recall": 1.0,
-      "f1": 0.10092240911557243,
-      "auc_pr": 0.03895169499062678
+      "precision": 0.4818941504178273,
+      "recall": 0.9301075268817204,
+      "f1": 0.634862385321101,
+      "auc_pr": 0.8739511275350383
     },
     {
       "tag_index": 30,
@@ -1514,137 +1514,137 @@
       "precision": 0.0,
       "recall": 0.0,
       "f1": 0.0,
-      "auc_pr": 0.002694314202254982
+      "auc_pr": 0.0668728402193669
     },
     {
       "tag_index": 31,
       "threshold": 0.08,
       "support": 69,
       "n_evaluated": 3500,
-      "precision": 0.019714285714285715,
-      "recall": 1.0,
-      "f1": 0.038666293079293916,
-      "auc_pr": 0.021801153483389575
+      "precision": 0.0825242718446602,
+      "recall": 0.4927536231884058,
+      "f1": 0.14137214137214138,
+      "auc_pr": 0.07597797346739864
     },
     {
       "tag_index": 32,
       "threshold": 0.11,
       "support": 123,
       "n_evaluated": 3500,
-      "precision": 0.03514285714285714,
-      "recall": 1.0,
-      "f1": 0.06789953077560033,
-      "auc_pr": 0.03364228614277326
+      "precision": 0.23728813559322035,
+      "recall": 0.11382113821138211,
+      "f1": 0.15384615384615385,
+      "auc_pr": 0.10890575333646092
     },
     {
       "tag_index": 33,
       "threshold": 0.11,
       "support": 80,
       "n_evaluated": 3500,
-      "precision": 0.022857142857142857,
-      "recall": 1.0,
-      "f1": 0.04469273743016759,
-      "auc_pr": 0.019865366778778343
+      "precision": 0.1503957783641161,
+      "recall": 0.7125,
+      "f1": 0.24836601307189546,
+      "auc_pr": 0.216613849624468
     },
     {
       "tag_index": 34,
       "threshold": 0.25,
       "support": 176,
       "n_evaluated": 3500,
-      "precision": 0.05028571428571429,
-      "recall": 1.0,
-      "f1": 0.09575625680087052,
-      "auc_pr": 0.18753261233939506
+      "precision": 0.3392857142857143,
+      "recall": 0.32386363636363635,
+      "f1": 0.33139534883720934,
+      "auc_pr": 0.28307251409621853
     },
     {
       "tag_index": 35,
       "threshold": 0.01,
       "support": 81,
       "n_evaluated": 3500,
-      "precision": 0.023142857142857142,
-      "recall": 1.0,
-      "f1": 0.0452387601228707,
-      "auc_pr": 0.017507169080837725
+      "precision": 0.07420494699646643,
+      "recall": 0.7777777777777778,
+      "f1": 0.13548387096774195,
+      "auc_pr": 0.13618158177077083
     },
     {
       "tag_index": 36,
       "threshold": 0.11,
       "support": 101,
       "n_evaluated": 3500,
-      "precision": 0.028857142857142856,
-      "recall": 1.0,
-      "f1": 0.05609552901971674,
-      "auc_pr": 0.020865707681878804
+      "precision": 0.4125560538116592,
+      "recall": 0.9108910891089109,
+      "f1": 0.5679012345679013,
+      "auc_pr": 0.566300764106646
     },
     {
       "tag_index": 37,
       "threshold": 0.02,
       "support": 162,
       "n_evaluated": 3500,
-      "precision": 0.046285714285714284,
-      "recall": 1.0,
-      "f1": 0.08847624249044238,
-      "auc_pr": 0.030805493879242356
+      "precision": 0.1875,
+      "recall": 0.7037037037037037,
+      "f1": 0.2961038961038961,
+      "auc_pr": 0.26735389907045193
     },
     {
       "tag_index": 38,
       "threshold": 0.04,
       "support": 52,
       "n_evaluated": 3500,
-      "precision": 0.014857142857142857,
-      "recall": 1.0,
-      "f1": 0.02927927927927928,
-      "auc_pr": 0.016108581249709146
+      "precision": 0.01935483870967742,
+      "recall": 0.057692307692307696,
+      "f1": 0.028985507246376812,
+      "auc_pr": 0.03296238964789499
     },
     {
       "tag_index": 39,
       "threshold": 0.02,
       "support": 30,
       "n_evaluated": 3500,
-      "precision": 0.008571428571428572,
-      "recall": 1.0,
-      "f1": 0.016997167138810197,
-      "auc_pr": 0.0154185583521395
+      "precision": 0.12440191387559808,
+      "recall": 0.8666666666666667,
+      "f1": 0.21757322175732216,
+      "auc_pr": 0.31065998047394644
     },
     {
       "tag_index": 40,
       "threshold": 0.11,
       "support": 51,
       "n_evaluated": 3500,
-      "precision": 0.014571428571428572,
-      "recall": 1.0,
-      "f1": 0.028724303013235707,
-      "auc_pr": 0.01394578793343079
+      "precision": 0.1,
+      "recall": 0.39215686274509803,
+      "f1": 0.1593625498007968,
+      "auc_pr": 0.08519758487077764
     },
     {
       "tag_index": 41,
       "threshold": 0.03,
       "support": 49,
       "n_evaluated": 3500,
-      "precision": 0.014,
-      "recall": 1.0,
-      "f1": 0.027613412228796843,
-      "auc_pr": 0.014689453536767339
+      "precision": 0.017543859649122806,
+      "recall": 0.12244897959183673,
+      "f1": 0.030690537084398978,
+      "auc_pr": 0.021466760863478714
     },
     {
       "tag_index": 42,
       "threshold": 0.1,
       "support": 27,
       "n_evaluated": 3500,
-      "precision": 0.007714285714285714,
-      "recall": 1.0,
-      "f1": 0.015310462149135241,
-      "auc_pr": 0.005896382445000736
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "auc_pr": 0.13423731471092223
     },
     {
       "tag_index": 43,
       "threshold": 0.05,
       "support": 54,
       "n_evaluated": 3500,
-      "precision": 0.015428571428571429,
-      "recall": 1.0,
-      "f1": 0.03038829487900957,
-      "auc_pr": 0.02211995578645022
+      "precision": 0.02909090909090909,
+      "recall": 0.14814814814814814,
+      "f1": 0.0486322188449848,
+      "auc_pr": 0.033418241736028045
     },
     {
       "tag_index": 44,
@@ -1654,17 +1654,17 @@
       "precision": 0.017142857142857144,
       "recall": 1.0,
       "f1": 0.033707865168539325,
-      "auc_pr": 0.030552202671061516
+      "auc_pr": 0.2846945677424639
     },
     {
       "tag_index": 45,
       "threshold": 0.2,
       "support": 53,
       "n_evaluated": 3500,
-      "precision": 0.015142857142857144,
-      "recall": 1.0,
-      "f1": 0.02983394314663665,
-      "auc_pr": 0.08545629903346989
+      "precision": 0.28859060402684567,
+      "recall": 0.8113207547169812,
+      "f1": 0.42574257425742584,
+      "auc_pr": 0.3401614567438731
     },
     {
       "tag_index": 46,
@@ -1674,37 +1674,37 @@
       "precision": 0.019428571428571427,
       "recall": 1.0,
       "f1": 0.03811659192825112,
-      "auc_pr": 0.016798343545572175
+      "auc_pr": 0.09879948490223162
     },
     {
       "tag_index": 47,
       "threshold": 0.02,
       "support": 30,
       "n_evaluated": 3500,
-      "precision": 0.008571428571428572,
-      "recall": 1.0,
-      "f1": 0.016997167138810197,
-      "auc_pr": 0.01210410700905616
+      "precision": 0.021917808219178082,
+      "recall": 0.26666666666666666,
+      "f1": 0.04050632911392405,
+      "auc_pr": 0.018385244823645466
     },
     {
       "tag_index": 48,
       "threshold": 0.04,
       "support": 63,
       "n_evaluated": 3500,
-      "precision": 0.018,
-      "recall": 1.0,
-      "f1": 0.03536345776031434,
-      "auc_pr": 0.01115163492276517
+      "precision": 0.09429280397022333,
+      "recall": 0.6031746031746031,
+      "f1": 0.1630901287553648,
+      "auc_pr": 0.10108069066478112
     },
     {
       "tag_index": 49,
       "threshold": 0.02,
       "support": 60,
       "n_evaluated": 3500,
-      "precision": 0.017142857142857144,
-      "recall": 1.0,
-      "f1": 0.033707865168539325,
-      "auc_pr": 0.014942898350837518
+      "precision": 0.04712041884816754,
+      "recall": 0.45,
+      "f1": 0.08530805687203792,
+      "auc_pr": 0.05961120387572251
     }
   ],
   "baselines": [
@@ -1758,81 +1758,81 @@
       "variant": "gnn_only",
       "mode": "gnn_only",
       "rewired": false,
-      "macro_f1": 0.32837495641769654,
-      "micro_f1": 0.30949980453077097,
-      "mean_auc_pr": 0.3386184838587243,
+      "macro_f1": 0.325870730517468,
+      "micro_f1": 0.30897936419408817,
+      "mean_auc_pr": 0.3385186774010752,
       "n_params": 926388
     },
     {
       "variant": "early_concat",
       "mode": "early_concat",
       "rewired": false,
-      "macro_f1": 0.3376461241285974,
-      "micro_f1": 0.3688784803538902,
-      "mean_auc_pr": 0.3420317674716333,
+      "macro_f1": 0.3391594445672702,
+      "micro_f1": 0.36624122200010256,
+      "mean_auc_pr": 0.3419387070467073,
       "n_params": 1025716
     },
     {
       "variant": "late_concat",
       "mode": "late_concat",
       "rewired": false,
-      "macro_f1": 0.33224948647266467,
-      "micro_f1": 0.37043083437492025,
-      "mean_auc_pr": 0.33775764050686286,
+      "macro_f1": 0.32977435679561756,
+      "micro_f1": 0.3694166190251299,
+      "mean_auc_pr": 0.3382408860855438,
       "n_params": 1025716
     },
     {
       "variant": "cross_attention",
       "mode": "cross_attention",
       "rewired": false,
-      "macro_f1": 0.3150757476127324,
-      "micro_f1": 0.3295375423938189,
-      "mean_auc_pr": 0.3293394004345515,
+      "macro_f1": 0.3147701874222395,
+      "micro_f1": 0.3546785741013296,
+      "mean_auc_pr": 0.3176280312975789,
       "n_params": 1454004
     },
     {
       "variant": "gated",
       "mode": "gated",
       "rewired": false,
-      "macro_f1": 0.30763991566368876,
-      "micro_f1": 0.3460579506668926,
-      "mean_auc_pr": 0.3199723270322077,
+      "macro_f1": 0.30848517175380974,
+      "micro_f1": 0.351699175547959,
+      "mean_auc_pr": 0.3186322779849939,
       "n_params": 1124020
     },
     {
       "variant": "bidirectional",
       "mode": "bidirectional",
       "rewired": false,
-      "macro_f1": 0.32457575338381917,
-      "micro_f1": 0.3616150085614314,
-      "mean_auc_pr": 0.3350596889733138,
+      "macro_f1": 0.3303371127179393,
+      "micro_f1": 0.3710677612914564,
+      "mean_auc_pr": 0.33450103736317993,
       "n_params": 2080948
     },
     {
       "variant": "cross_attention + rewired graph",
       "mode": "cross_attention",
       "rewired": true,
-      "macro_f1": 0.30341344759720873,
-      "micro_f1": 0.3368298931696234,
-      "mean_auc_pr": 0.31645857672158817,
+      "macro_f1": 0.32070205013773545,
+      "micro_f1": 0.3357121130583308,
+      "mean_auc_pr": 0.3361973409916344,
       "n_params": 1454004
     }
   ],
   "tsne_genre": {
     "knn_probe": 0.6067415730337079,
-    "silhouette": -0.01897267869894087,
+    "silhouette": -0.018972570346083826,
     "perplexity": 30,
     "n_points": 801
   },
   "tsne_mood": {
     "knn_probe": 0.6036363636363636,
-    "silhouette": 0.045481663660419114,
+    "silhouette": 0.04548196197952239,
     "perplexity": 30,
     "n_points": 275
   },
   "tsne_mood_mtat": {
     "knn_probe": 0.5596681557115507,
-    "silhouette": -0.20551765266620148,
+    "silhouette": -0.2055163008387959,
     "perplexity": 30,
     "n_points": 1567,
     "n_labelled": 1567,
@@ -1870,36 +1870,6 @@
   },
   "retrieval_examples": [
     {
-      "query_track_id": "musiccaps_NmwmOY6iBFg_30_40",
-      "query_caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
-      "selection": "best",
-      "true_rank": 1,
-      "is_failure": false,
-      "top3": [
-        {
-          "rank": 1,
-          "track_id": "musiccaps_NmwmOY6iBFg_30_40",
-          "caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
-          "score": 0.3596140146255493,
-          "is_correct": true
-        },
-        {
-          "rank": 2,
-          "track_id": "musiccaps_dbldb9tq8ng_30_40",
-          "caption": "The song features a singing the same as the, followed by widely spread, kick hits, punchy, and crash. There is a at some point in the loop. The is what makes the image and therefore the song sounds in.",
-          "score": 0.35688555240631104,
-          "is_correct": false
-        },
-        {
-          "rank": 3,
-          "track_id": "musiccaps_fsTVRca31nI_30_40",
-          "caption": "The music features a voice. The voice follows a with a sound. The bass is backing the. The beat is made first with ticking sounds but then it's played by a.",
-          "score": 0.32524508237838745,
-          "is_correct": false
-        }
-      ]
-    },
-    {
       "query_track_id": "musiccaps__n3r2inlqBc_520_530",
       "query_caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
       "selection": "best",
@@ -1910,21 +1880,51 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": 0.3305949866771698,
+          "score": 0.33062756061553955,
           "is_correct": true
         },
         {
           "rank": 2,
           "track_id": "musiccaps_HU7oqkJeItQ_0_10",
           "caption": "The recording a being aggressively. The recording is, and it sounds, but regardless, the is.",
-          "score": 0.29207244515419006,
+          "score": 0.2920675277709961,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_rUIGOcQMaSE_40_50",
           "caption": "The contains, hits and. At the very end of the video there is a. Judging by the silence at the end, it could be said that this is an of the. It sounds, and, like any sound should sound like.",
-          "score": 0.2902815043926239,
+          "score": 0.2902616858482361,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_NmwmOY6iBFg_30_40",
+      "query_caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
+      "selection": "best",
+      "true_rank": 1,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_NmwmOY6iBFg_30_40",
+          "caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
+          "score": 0.3595508933067322,
+          "is_correct": true
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_dbldb9tq8ng_30_40",
+          "caption": "The song features a singing the same as the, followed by widely spread, kick hits, punchy, and crash. There is a at some point in the loop. The is what makes the image and therefore the song sounds in.",
+          "score": 0.3568529486656189,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_fsTVRca31nI_30_40",
+          "caption": "The music features a voice. The voice follows a with a sound. The bass is backing the. The beat is made first with ticking sounds but then it's played by a.",
+          "score": 0.3251827359199524,
           "is_correct": false
         }
       ]
@@ -1940,51 +1940,21 @@
           "rank": 1,
           "track_id": "musiccaps_eZE0RmJESFU_140_150",
           "caption": "A with a and a funky. The is and the hi- is busy playing steady. plays a melody along with the male. The feature a male and duo singing in, while fill in the beat with short chords.",
-          "score": 0.41510915756225586,
+          "score": 0.4150875210762024,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_An-4jPvUT14_60_70",
           "caption": "A this song with in. The song is with, and. The song is and in nature. The song has poor audio quality with like.",
-          "score": 0.3325003683567047,
+          "score": 0.3325100839138031,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_l3pK8prEnrQ_590_600",
           "caption": "A sings an melody. The is with heavily instrumentation and. The articulated and add intensity and dense layers to the giving it a, hallucinatory, and like vibe. This song is an / song.",
-          "score": 0.32603976130485535,
-          "is_correct": false
-        }
-      ]
-    },
-    {
-      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
-      "query_caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
-      "selection": "best",
-      "true_rank": 2,
-      "is_failure": false,
-      "top3": [
-        {
-          "rank": 1,
-          "track_id": "musiccaps_azyNUtTHvaE_30_40",
-          "caption": "A is very clear and a pitched melody. She got a lot of reverb on her. A is supporting her. This song may be playing in a post-apocalyptic movie-scene.",
-          "score": 0.21269811689853668,
-          "is_correct": false
-        },
-        {
-          "rank": 2,
-          "track_id": "musiccaps_9gCeNCnWZhE_30_40",
-          "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a document",
-          "score": 0.2097977250814438,
-          "is_correct": true
-        },
-        {
-          "rank": 3,
-          "track_id": "musiccaps__gWEpDgPAho_100_110",
-          "caption": "A is kind of a calming in a while you can hear of and that seem not to belong to the song. This is an and not of the best audio-quality. This song may be playing in a cruel movie scene.",
-          "score": 0.20736511051654816,
+          "score": 0.3260453939437866,
           "is_correct": false
         }
       ]
@@ -2000,21 +1970,21 @@
           "rank": 1,
           "track_id": "musiccaps_bYwoYjbPm-I_30_40",
           "caption": "This music is an. The is with an solo riff. The audio quality is inferior so the is, and. There is disturbance in the with the of and a man incessantly in the.",
-          "score": 0.32157886028289795,
+          "score": 0.32162198424339294,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps__ALGXHquYkM_30_40",
           "caption": "This is. The is with a melodic harmony. The quality however is and,so the is. There are of and, indicating that this is a live performance.",
-          "score": 0.3079018294811249,
+          "score": 0.3079521059989929,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_LgKOnHwaCmg_30_40",
           "caption": "The recording features a of and singing over it. There are some and, probably because it was recorded outside. The recording is, but it regardless.",
-          "score": 0.3043251633644104,
+          "score": 0.3043522834777832,
           "is_correct": false
         }
       ]
@@ -2030,21 +2000,21 @@
           "rank": 1,
           "track_id": "musiccaps_7TmKzUgWiRU_0_10",
           "caption": "This is a multi audio. There are several things happening. There\u2019s an energetic song in the background with enthusiastic vocals, drumming and. There\u2019s a loud whirring of an, like a, and a phone dial tone. The audio is loud, confusing, loud, and.",
-          "score": 0.2726200222969055,
+          "score": 0.27265211939811707,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_VLjcIlZvkY0_30_40",
           "caption": "The features a, and. It and, almost like some old horror movie with.",
-          "score": 0.25303563475608826,
+          "score": 0.2530785799026489,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_gTO00a-LFYs_10_20",
           "caption": "This is. The tempo is with. There are sounds of and and a. The is, terrifying, dangerous and.",
-          "score": 0.2352171391248703,
+          "score": 0.2352902740240097,
           "is_correct": false
         }
       ]
@@ -2060,51 +2030,81 @@
           "rank": 1,
           "track_id": "musiccaps_PcdpjUIa8l0_30_40",
           "caption": "someone is masterfully over an instrumental containing percussive elements with strings/sounds and a bass note on the kick. This audio is an amateur recording.",
-          "score": 0.32895076274871826,
+          "score": 0.3289389908313751,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_SEDfsU63w8I_30_40",
           "caption": "This is a of a being played through a. The is at the beginning and switches to an or distortion tone. A is heard when the is switched to the distortion. There are no other instruments played in this clip apart from one. The guitarist seems to be testing the and dirty of the amplifier.",
-          "score": 0.3260585367679596,
+          "score": 0.3260652422904968,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_3zntWbS9XeI_70_80",
           "caption": "This audio clip features the end of an with a lot of. This additional gives the ending an feel. At the end of the clip, a chord is struck. There are no other in this. There are in this. This can be used to promote a pedal.",
-          "score": 0.32223665714263916,
+          "score": 0.3222604990005493,
           "is_correct": false
         }
       ]
     },
     {
-      "query_track_id": "musiccaps_qlWEAm4AUTU_370_380",
-      "query_caption": "Audio of a playing by itself. Sounds like a, or, playing a, alternating between a sound and a sound.",
+      "query_track_id": "musiccaps_9gCeNCnWZhE_30_40",
+      "query_caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a documentary.",
+      "selection": "best",
+      "true_rank": 2,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_azyNUtTHvaE_30_40",
+          "caption": "A is very clear and a pitched melody. She got a lot of reverb on her. A is supporting her. This song may be playing in a post-apocalyptic movie-scene.",
+          "score": 0.21270833909511566,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_9gCeNCnWZhE_30_40",
+          "caption": "This is an piece. The is playing a while samples of the and the can be heard in the background. There is also a very faint clattering bell-like that can be heard. The piece is very. It could be used in a meditation video. It could also be used during the scenery shots in the soundtrack of a document",
+          "score": 0.20983470976352692,
+          "is_correct": true
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps__gWEpDgPAho_100_110",
+          "caption": "A is kind of a calming in a while you can hear of and that seem not to belong to the song. This is an and not of the best audio-quality. This song may be playing in a cruel movie scene.",
+          "score": 0.20739325881004333,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_tG5C-Smp-eY_30_40",
+      "query_caption": "The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.",
       "selection": "best",
       "true_rank": 3,
       "is_failure": false,
       "top3": [
         {
           "rank": 1,
-          "track_id": "musiccaps_bqPCtwibgPg_440_450",
-          "caption": "This audio is an. The tempo is medium with an rhythm with a giving instructions. The went from to. This clip is instructional audio on.",
-          "score": 0.4336898922920227,
+          "track_id": "musiccaps_KCytKo5LzCc_30_40",
+          "caption": "The recording features a of a 's and it consists of an singing over located in the right channel of the image, which makes the image. The recording is a bit and It sounds, and.",
+          "score": 0.4334186911582947,
           "is_correct": false
         },
         {
           "rank": 2,
-          "track_id": "musiccaps_tmpVzeD_M5s_40_50",
-          "caption": "This clip is an. The tempo is slow with the sound of an being. This is a on how to tune a.",
-          "score": 0.36806076765060425,
+          "track_id": "musiccaps_afavVsmFWds_30_40",
+          "caption": "The recording features a song that consists of singing over and located in the left channel of the - which makes the a bit. The consist of, and. At the end of the loop, there is a. It sounds and a bit overall.",
+          "score": 0.3615064322948456,
           "is_correct": false
         },
         {
           "rank": 3,
-          "track_id": "musiccaps_qlWEAm4AUTU_370_380",
-          "caption": "Audio of a playing by itself. Sounds like a, or, playing a, alternating between a sound and a sound.",
-          "score": 0.33463212847709656,
+          "track_id": "musiccaps_tG5C-Smp-eY_30_40",
+          "caption": "The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.",
+          "score": 0.3475637137889862,
           "is_correct": true
         }
       ]
@@ -2120,21 +2120,21 @@
           "rank": 1,
           "track_id": "musiccaps_tG5C-Smp-eY_30_40",
           "caption": "The recording features a song that consists, alongside, rapping over, and all located in the right channel of the image, making it. The recording is.",
-          "score": 0.37710878252983093,
+          "score": 0.3771236836910248,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_qAr3mFkEvco_30_40",
           "caption": "The recording features a song that contains, talking over beats, and. It sounds chaotic, and - like a parody song.",
-          "score": 0.3753449618816376,
+          "score": 0.3753369450569153,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_682ODyTqKyw_130_140",
           "caption": "The clip has a relaxing, vibe. It is a outdoors, and features various of skateboarders doing tricks. The song itself is a song that's relaxing and. There's an, and a high pitched.",
-          "score": 0.36429452896118164,
+          "score": 0.36423471570014954,
           "is_correct": false
         }
       ]
@@ -2150,21 +2150,21 @@
           "rank": 1,
           "track_id": "musiccaps_3R8xDvhJk54_30_40",
           "caption": "The recording features a on how to tune an, string by string. The recording is very.",
-          "score": 0.31251588463783264,
+          "score": 0.3125515878200531,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_SkFG5SoXsVk_50_60",
           "caption": "The is an. The is with a distinctive style backbeat and a along with a solo. The is extremely passionate and in nature. The audio quality is poor.",
-          "score": 0.2980751097202301,
+          "score": 0.29807645082473755,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_VjbRot21Hq0_30_40",
           "caption": "The recording features an as it is being, string by string. The recording is very.",
-          "score": 0.2623625695705414,
+          "score": 0.2624412477016449,
           "is_correct": false
         }
       ]
@@ -2180,21 +2180,21 @@
           "rank": 1,
           "track_id": "musiccaps_-f1DNyngKVY_30_40",
           "caption": "This is an music piece. The is being played at a. There is a and atmosphere to this piece. This piece can be used in the background of a video. It could also be played during a session at a course.",
-          "score": 0.4208833873271942,
+          "score": 0.420858234167099,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_9Y8NR6nDxjk_460_470",
           "caption": "This audio clip features the of being. The is played at regular intervals. In the background, are heard playing a soft melody. This is from a PC or mobile.",
-          "score": 0.3962080776691437,
+          "score": 0.3961530029773712,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_PvHKu1XRSJ0_0_10",
           "caption": "This is the recording of a video in the key of D sharp. There is an playing the on each string repeatedly. This piece could be used to lift samples to be used in a beat or in the making of a virtual plug-in.",
-          "score": 0.3877545893192291,
+          "score": 0.38772663474082947,
           "is_correct": false
         }
       ]
@@ -2203,28 +2203,28 @@
       "query_track_id": "musiccaps_fYk2U9yJvps_30_40",
       "query_caption": "The song features a widely spread, and and hits. It sounds relaxing, calming and kind of satisfying, as it literally sounds like dripping through the stereo image.",
       "selection": "random",
-      "true_rank": 1277,
+      "true_rank": 1278,
       "is_failure": true,
       "top3": [
         {
           "rank": 1,
           "track_id": "musiccaps_xyAbP5XfGz8_30_40",
           "caption": "The 's sounds as if it's being played from a child's and recorded with a phone. The starts playing after a is being made and stops after a while to be activated again by the sound.",
-          "score": 0.3744421601295471,
+          "score": 0.37436866760253906,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_NmwmOY6iBFg_30_40",
           "caption": "The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.",
-          "score": 0.3575999438762665,
+          "score": 0.3574862480163574,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
           "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
-          "score": 0.3508262634277344,
+          "score": 0.350802481174469,
           "is_correct": false
         }
       ]
@@ -2240,21 +2240,21 @@
           "rank": 1,
           "track_id": "musiccaps_R7gHB-YuUZM_170_180",
           "caption": "The song features a 's singing over that consist of, and hits, followed by and. Sounds, like something kids would sing along to.",
-          "score": 0.3125149607658386,
+          "score": 0.31258296966552734,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_fpVlYpgTKZI_30_40",
           "caption": "The / song features an singing over, offbeat and that appear at the end of the loop. It sounds, and.",
-          "score": 0.3101365566253662,
+          "score": 0.3101126253604889,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_dbldb9tq8ng_30_40",
           "caption": "The song features a singing the same as the, followed by widely spread, kick hits, punchy, and crash. There is a at some point in the loop. The is what makes the image and therefore the song sounds in.",
-          "score": 0.3000044524669647,
+          "score": 0.3000105321407318,
           "is_correct": false
         }
       ]
@@ -2270,21 +2270,21 @@
           "rank": 1,
           "track_id": "musiccaps_7ZXz3Xa7APs_0_10",
           "caption": "This is a tongue-in-cheek version of a song edited to make it sound like a movie character was featured in it. It has a that starts singing with a Jamaican accent that turns into. Clean and provide the melodic background while the and play a basic beat for the rhythmic background.",
-          "score": 0.30951806902885437,
+          "score": 0.30942776799201965,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_682ODyTqKyw_130_140",
           "caption": "The clip has a relaxing, vibe. It is a outdoors, and features various of skateboarders doing tricks. The song itself is a song that's relaxing and. There's an, and a high pitched.",
-          "score": 0.28337767720222473,
+          "score": 0.28328877687454224,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_w6MtzUCl4vM_30_40",
           "caption": "This song contains playing a hiphop kinda feel along with a bassline. The most energy comes from the with autotune and a lot of cheering and along: Then a starts. The are spread across the both sides of the speakers. This song may be playing outside chilling with your friends.",
-          "score": 0.2817379832267761,
+          "score": 0.2816499173641205,
           "is_correct": false
         }
       ]
@@ -2300,21 +2300,21 @@
           "rank": 1,
           "track_id": "musiccaps_0LLlcPiatiU_210_220",
           "caption": "The is mostly with a faint vocal. The is with a, booming, and a. The is followed by and. The is with a lot of. The is with the superimposed with.",
-          "score": 0.236952006816864,
+          "score": 0.2368653416633606,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_Ee6MP1bIRUA_30_40",
           "caption": "A croons over a beat, and,. Has an feel with a underneath and lots of.",
-          "score": 0.23576737940311432,
+          "score": 0.23570682108402252,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_ER1fTL9-pQw_30_40",
           "caption": "A is playing a groove with and. Two are playing a catchy and simple melody in a higher key. A is /shouting along to a backing. This song may be playing in a club.",
-          "score": 0.20785970985889435,
+          "score": 0.20782943069934845,
           "is_correct": false
         }
       ]
@@ -2330,21 +2330,21 @@
           "rank": 1,
           "track_id": "musiccaps_We-bFXFjWaM_30_40",
           "caption": "The recording features a over beat playing in the background. The beat consists of, and. At one point the gets a little bit sloppy. It sounds a bit, and.",
-          "score": 0.28900158405303955,
+          "score": 0.2890290915966034,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KUE_I30--AY_30_40",
           "caption": "The song is an. The is with a slick and a creating cool melodies by and manipulating spinning. The song is energetic and has a groove. The song is with and is at.",
-          "score": 0.26841312646865845,
+          "score": 0.26847201585769653,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_aCA4yiPfFIg_10_20",
           "caption": "The recording features a song that consists of and hits, and, played by a DJ that manually made beat breaks, which resulted in. It sounds and thanks to that.",
-          "score": 0.25892171263694763,
+          "score": 0.2589693069458008,
           "is_correct": false
         }
       ]
@@ -2360,21 +2360,21 @@
           "rank": 1,
           "track_id": "musiccaps_BBmXMoI9Qus_30_40",
           "caption": "The music features and. It sounds, and - like something you would listen to while meditating.",
-          "score": 0.3316609859466553,
+          "score": 0.3317502439022064,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_TbA_TZn35LA_270_280",
           "caption": "This is an energetic and positive old school song. The recording is of a live performance. The singing is and the instruments sound mashed together in a way that diminishes their. You can just barely make out an intricate electric bass bassline, an that's, and some enthusiastic backing.",
-          "score": 0.32062840461730957,
+          "score": 0.32063570618629456,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_HFVM5pVTwkM_150_160",
           "caption": "The song features, and hits, in-between hits, and at the very end of the loop. It sounds a bit, but still and.",
-          "score": 0.30934128165245056,
+          "score": 0.3093806207180023,
           "is_correct": false
         }
       ]
@@ -2390,21 +2390,21 @@
           "rank": 1,
           "track_id": "musiccaps_mOn13E68Td0_30_40",
           "caption": "A singer sings in an manner. The is with a, accompaniment, line and. The is and. The is an \u2019s show tune, but a of the actual show.",
-          "score": 0.2038702368736267,
+          "score": 0.20388133823871613,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_2dyxjGTXSpA_30_40",
           "caption": "A vocalist this in a.The is with a and accompaniment that is as the song progresses. The are, and and the of the song is, and appealing.",
-          "score": 0.17592374980449677,
+          "score": 0.1760091632604599,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_f8nysknTFUo_30_40",
           "caption": "A vocalist this spirited. The is with and. The song is, spirited with a. The song is an / song.",
-          "score": 0.14746518433094025,
+          "score": 0.14754797518253326,
           "is_correct": false
         }
       ]
@@ -2413,28 +2413,28 @@
       "query_track_id": "musiccaps_bkzGHRpx5MM_30_40",
       "query_caption": "This is an piece. The only being in the piece is a. There is a gently that gives a aura. The atmosphere is. This piece could be used in the soundtrack of a movie or a TV show at a /flashback sequence. It could be in the background at a bar.",
       "selection": "random",
-      "true_rank": 496,
+      "true_rank": 495,
       "is_failure": true,
       "top3": [
         {
           "rank": 1,
           "track_id": "musiccaps_uT-S_JC_GzU_30_40",
           "caption": "The song is an. The song is with a and a synth tone melody. The song is exciting and in nature. The song is a video song.",
-          "score": 0.22223471105098724,
+          "score": 0.2222854048013687,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_EwDiNj_5PEg_50_60",
           "caption": "This song features the main melody being played on a bowed called the. This starts off by going to a higher note and then playing a descending lick. This is accompanied by a playing an ascending lick. There is in this song. There are no in this song. This song can be played in a meditation session.",
-          "score": 0.21261928975582123,
+          "score": 0.21262580156326294,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_OheHnFixwVk_30_40",
           "caption": "This song contains a -composition with a lot of playing a relaxing melody while running a waterdrippling sample. This song may be playing at home for or sleeping.",
-          "score": 0.19892826676368713,
+          "score": 0.19897226989269257,
           "is_correct": false
         }
       ]
@@ -2450,21 +2450,21 @@
           "rank": 1,
           "track_id": "musiccaps_0JbGxIR8JTk_200_210",
           "caption": "inspired music with an island flavor. carries the harmony, while a freely. and meld with.",
-          "score": 0.30233874917030334,
+          "score": 0.30241531133651733,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_GuQFhmGqdog_62_72",
           "caption": "A this rather country song. The is with. The is yodelling vigorously and rhythmically to the of an animated, and harmony, vibrant and.",
-          "score": 0.28316256403923035,
+          "score": 0.28318703174591064,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_4W8IZxn3nEI_30_40",
           "caption": "A this song. The is with, and. The song is, catchy, spirited, and easy to along. The are.",
-          "score": 0.2604006230831146,
+          "score": 0.260392427444458,
           "is_correct": false
         }
       ]
@@ -2473,28 +2473,28 @@
       "query_track_id": "musiccaps_MsEoUVWS59M_30_40",
       "query_caption": "like a poorly of an mono. with in the background.",
       "selection": "random",
-      "true_rank": 1028,
+      "true_rank": 1029,
       "is_failure": true,
       "top3": [
         {
           "rank": 1,
           "track_id": "musiccaps_OB7GyVqufwQ_120_130",
           "caption": "A drum is playing a reggaeton groove along with some while someone is playing a. A is /. This is an amateur recording. This song may be playing outside busking with a band.",
-          "score": 0.1891385167837143,
+          "score": 0.18915827572345734,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_PaQGXIh94uc_150_160",
           "caption": "The song is an. The song is medium with a with a. The song is and. The song is but is very to listen to.",
-          "score": 0.18818332254886627,
+          "score": 0.18819980323314667,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_GrbrWNohr6Y_30_40",
           "caption": "A sings this song. The is with a accompaniment. The audio quality is inferior making it difficult to hear the song well. There is another superimposed over the song which has so footsteps, breeze and some. This is an audio of a song played.",
-          "score": 0.1845988631248474,
+          "score": 0.18463651835918427,
           "is_correct": false
         }
       ]
@@ -2510,21 +2510,21 @@
           "rank": 1,
           "track_id": "musiccaps_HwGK5RvNOFI_30_40",
           "caption": "music featuring interlocking and, a, a, driving hi-, and. Good for a presentation on a new technology.",
-          "score": 0.31710320711135864,
+          "score": 0.317107230424881,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KFB1raoIhoU_80_90",
           "caption": "A is playing a groove with a strong snare sound. An is strumming short funky chords on the offbeat creating a reggae style rhythm. A is shouting in the same offbeat. An is playing a soft funky bassline while a in the mid range. A is adding a short melody on top spicing up the. This song may be playi",
-          "score": 0.3008633255958557,
+          "score": 0.3008463978767395,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_3mStyfCbL68_30_40",
           "caption": "The is playing a four on the floor groove with little fill-ins on the snare crash. A is playing a 2000s pad lead melody. The distorted that is playing underlining the melody with some long chords. This song may be played at an event to animate and pump up the.",
-          "score": 0.2929820120334625,
+          "score": 0.2929287552833557,
           "is_correct": false
         }
       ]
@@ -2540,21 +2540,21 @@
           "rank": 1,
           "track_id": "musiccaps_KFB1raoIhoU_80_90",
           "caption": "A is playing a groove with a strong snare sound. An is strumming short funky chords on the offbeat creating a reggae style rhythm. A is shouting in the same offbeat. An is playing a soft funky bassline while a in the mid range. A is adding a short melody on top spicing up the. This song may be playi",
-          "score": 0.18960075080394745,
+          "score": 0.1896265149116516,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_dTVkk4GSmNA_140_150",
           "caption": "A is loud and. A is playing a slight variation of the 's melody. A is playing bluesy/jazzy chord chops accompanied by an playing along with the melody. Panned to the left side of the speaker, a is playing one single chord as a rhythmic element. The is playing a line along with a simple rimshot and s",
-          "score": 0.15872156620025635,
+          "score": 0.1588502824306488,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_OEpMpYMjO9Y_30_40",
           "caption": "Someone is over a hip hop backing-track containing, a subby bassline and some sounds playing a melody. A is shouting something. This song may be playing at home practicing.",
-          "score": 0.15746483206748962,
+          "score": 0.15750983357429504,
           "is_correct": false
         }
       ]
@@ -2570,21 +2570,21 @@
           "rank": 1,
           "track_id": "musiccaps_6EwEo0JQkTg_30_40",
           "caption": "This is the of a. The DJ is modifying a - beat with the use of a through the technique. A repeated can be heard in the beat. There is a and line in the background. The rhythmic structure consists of a slightly fast-paced - beat. There is a, feel to it. This piece could be playing in the background a",
-          "score": 0.21814285218715668,
+          "score": 0.21815218031406403,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_E3iPiZlT6f8_30_40",
           "caption": "The song features a that creates the main melody. The sounds are and have a atmosphere. The track fits the genre. In the background there are drums that play a mix between hip-hop and patterns. A creates a counter melody that contrasts the whole instrumental. This is a song you would play at a beach",
-          "score": 0.20471888780593872,
+          "score": 0.20477193593978882,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_LKUYtvUHn0Y_30_40",
           "caption": "The and the are creating a groove together with the that is playing on the offbeat and with a lot of ping pong that is jumping and forth on both sides of the speakers. The is and a is playing panned to the right side of the speakers. This song may be playing at an alternative vegan restaurant with a",
-          "score": 0.20271842181682587,
+          "score": 0.20276081562042236,
           "is_correct": false
         }
       ]
@@ -2600,21 +2600,21 @@
           "rank": 1,
           "track_id": "musiccaps_iuNpXisjsLY_30_40",
           "caption": "The sound thick and played with deep tom hits. The electric is running through some effect, maybe an overdrive light distortion.The is with some delay on her. This song may be playing in a bar downtown.",
-          "score": 0.2942768335342407,
+          "score": 0.29431208968162537,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_f1_YKSYgtbI_30_40",
           "caption": "This is a that's arpeggiated on an. The signal has a effect applied to it, and so it doesn't sound like a clean tone. The itself is mellow yet uplifting.",
-          "score": 0.2641233205795288,
+          "score": 0.26422181725502014,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_xyXQ7Z1vX7E_30_40",
           "caption": "The recording features a, and with a on. It, and - like something you would hear in movies.",
-          "score": 0.24953541159629822,
+          "score": 0.2496064156293869,
           "is_correct": false
         }
       ]
@@ -2630,21 +2630,21 @@
           "rank": 1,
           "track_id": "musiccaps_VLjcIlZvkY0_30_40",
           "caption": "The features a, and. It and, almost like some old horror movie with.",
-          "score": 0.37994977831840515,
+          "score": 0.3799625337123871,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_MkPhe7TLLZ0_110_120",
           "caption": "Music and from an old. A interspersed with, distorted. and to the point of being.",
-          "score": 0.3474924564361572,
+          "score": 0.3474632501602173,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_DNYDyXn6qso_30_40",
           "caption": "Two this delightful in. They make funny effects like and funny. The is with a and no percussion. The is and in nature. The is a with bad.",
-          "score": 0.33956870436668396,
+          "score": 0.3395507335662842,
           "is_correct": false
         }
       ]
@@ -2660,21 +2660,21 @@
           "rank": 1,
           "track_id": "musiccaps_X7LrhZX4rdU_30_40",
           "caption": "The track features a pattern, alongside, and. It is and.",
-          "score": 0.2628730237483978,
+          "score": 0.2628348469734192,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_i3zayf6Hiog_30_40",
           "caption": "music features a full playing beautiful, and. It sounds like a background movie soundtrack -, and.",
-          "score": 0.2596738934516907,
+          "score": 0.2596118748188019,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_v29jCrlSCmE_250_260",
           "caption": "A beat with and with. holding, and.",
-          "score": 0.24363377690315247,
+          "score": 0.24359390139579773,
           "is_correct": false
         }
       ]
@@ -2690,21 +2690,21 @@
           "rank": 1,
           "track_id": "musiccaps_04NjXsLyCl4_30_40",
           "caption": "A loud is opening the space for a playing a simple groove when an e--like comes in and plays a melody on top. This is an. This song may be playing in a sensual movie scene.",
-          "score": 0.3934185206890106,
+          "score": 0.39340606331825256,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_Ts3ZcUaELzA_30_40",
           "caption": "Someone is playing a distorted melody in the lower mid-range. This song may be playing at home practicing.",
-          "score": 0.3810133934020996,
+          "score": 0.3810410797595978,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_jhsce15byHc_20_30",
           "caption": "This song contains playing a melody with a lot of and lasting. A strongly is singing long low notes with a monotone melody. Panning from the right to the left side of the speakers. This song may be playing while meditating.",
-          "score": 0.3732660710811615,
+          "score": 0.3733193576335907,
           "is_correct": false
         }
       ]
@@ -2720,21 +2720,21 @@
           "rank": 1,
           "track_id": "musiccaps_mLaon9oK1OA_30_40",
           "caption": "This is a song with a. There is a and a singing melodically but at a higher pitch than the original. An and a play in the melodic background while a beat is in the rhythmic background. The piece is very danceable. The piece could be used at a children's course as an accompaniment. It could also be u",
-          "score": 0.3470388948917389,
+          "score": 0.3470548391342163,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_2CzfBZ1mYBs_170_180",
           "caption": "This song is full of rhythmic elements and an that supports the mood for. A rhodes/ is playing a simple melody along with a trumped playing its own melody. The recording is full of sound and crash hits. This song may be playing on a portable speaker while riding a bike with friends during summer.",
-          "score": 0.3467342257499695,
+          "score": 0.3467590808868408,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_UcabTrKowlI_30_40",
           "caption": "This is an / music piece. There is a and a in a -like manner. The beat consists of a playing the chords of the tune with an backing. The atmosphere of the piece is and. This piece could be used in the soundtrack of a high school drama movie/TV show. It could also be played at birthday parties or bea",
-          "score": 0.336411714553833,
+          "score": 0.3364313542842865,
           "is_correct": false
         }
       ]
@@ -2750,21 +2750,21 @@
           "rank": 1,
           "track_id": "musiccaps_f6H0TMWDaZg_30_40",
           "caption": "Someone is turntables to a coming out of a speaker. This is an. This song may be playing at home practicing alone.",
-          "score": 0.3443296551704407,
+          "score": 0.34436988830566406,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_QXe9BpTENCc_30_40",
           "caption": "This features a singing the main melody. This is accompanied by percussion played on the. A plays a melody matching the vocal melody. A is played in the background. Other instruments are not clearly audible due to the of. This can be played in a religious gathering.",
-          "score": 0.3414185345172882,
+          "score": 0.34142905473709106,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_LgKOnHwaCmg_30_40",
           "caption": "The recording features a of and singing over it. There are some and, probably because it was recorded outside. The recording is, but it regardless.",
-          "score": 0.3361623287200928,
+          "score": 0.3362000584602356,
           "is_correct": false
         }
       ]
@@ -2774,165 +2774,149 @@
     "S_graph_real": 0.9919955165055974,
     "S_graph_rewired": 0.9811027139569177,
     "tau": 0.5,
-    "mean_edge_cosine": 0.9306884121415587
+    "mean_edge_cosine": 0.9306884121265245
   },
   "bert_attention_examples": [
     {
       "track_id": "mtat_32",
       "text": "Lesson 1 in G Major_ Prelude (James Nares). Portrait of an English Harpsichord. Steven Devine",
-      "top_tags": "classical (0.39), slow (0.33), strings (0.32), piano (0.30), quiet (0.19)",
+      "top_tags": "piano (0.73), classical (0.60), slow (0.28), solo (0.20), strings (0.20)",
       "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_00.png"
     },
     {
       "track_id": "mtat_33",
       "text": "Lesson 1 in G Major_ Prelude (James Nares). Portrait of an English Harpsichord. Steven Devine",
-      "top_tags": "classical (0.39), slow (0.33), strings (0.32), piano (0.30), quiet (0.19)",
+      "top_tags": "piano (0.73), classical (0.60), slow (0.28), solo (0.20), strings (0.20)",
       "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_01.png"
     },
     {
       "track_id": "mtat_37",
       "text": "Linda Morena. Jetuton Andawai. The Headroom Project",
-      "top_tags": "slow (0.27), strings (0.23), piano (0.22), vocal (0.22), techno (0.19)",
+      "top_tags": "flute (0.57), slow (0.20), no vocal (0.17), ambient (0.15), drum (0.14)",
       "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_02.png"
     },
     {
       "track_id": "mtat_38",
       "text": "Linda Morena. Jetuton Andawai. The Headroom Project",
-      "top_tags": "slow (0.27), strings (0.23), piano (0.22), vocal (0.22), techno (0.19)",
+      "top_tags": "flute (0.57), slow (0.20), no vocal (0.17), ambient (0.15), drum (0.14)",
       "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_03.png"
     },
     {
       "track_id": "mtat_97",
       "text": "Overture. Jake Heggie - To Hell and Back. Philharmonia Baroque Orchestra",
-      "top_tags": "classical (0.36), slow (0.30), strings (0.29), piano (0.27), violin (0.21)",
+      "top_tags": "classical (0.80), strings (0.23), orchestra (0.21), slow (0.15), soft (0.14)",
       "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_04.png"
     }
   ],
   "case_studies": [
     {
       "case": 0,
-      "track_id": "mtat_9666",
-      "is_failure": true,
-      "example_f1": 0.47368421052631576,
-      "caption": "Selection. Number 1. Strojovna 07",
+      "track_id": "mtat_186",
+      "is_failure": false,
+      "example_f1": 0.6666666666666666,
+      "caption": "8 seconds. 8 Seconds. Pain Factor",
       "predicted_tags": [
         {
-          "tag": "baroque",
-          "score": 0.6226887702941895
+          "tag": "rock",
+          "score": 0.5394381880760193
         },
         {
-          "tag": "ambient",
-          "score": 0.6055075526237488
+          "tag": "no vocal",
+          "score": 0.07490526884794235
         },
         {
-          "tag": "loud",
-          "score": 0.6001883149147034
+          "tag": "violin",
+          "score": 0.06779313832521439
         },
         {
-          "tag": "no piano",
-          "score": 0.5991920232772827
+          "tag": "dance",
+          "score": 0.03185885399580002
         },
         {
-          "tag": "flute",
-          "score": 0.5558571815490723
+          "tag": "solo",
+          "score": 0.008478401228785515
         }
       ],
       "true_tags": [
-        "techno",
-        "electronic",
-        "drum",
-        "no vocal",
         "rock",
-        "fast",
-        "ambient",
-        "beat",
-        "pop",
-        "new age",
-        "dance",
-        "jazz",
-        "bass",
-        "no piano",
-        "modern",
-        "trance"
+        "heavy"
       ],
       "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_cross_attention.png",
       "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_graph.png"
     },
     {
       "case": 1,
-      "track_id": "mtat_47099",
-      "is_failure": true,
-      "example_f1": 0.4444444444444444,
-      "caption": "The Beholder (Ambient Teknology). The Art of Persuasion. Various Artists",
+      "track_id": "mtat_28520",
+      "is_failure": false,
+      "example_f1": 0.6666666666666666,
+      "caption": "Pristine fifteen. Jacksploitation. Jackalopes",
       "predicted_tags": [
         {
-          "tag": "quiet",
-          "score": 0.6199890971183777
+          "tag": "rock",
+          "score": 0.5298411846160889
         },
         {
-          "tag": "soft",
-          "score": 0.5889482498168945
+          "tag": "violin",
+          "score": 0.1149633526802063
         },
         {
-          "tag": "baroque",
-          "score": 0.5545910596847534
+          "tag": "no vocal",
+          "score": 0.09670579433441162
         },
         {
-          "tag": "eastern",
-          "score": 0.5527509450912476
+          "tag": "dance",
+          "score": 0.054198723286390305
         },
         {
-          "tag": "fast",
-          "score": 0.5524189472198486
+          "tag": "modern",
+          "score": 0.013325147330760956
         }
       ],
       "true_tags": [
-        "techno",
-        "electronic",
-        "drum",
-        "no vocal",
-        "fast",
-        "beat",
-        "synth",
-        "pop",
-        "new age",
-        "dance",
-        "trance"
+        "rock",
+        "loud"
       ],
       "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_1_cross_attention.png",
       "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_1_graph.png"
     },
     {
       "case": 2,
-      "track_id": "mtat_58605",
+      "track_id": "mtat_58608",
       "is_failure": true,
       "example_f1": 0.0,
       "caption": "Fantasia (del segundo tono). Alonso Mudarra songs and solos. Jacob Heringman and Catherine King",
       "predicted_tags": [
         {
-          "tag": "baroque",
-          "score": 0.5758861899375916
+          "tag": "classical",
+          "score": 0.06560483574867249
         },
         {
-          "tag": "no beat",
-          "score": 0.5680564045906067
+          "tag": "vocal",
+          "score": 0.057599205523729324
         },
         {
-          "tag": "chant",
-          "score": 0.5654187798500061
+          "tag": "quiet",
+          "score": 0.035678550601005554
         },
         {
-          "tag": "india",
-          "score": 0.5598917007446289
+          "tag": "no vocal",
+          "score": 0.03085050918161869
         },
         {
-          "tag": "heavy",
-          "score": 0.5520265698432922
+          "tag": "trance",
+          "score": 0.029535338282585144
         }
       ],
       "true_tags": [
         "guitar",
-        "strings"
+        "classical",
+        "slow",
+        "strings",
+        "piano",
+        "quiet",
+        "soft",
+        "solo",
+        "harp"
       ],
       "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_2_cross_attention.png",
       "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_2_graph.png"

@@ -418,3 +418,28 @@ Format:
 [2026-09-06 16:05] FIX   The listening study was unratable and undersized: raters were shown caption_masked (descriptive
                         terms stripped) and only 14 of the intended 24 clips. Now 24 clips, 4 controls, 24/24 unmasked,
                         with random draws added beyond the curated best-and-worst so the sample is not biased upward.
+
+[2026-09-06 18:15] DONE   C4 IMPORTED FROM KAGGLE. All 21 runs present (7 modes x 3 seeds), 0 rejected. The vocabulary
+                        guard passed by recomputing the hash from each result's tag_vocab, since the payload predated the
+                        tag_vocab_hash stamp - incoming 200f934da671 matched the local MTAT vocabulary exactly.
+[2026-09-06 18:15] NOTE   Kaggle throughput 5.72 ms/row against 68 ms/row locally = 11.9x. The sweep took ~1.6 h of wall
+                        clock instead of the ~26 h it would have cost here, so no ablation rows had to be cut and the
+                        local GPU ran C5-C7 in parallel. Moving C4 was the right call and the numbers say so.
+[2026-09-06 18:15] DONE   ABLATION RESULT: bert_only 0.1529 is the only mode outside the noise floor - roughly 0.12 below
+                        everything else. The other SIX modes, gnn_only included, lie within 0.0288 of one another, so no
+                        ordering is claimed. Critically gnn_only (0.2720) sits inside the band with every fusion variant:
+                        on MTAT, fusion buys nothing over the graph alone. Decision rule 3.3, as predicted.
+[2026-09-06 18:15] DONE   THE CONTRAST IS THE FINDING. Same architecture, different corpus:
+                          MTAT (metadata) : bert_only 0.1529  gnn_only 0.2720  cross_attention 0.2562
+                          MusicCaps (cap.): bert_only 0.3073  gnn_only 0.1117  cross_attention 0.3188
+                        Which modality dominates FLIPS with the corpus, by a margin an order of magnitude larger than any
+                        of the within-corpus gaps. Fusion is not intrinsically worthwhile; it is worthwhile in proportion
+                        to what the second modality knows. A single-corpus study would have concluded the opposite.
+[2026-09-06 18:15] DONE   Page guard fired at 10.1 pages, exactly as designed. Applied compression step 4: Reproducibility
+                        moved behind \appendix (its standard venue placement anyway). Now 9.8 + 0.4 appendix.
+[2026-09-06 18:15] FIX   The retrieval figure grew to 30 rows once the exporter started adding random draws for the
+                        listening study - fourteen inches tall. The figure keeps the ten curated extremes it was designed
+                        for; the study keeps the random sample it needs to be unbiased.
+[2026-09-06 18:15] DONE   Cleaned 11.9 GB: the Kaggle output was 11 GB of ablation checkpoints nothing reads, plus an
+                        echo of the payload. Kept the 21 results, 21 score matrices, 2 shard summaries and both logs.
+                        Also removed the superseded 863 MB Task 1 output folder. Free space 26 GB -> 38 GB.
