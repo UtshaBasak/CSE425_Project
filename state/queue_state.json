@@ -23,6 +23,9 @@
     },
     "C5 Task 3 MusicCaps gnn_only": {
       "minutes": 2.2
+    },
+    "C5 Task 3 MusicCaps cross_attention": {
+      "minutes": 19.7
     }
   },
   "failed": {},
