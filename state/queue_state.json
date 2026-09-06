@@ -62,6 +62,10 @@
     "C6 genre confusion figure": {
       "error": "produced no artifact",
       "minutes": 0.0
+    },
+    "C7 Task 4 seed 2024": {
+      "error": "exit code 1",
+      "minutes": 3.6
     }
   },
   "started": 1788656262.3632622

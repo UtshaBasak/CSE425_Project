@@ -451,7 +451,7 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 11:37. **15 done, 4 failed, 6 remaining.**
+Updated 2026-09-06 11:40. **15 done, 5 failed, 6 remaining.**
 
 Estimated **0.6 h** of local GPU left, from 14 measured step(s) (estimates running 0.41x of prediction).
 
@@ -478,8 +478,8 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C7 Task 2 tags seed 1337 | C7 | [x] | 3.7 min |
 | C7 Task 2 tags seed 2024 | C7 | [x] | 4.9 min |
 | C7 Task 4 seed 1337 | C7 | [x] | 3.8 min |
-| C7 Task 4 seed 2024 | C7 | [~] | running |
-| report fill + structural check | C7 | [ ] | ~0 min est. |
+| C7 Task 4 seed 2024 | C7 | [!] | exit code 1 |
+| report fill + structural check | C7 | [~] | running |
 
 <!-- QUEUE:END -->
 
