@@ -29,6 +29,9 @@
     },
     "C6 zero-shot vs supervised": {
       "minutes": 0.3
+    },
+    "C7 Task 2 genre seed 1337": {
+      "minutes": 1.0
     }
   },
   "failed": {
