@@ -1,0 +1,59 @@
+{
+  "seed": 42,
+  "corpus": "musiccaps",
+  "vocab_source": "musiccaps",
+  "n_tags": 50,
+  "n_test_clips": 2503,
+  "templates": [
+    "{tag}",
+    "a recording of {tag} music",
+    "this music sounds {tag}",
+    "an audio clip that is {tag}"
+  ],
+  "per_template": [
+    {
+      "template": "{tag}",
+      "macro_f1": 0.08373090189121042,
+      "micro_f1": 0.10264587443582607,
+      "mean_auc_pr": 0.052972446439361366,
+      "macro_f1_fixed_half": 0.09360293364341908
+    },
+    {
+      "template": "a recording of {tag} music",
+      "macro_f1": 0.08327084583053802,
+      "micro_f1": 0.10422883155455012,
+      "mean_auc_pr": 0.0525793148875492,
+      "macro_f1_fixed_half": 0.0932837751554186
+    },
+    {
+      "template": "this music sounds {tag}",
+      "macro_f1": 0.08609893763836025,
+      "micro_f1": 0.10457676162530057,
+      "mean_auc_pr": 0.05339336803657225,
+      "macro_f1_fixed_half": 0.09360548671330428
+    },
+    {
+      "template": "an audio clip that is {tag}",
+      "macro_f1": 0.08472912882475674,
+      "micro_f1": 0.10317681574999668,
+      "mean_auc_pr": 0.05291357353169672,
+      "macro_f1_fixed_half": 0.09370214578539102
+    }
+  ],
+  "ensemble": {
+    "macro_f1": 0.08484490346457886,
+    "micro_f1": 0.10331218598887405,
+    "mean_auc_pr": 0.052989892018412386,
+    "macro_f1_fixed_half": 0.09350054338527045
+  },
+  "template_spread_macro_f1": 0.0028280918078222306,
+  "threshold_source": "val",
+  "supervised_reference": {
+    "run": "task3_seed42_musiccaps_cross_attention",
+    "macro_f1": 0.3187865676835458,
+    "micro_f1": 0.28727904765028034,
+    "fusion_mode": "cross_attention"
+  },
+  "noise_floor": 0.0288,
+  "zero_shot_gap": 0.23394166421896695
+}
