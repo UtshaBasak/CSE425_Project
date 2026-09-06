@@ -13,21 +13,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.16818846762180328,
+          "score": 0.16819284856319427,
           "is_correct": true
         },
         {
           "rank": 2,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.16565151512622833,
+          "score": 0.1656552106142044,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.16392044723033905,
+          "score": 0.1639202982187271,
           "is_correct": false
         }
       ]
@@ -42,21 +42,21 @@
           "rank": 1,
           "track_id": "musiccaps_B3lq6U4PDZo_30_40",
           "caption": "This features a melody played using. There are played in the background like clockwork. A plays a note. There is in this. This has a theme and can be used in a children's scary movie. There is a lot of white noise that can be heard in this low quality recording. There are in this.",
-          "score": 0.15971656143665314,
+          "score": 0.15973058342933655,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_fjj9NJX8GB0_400_410",
           "caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
-          "score": 0.159030944108963,
+          "score": 0.1590525209903717,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_lbB2VQYIMo0_30_40",
           "caption": "This is a. There is a variety of pieces ranging from pop to to. The made by the shoes of the dancers can also be heard. The atmosphere is rather. Parts of this recording could be lifted as samples to be used in beat-making.",
-          "score": 0.15825414657592773,
+          "score": 0.1582660973072052,
           "is_correct": false
         }
       ]
@@ -71,50 +71,21 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": -0.015692178159952164,
+          "score": -0.015729084610939026,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_D_QEW1Lnl2Q_30_40",
           "caption": "The recording features of, and some. It is obviously a, but the is since it does not have much depth to it.",
-          "score": -0.020540406927466393,
+          "score": -0.020582731813192368,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_EC4GbkL3XvI_80_90",
           "caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
-          "score": -0.02239346317946911,
-          "is_correct": true
-        }
-      ]
-    },
-    {
-      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-      "query_caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
-      "true_rank": 3,
-      "is_failure": false,
-      "top3": [
-        {
-          "rank": 1,
-          "track_id": "musiccaps_ypg2ItQIc2c_190_200",
-          "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
-          "score": -0.06384442001581192,
-          "is_correct": false
-        },
-        {
-          "rank": 2,
-          "track_id": "musiccaps_GJYhDjThTHM_30_40",
-          "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
-          "score": -0.06671716272830963,
-          "is_correct": false
-        },
-        {
-          "rank": 3,
-          "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-          "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
-          "score": -0.0679788589477539,
+          "score": -0.022441484034061432,
           "is_correct": true
         }
       ]
@@ -129,51 +100,51 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": 0.1271400898694992,
+          "score": 0.1271054893732071,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
           "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
-          "score": 0.12518665194511414,
+          "score": 0.12515053153038025,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_H4tyvJJzSDk_30_40",
           "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
-          "score": 0.11576461046934128,
+          "score": 0.11572536081075668,
           "is_correct": true
         }
       ]
     },
     {
-      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
-      "query_caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
-      "true_rank": 4,
+      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+      "query_caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+      "true_rank": 3,
       "is_failure": false,
       "top3": [
         {
           "rank": 1,
-          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
-          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.06693316251039505,
+          "track_id": "musiccaps_ypg2ItQIc2c_190_200",
+          "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
+          "score": -0.06383410841226578,
           "is_correct": false
         },
         {
           "rank": 2,
-          "track_id": "musiccaps_CRDDdjDinYc_50_60",
-          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.0576065294444561,
+          "track_id": "musiccaps_GJYhDjThTHM_30_40",
+          "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
+          "score": -0.06670500338077545,
           "is_correct": false
         },
         {
           "rank": 3,
-          "track_id": "musiccaps_UoSID1KzWuI_30_40",
-          "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
-          "score": 0.056665945798158646,
-          "is_correct": false
+          "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+          "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+          "score": -0.067971371114254,
+          "is_correct": true
         }
       ]
     },
@@ -187,21 +158,50 @@
           "rank": 1,
           "track_id": "musiccaps_w4Z1QuBOMWU_70_80",
           "caption": "The song is an. The is with a guitarist traditional in a. The song has a groove and sounds delightful. The song has a.",
-          "score": 0.23872414231300354,
+          "score": 0.23874565958976746,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.23677515983581543,
+          "score": 0.23679772019386292,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.23661623895168304,
+          "score": 0.23663634061813354,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
+      "query_caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
+      "true_rank": 4,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.06696991622447968,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_CRDDdjDinYc_50_60",
+          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
+          "score": 0.05764297395944595,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_UoSID1KzWuI_30_40",
+          "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
+          "score": 0.05670740455389023,
           "is_correct": false
         }
       ]
@@ -216,21 +216,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.1507657915353775,
+          "score": 0.15077705681324005,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.14689140021800995,
+          "score": 0.14690349996089935,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_-7B9tPuIP-w_450_460",
           "caption": "A voice narrates a to the rhythm of a in the. The is with, keyboard accompaniment, and vocals. The plays softly in the as the speaks and burgeons when he stops. The is a and Roll and the is a.",
-          "score": 0.14578258991241455,
+          "score": 0.14579060673713684,
           "is_correct": false
         }
       ]
@@ -245,21 +245,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.1963932365179062,
+          "score": 0.1964380145072937,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.1917758733034134,
+          "score": 0.19182097911834717,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.19031284749507904,
+          "score": 0.190360888838768,
           "is_correct": false
         }
       ]
@@ -274,21 +274,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.20029491186141968,
+          "score": 0.20026037096977234,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_CRDDdjDinYc_50_60",
           "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.1898278295993805,
+          "score": 0.18979620933532715,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.188883975148201,
+          "score": 0.18885725736618042,
           "is_correct": false
         }
       ]

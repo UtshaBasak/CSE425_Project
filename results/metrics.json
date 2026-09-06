@@ -746,6 +746,228 @@
         "val"
       ]
     },
+    "task3_musiccaps_bert_only": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_bert_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.307321963604577,
+          "micro_f1": 0.24205105239587998,
+          "mean_auc_pr": 0.3348923061559889,
+          "n_rows": 7079,
+          "valence_mae": 0.8700268598036333,
+          "valence_rmse": 1.0565267414341746,
+          "valence_r2": 0.01890194534367806,
+          "valence_n": 275,
+          "arousal_mae": 0.9620737452940508,
+          "arousal_rmse": 1.1783691928671052,
+          "arousal_r2": 0.17261356335348244,
+          "arousal_n": 275,
+          "macro_f1_fixed_half": 0.22865822715473047,
+          "micro_f1_fixed_half": 0.3307201458523245
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.307321963604577,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.24205105239587998,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3348923061559889,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 7079.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "valence_mae_mean": 0.8700268598036333,
+        "valence_mae_std": 0.0,
+        "valence_mae_n": 1,
+        "valence_rmse_mean": 1.0565267414341746,
+        "valence_rmse_std": 0.0,
+        "valence_rmse_n": 1,
+        "valence_r2_mean": 0.01890194534367806,
+        "valence_r2_std": 0.0,
+        "valence_r2_n": 1,
+        "valence_n_mean": 275.0,
+        "valence_n_std": 0.0,
+        "valence_n_n": 1,
+        "arousal_mae_mean": 0.9620737452940508,
+        "arousal_mae_std": 0.0,
+        "arousal_mae_n": 1,
+        "arousal_rmse_mean": 1.1783691928671052,
+        "arousal_rmse_std": 0.0,
+        "arousal_rmse_n": 1,
+        "arousal_r2_mean": 0.17261356335348244,
+        "arousal_r2_std": 0.0,
+        "arousal_r2_n": 1,
+        "arousal_n_mean": 275.0,
+        "arousal_n_std": 0.0,
+        "arousal_n_n": 1,
+        "macro_f1_fixed_half_mean": 0.22865822715473047,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.3307201458523245,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.5305416447982999
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task3_musiccaps_cross_attention": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_cross_attention",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3187865676835458,
+          "micro_f1": 0.28727904765028034,
+          "mean_auc_pr": 0.3162322271566281,
+          "n_rows": 7079,
+          "valence_mae": 0.6481333879991011,
+          "valence_rmse": 0.8204834576474899,
+          "valence_r2": 0.40831428314184537,
+          "valence_n": 275,
+          "arousal_mae": 0.7514539757641879,
+          "arousal_rmse": 0.9668902625622564,
+          "arousal_r2": 0.442942519477702,
+          "arousal_n": 275,
+          "macro_f1_fixed_half": 0.24009078170543507,
+          "micro_f1_fixed_half": 0.3462434227551109
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3187865676835458,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.28727904765028034,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3162322271566281,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 7079.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "valence_mae_mean": 0.6481333879991011,
+        "valence_mae_std": 0.0,
+        "valence_mae_n": 1,
+        "valence_rmse_mean": 0.8204834576474899,
+        "valence_rmse_std": 0.0,
+        "valence_rmse_n": 1,
+        "valence_r2_mean": 0.40831428314184537,
+        "valence_r2_std": 0.0,
+        "valence_r2_n": 1,
+        "valence_n_mean": 275.0,
+        "valence_n_std": 0.0,
+        "valence_n_n": 1,
+        "arousal_mae_mean": 0.7514539757641879,
+        "arousal_mae_std": 0.0,
+        "arousal_mae_n": 1,
+        "arousal_rmse_mean": 0.9668902625622564,
+        "arousal_rmse_std": 0.0,
+        "arousal_rmse_n": 1,
+        "arousal_r2_mean": 0.442942519477702,
+        "arousal_r2_std": 0.0,
+        "arousal_r2_n": 1,
+        "arousal_n_mean": 275.0,
+        "arousal_n_std": 0.0,
+        "arousal_n_n": 1,
+        "macro_f1_fixed_half_mean": 0.24009078170543507,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.3462434227551109,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.5279183375425339
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task3_musiccaps_gnn_only": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_gnn_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.11170180693025614,
+          "micro_f1": 0.1474608289809979,
+          "mean_auc_pr": 0.06697423959538888,
+          "n_rows": 7079,
+          "valence_mae": 0.6967327473380349,
+          "valence_rmse": 0.8553821525271382,
+          "valence_r2": 0.3569099414468606,
+          "valence_n": 275,
+          "arousal_mae": 0.7993406334790316,
+          "arousal_rmse": 1.0089789009093078,
+          "arousal_r2": 0.3933896627530561,
+          "arousal_n": 275,
+          "macro_f1_fixed_half": 0.0006798866855524079,
+          "micro_f1_fixed_half": 0.0014503263234227702
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.11170180693025614,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.1474608289809979,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.06697423959538888,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 7079.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "valence_mae_mean": 0.6967327473380349,
+        "valence_mae_std": 0.0,
+        "valence_mae_n": 1,
+        "valence_rmse_mean": 0.8553821525271382,
+        "valence_rmse_std": 0.0,
+        "valence_rmse_n": 1,
+        "valence_r2_mean": 0.3569099414468606,
+        "valence_r2_std": 0.0,
+        "valence_r2_n": 1,
+        "valence_n_mean": 275.0,
+        "valence_n_std": 0.0,
+        "valence_n_n": 1,
+        "arousal_mae_mean": 0.7993406334790316,
+        "arousal_mae_std": 0.0,
+        "arousal_mae_n": 1,
+        "arousal_rmse_mean": 1.0089789009093078,
+        "arousal_rmse_std": 0.0,
+        "arousal_rmse_n": 1,
+        "arousal_r2_mean": 0.3933896627530561,
+        "arousal_r2_std": 0.0,
+        "arousal_r2_n": 1,
+        "arousal_n_mean": 275.0,
+        "arousal_n_std": 0.0,
+        "arousal_n_n": 1,
+        "macro_f1_fixed_half_mean": 0.0006798866855524079,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.0014503263234227702,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.18869318103038346
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
     "task4_musiccaps_dual": {
       "n_runs": 1,
       "run_tag": "musiccaps_dual",
@@ -886,17 +1108,17 @@
       "precision": 0.19942857142857143,
       "recall": 1.0,
       "f1": 0.33253930443068125,
-      "auc_pr": 0.19416864794081776
+      "auc_pr": 0.19419109528373335
     },
     {
       "tag_index": 1,
       "threshold": 0.45,
       "support": 527,
       "n_evaluated": 3500,
-      "precision": 0.13664596273291926,
+      "precision": 0.13654618473895583,
       "recall": 0.7096774193548387,
-      "f1": 0.22916666666666669,
-      "auc_pr": 0.10705010403634785
+      "f1": 0.2290263319044703,
+      "auc_pr": 0.10704861464062354
     },
     {
       "tag_index": 2,
@@ -906,7 +1128,7 @@
       "precision": 0.1362857142857143,
       "recall": 1.0,
       "f1": 0.23987930600955493,
-      "auc_pr": 0.1285971339417374
+      "auc_pr": 0.1286158493012468
     },
     {
       "tag_index": 3,
@@ -916,17 +1138,17 @@
       "precision": 0.09514285714285714,
       "recall": 1.0,
       "f1": 0.17375423949908686,
-      "auc_pr": 0.07208728615594619
+      "auc_pr": 0.0720864564783936
     },
     {
       "tag_index": 4,
       "threshold": 0.54,
       "support": 674,
       "n_evaluated": 3500,
-      "precision": 0.20651162790697675,
-      "recall": 0.658753709198813,
-      "f1": 0.31444759206798867,
-      "auc_pr": 0.18266674922419301
+      "precision": 0.20614239181014427,
+      "recall": 0.6572700296735905,
+      "f1": 0.31385051363797384,
+      "auc_pr": 0.18266932236092304
     },
     {
       "tag_index": 5,
@@ -936,7 +1158,7 @@
       "precision": 0.15485714285714286,
       "recall": 1.0,
       "f1": 0.2681840672934191,
-      "auc_pr": 0.15656946082526815
+      "auc_pr": 0.15650215528251193
     },
     {
       "tag_index": 6,
@@ -946,7 +1168,7 @@
       "precision": 0.15622317596566523,
       "recall": 1.0,
       "f1": 0.2702301410541945,
-      "auc_pr": 0.21323708693028148
+      "auc_pr": 0.21313596208023522
     },
     {
       "tag_index": 7,
@@ -956,7 +1178,7 @@
       "precision": 0.15085714285714286,
       "recall": 1.0,
       "f1": 0.2621648460774578,
-      "auc_pr": 0.1971084495339216
+      "auc_pr": 0.19713103629073592
     },
     {
       "tag_index": 8,
@@ -966,7 +1188,7 @@
       "precision": 0.11571428571428571,
       "recall": 1.0,
       "f1": 0.20742637644046097,
-      "auc_pr": 0.13767836965193325
+      "auc_pr": 0.13774497791888587
     },
     {
       "tag_index": 9,
@@ -976,7 +1198,7 @@
       "precision": 0.10285714285714286,
       "recall": 1.0,
       "f1": 0.18652849740932645,
-      "auc_pr": 0.0632315745639841
+      "auc_pr": 0.06323850815754203
     },
     {
       "tag_index": 10,
@@ -986,7 +1208,7 @@
       "precision": 0.14057142857142857,
       "recall": 1.0,
       "f1": 0.24649298597194388,
-      "auc_pr": 0.09755278086159738
+      "auc_pr": 0.09754963005596758
     },
     {
       "tag_index": 11,
@@ -996,7 +1218,7 @@
       "precision": 0.05171428571428571,
       "recall": 1.0,
       "f1": 0.09834284161912525,
-      "auc_pr": 0.05023248574460999
+      "auc_pr": 0.050238481815474356
     },
     {
       "tag_index": 12,
@@ -1006,7 +1228,7 @@
       "precision": 0.11146869514335869,
       "recall": 0.9870466321243523,
       "f1": 0.20031545741324921,
-      "auc_pr": 0.10725070496768871
+      "auc_pr": 0.10724298227016484
     },
     {
       "tag_index": 13,
@@ -1016,7 +1238,7 @@
       "precision": 0.066,
       "recall": 1.0,
       "f1": 0.12382739212007504,
-      "auc_pr": 0.17677950176455304
+      "auc_pr": 0.1768641472159693
     },
     {
       "tag_index": 14,
@@ -1026,7 +1248,7 @@
       "precision": 0.09828571428571428,
       "recall": 1.0,
       "f1": 0.17898022892819979,
-      "auc_pr": 0.2568114009781208
+      "auc_pr": 0.25681993043939244
     },
     {
       "tag_index": 15,
@@ -1036,7 +1258,7 @@
       "precision": 0.11457142857142857,
       "recall": 1.0,
       "f1": 0.2055883106895668,
-      "auc_pr": 0.15602638936945967
+      "auc_pr": 0.15608010981075976
     },
     {
       "tag_index": 16,
@@ -1046,7 +1268,7 @@
       "precision": 0.13057142857142856,
       "recall": 1.0,
       "f1": 0.23098306798079352,
-      "auc_pr": 0.1276733326487779
+      "auc_pr": 0.12765762288062088
     },
     {
       "tag_index": 17,
@@ -1056,7 +1278,7 @@
       "precision": 0.078,
       "recall": 1.0,
       "f1": 0.14471243042671614,
-      "auc_pr": 0.08405323430830487
+      "auc_pr": 0.0840846400719227
     },
     {
       "tag_index": 18,
@@ -1066,7 +1288,7 @@
       "precision": 0.05228571428571428,
       "recall": 1.0,
       "f1": 0.09937550909584578,
-      "auc_pr": 0.08792290669416201
+      "auc_pr": 0.08777010428570353
     },
     {
       "tag_index": 19,
@@ -1076,7 +1298,7 @@
       "precision": 0.06885714285714285,
       "recall": 1.0,
       "f1": 0.1288425554664528,
-      "auc_pr": 0.06016901123301306
+      "auc_pr": 0.06016690107900777
     },
     {
       "tag_index": 20,
@@ -1086,7 +1308,7 @@
       "precision": 0.011717633609602743,
       "recall": 1.0,
       "f1": 0.023163841807909605,
-      "auc_pr": 0.009835706464057261
+      "auc_pr": 0.009807610362646761
     },
     {
       "tag_index": 21,
@@ -1096,7 +1318,7 @@
       "precision": 0.09371428571428571,
       "recall": 1.0,
       "f1": 0.17136886102403343,
-      "auc_pr": 0.06920580889945074
+      "auc_pr": 0.06919659715164941
     },
     {
       "tag_index": 22,
@@ -1106,7 +1328,7 @@
       "precision": 0.040285714285714286,
       "recall": 1.0,
       "f1": 0.07745124965668773,
-      "auc_pr": 0.04049245444359125
+      "auc_pr": 0.04050187499518281
     },
     {
       "tag_index": 23,
@@ -1116,7 +1338,7 @@
       "precision": 0.040285714285714286,
       "recall": 1.0,
       "f1": 0.07745124965668773,
-      "auc_pr": 0.03035849976588105
+      "auc_pr": 0.030360120234787402
     },
     {
       "tag_index": 24,
@@ -1126,7 +1348,7 @@
       "precision": 0.055142857142857146,
       "recall": 1.0,
       "f1": 0.10452206877877065,
-      "auc_pr": 0.06667469053449179
+      "auc_pr": 0.06667026122972833
     },
     {
       "tag_index": 25,
@@ -1136,7 +1358,7 @@
       "precision": 0.036,
       "recall": 1.0,
       "f1": 0.06949806949806948,
-      "auc_pr": 0.07899722618931906
+      "auc_pr": 0.07891222559278431
     },
     {
       "tag_index": 26,
@@ -1146,7 +1368,7 @@
       "precision": 0.04057142857142857,
       "recall": 1.0,
       "f1": 0.07797913234486546,
-      "auc_pr": 0.03619225176654338
+      "auc_pr": 0.03618898081549799
     },
     {
       "tag_index": 27,
@@ -1156,7 +1378,7 @@
       "precision": 0.04914285714285714,
       "recall": 1.0,
       "f1": 0.09368191721132897,
-      "auc_pr": 0.041318560827480956
+      "auc_pr": 0.04131108586749946
     },
     {
       "tag_index": 28,
@@ -1166,7 +1388,7 @@
       "precision": 0.033428571428571426,
       "recall": 1.0,
       "f1": 0.0646944982029306,
-      "auc_pr": 0.05374770305991859
+      "auc_pr": 0.05376717664235988
     },
     {
       "tag_index": 29,
@@ -1176,7 +1398,7 @@
       "precision": 0.053142857142857144,
       "recall": 1.0,
       "f1": 0.10092240911557243,
-      "auc_pr": 0.03894558559885889
+      "auc_pr": 0.03894964434944071
     },
     {
       "tag_index": 30,
@@ -1186,7 +1408,7 @@
       "precision": 0.0,
       "recall": 0.0,
       "f1": 0.0,
-      "auc_pr": 0.002694035595864537
+      "auc_pr": 0.0026939345474976868
     },
     {
       "tag_index": 31,
@@ -1196,7 +1418,7 @@
       "precision": 0.019714285714285715,
       "recall": 1.0,
       "f1": 0.038666293079293916,
-      "auc_pr": 0.021786709331227457
+      "auc_pr": 0.021823588005633488
     },
     {
       "tag_index": 32,
@@ -1206,7 +1428,7 @@
       "precision": 0.03514285714285714,
       "recall": 1.0,
       "f1": 0.06789953077560033,
-      "auc_pr": 0.03362366363558066
+      "auc_pr": 0.03363702089052699
     },
     {
       "tag_index": 33,
@@ -1216,7 +1438,7 @@
       "precision": 0.022857142857142857,
       "recall": 1.0,
       "f1": 0.04469273743016759,
-      "auc_pr": 0.019857018299600186
+      "auc_pr": 0.019851917997626332
     },
     {
       "tag_index": 34,
@@ -1226,7 +1448,7 @@
       "precision": 0.05028571428571429,
       "recall": 1.0,
       "f1": 0.09575625680087052,
-      "auc_pr": 0.18749892033828067
+      "auc_pr": 0.18722447229275677
     },
     {
       "tag_index": 35,
@@ -1236,7 +1458,7 @@
       "precision": 0.023142857142857142,
       "recall": 1.0,
       "f1": 0.0452387601228707,
-      "auc_pr": 0.017509492813996257
+      "auc_pr": 0.01750313413933833
     },
     {
       "tag_index": 36,
@@ -1246,7 +1468,7 @@
       "precision": 0.028857142857142856,
       "recall": 1.0,
       "f1": 0.05609552901971674,
-      "auc_pr": 0.02086729409604701
+      "auc_pr": 0.0208683312396663
     },
     {
       "tag_index": 37,
@@ -1256,7 +1478,7 @@
       "precision": 0.046285714285714284,
       "recall": 1.0,
       "f1": 0.08847624249044238,
-      "auc_pr": 0.03080269894094624
+      "auc_pr": 0.030817428134484952
     },
     {
       "tag_index": 38,
@@ -1266,7 +1488,7 @@
       "precision": 0.014857142857142857,
       "recall": 1.0,
       "f1": 0.02927927927927928,
-      "auc_pr": 0.01611006453159393
+      "auc_pr": 0.016112747254714482
     },
     {
       "tag_index": 39,
@@ -1276,7 +1498,7 @@
       "precision": 0.008571428571428572,
       "recall": 1.0,
       "f1": 0.016997167138810197,
-      "auc_pr": 0.015417895144205208
+      "auc_pr": 0.015415187516834003
     },
     {
       "tag_index": 40,
@@ -1286,7 +1508,7 @@
       "precision": 0.014571428571428572,
       "recall": 1.0,
       "f1": 0.028724303013235707,
-      "auc_pr": 0.013944046611017339
+      "auc_pr": 0.013948992253139341
     },
     {
       "tag_index": 41,
@@ -1296,7 +1518,7 @@
       "precision": 0.014,
       "recall": 1.0,
       "f1": 0.027613412228796843,
-      "auc_pr": 0.014687436073692293
+      "auc_pr": 0.014697958482778386
     },
     {
       "tag_index": 42,
@@ -1306,7 +1528,7 @@
       "precision": 0.007714285714285714,
       "recall": 1.0,
       "f1": 0.015310462149135241,
-      "auc_pr": 0.005894565746915383
+      "auc_pr": 0.005894942280477611
     },
     {
       "tag_index": 43,
@@ -1316,7 +1538,7 @@
       "precision": 0.015428571428571429,
       "recall": 1.0,
       "f1": 0.03038829487900957,
-      "auc_pr": 0.02212162050254317
+      "auc_pr": 0.022127144982021563
     },
     {
       "tag_index": 44,
@@ -1326,7 +1548,7 @@
       "precision": 0.017142857142857144,
       "recall": 1.0,
       "f1": 0.033707865168539325,
-      "auc_pr": 0.03050551843119423
+      "auc_pr": 0.030527932261831096
     },
     {
       "tag_index": 45,
@@ -1336,7 +1558,7 @@
       "precision": 0.015142857142857144,
       "recall": 1.0,
       "f1": 0.02983394314663665,
-      "auc_pr": 0.08536999600093151
+      "auc_pr": 0.08556409215724281
     },
     {
       "tag_index": 46,
@@ -1346,7 +1568,7 @@
       "precision": 0.019428571428571427,
       "recall": 1.0,
       "f1": 0.03811659192825112,
-      "auc_pr": 0.016781697842836396
+      "auc_pr": 0.016806924183989894
     },
     {
       "tag_index": 47,
@@ -1356,7 +1578,7 @@
       "precision": 0.008571428571428572,
       "recall": 1.0,
       "f1": 0.016997167138810197,
-      "auc_pr": 0.012102629051510033
+      "auc_pr": 0.012097377003237776
     },
     {
       "tag_index": 48,
@@ -1366,7 +1588,7 @@
       "precision": 0.018,
       "recall": 1.0,
       "f1": 0.03536345776031434,
-      "auc_pr": 0.011159034020562323
+      "auc_pr": 0.01115207505933553
     },
     {
       "tag_index": 49,
@@ -1376,7 +1598,7 @@
       "precision": 0.017142857142857144,
       "recall": 1.0,
       "f1": 0.033707865168539325,
-      "auc_pr": 0.014939042900049482
+      "auc_pr": 0.014940771463738145
     }
   ],
   "baselines": [
@@ -1430,81 +1652,81 @@
       "variant": "gnn_only",
       "mode": "gnn_only",
       "rewired": false,
-      "macro_f1": 0.3246094863092157,
-      "micro_f1": 0.30780675290325243,
-      "mean_auc_pr": 0.33869034593202757,
+      "macro_f1": 0.3260620635829064,
+      "micro_f1": 0.3077493053411547,
+      "mean_auc_pr": 0.3383742456354167,
       "n_params": 926388
     },
     {
       "variant": "early_concat",
       "mode": "early_concat",
       "rewired": false,
-      "macro_f1": 0.33985213658492625,
-      "micro_f1": 0.36913429896613376,
-      "mean_auc_pr": 0.3419926017548599,
+      "macro_f1": 0.3369751835300011,
+      "micro_f1": 0.36784533197659625,
+      "mean_auc_pr": 0.34195894577294467,
       "n_params": 1025716
     },
     {
       "variant": "late_concat",
       "mode": "late_concat",
       "rewired": false,
-      "macro_f1": 0.33301949370141803,
-      "micro_f1": 0.3751214274758424,
-      "mean_auc_pr": 0.3382110715421491,
+      "macro_f1": 0.33081509982560403,
+      "micro_f1": 0.37383465598274135,
+      "mean_auc_pr": 0.337788793947573,
       "n_params": 1025716
     },
     {
       "variant": "cross_attention",
       "mode": "cross_attention",
       "rewired": false,
-      "macro_f1": 0.3125707012037801,
-      "micro_f1": 0.33033634584925,
-      "mean_auc_pr": 0.32851557475030513,
+      "macro_f1": 0.31372906341491047,
+      "micro_f1": 0.3328445747800587,
+      "mean_auc_pr": 0.31683753992146246,
       "n_params": 1454004
     },
     {
       "variant": "gated",
       "mode": "gated",
       "rewired": false,
-      "macro_f1": 0.3121841947413402,
-      "micro_f1": 0.3544828981987452,
-      "mean_auc_pr": 0.3198286041353204,
+      "macro_f1": 0.3057889732845557,
+      "micro_f1": 0.3442038780074218,
+      "mean_auc_pr": 0.3187648793918108,
       "n_params": 1124020
     },
     {
       "variant": "bidirectional",
       "mode": "bidirectional",
       "rewired": false,
-      "macro_f1": 0.3183789236771029,
-      "micro_f1": 0.3369079748740118,
-      "mean_auc_pr": 0.32641198208307054,
+      "macro_f1": 0.3124188433591603,
+      "micro_f1": 0.324021040327294,
+      "mean_auc_pr": 0.32442231500839197,
       "n_params": 2080948
     },
     {
       "variant": "cross_attention + rewired graph",
       "mode": "cross_attention",
       "rewired": true,
-      "macro_f1": 0.3194860488891789,
-      "micro_f1": 0.33175698499252043,
-      "mean_auc_pr": 0.3231839681268454,
+      "macro_f1": 0.31661035705933693,
+      "micro_f1": 0.31092120702251547,
+      "mean_auc_pr": 0.31867994387169835,
       "n_params": 1454004
     }
   ],
   "tsne_genre": {
-    "knn_probe": 0.6429463171036205,
-    "silhouette": 0.00577355637288898,
+    "knn_probe": 0.6067415730337079,
+    "silhouette": -0.018973843981136655,
     "perplexity": 30,
     "n_points": 801
   },
   "tsne_mood": {
-    "knn_probe": 0.6290909090909091,
-    "silhouette": 0.043440701066959755,
+    "knn_probe": 0.6036363636363636,
+    "silhouette": 0.045479589485131644,
     "perplexity": 30,
     "n_points": 275
   },
   "tsne_mood_mtat": {
-    "knn_probe": 0.5277600510529674,
-    "silhouette": -0.050218697290367924,
+    "knn_probe": 0.559029993618379,
+    "silhouette": -0.20551814571441562,
     "perplexity": 30,
     "n_points": 1567,
     "n_labelled": 1567,
@@ -1551,21 +1773,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.16818846762180328,
+          "score": 0.16819284856319427,
           "is_correct": true
         },
         {
           "rank": 2,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.16565151512622833,
+          "score": 0.1656552106142044,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.16392044723033905,
+          "score": 0.1639202982187271,
           "is_correct": false
         }
       ]
@@ -1580,21 +1802,21 @@
           "rank": 1,
           "track_id": "musiccaps_B3lq6U4PDZo_30_40",
           "caption": "This features a melody played using. There are played in the background like clockwork. A plays a note. There is in this. This has a theme and can be used in a children's scary movie. There is a lot of white noise that can be heard in this low quality recording. There are in this.",
-          "score": 0.15971656143665314,
+          "score": 0.15973058342933655,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_fjj9NJX8GB0_400_410",
           "caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
-          "score": 0.159030944108963,
+          "score": 0.1590525209903717,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_lbB2VQYIMo0_30_40",
           "caption": "This is a. There is a variety of pieces ranging from pop to to. The made by the shoes of the dancers can also be heard. The atmosphere is rather. Parts of this recording could be lifted as samples to be used in beat-making.",
-          "score": 0.15825414657592773,
+          "score": 0.1582660973072052,
           "is_correct": false
         }
       ]
@@ -1609,50 +1831,21 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": -0.015692178159952164,
+          "score": -0.015729084610939026,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_D_QEW1Lnl2Q_30_40",
           "caption": "The recording features of, and some. It is obviously a, but the is since it does not have much depth to it.",
-          "score": -0.020540406927466393,
+          "score": -0.020582731813192368,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_EC4GbkL3XvI_80_90",
           "caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
-          "score": -0.02239346317946911,
-          "is_correct": true
-        }
-      ]
-    },
-    {
-      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-      "query_caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
-      "true_rank": 3,
-      "is_failure": false,
-      "top3": [
-        {
-          "rank": 1,
-          "track_id": "musiccaps_ypg2ItQIc2c_190_200",
-          "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
-          "score": -0.06384442001581192,
-          "is_correct": false
-        },
-        {
-          "rank": 2,
-          "track_id": "musiccaps_GJYhDjThTHM_30_40",
-          "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
-          "score": -0.06671716272830963,
-          "is_correct": false
-        },
-        {
-          "rank": 3,
-          "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
-          "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
-          "score": -0.0679788589477539,
+          "score": -0.022441484034061432,
           "is_correct": true
         }
       ]
@@ -1667,51 +1860,51 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": 0.1271400898694992,
+          "score": 0.1271054893732071,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
           "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
-          "score": 0.12518665194511414,
+          "score": 0.12515053153038025,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_H4tyvJJzSDk_30_40",
           "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
-          "score": 0.11576461046934128,
+          "score": 0.11572536081075668,
           "is_correct": true
         }
       ]
     },
     {
-      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
-      "query_caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
-      "true_rank": 4,
+      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+      "query_caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+      "true_rank": 3,
       "is_failure": false,
       "top3": [
         {
           "rank": 1,
-          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
-          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.06693316251039505,
+          "track_id": "musiccaps_ypg2ItQIc2c_190_200",
+          "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
+          "score": -0.06383410841226578,
           "is_correct": false
         },
         {
           "rank": 2,
-          "track_id": "musiccaps_CRDDdjDinYc_50_60",
-          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.0576065294444561,
+          "track_id": "musiccaps_GJYhDjThTHM_30_40",
+          "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
+          "score": -0.06670500338077545,
           "is_correct": false
         },
         {
           "rank": 3,
-          "track_id": "musiccaps_UoSID1KzWuI_30_40",
-          "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
-          "score": 0.056665945798158646,
-          "is_correct": false
+          "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+          "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+          "score": -0.067971371114254,
+          "is_correct": true
         }
       ]
     },
@@ -1725,21 +1918,50 @@
           "rank": 1,
           "track_id": "musiccaps_w4Z1QuBOMWU_70_80",
           "caption": "The song is an. The is with a guitarist traditional in a. The song has a groove and sounds delightful. The song has a.",
-          "score": 0.23872414231300354,
+          "score": 0.23874565958976746,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.23677515983581543,
+          "score": 0.23679772019386292,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.23661623895168304,
+          "score": 0.23663634061813354,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
+      "query_caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
+      "true_rank": 4,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.06696991622447968,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_CRDDdjDinYc_50_60",
+          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
+          "score": 0.05764297395944595,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_UoSID1KzWuI_30_40",
+          "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
+          "score": 0.05670740455389023,
           "is_correct": false
         }
       ]
@@ -1754,21 +1976,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.1507657915353775,
+          "score": 0.15077705681324005,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.14689140021800995,
+          "score": 0.14690349996089935,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_-7B9tPuIP-w_450_460",
           "caption": "A voice narrates a to the rhythm of a in the. The is with, keyboard accompaniment, and vocals. The plays softly in the as the speaks and burgeons when he stops. The is a and Roll and the is a.",
-          "score": 0.14578258991241455,
+          "score": 0.14579060673713684,
           "is_correct": false
         }
       ]
@@ -1783,21 +2005,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.1963932365179062,
+          "score": 0.1964380145072937,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.1917758733034134,
+          "score": 0.19182097911834717,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.19031284749507904,
+          "score": 0.190360888838768,
           "is_correct": false
         }
       ]
@@ -1812,31 +2034,31 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.20029491186141968,
+          "score": 0.20026037096977234,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_CRDDdjDinYc_50_60",
           "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.1898278295993805,
+          "score": 0.18979620933532715,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.188883975148201,
+          "score": 0.18885725736618042,
           "is_correct": false
         }
       ]
     }
   ],
   "graph_coherence": {
-    "S_graph_real": 0.9890705510303284,
-    "S_graph_rewired": 0.9744632490921606,
+    "S_graph_real": 0.9919955165055974,
+    "S_graph_rewired": 0.9811027139569177,
     "tau": 0.5,
-    "mean_edge_cosine": 0.9131532344480175
+    "mean_edge_cosine": 0.9306884121491367
   },
   "bert_attention_examples": [
     {
@@ -1985,11 +2207,11 @@
         },
         {
           "tag": "india",
-          "score": 0.5598917007446289
+          "score": 0.5599218010902405
         },
         {
           "tag": "heavy",
-          "score": 0.5520265698432922
+          "score": 0.5519964098930359
         }
       ],
       "true_tags": [
@@ -2001,19 +2223,19 @@
     }
   ],
   "seed_summary": {
-    "n_seeds": 19,
-    "macro_f1_mean": 0.3344911229100054,
-    "macro_f1_std": 0.100006747276542,
-    "macro_f1_n": 13,
-    "micro_f1_mean": 0.3637891563701957,
-    "micro_f1_std": 0.11908867257272628,
-    "micro_f1_n": 13,
-    "mean_auc_pr_mean": 0.35169487458998133,
-    "mean_auc_pr_std": 0.11393438442573636,
-    "mean_auc_pr_n": 13,
-    "n_rows_mean": 3468.5384615384614,
-    "n_rows_std": 1182.2439550409083,
-    "n_rows_n": 13,
+    "n_seeds": 22,
+    "macro_f1_mean": 0.317887183503028,
+    "macro_f1_std": 0.10526950072256437,
+    "macro_f1_n": 16,
+    "micro_f1_mean": 0.3378781226149814,
+    "micro_f1_std": 0.12299461896738652,
+    "micro_f1_n": 16,
+    "mean_auc_pr_mean": 0.3306332589111102,
+    "mean_auc_pr_std": 0.12417214573171431,
+    "mean_auc_pr_n": 16,
+    "n_rows_mean": 4145.5,
+    "n_rows_std": 1799.004836013511,
+    "n_rows_n": 16,
     "genre_accuracy_mean": 0.4289637952559301,
     "genre_accuracy_std": 0.006699829146066802,
     "genre_accuracy_n": 5,
@@ -2026,36 +2248,36 @@
     "genre_n_classes_mean": 8.0,
     "genre_n_classes_std": 0.0,
     "genre_n_classes_n": 5,
-    "macro_f1_fixed_half_mean": 0.26368656468135504,
-    "macro_f1_fixed_half_std": 0.030372251287921277,
-    "macro_f1_fixed_half_n": 5,
-    "micro_f1_fixed_half_mean": 0.44108455678717917,
-    "micro_f1_fixed_half_std": 0.048154141136585046,
-    "micro_f1_fixed_half_n": 5,
-    "valence_mae_mean": 0.7135590691999956,
-    "valence_mae_std": 0.0,
-    "valence_mae_n": 1,
-    "valence_rmse_mean": 0.8851461097892833,
-    "valence_rmse_std": 0.0,
-    "valence_rmse_n": 1,
-    "valence_r2_mean": 0.31137726503963437,
-    "valence_r2_std": 0.0,
-    "valence_r2_n": 1,
+    "macro_f1_fixed_half_mean": 0.22348271486906165,
+    "macro_f1_fixed_half_std": 0.09389611002886165,
+    "macro_f1_fixed_half_n": 8,
+    "micro_f1_fixed_half_mean": 0.3604795848583442,
+    "micro_f1_fixed_half_std": 0.15663943753463508,
+    "micro_f1_fixed_half_n": 8,
+    "valence_mae_mean": 0.7321130160851912,
+    "valence_mae_std": 0.0960361365742301,
+    "valence_mae_n": 4,
+    "valence_rmse_mean": 0.9043846153495215,
+    "valence_rmse_std": 0.10481410886604599,
+    "valence_rmse_n": 4,
+    "valence_r2_mean": 0.2738758587430046,
+    "valence_r2_std": 0.17453404714047993,
+    "valence_r2_n": 4,
     "valence_n_mean": 275.0,
     "valence_n_std": 0.0,
-    "valence_n_n": 1,
-    "arousal_mae_mean": 0.7527667101946744,
-    "arousal_mae_std": 0.0,
-    "arousal_mae_n": 1,
-    "arousal_rmse_mean": 0.9355538121726722,
-    "arousal_rmse_std": 0.0,
-    "arousal_rmse_n": 1,
-    "arousal_r2_mean": 0.4784653314444235,
-    "arousal_r2_std": 0.0,
-    "arousal_r2_n": 1,
+    "valence_n_n": 4,
+    "arousal_mae_mean": 0.8164087661829862,
+    "arousal_mae_std": 0.0996310583807347,
+    "arousal_mae_n": 4,
+    "arousal_rmse_mean": 1.0224480421278355,
+    "arousal_rmse_std": 0.10821290293179918,
+    "arousal_rmse_n": 4,
+    "arousal_r2_mean": 0.37185276925716604,
+    "arousal_r2_std": 0.1373318243684905,
+    "arousal_r2_n": 4,
     "arousal_n_mean": 275.0,
     "arousal_n_std": 0.0,
-    "arousal_n_n": 1,
+    "arousal_n_n": 4,
     "gallery_size_mean": 2503.0,
     "gallery_size_std": 0.0,
     "gallery_size_n": 1,

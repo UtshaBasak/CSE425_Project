@@ -451,9 +451,9 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 
 ## Local run queue -- live status
 
-Updated 2026-09-06 10:38. **9 done, 0 failed, 12 remaining.**
+Updated 2026-09-06 10:39. **10 done, 0 failed, 11 remaining.**
 
-Estimated **1.3 h** of local GPU left, from 8 measured step(s) (estimates running 0.46x of prediction).
+Estimated **1.2 h** of local GPU left, from 9 measured step(s) (estimates running 0.44x of prediction).
 
 C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not sit in front of C5-C7 for a day. See `state/kaggle_c4_instructions.md`; merge with `scripts/import_kaggle_results.py`.
 
@@ -468,15 +468,15 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C5 Task 3 MusicCaps bert_only | C5 | [x] | 19.2 min |
 | C5 Task 3 MusicCaps gnn_only | C5 | [x] | 2.2 min |
 | C5 Task 3 MusicCaps cross_attention | C5 | [x] | 19.7 min |
-| C6 zero-shot vs supervised | C6 | [~] | running |
-| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~14 min est. |
+| C6 zero-shot vs supervised | C6 | [x] | 0.3 min |
+| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [~] | running |
 | C6 threshold bootstrap | C6 | [ ] | ~2 min est. |
 | C6 compact figures | C6 | [ ] | ~1 min est. |
 | C6 genre confusion figure | C6 | [ ] | ~1 min est. |
 | C7 Task 2 genre seed 1337 | C7 | [ ] | ~2 min est. |
 | C7 Task 2 genre seed 2024 | C7 | [ ] | ~2 min est. |
-| C7 Task 2 tags seed 1337 | C7 | [ ] | ~5 min est. |
-| C7 Task 2 tags seed 2024 | C7 | [ ] | ~5 min est. |
+| C7 Task 2 tags seed 1337 | C7 | [ ] | ~4 min est. |
+| C7 Task 2 tags seed 2024 | C7 | [ ] | ~4 min est. |
 | C7 Task 4 seed 1337 | C7 | [ ] | ~20 min est. |
 | C7 Task 4 seed 2024 | C7 | [ ] | ~20 min est. |
 | report fill + structural check | C7 | [ ] | ~0 min est. |

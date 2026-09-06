@@ -294,3 +294,18 @@ Format:
 [2026-09-06 10:18] DONE   C5 C5 Task 3 MusicCaps gnn_only in 2.2 min
 [2026-09-06 10:38] DONE   C5 C5 Task 3 MusicCaps cross_attention in 19.7 min
 [2026-09-06 10:39] DONE   C6 C6 zero-shot vs supervised in 0.3 min
+[2026-09-06 11:17] BLOCKED C6 C6 full evaluation (t-SNE, S_graph, case studies) after 38.7 min: produced no artifact
+         last lines of queue_C6_444137.log:
+             "confusion_topk": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\confusion_topk.png",
+             "ablation": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\ablation.png",
+             "tsne_genre": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_genre.png",
+             "tsne_mood": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_mood.png",
+             "tsne_mood_mtat": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_mood_mtat.png",
+             "retrieval": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\retrieval.png",
+             "graph_coherence": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\graph_coherence.png",
+             "bert_attention": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_00.png",
+             "case_study": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_graph.png",
+             "seed_summary": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\seed_summary.png"
+           }
+         }
+
