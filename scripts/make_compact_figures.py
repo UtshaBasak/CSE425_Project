@@ -51,7 +51,13 @@ def retrieval_figure(examples_path: Path, out_path: Path, gallery: int | None = 
         return None
     gallery = int(gallery or payload.get("gallery_size", 0) or 1)
 
-    examples = sorted(examples, key=lambda e: e.get("true_rank") or 10**6)
+    # The exporter now returns a larger pool: ten curated extremes for this
+    # figure plus random draws for the listening study, which needs an unbiased
+    # sample. Thirty rows would be fourteen inches tall, so the figure keeps the
+    # curated ten it was designed for and the study keeps the random ones.
+    curated = [e for e in examples if e.get("selection") in (None, "best", "worst")]
+    examples = sorted(curated or examples,
+                      key=lambda e: e.get("true_rank") or 10**6)[:12]
     n = len(examples)
     fig, ax = plt.subplots(figsize=(7.0, 0.46 * n + 1.4))
 

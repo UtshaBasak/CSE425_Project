@@ -260,6 +260,74 @@ def build_macros() -> dict:
     macros["BTwoTagPR"] = num(b2_tags.get("mean_auc_pr"))
     macros["BTwoTagParams"] = integer(b2_tags.get("trainable_params"))
 
+    # ---- C4: the seven-mode fusion ablation ------------------------------ #
+    import statistics as _st
+    from src.fusion_model import FUSION_MODES
+
+    ablation = {}
+    for path in sorted((ROOT / "results").glob("task3_seed*_mtat_*.json")):
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        tag = str(payload.get("run_tag") or "")
+        if "headline" in tag or not tag.startswith("mtat_"):
+            continue
+        mode = payload.get("fusion_mode")
+        if mode:
+            ablation.setdefault(mode, []).append(payload.get("test", {}))
+
+    if ablation:
+        rows, means = [], {}
+        for mode in FUSION_MODES:
+            runs = ablation.get(mode) or []
+            tuned = [r.get("macro_f1") for r in runs if r.get("macro_f1") is not None]
+            fixed = [r.get("macro_f1_fixed_half") for r in runs
+                     if r.get("macro_f1_fixed_half") is not None]
+            if not tuned:
+                continue
+            means[mode] = _st.fmean(tuned)
+            rows.append((mode, tuned, fixed))
+        best = max(means.values()) if means else 0.0
+
+        def _pm(values):
+            if not values:
+                return "---"
+            sd = _st.stdev(values) if len(values) > 1 else 0.0
+            return f"{_st.fmean(values):.4f} $\\pm$ {sd:.4f}"
+
+        lines = []
+        for mode, tuned, fixed in rows:
+            delta = _st.fmean(tuned) - best
+            noise = abs(delta) < 0.0288
+            label = mode.replace("_", r"\_")
+            lines.append(
+                f"\\texttt{{{label}}} & {_pm(tuned)} & {_pm(fixed)} & "
+                f"{delta:+.4f} & {len(tuned)} \\\\")
+        macros["AblationRows"] = "\n".join(lines)
+
+        inside = sorted(m for m, v in means.items() if abs(v - best) < 0.0288)
+        macros["AblationVerdict"] = (
+            f"{len(inside)} of the seven modes --- "
+            + ", ".join(f"\\texttt{{{m.replace('_', chr(92) + '_')}}}" for m in inside)
+            + " --- lie within the measurement floor of one another. No ordering "
+            "among them is claimed."
+            if len(inside) > 1 else
+            f"\\texttt{{{max(means, key=means.get)}}} is the only mode outside "
+            "the measurement floor of the best, so the ordering is reportable.")
+        macros["AblationBest"] = num(best)
+        macros["AblationBertOnly"] = num(means.get("bert_only"))
+        macros["AblationGnnOnly"] = num(means.get("gnn_only"))
+    else:
+        for key in ("AblationRows", "AblationVerdict", "AblationBest",
+                    "AblationBertOnly", "AblationGnnOnly"):
+            macros[key] = PENDING
+        macros["AblationRows"] = r"\multicolumn{5}{c}{\textit{pending}} \\"
+
+    # ---- the corpus contrast: which modality dominates, and when ---------- #
+    contrast = {}
+    for mode in ("bert_only", "gnn_only", "cross_attention"):
+        payload = load(f"task3_seed42_musiccaps_{mode}.json") or {}
+        contrast[mode] = dig(payload, "test", "macro_f1")
+        macros["MC" + "".join(w.title() for w in mode.split("_"))] = num(contrast[mode])
+
     # ---- qualitative figures -------------------------------------------- #
     examples = load("retrieval_examples/retrieval_examples.json") or {}
     rows = examples.get("examples", [])
