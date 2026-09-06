@@ -43,6 +43,7 @@ from .utils import (  # noqa: E402
     detect_provenance,
     guard_against_synthetic,
     ensure_dir,
+    encoder_name_from_checkpoint,
     find_checkpoint,
     get_device,
     get_logger,
@@ -914,11 +915,22 @@ def _rescore_from_checkpoint(bundle, cfg, device, task: int, run: dict):
         resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
         task=task, seed=int(run.get("seed", cfg.get("seed", 42))),
         run_tag=run.get("run_tag"))
-    tokenizer = load_tokenizer(cfg["bert"]["model_name"]) if task in (1, 3) else None
+
+    # Read the architecture out of the checkpoint before building anything.
+    # config.yaml defaults to distilbert while the Task 3 headline is bert-base,
+    # and _load_compatible would then restore 48 of 144 tensors and carry on.
+    payload = (torch.load(ckpt, map_location=device, weights_only=False)
+               if ckpt is not None else None)
+    encoder_name = encoder_name_from_checkpoint(payload, cfg["bert"]["model_name"])
+    if encoder_name != cfg["bert"]["model_name"]:
+        LOGGER.info("task %d checkpoint was trained with %s, not the configured "
+                    "%s -- building the checkpoint's architecture",
+                    task, encoder_name, cfg["bert"]["model_name"])
+    tokenizer = load_tokenizer(encoder_name) if task in (1, 3) else None
     n_tags = len(bundle.tag_vocab)
 
     if task == 1:
-        model = BertTagClassifier(n_tags, cfg["bert"]["model_name"], freeze_mode="frozen_probe")
+        model = BertTagClassifier(n_tags, encoder_name, freeze_mode="frozen_probe")
     elif task == 2:
         model = GNNClassifier(n_tags, in_dim=int(cfg["graph"]["node_feat_dim"]),
                               hidden_dim=int(cfg["gnn"]["hidden_dim"]),
@@ -931,15 +943,18 @@ def _rescore_from_checkpoint(bundle, cfg, device, task: int, run: dict):
                          num_layers=int(cfg["gnn"]["num_layers"]),
                          conv=str(cfg["gnn"]["conv"]), dropout=0.0,
                          readout=str(cfg["gnn"]["readout"]))
-        bert = BertTextEncoder(cfg["bert"]["model_name"], freeze_mode="frozen_probe")
+        bert = BertTextEncoder(encoder_name, freeze_mode="frozen_probe")
         model = GNNBertFusion(gnn, bert, mode=str(cfg["fusion"]["mode"]),
                               shared_dim=int(cfg["fusion"]["shared_dim"]),
                               n_heads=int(cfg["fusion"]["n_heads"]), n_tags=n_tags)
     model = model.to(device)
-    if ckpt is not None:
+    if payload is not None:
         LOGGER.info("task %d: loading %s", task, ckpt.name)
-        payload = torch.load(ckpt, map_location=device, weights_only=False)
-        _load_compatible(model, payload["model_state"])
+        report = _load_compatible(model, payload["model_state"])
+        if report["restored"] < 0.5 * report["total"]:
+            LOGGER.warning("only %d/%d tensors restored from %s -- the model is "
+                           "mostly untrained and its numbers are not meaningful",
+                           report["restored"], report["total"], ckpt.name)
     else:
         LOGGER.warning("no task %d checkpoint for seed %s; scoring an UNTRAINED "
                        "model -- any number from this pass is meaningless",
