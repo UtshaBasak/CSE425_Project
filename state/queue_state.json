@@ -35,6 +35,10 @@
     "C6 full evaluation (t-SNE, S_graph, case studies)": {
       "error": "produced no artifact",
       "minutes": 38.7
+    },
+    "C6 threshold bootstrap": {
+      "error": "produced no artifact",
+      "minutes": 4.3
     }
   },
   "started": 1788656262.3632622
