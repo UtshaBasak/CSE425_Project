@@ -35,6 +35,7 @@ __all__ = [
     "log_vram",
     "find_checkpoint",
     "vocabulary_hash",
+    "encoder_name_from_checkpoint",
     "get_logger",
     "AttrDict",
     "save_json",
@@ -579,3 +580,28 @@ def vocabulary_hash(tags) -> str:
         return ""
     joined = "\u0000".join(str(t) for t in tags)
     return hashlib.sha256(joined.encode("utf-8")).hexdigest()[:12]
+
+
+def encoder_name_from_checkpoint(payload, fallback: str) -> str:
+    """The text encoder a checkpoint was trained with, not the current default.
+
+    ``config.yaml`` defaults ``bert.model_name`` to distilbert, while the Task 3
+    and Task 4 headline runs use bert-base. Building the encoder from the config
+    and then calling ``load_state_dict(strict=False)`` -- or the shape-tolerant
+    loader in evaluate.py -- silently leaves most of a 12-layer tower randomly
+    initialised and returns numbers that look entirely reasonable. It showed up
+    three times in this project as "96 parameter(s) missing" and "restored
+    48/144 tensors", neither of which stops anything.
+
+    Every checkpoint stores the config it was trained under, so the architecture
+    is recoverable rather than guessable. Callers should pass the result into
+    the encoder they build.
+    """
+    if not isinstance(payload, Mapping):
+        return fallback
+    config = payload.get("config") or payload.get("cfg") or {}
+    if not isinstance(config, Mapping):
+        return fallback
+    bert = config.get("bert") or {}
+    name = bert.get("model_name") if isinstance(bert, Mapping) else None
+    return str(name) if name else fallback

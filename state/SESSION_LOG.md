@@ -404,3 +404,17 @@ Format:
                         supervised reference of 0.3188 -- a gap of 0.2274 on the same corpus, vocabulary and split.
 [2026-09-06 15:45] NOTE   Report now 9.0 pages + 0.1 appendix of a 6-10 limit. One macro pending (CaseStudyNote), which
                         needs the three MusicCaps case studies from C6.
+
+[2026-09-06 16:44] FIX   THE SAME ARCHITECTURE MISMATCH IN THREE MORE PLACES. config.yaml defaults bert.model_name to
+                        distilbert (6 layers) while the Task 3 and Task 4 headline runs use bert-base (12). Building from
+                        config and then loading the checkpoint restored 48 of 144 tensors in evaluate.py - the rest stayed
+                        random - and attention_viz would have drawn the Task 1 attention maps and the Task 3 case studies
+                        the same way. Every symptom is a log line nobody reads: "96 parameter(s) missing", "restored
+                        48/144 tensors". Nothing raises, and the figures look fine.
+                        utils.encoder_name_from_checkpoint now reads the architecture out of the checkpoint's own stored
+                        config, and evaluate/attention_viz build the encoder from that rather than from config.yaml.
+                        evaluate also warns loudly when under half the tensors restore. Fixed once, in a shared helper,
+                        because this is the fourth site and site-by-site was clearly not working.
+[2026-09-06 16:05] FIX   The listening study was unratable and undersized: raters were shown caption_masked (descriptive
+                        terms stripped) and only 14 of the intended 24 clips. Now 24 clips, 4 controls, 24/24 unmasked,
+                        with random draws added beyond the curated best-and-worst so the sample is not biased upward.

@@ -22,7 +22,7 @@ import numpy as np  # noqa: E402
 import torch  # noqa: E402
 
 from .graph_builder import visualise_graph  # noqa: E402
-from .utils import find_checkpoint, autocast_ctx, ensure_dir, get_logger, resolve_path, set_seed  # noqa: E402
+from .utils import encoder_name_from_checkpoint, find_checkpoint, autocast_ctx, ensure_dir, get_logger, resolve_path, set_seed  # noqa: E402
 
 LOGGER = get_logger("gbmc.attnviz")
 
@@ -103,7 +103,14 @@ def generate_bert_examples(bundle, cfg, device, seed: int, out_dir,
     tokenizer = load_tokenizer(cfg["bert"]["model_name"])
     # eager attention is required to read the weights back out -- see
     # bert_encoder.ATTENTION_NOTE
-    model = BertTagClassifier(len(bundle.tag_vocab), cfg["bert"]["model_name"],
+    ckpt_probe = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=1, seed=seed, run_tag=run_tag)
+    probe_payload = (torch.load(ckpt_probe, map_location=device, weights_only=False)
+                     if ckpt_probe is not None else None)
+    encoder_name = encoder_name_from_checkpoint(probe_payload,
+                                                cfg["bert"]["model_name"])
+    model = BertTagClassifier(len(bundle.tag_vocab), encoder_name,
                               freeze_mode="frozen_probe",
                               output_attentions=True).to(device)
     # Checkpoints carry their run tag, so the bare name no longer exists and
@@ -174,36 +181,46 @@ def generate_case_studies(bundle, cfg, device, seed: int, out_dir,
 
     out = ensure_dir(out_dir)
     set_seed(seed)
-    tokenizer = load_tokenizer(cfg["bert"]["model_name"])
+
+    # Phase C 4.3: the case studies must come from the MusicCaps fusion model.
+    # MTAT's text channel is title/album/artist metadata, so a token-alignment
+    # map over it shows a graph attending to an artist name -- uninformative by
+    # construction. The default tag therefore names the MusicCaps run.
+    #
+    # The checkpoint is located and read FIRST, because the encoder it was
+    # trained with decides what to build: config.yaml defaults to distilbert
+    # while these runs use bert-base, and building the wrong one restores about
+    # a third of the tensors and draws attention maps from the rest at random.
+    ckpt = find_checkpoint(
+        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
+        task=3, seed=seed, run_tag=run_tag or "musiccaps_cross_attention")
+    if ckpt is None:
+        LOGGER.warning("no Task 3 checkpoint for seed %s -- case studies from an "
+                       "untrained model would be meaningless; skipping", seed)
+        return []
+
+    payload = torch.load(ckpt, map_location=device, weights_only=False)
+    encoder_name = encoder_name_from_checkpoint(payload, cfg["bert"]["model_name"])
+    LOGGER.info("case studies from %s (encoder %s)", ckpt.name, encoder_name)
+
+    tokenizer = load_tokenizer(encoder_name)
     gnn = GNNEncoder(in_dim=int(cfg["graph"]["node_feat_dim"]),
                      hidden_dim=int(cfg["gnn"]["hidden_dim"]),
                      num_layers=int(cfg["gnn"]["num_layers"]),
                      conv="gatv2",           # GATv2 so per-edge attention exists
                      dropout=0.0, readout=str(cfg["gnn"]["readout"]))
-    bert = BertTextEncoder(cfg["bert"]["model_name"], freeze_mode="frozen_probe")
+    bert = BertTextEncoder(encoder_name, freeze_mode="frozen_probe")
     model = GNNBertFusion(gnn, bert, mode="cross_attention",
                           shared_dim=int(cfg["fusion"]["shared_dim"]),
                           n_heads=int(cfg["fusion"]["n_heads"]),
                           n_tags=len(bundle.tag_vocab)).to(device)
-    # Phase C 4.3: the case studies must come from the MusicCaps fusion model.
-    # MTAT's text channel is title/album/artist metadata, so a token-alignment
-    # map over it shows a graph attending to an artist name -- uninformative by
-    # construction. The default tag therefore names the MusicCaps run.
-    ckpt = find_checkpoint(
-        resolve_path(cfg["paths"].get("checkpoints", "results/checkpoints")),
-        task=3, seed=seed, run_tag=run_tag or "musiccaps_cross_attention")
-    if ckpt is not None:
-        from .evaluate import _load_compatible
 
-        LOGGER.info("case studies from %s", ckpt.name)
-        payload = torch.load(ckpt, map_location=device, weights_only=False)
-        # the checkpoint's encoder is SAGE while this one is GATv2, so only the
-        # name-and-shape compatible tensors are restored
-        _load_compatible(model, payload["model_state"])
-    else:
-        LOGGER.warning("no Task 3 checkpoint for seed %s -- case studies from an "
-                       "untrained model would be meaningless; skipping", seed)
-        return []
+    from .evaluate import _load_compatible
+
+    # the checkpoint's graph encoder is SAGE while this one is GATv2, so only
+    # the name-and-shape compatible tensors are restored; the text tower now
+    # matches exactly because it was built from the checkpoint's own config
+    _load_compatible(model, payload["model_state"])
     model.eval()
 
     from .train import TAG_DATASETS
