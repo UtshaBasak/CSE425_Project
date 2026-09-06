@@ -8,6 +8,9 @@
     },
     "C2 Task 3 headline (MTAT, bert-base)": {
       "minutes": 68.9
+    },
+    "C3 Task 4 headline (MusicCaps dual encoder)": {
+      "minutes": 4.5
     }
   },
   "failed": {},

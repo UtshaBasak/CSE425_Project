@@ -288,3 +288,4 @@ Format:
 [2026-09-06 08:05] DONE   C1 C1b structural controls in 20.8 min
 [2026-09-06 09:14] DONE   C2 C2 Task 3 headline (MTAT, bert-base) in 68.9 min
 [2026-09-06 09:18] DONE   C3 C3 Task 4 headline (MusicCaps dual encoder) in 4.5 min
+[2026-09-06 09:57] DONE   C3 C3 retrieval export in 38.7 min
