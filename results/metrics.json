@@ -1,164 +1,2187 @@
 {
-  "splits": {
-    "datasets": {
-      "mtat": {
-        "rows": 21358,
-        "artists": 229,
-        "per_split": {
-          "test": {
-            "clips": 3500,
-            "artists": 42
-          },
-          "train": {
-            "clips": 16881,
-            "artists": 173
-          },
-          "val": {
-            "clips": 977,
-            "artists": 14
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
+  "config_path": "config.yaml",
+  "synthetic": false,
+  "device": "cuda",
+  "seed": 42,
+  "n_tags": 50,
+  "tag_vocab": [
+    "guitar",
+    "classical",
+    "slow",
+    "strings",
+    "techno",
+    "vocal",
+    "electronic",
+    "drum",
+    "no vocal",
+    "rock",
+    "fast",
+    "ambient",
+    "female vocal",
+    "violin",
+    "piano",
+    "male vocal",
+    "beat",
+    "synth",
+    "india",
+    "singing",
+    "flute",
+    "opera",
+    "harpsichord",
+    "quiet",
+    "loud",
+    "soft",
+    "sitar",
+    "pop",
+    "solo",
+    "choir",
+    "cello",
+    "new age",
+    "weird",
+    "harp",
+    "dance",
+    "country",
+    "heavy",
+    "jazz",
+    "eastern",
+    "orchestra",
+    "bass",
+    "no piano",
+    "baroque",
+    "modern",
+    "chant",
+    "hard",
+    "foreign",
+    "no beat",
+    "trance",
+    "folk"
+  ],
+  "split_sizes": {
+    "train": 26651,
+    "test": 7079,
+    "val": 2254
+  },
+  "tasks": {
+    "task1": {
+      "n_runs": 1,
+      "run_tag": null,
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.18083424094064227,
+          "micro_f1": 0.19979627213753418,
+          "mean_auc_pr": 0.18055993766256256,
+          "n_rows": 3500
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.18083424094064227,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.19979627213753418,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.18055993766256256,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
       },
-      "fma": {
-        "rows": 7994,
-        "artists": 2305,
-        "per_split": {
-          "test": {
-            "clips": 801,
-            "artists": 204
-          },
-          "train": {
-            "clips": 6398,
-            "artists": 1886
-          },
-          "val": {
-            "clips": 795,
-            "artists": 215
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
-      },
-      "deam": {
-        "rows": 1802,
-        "artists": 1469,
-        "per_split": {
-          "test": {
-            "clips": 275,
-            "artists": 227
-          },
-          "train": {
-            "clips": 1277,
-            "artists": 1012
-          },
-          "val": {
-            "clips": 250,
-            "artists": 230
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
-      },
-      "musiccaps": {
-        "rows": 4830,
-        "artists": 4830,
-        "per_split": {
-          "test": {
-            "clips": 2503,
-            "artists": 2503
-          },
-          "train": {
-            "clips": 2095,
-            "artists": 2095
-          },
-          "val": {
-            "clips": 232,
-            "artists": 232
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
-      },
-      "lmd": {
-        "rows": 17164,
-        "artists": 2189,
-        "per_split": {
-          "validation_only": {
-            "clips": 17164,
-            "artists": 2189
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
-      },
-      "mtat_literature": {
-        "rows": 21361,
-        "artists": 229,
-        "per_split": {
-          "test": {
-            "clips": 4392,
-            "artists": 75
-          },
-          "train": {
-            "clips": 15431,
-            "artists": 190
-          },
-          "val": {
-            "clips": 1538,
-            "artists": 26
-          }
-        },
-        "artist_disjoint_moved": 0,
-        "cross_corpus_moved": 0,
-        "errata_excluded": 0
-      }
-    },
-    "tag_vocab_size": 50,
-    "musiccaps_tag_vocab_size": 50,
-    "musiccaps_vocab_coverage": {
-      "split_used": "train",
-      "n_clips_counted": 2095,
-      "n_clips_in_csv": 5521,
-      "n_distinct_aspects": 5830,
-      "vocab_size": 50,
-      "mean_aspects_per_clip": 10.668538308277485,
-      "mean_labels_per_clip": 2.7616373845317876,
-      "clips_with_no_label": 511,
-      "clips_with_no_label_pct": 9.255569643180584,
-      "most_frequent": [
-        "low quality",
-        "instrumental",
-        "passionate",
-        "noisy",
-        "emotional",
-        "slow tempo",
-        "energetic",
-        "live performance",
-        "medium tempo",
-        "amateur recording"
+      "best_val_metric": [
+        0.24751703107725784
+      ],
+      "threshold_source": [
+        "val"
       ]
     },
-    "musiccaps_survival": {
-      "status_counts": {
-        "ok": 4830,
-        "missing": 478,
-        "corrupt": 206,
-        "wrong_duration": 7
+    "task1_mtat_metadata_full_ft": {
+      "n_runs": 1,
+      "run_tag": "mtat_metadata_full_ft",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.1862230327221094,
+          "micro_f1": 0.1907492291024252,
+          "mean_auc_pr": 0.20283448426474293,
+          "n_rows": 3500
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.1862230327221094,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.1907492291024252,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.20283448426474293,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
       },
-      "train_nominal": 2663,
-      "train_survivors": 2327,
-      "train_survival_rate": 0.8738265114532482,
-      "eval_nominal": 2858,
-      "eval_survivors": 2503,
-      "eval_survival_rate": 0.8757872638208537,
-      "retrieval_gallery_size": 2503
+      "best_val_metric": [
+        0.24730434284162564
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task1_musiccaps_caption_masked_frozen_probe": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_caption_masked_frozen_probe",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.26366973878774275,
+          "micro_f1": 0.2643991355820727,
+          "mean_auc_pr": 0.24133775762379078,
+          "n_rows": 2503
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.26366973878774275,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.2643991355820727,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.24133775762379078,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 2503.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.4366133594974564
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task1_musiccaps_caption_masked_full_ft": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_caption_masked_full_ft",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3706605092991918,
+          "micro_f1": 0.4139631456008305,
+          "mean_auc_pr": 0.38411103654827206,
+          "n_rows": 2503
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3706605092991918,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.4139631456008305,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.38411103654827206,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 2503.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.5682085850179613
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task1_musiccaps_caption_masked_top_n": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_caption_masked_top_n",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3297552001783531,
+          "micro_f1": 0.34339745679817407,
+          "mean_auc_pr": 0.3577439915943341,
+          "n_rows": 2503
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3297552001783531,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.34339745679817407,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3577439915943341,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 2503.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.543741528748473
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task1_musiccaps_caption_raw_full_ft": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_caption_raw_full_ft",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.5669801746736773,
+          "micro_f1": 0.6341128970823494,
+          "mean_auc_pr": 0.6182151881437872,
+          "n_rows": 2503
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.5669801746736773,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.6341128970823494,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.6182151881437872,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 2503.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.773296694917834
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2": {
+      "n_runs": 1,
+      "run_tag": null,
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3691582532425512,
+          "micro_f1": 0.41240293297978836,
+          "mean_auc_pr": 0.3914982376878173,
+          "n_rows": 3500
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3691582532425512,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.41240293297978836,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3914982376878173,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.3490411288684463
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_fma_genre": {
+      "n_runs": 1,
+      "run_tag": "fma_genre",
+      "per_seed": [
+        {
+          "seed": 42,
+          "genre_accuracy": 0.4232209737827715,
+          "genre_macro_f1": 0.427672640584023,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "genre_accuracy_mean": 0.4232209737827715,
+        "genre_accuracy_std": 0.0,
+        "genre_accuracy_n": 1,
+        "genre_macro_f1_mean": 0.427672640584023,
+        "genre_macro_f1_std": 0.0,
+        "genre_macro_f1_n": 1,
+        "genre_n_rows_mean": 801.0,
+        "genre_n_rows_std": 0.0,
+        "genre_n_rows_n": 1,
+        "genre_n_classes_mean": 8.0,
+        "genre_n_classes_std": 0.0,
+        "genre_n_classes_n": 1
+      },
+      "best_val_metric": [
+        0.5436302357644338
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_genre_baseline": {
+      "n_runs": 1,
+      "run_tag": "genre_baseline",
+      "per_seed": [
+        {
+          "seed": 42,
+          "genre_accuracy": 0.4282147315855181,
+          "genre_macro_f1": 0.42630171593784594,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "genre_accuracy_mean": 0.4282147315855181,
+        "genre_accuracy_std": 0.0,
+        "genre_accuracy_n": 1,
+        "genre_macro_f1_mean": 0.42630171593784594,
+        "genre_macro_f1_std": 0.0,
+        "genre_macro_f1_n": 1,
+        "genre_n_rows_mean": 801.0,
+        "genre_n_rows_std": 0.0,
+        "genre_n_rows_n": 1,
+        "genre_n_classes_mean": 8.0,
+        "genre_n_classes_std": 0.0,
+        "genre_n_classes_n": 1
+      },
+      "best_val_metric": [
+        0.5393845020560523
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_genre_rewired": {
+      "n_runs": 1,
+      "run_tag": "genre_rewired",
+      "per_seed": [
+        {
+          "seed": 42,
+          "genre_accuracy": 0.4232209737827715,
+          "genre_macro_f1": 0.4145726735748666,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "genre_accuracy_mean": 0.4232209737827715,
+        "genre_accuracy_std": 0.0,
+        "genre_accuracy_n": 1,
+        "genre_macro_f1_mean": 0.4145726735748666,
+        "genre_macro_f1_std": 0.0,
+        "genre_macro_f1_n": 1,
+        "genre_n_rows_mean": 801.0,
+        "genre_n_rows_std": 0.0,
+        "genre_n_rows_n": 1,
+        "genre_n_classes_mean": 8.0,
+        "genre_n_classes_std": 0.0,
+        "genre_n_classes_n": 1
+      },
+      "best_val_metric": [
+        0.5295592236481678
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_genre_similarity_only": {
+      "n_runs": 1,
+      "run_tag": "genre_similarity_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "genre_accuracy": 0.4394506866416979,
+          "genre_macro_f1": 0.44325269072719214,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "genre_accuracy_mean": 0.4394506866416979,
+        "genre_accuracy_std": 0.0,
+        "genre_accuracy_n": 1,
+        "genre_macro_f1_mean": 0.44325269072719214,
+        "genre_macro_f1_std": 0.0,
+        "genre_macro_f1_n": 1,
+        "genre_n_rows_mean": 801.0,
+        "genre_n_rows_std": 0.0,
+        "genre_n_rows_n": 1,
+        "genre_n_classes_mean": 8.0,
+        "genre_n_classes_std": 0.0,
+        "genre_n_classes_n": 1
+      },
+      "best_val_metric": [
+        0.5406899862790818
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_genre_temporal_only": {
+      "n_runs": 1,
+      "run_tag": "genre_temporal_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "genre_accuracy": 0.4307116104868914,
+          "genre_macro_f1": 0.42166039403466915,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "genre_accuracy_mean": 0.4307116104868914,
+        "genre_accuracy_std": 0.0,
+        "genre_accuracy_n": 1,
+        "genre_macro_f1_mean": 0.42166039403466915,
+        "genre_macro_f1_std": 0.0,
+        "genre_macro_f1_n": 1,
+        "genre_n_rows_mean": 801.0,
+        "genre_n_rows_std": 0.0,
+        "genre_n_rows_n": 1,
+        "genre_n_classes_mean": 8.0,
+        "genre_n_classes_std": 0.0,
+        "genre_n_classes_n": 1
+      },
+      "best_val_metric": [
+        0.5344688171770086
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_mtat_tags": {
+      "n_runs": 1,
+      "run_tag": "mtat_tags",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.37369722518108534,
+          "micro_f1": 0.4102466171977302,
+          "mean_auc_pr": 0.39392882514733946,
+          "n_rows": 3500
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.37369722518108534,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.4102466171977302,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.39392882514733946,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1
+      },
+      "best_val_metric": [
+        0.3481388768758173
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_tags_baseline": {
+      "n_runs": 1,
+      "run_tag": "tags_baseline",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3591019824669531,
+          "micro_f1": 0.4029790768076727,
+          "mean_auc_pr": 0.387542665273168,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.277491429314294,
+          "micro_f1_fixed_half": 0.4645759413986495
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3591019824669531,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.4029790768076727,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.387542665273168,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "macro_f1_fixed_half_mean": 0.277491429314294,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.4645759413986495,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.3480695998535225
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_tags_rewired": {
+      "n_runs": 1,
+      "run_tag": "tags_rewired",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.37497121017991203,
+          "micro_f1": 0.41040478057485874,
+          "mean_auc_pr": 0.39429713695932656,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.2822561081521394,
+          "micro_f1_fixed_half": 0.46175147109726544
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.37497121017991203,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.41040478057485874,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.39429713695932656,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "macro_f1_fixed_half_mean": 0.2822561081521394,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.46175147109726544,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.3453812975037683
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_tags_similarity_only": {
+      "n_runs": 1,
+      "run_tag": "tags_similarity_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.36172821753295337,
+          "micro_f1": 0.4044555924157834,
+          "mean_auc_pr": 0.3872251747909112,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.2764107166444816,
+          "micro_f1_fixed_half": 0.4633488318695827
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.36172821753295337,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.4044555924157834,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3872251747909112,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "macro_f1_fixed_half_mean": 0.2764107166444816,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.4633488318695827,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.34707321051630935
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task2_tags_temporal_only": {
+      "n_runs": 1,
+      "run_tag": "tags_temporal_only",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.3634810178284071,
+          "micro_f1": 0.4046813906794885,
+          "mean_auc_pr": 0.3863715119845619,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.2725669542111555,
+          "micro_f1_fixed_half": 0.4607629739947302
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.3634810178284071,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.4046813906794885,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.3863715119845619,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 3500.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "macro_f1_fixed_half_mean": 0.2725669542111555,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.4607629739947302,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.34850872767361024
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task3_mtat_cross_attention_headline": {
+      "n_runs": 1,
+      "run_tag": "mtat_cross_attention_headline",
+      "per_seed": [
+        {
+          "seed": 42,
+          "macro_f1": 0.24812379479649102,
+          "micro_f1": 0.23767050585383628,
+          "mean_auc_pr": 0.24636742198914313,
+          "n_rows": 7079,
+          "valence_mae": 0.7135590691999956,
+          "valence_rmse": 0.8851461097892833,
+          "valence_r2": 0.31137726503963437,
+          "valence_n": 275,
+          "arousal_mae": 0.7527667101946744,
+          "arousal_rmse": 0.9355538121726722,
+          "arousal_r2": 0.4784653314444235,
+          "arousal_n": 275,
+          "macro_f1_fixed_half": 0.2097076150847049,
+          "micro_f1_fixed_half": 0.3549835655756678
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "macro_f1_mean": 0.24812379479649102,
+        "macro_f1_std": 0.0,
+        "macro_f1_n": 1,
+        "micro_f1_mean": 0.23767050585383628,
+        "micro_f1_std": 0.0,
+        "micro_f1_n": 1,
+        "mean_auc_pr_mean": 0.24636742198914313,
+        "mean_auc_pr_std": 0.0,
+        "mean_auc_pr_n": 1,
+        "n_rows_mean": 7079.0,
+        "n_rows_std": 0.0,
+        "n_rows_n": 1,
+        "valence_mae_mean": 0.7135590691999956,
+        "valence_mae_std": 0.0,
+        "valence_mae_n": 1,
+        "valence_rmse_mean": 0.8851461097892833,
+        "valence_rmse_std": 0.0,
+        "valence_rmse_n": 1,
+        "valence_r2_mean": 0.31137726503963437,
+        "valence_r2_std": 0.0,
+        "valence_r2_n": 1,
+        "valence_n_mean": 275.0,
+        "valence_n_std": 0.0,
+        "valence_n_n": 1,
+        "arousal_mae_mean": 0.7527667101946744,
+        "arousal_mae_std": 0.0,
+        "arousal_mae_n": 1,
+        "arousal_rmse_mean": 0.9355538121726722,
+        "arousal_rmse_std": 0.0,
+        "arousal_rmse_n": 1,
+        "arousal_r2_mean": 0.4784653314444235,
+        "arousal_r2_std": 0.0,
+        "arousal_r2_n": 1,
+        "arousal_n_mean": 275.0,
+        "arousal_n_std": 0.0,
+        "arousal_n_n": 1,
+        "macro_f1_fixed_half_mean": 0.2097076150847049,
+        "macro_f1_fixed_half_std": 0.0,
+        "macro_f1_fixed_half_n": 1,
+        "micro_f1_fixed_half_mean": 0.3549835655756678,
+        "micro_f1_fixed_half_std": 0.0,
+        "micro_f1_fixed_half_n": 1
+      },
+      "best_val_metric": [
+        0.2972182816217932
+      ],
+      "threshold_source": [
+        "val"
+      ]
+    },
+    "task4_musiccaps_dual": {
+      "n_runs": 1,
+      "run_tag": "musiccaps_dual",
+      "per_seed": [
+        {
+          "seed": 42,
+          "gallery_size": 2503,
+          "n_queries": 2503,
+          "n_pairs": 2503,
+          "g2t_R@1": 0.00039952057530962844,
+          "g2t_R@5": 0.0023971234518577705,
+          "g2t_R@10": 0.0043947263284059125,
+          "g2t_medR": 998.0,
+          "g2t_meanR": 1079.1286456252496,
+          "g2t_MRR": 0.004343176743943933,
+          "t2g_R@1": 0.0007990411506192569,
+          "t2g_R@5": 0.001997602876548142,
+          "t2g_R@10": 0.003595685177786656,
+          "t2g_medR": 1216.0,
+          "t2g_meanR": 1233.025968837395,
+          "t2g_MRR": 0.003885190234681536,
+          "mean_R@1": 0.0005992808629644426,
+          "mean_R@5": 0.0021973631642029563,
+          "mean_R@10": 0.003995205753096284,
+          "mean_MRR": 0.004114183489312735,
+          "random_R@1": 0.00039952057530962844,
+          "random_R@5": 0.001997602876548142,
+          "random_R@10": 0.003995205753096284,
+          "random_medR": 1252.0,
+          "random_meanR": 1252.0,
+          "random_MRR": 0.003357035838321842,
+          "mean_R@1_vs_chance": 1.5,
+          "mean_R@5_vs_chance": 1.1,
+          "mean_R@10_vs_chance": 1.0
+        }
+      ],
+      "aggregated": {
+        "n_seeds": 1,
+        "gallery_size_mean": 2503.0,
+        "gallery_size_std": 0.0,
+        "gallery_size_n": 1,
+        "n_queries_mean": 2503.0,
+        "n_queries_std": 0.0,
+        "n_queries_n": 1,
+        "n_pairs_mean": 2503.0,
+        "n_pairs_std": 0.0,
+        "n_pairs_n": 1,
+        "g2t_R@1_mean": 0.00039952057530962844,
+        "g2t_R@1_std": 0.0,
+        "g2t_R@1_n": 1,
+        "g2t_R@5_mean": 0.0023971234518577705,
+        "g2t_R@5_std": 0.0,
+        "g2t_R@5_n": 1,
+        "g2t_R@10_mean": 0.0043947263284059125,
+        "g2t_R@10_std": 0.0,
+        "g2t_R@10_n": 1,
+        "g2t_medR_mean": 998.0,
+        "g2t_medR_std": 0.0,
+        "g2t_medR_n": 1,
+        "g2t_meanR_mean": 1079.1286456252496,
+        "g2t_meanR_std": 0.0,
+        "g2t_meanR_n": 1,
+        "g2t_MRR_mean": 0.004343176743943933,
+        "g2t_MRR_std": 0.0,
+        "g2t_MRR_n": 1,
+        "t2g_R@1_mean": 0.0007990411506192569,
+        "t2g_R@1_std": 0.0,
+        "t2g_R@1_n": 1,
+        "t2g_R@5_mean": 0.001997602876548142,
+        "t2g_R@5_std": 0.0,
+        "t2g_R@5_n": 1,
+        "t2g_R@10_mean": 0.003595685177786656,
+        "t2g_R@10_std": 0.0,
+        "t2g_R@10_n": 1,
+        "t2g_medR_mean": 1216.0,
+        "t2g_medR_std": 0.0,
+        "t2g_medR_n": 1,
+        "t2g_meanR_mean": 1233.025968837395,
+        "t2g_meanR_std": 0.0,
+        "t2g_meanR_n": 1,
+        "t2g_MRR_mean": 0.003885190234681536,
+        "t2g_MRR_std": 0.0,
+        "t2g_MRR_n": 1,
+        "mean_R@1_mean": 0.0005992808629644426,
+        "mean_R@1_std": 0.0,
+        "mean_R@1_n": 1,
+        "mean_R@5_mean": 0.0021973631642029563,
+        "mean_R@5_std": 0.0,
+        "mean_R@5_n": 1,
+        "mean_R@10_mean": 0.003995205753096284,
+        "mean_R@10_std": 0.0,
+        "mean_R@10_n": 1,
+        "mean_MRR_mean": 0.004114183489312735,
+        "mean_MRR_std": 0.0,
+        "mean_MRR_n": 1,
+        "random_R@1_mean": 0.00039952057530962844,
+        "random_R@1_std": 0.0,
+        "random_R@1_n": 1,
+        "random_R@5_mean": 0.001997602876548142,
+        "random_R@5_std": 0.0,
+        "random_R@5_n": 1,
+        "random_R@10_mean": 0.003995205753096284,
+        "random_R@10_std": 0.0,
+        "random_R@10_n": 1,
+        "random_medR_mean": 1252.0,
+        "random_medR_std": 0.0,
+        "random_medR_n": 1,
+        "random_meanR_mean": 1252.0,
+        "random_meanR_std": 0.0,
+        "random_meanR_n": 1,
+        "random_MRR_mean": 0.003357035838321842,
+        "random_MRR_std": 0.0,
+        "random_MRR_n": 1,
+        "mean_R@1_vs_chance_mean": 1.5,
+        "mean_R@1_vs_chance_std": 0.0,
+        "mean_R@1_vs_chance_n": 1,
+        "mean_R@5_vs_chance_mean": 1.1,
+        "mean_R@5_vs_chance_std": 0.0,
+        "mean_R@5_vs_chance_n": 1,
+        "mean_R@10_vs_chance_mean": 1.0,
+        "mean_R@10_vs_chance_std": 0.0,
+        "mean_R@10_vs_chance_n": 1
+      },
+      "best_val_metric": [
+        0.0603448275862069
+      ],
+      "threshold_source": [
+        "val"
+      ]
     }
-  }
+  },
+  "per_tag_prf": [
+    {
+      "tag_index": 0,
+      "threshold": 0.19,
+      "support": 698,
+      "n_evaluated": 3500,
+      "precision": 0.19942857142857143,
+      "recall": 1.0,
+      "f1": 0.33253930443068125,
+      "auc_pr": 0.19416864794081776
+    },
+    {
+      "tag_index": 1,
+      "threshold": 0.45,
+      "support": 527,
+      "n_evaluated": 3500,
+      "precision": 0.13664596273291926,
+      "recall": 0.7096774193548387,
+      "f1": 0.22916666666666669,
+      "auc_pr": 0.10705010403634785
+    },
+    {
+      "tag_index": 2,
+      "threshold": 0.17,
+      "support": 477,
+      "n_evaluated": 3500,
+      "precision": 0.1362857142857143,
+      "recall": 1.0,
+      "f1": 0.23987930600955493,
+      "auc_pr": 0.1285971339417374
+    },
+    {
+      "tag_index": 3,
+      "threshold": 0.17,
+      "support": 333,
+      "n_evaluated": 3500,
+      "precision": 0.09514285714285714,
+      "recall": 1.0,
+      "f1": 0.17375423949908686,
+      "auc_pr": 0.07208728615594619
+    },
+    {
+      "tag_index": 4,
+      "threshold": 0.54,
+      "support": 674,
+      "n_evaluated": 3500,
+      "precision": 0.20651162790697675,
+      "recall": 0.658753709198813,
+      "f1": 0.31444759206798867,
+      "auc_pr": 0.18266674922419301
+    },
+    {
+      "tag_index": 5,
+      "threshold": 0.09,
+      "support": 542,
+      "n_evaluated": 3500,
+      "precision": 0.15485714285714286,
+      "recall": 1.0,
+      "f1": 0.2681840672934191,
+      "auc_pr": 0.15656946082526815
+    },
+    {
+      "tag_index": 6,
+      "threshold": 0.44,
+      "support": 546,
+      "n_evaluated": 3500,
+      "precision": 0.15622317596566523,
+      "recall": 1.0,
+      "f1": 0.2702301410541945,
+      "auc_pr": 0.21323708693028148
+    },
+    {
+      "tag_index": 7,
+      "threshold": 0.2,
+      "support": 528,
+      "n_evaluated": 3500,
+      "precision": 0.15085714285714286,
+      "recall": 1.0,
+      "f1": 0.2621648460774578,
+      "auc_pr": 0.1971084495339216
+    },
+    {
+      "tag_index": 8,
+      "threshold": 0.14,
+      "support": 405,
+      "n_evaluated": 3500,
+      "precision": 0.11571428571428571,
+      "recall": 1.0,
+      "f1": 0.20742637644046097,
+      "auc_pr": 0.13767836965193325
+    },
+    {
+      "tag_index": 9,
+      "threshold": 0.11,
+      "support": 360,
+      "n_evaluated": 3500,
+      "precision": 0.10285714285714286,
+      "recall": 1.0,
+      "f1": 0.18652849740932645,
+      "auc_pr": 0.0632315745639841
+    },
+    {
+      "tag_index": 10,
+      "threshold": 0.28,
+      "support": 492,
+      "n_evaluated": 3500,
+      "precision": 0.14057142857142857,
+      "recall": 1.0,
+      "f1": 0.24649298597194388,
+      "auc_pr": 0.09755278086159738
+    },
+    {
+      "tag_index": 11,
+      "threshold": 0.2,
+      "support": 181,
+      "n_evaluated": 3500,
+      "precision": 0.05171428571428571,
+      "recall": 1.0,
+      "f1": 0.09834284161912525,
+      "auc_pr": 0.05023248574460999
+    },
+    {
+      "tag_index": 12,
+      "threshold": 0.46,
+      "support": 386,
+      "n_evaluated": 3500,
+      "precision": 0.11146869514335869,
+      "recall": 0.9870466321243523,
+      "f1": 0.20031545741324921,
+      "auc_pr": 0.10725070496768871
+    },
+    {
+      "tag_index": 13,
+      "threshold": 0.25,
+      "support": 231,
+      "n_evaluated": 3500,
+      "precision": 0.066,
+      "recall": 1.0,
+      "f1": 0.12382739212007504,
+      "auc_pr": 0.17677950176455304
+    },
+    {
+      "tag_index": 14,
+      "threshold": 0.2,
+      "support": 344,
+      "n_evaluated": 3500,
+      "precision": 0.09828571428571428,
+      "recall": 1.0,
+      "f1": 0.17898022892819979,
+      "auc_pr": 0.2568114009781208
+    },
+    {
+      "tag_index": 15,
+      "threshold": 0.11,
+      "support": 401,
+      "n_evaluated": 3500,
+      "precision": 0.11457142857142857,
+      "recall": 1.0,
+      "f1": 0.2055883106895668,
+      "auc_pr": 0.15602638936945967
+    },
+    {
+      "tag_index": 16,
+      "threshold": 0.29,
+      "support": 457,
+      "n_evaluated": 3500,
+      "precision": 0.13057142857142856,
+      "recall": 1.0,
+      "f1": 0.23098306798079352,
+      "auc_pr": 0.1276733326487779
+    },
+    {
+      "tag_index": 17,
+      "threshold": 0.26,
+      "support": 273,
+      "n_evaluated": 3500,
+      "precision": 0.078,
+      "recall": 1.0,
+      "f1": 0.14471243042671614,
+      "auc_pr": 0.08405323430830487
+    },
+    {
+      "tag_index": 18,
+      "threshold": 0.08,
+      "support": 183,
+      "n_evaluated": 3500,
+      "precision": 0.05228571428571428,
+      "recall": 1.0,
+      "f1": 0.09937550909584578,
+      "auc_pr": 0.08792290669416201
+    },
+    {
+      "tag_index": 19,
+      "threshold": 0.06,
+      "support": 241,
+      "n_evaluated": 3500,
+      "precision": 0.06885714285714285,
+      "recall": 1.0,
+      "f1": 0.1288425554664528,
+      "auc_pr": 0.06016901123301306
+    },
+    {
+      "tag_index": 20,
+      "threshold": 0.35000000000000003,
+      "support": 41,
+      "n_evaluated": 3500,
+      "precision": 0.011717633609602743,
+      "recall": 1.0,
+      "f1": 0.023163841807909605,
+      "auc_pr": 0.009835706464057261
+    },
+    {
+      "tag_index": 21,
+      "threshold": 0.17,
+      "support": 328,
+      "n_evaluated": 3500,
+      "precision": 0.09371428571428571,
+      "recall": 1.0,
+      "f1": 0.17136886102403343,
+      "auc_pr": 0.06920580889945074
+    },
+    {
+      "tag_index": 22,
+      "threshold": 0.25,
+      "support": 141,
+      "n_evaluated": 3500,
+      "precision": 0.040285714285714286,
+      "recall": 1.0,
+      "f1": 0.07745124965668773,
+      "auc_pr": 0.04049245444359125
+    },
+    {
+      "tag_index": 23,
+      "threshold": 0.23,
+      "support": 141,
+      "n_evaluated": 3500,
+      "precision": 0.040285714285714286,
+      "recall": 1.0,
+      "f1": 0.07745124965668773,
+      "auc_pr": 0.03035849976588105
+    },
+    {
+      "tag_index": 24,
+      "threshold": 0.3,
+      "support": 193,
+      "n_evaluated": 3500,
+      "precision": 0.055142857142857146,
+      "recall": 1.0,
+      "f1": 0.10452206877877065,
+      "auc_pr": 0.06667469053449179
+    },
+    {
+      "tag_index": 25,
+      "threshold": 0.18,
+      "support": 126,
+      "n_evaluated": 3500,
+      "precision": 0.036,
+      "recall": 1.0,
+      "f1": 0.06949806949806948,
+      "auc_pr": 0.07899722618931906
+    },
+    {
+      "tag_index": 26,
+      "threshold": 0.06,
+      "support": 142,
+      "n_evaluated": 3500,
+      "precision": 0.04057142857142857,
+      "recall": 1.0,
+      "f1": 0.07797913234486546,
+      "auc_pr": 0.03619225176654338
+    },
+    {
+      "tag_index": 27,
+      "threshold": 0.08,
+      "support": 172,
+      "n_evaluated": 3500,
+      "precision": 0.04914285714285714,
+      "recall": 1.0,
+      "f1": 0.09368191721132897,
+      "auc_pr": 0.041318560827480956
+    },
+    {
+      "tag_index": 28,
+      "threshold": 0.13,
+      "support": 117,
+      "n_evaluated": 3500,
+      "precision": 0.033428571428571426,
+      "recall": 1.0,
+      "f1": 0.0646944982029306,
+      "auc_pr": 0.05374770305991859
+    },
+    {
+      "tag_index": 29,
+      "threshold": 0.17,
+      "support": 186,
+      "n_evaluated": 3500,
+      "precision": 0.053142857142857144,
+      "recall": 1.0,
+      "f1": 0.10092240911557243,
+      "auc_pr": 0.03894558559885889
+    },
+    {
+      "tag_index": 30,
+      "threshold": 0.6,
+      "support": 15,
+      "n_evaluated": 3500,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0,
+      "auc_pr": 0.002694035595864537
+    },
+    {
+      "tag_index": 31,
+      "threshold": 0.08,
+      "support": 69,
+      "n_evaluated": 3500,
+      "precision": 0.019714285714285715,
+      "recall": 1.0,
+      "f1": 0.038666293079293916,
+      "auc_pr": 0.021786709331227457
+    },
+    {
+      "tag_index": 32,
+      "threshold": 0.11,
+      "support": 123,
+      "n_evaluated": 3500,
+      "precision": 0.03514285714285714,
+      "recall": 1.0,
+      "f1": 0.06789953077560033,
+      "auc_pr": 0.03362366363558066
+    },
+    {
+      "tag_index": 33,
+      "threshold": 0.11,
+      "support": 80,
+      "n_evaluated": 3500,
+      "precision": 0.022857142857142857,
+      "recall": 1.0,
+      "f1": 0.04469273743016759,
+      "auc_pr": 0.019857018299600186
+    },
+    {
+      "tag_index": 34,
+      "threshold": 0.25,
+      "support": 176,
+      "n_evaluated": 3500,
+      "precision": 0.05028571428571429,
+      "recall": 1.0,
+      "f1": 0.09575625680087052,
+      "auc_pr": 0.18749892033828067
+    },
+    {
+      "tag_index": 35,
+      "threshold": 0.01,
+      "support": 81,
+      "n_evaluated": 3500,
+      "precision": 0.023142857142857142,
+      "recall": 1.0,
+      "f1": 0.0452387601228707,
+      "auc_pr": 0.017509492813996257
+    },
+    {
+      "tag_index": 36,
+      "threshold": 0.11,
+      "support": 101,
+      "n_evaluated": 3500,
+      "precision": 0.028857142857142856,
+      "recall": 1.0,
+      "f1": 0.05609552901971674,
+      "auc_pr": 0.02086729409604701
+    },
+    {
+      "tag_index": 37,
+      "threshold": 0.02,
+      "support": 162,
+      "n_evaluated": 3500,
+      "precision": 0.046285714285714284,
+      "recall": 1.0,
+      "f1": 0.08847624249044238,
+      "auc_pr": 0.03080269894094624
+    },
+    {
+      "tag_index": 38,
+      "threshold": 0.04,
+      "support": 52,
+      "n_evaluated": 3500,
+      "precision": 0.014857142857142857,
+      "recall": 1.0,
+      "f1": 0.02927927927927928,
+      "auc_pr": 0.01611006453159393
+    },
+    {
+      "tag_index": 39,
+      "threshold": 0.02,
+      "support": 30,
+      "n_evaluated": 3500,
+      "precision": 0.008571428571428572,
+      "recall": 1.0,
+      "f1": 0.016997167138810197,
+      "auc_pr": 0.015417895144205208
+    },
+    {
+      "tag_index": 40,
+      "threshold": 0.11,
+      "support": 51,
+      "n_evaluated": 3500,
+      "precision": 0.014571428571428572,
+      "recall": 1.0,
+      "f1": 0.028724303013235707,
+      "auc_pr": 0.013944046611017339
+    },
+    {
+      "tag_index": 41,
+      "threshold": 0.03,
+      "support": 49,
+      "n_evaluated": 3500,
+      "precision": 0.014,
+      "recall": 1.0,
+      "f1": 0.027613412228796843,
+      "auc_pr": 0.014687436073692293
+    },
+    {
+      "tag_index": 42,
+      "threshold": 0.1,
+      "support": 27,
+      "n_evaluated": 3500,
+      "precision": 0.007714285714285714,
+      "recall": 1.0,
+      "f1": 0.015310462149135241,
+      "auc_pr": 0.005894565746915383
+    },
+    {
+      "tag_index": 43,
+      "threshold": 0.05,
+      "support": 54,
+      "n_evaluated": 3500,
+      "precision": 0.015428571428571429,
+      "recall": 1.0,
+      "f1": 0.03038829487900957,
+      "auc_pr": 0.02212162050254317
+    },
+    {
+      "tag_index": 44,
+      "threshold": 0.0,
+      "support": 60,
+      "n_evaluated": 3500,
+      "precision": 0.017142857142857144,
+      "recall": 1.0,
+      "f1": 0.033707865168539325,
+      "auc_pr": 0.03050551843119423
+    },
+    {
+      "tag_index": 45,
+      "threshold": 0.2,
+      "support": 53,
+      "n_evaluated": 3500,
+      "precision": 0.015142857142857144,
+      "recall": 1.0,
+      "f1": 0.02983394314663665,
+      "auc_pr": 0.08536999600093151
+    },
+    {
+      "tag_index": 46,
+      "threshold": 0.0,
+      "support": 68,
+      "n_evaluated": 3500,
+      "precision": 0.019428571428571427,
+      "recall": 1.0,
+      "f1": 0.03811659192825112,
+      "auc_pr": 0.016781697842836396
+    },
+    {
+      "tag_index": 47,
+      "threshold": 0.02,
+      "support": 30,
+      "n_evaluated": 3500,
+      "precision": 0.008571428571428572,
+      "recall": 1.0,
+      "f1": 0.016997167138810197,
+      "auc_pr": 0.012102629051510033
+    },
+    {
+      "tag_index": 48,
+      "threshold": 0.04,
+      "support": 63,
+      "n_evaluated": 3500,
+      "precision": 0.018,
+      "recall": 1.0,
+      "f1": 0.03536345776031434,
+      "auc_pr": 0.011159034020562323
+    },
+    {
+      "tag_index": 49,
+      "threshold": 0.02,
+      "support": 60,
+      "n_evaluated": 3500,
+      "precision": 0.017142857142857144,
+      "recall": 1.0,
+      "f1": 0.033707865168539325,
+      "auc_pr": 0.014939042900049482
+    }
+  ],
+  "baselines": [
+    {
+      "baseline": "B1_random",
+      "n_repeats": 5,
+      "n_test": 3500,
+      "n_tags": 50,
+      "macro_f1": 0.06444270305888335,
+      "macro_f1_std": 0.0006214624610884781,
+      "micro_f1": 0.10455067448889668,
+      "micro_f1_std": 0.001478342925240272,
+      "mean_auc_pr": 0.06676061078346676,
+      "mean_auc_pr_std": 0.000669628321418861,
+      "mean_train_prior": 0.0650364314910254
+    },
+    {
+      "baseline": "B1_majority",
+      "macro_f1": 0.0,
+      "micro_f1": 0.0,
+      "mean_auc_pr": 0.0644,
+      "n_test": 3500,
+      "n_tags": 50,
+      "n_tags_predicted_positive": 0,
+      "element_accuracy_do_not_report": 0.9356
+    },
+    {
+      "baseline": "B4_pca_mlp",
+      "macro_f1": 0.3145693558752185,
+      "micro_f1": 0.2903565518278923,
+      "mean_auc_pr": 0.3069431851794457,
+      "n_test": 3500,
+      "n_tags": 50,
+      "n_components": 96,
+      "explained_variance": 0.9999999999999999,
+      "threshold_source": "val",
+      "n_train": 16881
+    }
+  ],
+  "ablation": [
+    {
+      "variant": "bert_only",
+      "mode": "bert_only",
+      "rewired": false,
+      "macro_f1": 0.16891776178104995,
+      "micro_f1": 0.20065627563576702,
+      "mean_auc_pr": 0.1753179749255697,
+      "n_params": 926388
+    },
+    {
+      "variant": "gnn_only",
+      "mode": "gnn_only",
+      "rewired": false,
+      "macro_f1": 0.3246094863092157,
+      "micro_f1": 0.30780675290325243,
+      "mean_auc_pr": 0.33869034593202757,
+      "n_params": 926388
+    },
+    {
+      "variant": "early_concat",
+      "mode": "early_concat",
+      "rewired": false,
+      "macro_f1": 0.33985213658492625,
+      "micro_f1": 0.36913429896613376,
+      "mean_auc_pr": 0.3419926017548599,
+      "n_params": 1025716
+    },
+    {
+      "variant": "late_concat",
+      "mode": "late_concat",
+      "rewired": false,
+      "macro_f1": 0.33301949370141803,
+      "micro_f1": 0.3751214274758424,
+      "mean_auc_pr": 0.3382110715421491,
+      "n_params": 1025716
+    },
+    {
+      "variant": "cross_attention",
+      "mode": "cross_attention",
+      "rewired": false,
+      "macro_f1": 0.3125707012037801,
+      "micro_f1": 0.33033634584925,
+      "mean_auc_pr": 0.32851557475030513,
+      "n_params": 1454004
+    },
+    {
+      "variant": "gated",
+      "mode": "gated",
+      "rewired": false,
+      "macro_f1": 0.3121841947413402,
+      "micro_f1": 0.3544828981987452,
+      "mean_auc_pr": 0.3198286041353204,
+      "n_params": 1124020
+    },
+    {
+      "variant": "bidirectional",
+      "mode": "bidirectional",
+      "rewired": false,
+      "macro_f1": 0.3183789236771029,
+      "micro_f1": 0.3369079748740118,
+      "mean_auc_pr": 0.32641198208307054,
+      "n_params": 2080948
+    },
+    {
+      "variant": "cross_attention + rewired graph",
+      "mode": "cross_attention",
+      "rewired": true,
+      "macro_f1": 0.3194860488891789,
+      "micro_f1": 0.33175698499252043,
+      "mean_auc_pr": 0.3231839681268454,
+      "n_params": 1454004
+    }
+  ],
+  "tsne_genre": {
+    "knn_probe": 0.6429463171036205,
+    "silhouette": 0.00577355637288898,
+    "perplexity": 30,
+    "n_points": 801
+  },
+  "tsne_mood": {
+    "knn_probe": 0.6290909090909091,
+    "silhouette": 0.043440701066959755,
+    "perplexity": 30,
+    "n_points": 275
+  },
+  "tsne_mood_mtat": {
+    "knn_probe": 0.5277600510529674,
+    "silhouette": -0.050218697290367924,
+    "perplexity": 30,
+    "n_points": 1567,
+    "n_labelled": 1567,
+    "n_unlabelled_excluded": 5512
+  },
+  "retrieval": {
+    "gallery_size": 2503,
+    "n_queries": 2503,
+    "n_pairs": 2503,
+    "g2t_R@1": 0.00039952057530962844,
+    "g2t_R@5": 0.0023971234518577705,
+    "g2t_R@10": 0.0043947263284059125,
+    "g2t_medR": 998.0,
+    "g2t_meanR": 1079.1286456252496,
+    "g2t_MRR": 0.004343176743943933,
+    "t2g_R@1": 0.0007990411506192569,
+    "t2g_R@5": 0.001997602876548142,
+    "t2g_R@10": 0.003595685177786656,
+    "t2g_medR": 1216.0,
+    "t2g_meanR": 1233.025968837395,
+    "t2g_MRR": 0.003885190234681536,
+    "mean_R@1": 0.0005992808629644426,
+    "mean_R@5": 0.0021973631642029563,
+    "mean_R@10": 0.003995205753096284,
+    "mean_MRR": 0.004114183489312735,
+    "random_R@1": 0.00039952057530962844,
+    "random_R@5": 0.001997602876548142,
+    "random_R@10": 0.003995205753096284,
+    "random_medR": 1252.0,
+    "random_meanR": 1252.0,
+    "random_MRR": 0.003357035838321842,
+    "mean_R@1_vs_chance": 1.5,
+    "mean_R@5_vs_chance": 1.1,
+    "mean_R@10_vs_chance": 1.0
+  },
+  "retrieval_examples": [
+    {
+      "query_track_id": "musiccaps_vrMmkVV4SOE_30_40",
+      "query_caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+      "true_rank": 1,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.16818846762180328,
+          "is_correct": true
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_b9rgWct9ivI_110_120",
+          "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
+          "score": 0.16565151512622833,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_P8nK4i8XscM_30_40",
+          "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
+          "score": 0.16392044723033905,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_fjj9NJX8GB0_400_410",
+      "query_caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
+      "true_rank": 2,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_B3lq6U4PDZo_30_40",
+          "caption": "This features a melody played using. There are played in the background like clockwork. A plays a note. There is in this. This has a theme and can be used in a children's scary movie. There is a lot of white noise that can be heard in this low quality recording. There are in this.",
+          "score": 0.15971656143665314,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_fjj9NJX8GB0_400_410",
+          "caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
+          "score": 0.159030944108963,
+          "is_correct": true
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_lbB2VQYIMo0_30_40",
+          "caption": "This is a. There is a variety of pieces ranging from pop to to. The made by the shoes of the dancers can also be heard. The atmosphere is rather. Parts of this recording could be lifted as samples to be used in beat-making.",
+          "score": 0.15825414657592773,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_EC4GbkL3XvI_80_90",
+      "query_caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
+      "true_rank": 3,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps__n3r2inlqBc_520_530",
+          "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
+          "score": -0.015692178159952164,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_D_QEW1Lnl2Q_30_40",
+          "caption": "The recording features of, and some. It is obviously a, but the is since it does not have much depth to it.",
+          "score": -0.020540406927466393,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_EC4GbkL3XvI_80_90",
+          "caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
+          "score": -0.02239346317946911,
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+      "query_caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+      "true_rank": 3,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_ypg2ItQIc2c_190_200",
+          "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
+          "score": -0.06384442001581192,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_GJYhDjThTHM_30_40",
+          "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
+          "score": -0.06671716272830963,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
+          "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
+          "score": -0.0679788589477539,
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_H4tyvJJzSDk_30_40",
+      "query_caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
+      "true_rank": 3,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps__n3r2inlqBc_520_530",
+          "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
+          "score": 0.1271400898694992,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
+          "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
+          "score": 0.12518665194511414,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_H4tyvJJzSDk_30_40",
+          "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
+          "score": 0.11576461046934128,
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_z6SNngkMAug_30_40",
+      "query_caption": "A this poignant melody. The is with an buzzing, groovy and Tambour. The is and. The is a recording of a.",
+      "true_rank": 4,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.06693316251039505,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_CRDDdjDinYc_50_60",
+          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
+          "score": 0.0576065294444561,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_UoSID1KzWuI_30_40",
+          "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
+          "score": 0.056665945798158646,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_P8nK4i8XscM_30_40",
+      "query_caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmosphere in the piece, but it is also a bit in nature.",
+      "true_rank": 4,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_w4Z1QuBOMWU_70_80",
+          "caption": "The song is an. The is with a guitarist traditional in a. The song has a groove and sounds delightful. The song has a.",
+          "score": 0.23872414231300354,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_KMQmM12G9Z4_110_120",
+          "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
+          "score": 0.23677515983581543,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.23661623895168304,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_CP3phqztym0_30_40",
+      "query_caption": "A sings this vivacious. The is with, mandolin, groovy and lively pandeira beats. The is melodic, simple, bouncy, peppy, and joyful.",
+      "true_rank": 5,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.1507657915353775,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_KMQmM12G9Z4_110_120",
+          "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
+          "score": 0.14689140021800995,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_-7B9tPuIP-w_450_460",
+          "caption": "A voice narrates a to the rhythm of a in the. The is with, keyboard accompaniment, and vocals. The plays softly in the as the speaks and burgeons when he stops. The is a and Roll and the is a.",
+          "score": 0.14578258991241455,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_heZw1TTrtTU_80_90",
+      "query_caption": "This clip is an with like, an starting, or, and. This is an.",
+      "true_rank": 2501,
+      "is_failure": true,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.1963932365179062,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_P8nK4i8XscM_30_40",
+          "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
+          "score": 0.1917758733034134,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_b9rgWct9ivI_110_120",
+          "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
+          "score": 0.19031284749507904,
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_dcgwxlK3VVk_30_40",
+      "query_caption": "up with juxtaposed by and effects.",
+      "true_rank": 2498,
+      "is_failure": true,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps_vrMmkVV4SOE_30_40",
+          "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
+          "score": 0.20029491186141968,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_CRDDdjDinYc_50_60",
+          "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
+          "score": 0.1898278295993805,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_P8nK4i8XscM_30_40",
+          "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
+          "score": 0.188883975148201,
+          "is_correct": false
+        }
+      ]
+    }
+  ],
+  "graph_coherence": {
+    "S_graph_real": 0.9890705510303284,
+    "S_graph_rewired": 0.9744632490921606,
+    "tau": 0.5,
+    "mean_edge_cosine": 0.9131532344480175
+  },
+  "bert_attention_examples": [
+    {
+      "track_id": "mtat_32",
+      "text": "Lesson 1 in G Major_ Prelude (James Nares). Portrait of an English Harpsichord. Steven Devine",
+      "top_tags": "classical (0.39), slow (0.33), strings (0.32), piano (0.30), quiet (0.19)",
+      "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_00.png"
+    },
+    {
+      "track_id": "mtat_33",
+      "text": "Lesson 1 in G Major_ Prelude (James Nares). Portrait of an English Harpsichord. Steven Devine",
+      "top_tags": "classical (0.39), slow (0.33), strings (0.32), piano (0.30), quiet (0.19)",
+      "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_01.png"
+    },
+    {
+      "track_id": "mtat_37",
+      "text": "Linda Morena. Jetuton Andawai. The Headroom Project",
+      "top_tags": "slow (0.27), strings (0.23), piano (0.22), vocal (0.22), techno (0.19)",
+      "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_02.png"
+    },
+    {
+      "track_id": "mtat_38",
+      "text": "Linda Morena. Jetuton Andawai. The Headroom Project",
+      "top_tags": "slow (0.27), strings (0.23), piano (0.22), vocal (0.22), techno (0.19)",
+      "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_03.png"
+    },
+    {
+      "track_id": "mtat_97",
+      "text": "Overture. Jake Heggie - To Hell and Back. Philharmonia Baroque Orchestra",
+      "top_tags": "classical (0.36), slow (0.30), strings (0.29), piano (0.27), violin (0.21)",
+      "plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_04.png"
+    }
+  ],
+  "case_studies": [
+    {
+      "case": 0,
+      "track_id": "mtat_9666",
+      "is_failure": true,
+      "example_f1": 0.47368421052631576,
+      "caption": "Selection. Number 1. Strojovna 07",
+      "predicted_tags": [
+        {
+          "tag": "baroque",
+          "score": 0.6226887702941895
+        },
+        {
+          "tag": "ambient",
+          "score": 0.6055075526237488
+        },
+        {
+          "tag": "loud",
+          "score": 0.6001883149147034
+        },
+        {
+          "tag": "no piano",
+          "score": 0.5991920232772827
+        },
+        {
+          "tag": "flute",
+          "score": 0.5558571815490723
+        }
+      ],
+      "true_tags": [
+        "techno",
+        "electronic",
+        "drum",
+        "no vocal",
+        "rock",
+        "fast",
+        "ambient",
+        "beat",
+        "pop",
+        "new age",
+        "dance",
+        "jazz",
+        "bass",
+        "no piano",
+        "modern",
+        "trance"
+      ],
+      "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_cross_attention.png",
+      "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_graph.png"
+    },
+    {
+      "case": 1,
+      "track_id": "mtat_47099",
+      "is_failure": true,
+      "example_f1": 0.4444444444444444,
+      "caption": "The Beholder (Ambient Teknology). The Art of Persuasion. Various Artists",
+      "predicted_tags": [
+        {
+          "tag": "quiet",
+          "score": 0.6199890971183777
+        },
+        {
+          "tag": "soft",
+          "score": 0.5889482498168945
+        },
+        {
+          "tag": "baroque",
+          "score": 0.5545910596847534
+        },
+        {
+          "tag": "eastern",
+          "score": 0.5527509450912476
+        },
+        {
+          "tag": "fast",
+          "score": 0.5524189472198486
+        }
+      ],
+      "true_tags": [
+        "techno",
+        "electronic",
+        "drum",
+        "no vocal",
+        "fast",
+        "beat",
+        "synth",
+        "pop",
+        "new age",
+        "dance",
+        "trance"
+      ],
+      "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_1_cross_attention.png",
+      "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_1_graph.png"
+    },
+    {
+      "case": 2,
+      "track_id": "mtat_58605",
+      "is_failure": true,
+      "example_f1": 0.0,
+      "caption": "Fantasia (del segundo tono). Alonso Mudarra songs and solos. Jacob Heringman and Catherine King",
+      "predicted_tags": [
+        {
+          "tag": "baroque",
+          "score": 0.5758861899375916
+        },
+        {
+          "tag": "no beat",
+          "score": 0.5680564045906067
+        },
+        {
+          "tag": "chant",
+          "score": 0.5654187798500061
+        },
+        {
+          "tag": "india",
+          "score": 0.5598917007446289
+        },
+        {
+          "tag": "heavy",
+          "score": 0.5520265698432922
+        }
+      ],
+      "true_tags": [
+        "guitar",
+        "strings"
+      ],
+      "cross_attention_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_2_cross_attention.png",
+      "graph_plot": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_2_graph.png"
+    }
+  ],
+  "seed_summary": {
+    "n_seeds": 19,
+    "macro_f1_mean": 0.3344911229100054,
+    "macro_f1_std": 0.100006747276542,
+    "macro_f1_n": 13,
+    "micro_f1_mean": 0.3637891563701957,
+    "micro_f1_std": 0.11908867257272628,
+    "micro_f1_n": 13,
+    "mean_auc_pr_mean": 0.35169487458998133,
+    "mean_auc_pr_std": 0.11393438442573636,
+    "mean_auc_pr_n": 13,
+    "n_rows_mean": 3468.5384615384614,
+    "n_rows_std": 1182.2439550409083,
+    "n_rows_n": 13,
+    "genre_accuracy_mean": 0.4289637952559301,
+    "genre_accuracy_std": 0.006699829146066802,
+    "genre_accuracy_n": 5,
+    "genre_macro_f1_mean": 0.4266920229717194,
+    "genre_macro_f1_std": 0.0105778729732466,
+    "genre_macro_f1_n": 5,
+    "genre_n_rows_mean": 801.0,
+    "genre_n_rows_std": 0.0,
+    "genre_n_rows_n": 5,
+    "genre_n_classes_mean": 8.0,
+    "genre_n_classes_std": 0.0,
+    "genre_n_classes_n": 5,
+    "macro_f1_fixed_half_mean": 0.26368656468135504,
+    "macro_f1_fixed_half_std": 0.030372251287921277,
+    "macro_f1_fixed_half_n": 5,
+    "micro_f1_fixed_half_mean": 0.44108455678717917,
+    "micro_f1_fixed_half_std": 0.048154141136585046,
+    "micro_f1_fixed_half_n": 5,
+    "valence_mae_mean": 0.7135590691999956,
+    "valence_mae_std": 0.0,
+    "valence_mae_n": 1,
+    "valence_rmse_mean": 0.8851461097892833,
+    "valence_rmse_std": 0.0,
+    "valence_rmse_n": 1,
+    "valence_r2_mean": 0.31137726503963437,
+    "valence_r2_std": 0.0,
+    "valence_r2_n": 1,
+    "valence_n_mean": 275.0,
+    "valence_n_std": 0.0,
+    "valence_n_n": 1,
+    "arousal_mae_mean": 0.7527667101946744,
+    "arousal_mae_std": 0.0,
+    "arousal_mae_n": 1,
+    "arousal_rmse_mean": 0.9355538121726722,
+    "arousal_rmse_std": 0.0,
+    "arousal_rmse_n": 1,
+    "arousal_r2_mean": 0.4784653314444235,
+    "arousal_r2_std": 0.0,
+    "arousal_r2_n": 1,
+    "arousal_n_mean": 275.0,
+    "arousal_n_std": 0.0,
+    "arousal_n_n": 1,
+    "gallery_size_mean": 2503.0,
+    "gallery_size_std": 0.0,
+    "gallery_size_n": 1,
+    "n_queries_mean": 2503.0,
+    "n_queries_std": 0.0,
+    "n_queries_n": 1,
+    "n_pairs_mean": 2503.0,
+    "n_pairs_std": 0.0,
+    "n_pairs_n": 1,
+    "g2t_R@1_mean": 0.00039952057530962844,
+    "g2t_R@1_std": 0.0,
+    "g2t_R@1_n": 1,
+    "g2t_R@5_mean": 0.0023971234518577705,
+    "g2t_R@5_std": 0.0,
+    "g2t_R@5_n": 1,
+    "g2t_R@10_mean": 0.0043947263284059125,
+    "g2t_R@10_std": 0.0,
+    "g2t_R@10_n": 1,
+    "g2t_medR_mean": 998.0,
+    "g2t_medR_std": 0.0,
+    "g2t_medR_n": 1,
+    "g2t_meanR_mean": 1079.1286456252496,
+    "g2t_meanR_std": 0.0,
+    "g2t_meanR_n": 1,
+    "g2t_MRR_mean": 0.004343176743943933,
+    "g2t_MRR_std": 0.0,
+    "g2t_MRR_n": 1,
+    "t2g_R@1_mean": 0.0007990411506192569,
+    "t2g_R@1_std": 0.0,
+    "t2g_R@1_n": 1,
+    "t2g_R@5_mean": 0.001997602876548142,
+    "t2g_R@5_std": 0.0,
+    "t2g_R@5_n": 1,
+    "t2g_R@10_mean": 0.003595685177786656,
+    "t2g_R@10_std": 0.0,
+    "t2g_R@10_n": 1,
+    "t2g_medR_mean": 1216.0,
+    "t2g_medR_std": 0.0,
+    "t2g_medR_n": 1,
+    "t2g_meanR_mean": 1233.025968837395,
+    "t2g_meanR_std": 0.0,
+    "t2g_meanR_n": 1,
+    "t2g_MRR_mean": 0.003885190234681536,
+    "t2g_MRR_std": 0.0,
+    "t2g_MRR_n": 1,
+    "mean_R@1_mean": 0.0005992808629644426,
+    "mean_R@1_std": 0.0,
+    "mean_R@1_n": 1,
+    "mean_R@5_mean": 0.0021973631642029563,
+    "mean_R@5_std": 0.0,
+    "mean_R@5_n": 1,
+    "mean_R@10_mean": 0.003995205753096284,
+    "mean_R@10_std": 0.0,
+    "mean_R@10_n": 1,
+    "mean_MRR_mean": 0.004114183489312735,
+    "mean_MRR_std": 0.0,
+    "mean_MRR_n": 1,
+    "random_R@1_mean": 0.00039952057530962844,
+    "random_R@1_std": 0.0,
+    "random_R@1_n": 1,
+    "random_R@5_mean": 0.001997602876548142,
+    "random_R@5_std": 0.0,
+    "random_R@5_n": 1,
+    "random_R@10_mean": 0.003995205753096284,
+    "random_R@10_std": 0.0,
+    "random_R@10_n": 1,
+    "random_medR_mean": 1252.0,
+    "random_medR_std": 0.0,
+    "random_medR_n": 1,
+    "random_meanR_mean": 1252.0,
+    "random_meanR_std": 0.0,
+    "random_meanR_n": 1,
+    "random_MRR_mean": 0.003357035838321842,
+    "random_MRR_std": 0.0,
+    "random_MRR_n": 1,
+    "mean_R@1_vs_chance_mean": 1.5,
+    "mean_R@1_vs_chance_std": 0.0,
+    "mean_R@1_vs_chance_n": 1,
+    "mean_R@5_vs_chance_mean": 1.1,
+    "mean_R@5_vs_chance_std": 0.0,
+    "mean_R@5_vs_chance_n": 1,
+    "mean_R@10_vs_chance_mean": 1.0,
+    "mean_R@10_vs_chance_std": 0.0,
+    "mean_R@10_vs_chance_n": 1
+  },
+  "musiccaps_survival": {
+    "status_counts": {
+      "ok": 4830,
+      "missing": 478,
+      "corrupt": 206,
+      "wrong_duration": 7
+    },
+    "train_nominal": 2663,
+    "train_survivors": 2327,
+    "train_survival_rate": 0.8738265114532482,
+    "eval_nominal": 2858,
+    "eval_survivors": 2503,
+    "eval_survival_rate": 0.8757872638208537,
+    "retrieval_gallery_size": 2503
+  },
+  "plots": {
+    "f1_vs_epoch": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\f1_vs_epoch.png",
+    "per_tag_prf": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\per_tag_prf.png",
+    "confusion_topk": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\confusion_topk.png",
+    "ablation": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\ablation.png",
+    "tsne_genre": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_genre.png",
+    "tsne_mood": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_mood.png",
+    "tsne_mood_mtat": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\tsne_mood_mtat.png",
+    "retrieval": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\retrieval.png",
+    "graph_coherence": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\graph_coherence.png",
+    "bert_attention": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\bert_attention_00.png",
+    "case_study": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\case_study_0_graph.png",
+    "seed_summary": "B:\\CSE425_Project\\gnn-bert-music-context\\results\\plots\\seed_summary.png"
+  },
+  "plot_types_written": [
+    "ablation",
+    "bert_attention",
+    "case_study",
+    "confusion_topk",
+    "f1_vs_epoch",
+    "graph_coherence",
+    "per_tag_prf",
+    "retrieval",
+    "seed_summary",
+    "tsne_genre",
+    "tsne_mood",
+    "tsne_mood_mtat"
+  ]
 }
