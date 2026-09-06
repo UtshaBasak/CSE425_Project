@@ -443,3 +443,21 @@ Format:
 [2026-09-06 18:15] DONE   Cleaned 11.9 GB: the Kaggle output was 11 GB of ablation checkpoints nothing reads, plus an
                         echo of the payload. Kept the 21 results, 21 score matrices, 2 shard summaries and both logs.
                         Also removed the superseded 863 MB Task 1 output folder. Free space 26 GB -> 38 GB.
+
+[2026-09-06 20:33] FIX   THE CASE STUDIES WERE ON MTAT, which Phase C 4.3 explicitly forbids. I had fixed half of it -
+                        the checkpoint was correctly the MusicCaps model - but generate_case_studies still drew its ROWS
+                        from TAG_DATASETS = mtat, so the attention maps were over "8 seconds. 8 Seconds. Pain Factor" and
+                        "Fantasia (del segundo tono). Alonso Mudarra songs and solos": a title, an album and an artist.
+                        That is precisely the uninformative map the instruction exists to prevent. Now reads the caption
+                        corpus, and evaluate builds a MusicCaps-configured bundle so the vocabulary matches the head.
+[2026-09-06 20:35] DONE   Case studies regenerated on MusicCaps, 2 successes + 1 failure as required. Both successes are
+                        captions describing RECORDING CONDITIONS rather than musical content - "amateur recording", and
+                        "low quality/noisy/mono" at 1.00/1.00/0.96 - consistent with segment features carrying spectral
+                        character more readily than structure.
+                        The failure is the interesting one: for a clip described as a triangle wave with randomly placed
+                        samples, the model's TOP prediction is the correct tag (instrumental) at 0.11, against that tag's
+                        validation-tuned threshold of 0.46. The representation ranked it first; the operating point
+                        rejected it. A calibration failure, not a perceptual one - and a direct instance of the threshold
+                        instability measured in A7.4.
+[2026-09-06 20:35] GATE  REPORT COMPLETE except human eval: zero pending macros, check_tex clean, 9.9 pages + 0.4
+                        appendix against a 6-10 limit. 211 fast tests pass.

@@ -223,11 +223,16 @@ def generate_case_studies(bundle, cfg, device, seed: int, out_dir,
     _load_compatible(model, payload["model_state"])
     model.eval()
 
-    from .train import TAG_DATASETS
+    from .train import corpora_for
 
-    dataset = bundle.dataset("test", TAG_DATASETS)
+    # Phase C 4.3 again, and this is the half that was wrong: loading the
+    # MusicCaps checkpoint is not enough if the rows still come from MTAT. The
+    # first attempt produced attention maps over "8 seconds. 8 Seconds. Pain
+    # Factor" -- a title, an album and an artist -- which is precisely the
+    # uninformative map the instruction exists to prevent.
+    dataset = bundle.dataset("test", corpora_for(bundle.cfg, "caption"))
     if len(dataset) == 0:
-        LOGGER.warning("no tag-bearing test rows; skipping case studies")
+        LOGGER.warning("no caption-bearing test rows; skipping case studies")
         return []
 
     # score every example so a genuine failure can be chosen rather than assumed
