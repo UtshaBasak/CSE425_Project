@@ -301,9 +301,23 @@
       ]
     },
     "task2_fma_genre": {
-      "n_runs": 1,
+      "n_runs": 3,
       "run_tag": "fma_genre",
       "per_seed": [
+        {
+          "seed": 1337,
+          "genre_accuracy": 0.4581772784019975,
+          "genre_macro_f1": 0.4457979478101326,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        },
+        {
+          "seed": 2024,
+          "genre_accuracy": 0.4307116104868914,
+          "genre_macro_f1": 0.42105712652254823,
+          "genre_n_rows": 801,
+          "genre_n_classes": 8
+        },
         {
           "seed": 42,
           "genre_accuracy": 0.4232209737827715,
@@ -313,21 +327,23 @@
         }
       ],
       "aggregated": {
-        "n_seeds": 1,
-        "genre_accuracy_mean": 0.4232209737827715,
-        "genre_accuracy_std": 0.0,
-        "genre_accuracy_n": 1,
-        "genre_macro_f1_mean": 0.427672640584023,
-        "genre_macro_f1_std": 0.0,
-        "genre_macro_f1_n": 1,
+        "n_seeds": 3,
+        "genre_accuracy_mean": 0.43736995422388675,
+        "genre_accuracy_std": 0.018404781013313356,
+        "genre_accuracy_n": 3,
+        "genre_macro_f1_mean": 0.4315092383055679,
+        "genre_macro_f1_std": 0.01280885127768177,
+        "genre_macro_f1_n": 3,
         "genre_n_rows_mean": 801.0,
         "genre_n_rows_std": 0.0,
-        "genre_n_rows_n": 1,
+        "genre_n_rows_n": 3,
         "genre_n_classes_mean": 8.0,
         "genre_n_classes_std": 0.0,
-        "genre_n_classes_n": 1
+        "genre_n_classes_n": 3
       },
       "best_val_metric": [
+        0.5366196404128026,
+        0.5490432155551499,
         0.5436302357644338
       ],
       "threshold_source": [
@@ -471,9 +487,27 @@
       ]
     },
     "task2_mtat_tags": {
-      "n_runs": 1,
+      "n_runs": 3,
       "run_tag": "mtat_tags",
       "per_seed": [
+        {
+          "seed": 1337,
+          "macro_f1": 0.3719967179356773,
+          "micro_f1": 0.3797091378368988,
+          "mean_auc_pr": 0.3888833373324021,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.284293147024421,
+          "micro_f1_fixed_half": 0.4581830871234151
+        },
+        {
+          "seed": 2024,
+          "macro_f1": 0.381311645619756,
+          "micro_f1": 0.4119967175794796,
+          "mean_auc_pr": 0.4006580731446779,
+          "n_rows": 3500,
+          "macro_f1_fixed_half": 0.2944606225824803,
+          "micro_f1_fixed_half": 0.4726899149591918
+        },
         {
           "seed": 42,
           "macro_f1": 0.37369722518108534,
@@ -483,21 +517,29 @@
         }
       ],
       "aggregated": {
-        "n_seeds": 1,
-        "macro_f1_mean": 0.37369722518108534,
-        "macro_f1_std": 0.0,
-        "macro_f1_n": 1,
-        "micro_f1_mean": 0.4102466171977302,
-        "micro_f1_std": 0.0,
-        "micro_f1_n": 1,
-        "mean_auc_pr_mean": 0.39392882514733946,
-        "mean_auc_pr_std": 0.0,
-        "mean_auc_pr_n": 1,
+        "n_seeds": 3,
+        "macro_f1_mean": 0.37566852957883956,
+        "macro_f1_std": 0.004960493948323877,
+        "macro_f1_n": 3,
+        "micro_f1_mean": 0.4006508242047029,
+        "micro_f1_std": 0.01815713038401588,
+        "micro_f1_n": 3,
+        "mean_auc_pr_mean": 0.3944900785414731,
+        "mean_auc_pr_std": 0.005907398318341366,
+        "mean_auc_pr_n": 3,
         "n_rows_mean": 3500.0,
         "n_rows_std": 0.0,
-        "n_rows_n": 1
+        "n_rows_n": 3,
+        "macro_f1_fixed_half_mean": 0.28937688480345064,
+        "macro_f1_fixed_half_std": 0.007189490914652209,
+        "macro_f1_fixed_half_n": 2,
+        "micro_f1_fixed_half_mean": 0.46543650104130346,
+        "micro_f1_fixed_half_std": 0.01025787633618349,
+        "micro_f1_fixed_half_n": 2
       },
       "best_val_metric": [
+        0.34414179985572607,
+        0.3440759248631293,
         0.3481388768758173
       ],
       "threshold_source": [
@@ -969,9 +1011,40 @@
       ]
     },
     "task4_musiccaps_dual": {
-      "n_runs": 1,
+      "n_runs": 2,
       "run_tag": "musiccaps_dual",
       "per_seed": [
+        {
+          "seed": 1337,
+          "gallery_size": 2503,
+          "n_queries": 2503,
+          "n_pairs": 2503,
+          "g2t_R@1": 0.00039952057530962844,
+          "g2t_R@5": 0.0015980823012385138,
+          "g2t_R@10": 0.003995205753096284,
+          "g2t_medR": 1236.0,
+          "g2t_meanR": 1239.300439472633,
+          "g2t_MRR": 0.0033322611476220365,
+          "t2g_R@1": 0.00039952057530962844,
+          "t2g_R@5": 0.0011985617259288853,
+          "t2g_R@10": 0.0031961646024770275,
+          "t2g_medR": 1219.0,
+          "t2g_meanR": 1239.2780663204155,
+          "t2g_MRR": 0.00323134079414374,
+          "mean_R@1": 0.00039952057530962844,
+          "mean_R@5": 0.0013983220135836995,
+          "mean_R@10": 0.0035956851777866556,
+          "mean_MRR": 0.0032818009708828885,
+          "random_R@1": 0.00039952057530962844,
+          "random_R@5": 0.001997602876548142,
+          "random_R@10": 0.003995205753096284,
+          "random_medR": 1252.0,
+          "random_meanR": 1252.0,
+          "random_MRR": 0.003357035838321842,
+          "mean_R@1_vs_chance": 1.0,
+          "mean_R@5_vs_chance": 0.7000000000000001,
+          "mean_R@10_vs_chance": 0.9
+        },
         {
           "seed": 42,
           "gallery_size": 2503,
@@ -1005,93 +1078,94 @@
         }
       ],
       "aggregated": {
-        "n_seeds": 1,
+        "n_seeds": 2,
         "gallery_size_mean": 2503.0,
         "gallery_size_std": 0.0,
-        "gallery_size_n": 1,
+        "gallery_size_n": 2,
         "n_queries_mean": 2503.0,
         "n_queries_std": 0.0,
-        "n_queries_n": 1,
+        "n_queries_n": 2,
         "n_pairs_mean": 2503.0,
         "n_pairs_std": 0.0,
-        "n_pairs_n": 1,
+        "n_pairs_n": 2,
         "g2t_R@1_mean": 0.00039952057530962844,
         "g2t_R@1_std": 0.0,
-        "g2t_R@1_n": 1,
-        "g2t_R@5_mean": 0.0023971234518577705,
-        "g2t_R@5_std": 0.0,
-        "g2t_R@5_n": 1,
-        "g2t_R@10_mean": 0.0043947263284059125,
-        "g2t_R@10_std": 0.0,
-        "g2t_R@10_n": 1,
-        "g2t_medR_mean": 998.0,
-        "g2t_medR_std": 0.0,
-        "g2t_medR_n": 1,
-        "g2t_meanR_mean": 1079.1286456252496,
-        "g2t_meanR_std": 0.0,
-        "g2t_meanR_n": 1,
-        "g2t_MRR_mean": 0.004343176743943933,
-        "g2t_MRR_std": 0.0,
-        "g2t_MRR_n": 1,
-        "t2g_R@1_mean": 0.0007990411506192569,
-        "t2g_R@1_std": 0.0,
-        "t2g_R@1_n": 1,
-        "t2g_R@5_mean": 0.001997602876548142,
-        "t2g_R@5_std": 0.0,
-        "t2g_R@5_n": 1,
-        "t2g_R@10_mean": 0.003595685177786656,
-        "t2g_R@10_std": 0.0,
-        "t2g_R@10_n": 1,
-        "t2g_medR_mean": 1216.0,
-        "t2g_medR_std": 0.0,
-        "t2g_medR_n": 1,
-        "t2g_meanR_mean": 1233.025968837395,
-        "t2g_meanR_std": 0.0,
-        "t2g_meanR_n": 1,
-        "t2g_MRR_mean": 0.003885190234681536,
-        "t2g_MRR_std": 0.0,
-        "t2g_MRR_n": 1,
-        "mean_R@1_mean": 0.0005992808629644426,
-        "mean_R@1_std": 0.0,
-        "mean_R@1_n": 1,
-        "mean_R@5_mean": 0.0021973631642029563,
-        "mean_R@5_std": 0.0,
-        "mean_R@5_n": 1,
-        "mean_R@10_mean": 0.003995205753096284,
-        "mean_R@10_std": 0.0,
-        "mean_R@10_n": 1,
-        "mean_MRR_mean": 0.004114183489312735,
-        "mean_MRR_std": 0.0,
-        "mean_MRR_n": 1,
+        "g2t_R@1_n": 2,
+        "g2t_R@5_mean": 0.001997602876548142,
+        "g2t_R@5_std": 0.000565007416049978,
+        "g2t_R@5_n": 2,
+        "g2t_R@10_mean": 0.004194966040751098,
+        "g2t_R@10_std": 0.0002825037080249891,
+        "g2t_R@10_n": 2,
+        "g2t_medR_mean": 1117.0,
+        "g2t_medR_std": 168.2914139223983,
+        "g2t_medR_n": 2,
+        "g2t_meanR_mean": 1159.2145425489412,
+        "g2t_meanR_std": 113.25856158429842,
+        "g2t_meanR_n": 2,
+        "g2t_MRR_mean": 0.003837718945782985,
+        "g2t_MRR_std": 0.0007148252733664555,
+        "g2t_MRR_n": 2,
+        "t2g_R@1_mean": 0.0005992808629644426,
+        "t2g_R@1_std": 0.00028250370802498904,
+        "t2g_R@1_n": 2,
+        "t2g_R@5_mean": 0.0015980823012385135,
+        "t2g_R@5_std": 0.000565007416049978,
+        "t2g_R@5_n": 2,
+        "t2g_R@10_mean": 0.0033959248901318418,
+        "t2g_R@10_std": 0.0002825037080249891,
+        "t2g_R@10_n": 2,
+        "t2g_medR_mean": 1217.5,
+        "t2g_medR_std": 2.1213203435596424,
+        "t2g_medR_n": 2,
+        "t2g_meanR_mean": 1236.1520175789053,
+        "t2g_meanR_std": 4.420900526883075,
+        "t2g_meanR_n": 2,
+        "t2g_MRR_mean": 0.003558265514412638,
+        "t2g_MRR_std": 0.0004623413732793059,
+        "t2g_MRR_n": 2,
+        "mean_R@1_mean": 0.0004994007191370355,
+        "mean_R@1_std": 0.0001412518540124945,
+        "mean_R@1_n": 2,
+        "mean_R@5_mean": 0.0017978425888933278,
+        "mean_R@5_std": 0.000565007416049978,
+        "mean_R@5_n": 2,
+        "mean_R@10_mean": 0.00379544546544147,
+        "mean_R@10_std": 0.0002825037080249891,
+        "mean_R@10_n": 2,
+        "mean_MRR_mean": 0.0036979922300978117,
+        "mean_MRR_std": 0.0005885833233228807,
+        "mean_MRR_n": 2,
         "random_R@1_mean": 0.00039952057530962844,
         "random_R@1_std": 0.0,
-        "random_R@1_n": 1,
+        "random_R@1_n": 2,
         "random_R@5_mean": 0.001997602876548142,
         "random_R@5_std": 0.0,
-        "random_R@5_n": 1,
+        "random_R@5_n": 2,
         "random_R@10_mean": 0.003995205753096284,
         "random_R@10_std": 0.0,
-        "random_R@10_n": 1,
+        "random_R@10_n": 2,
         "random_medR_mean": 1252.0,
         "random_medR_std": 0.0,
-        "random_medR_n": 1,
+        "random_medR_n": 2,
         "random_meanR_mean": 1252.0,
         "random_meanR_std": 0.0,
-        "random_meanR_n": 1,
+        "random_meanR_n": 2,
         "random_MRR_mean": 0.003357035838321842,
         "random_MRR_std": 0.0,
-        "random_MRR_n": 1,
-        "mean_R@1_vs_chance_mean": 1.5,
-        "mean_R@1_vs_chance_std": 0.0,
-        "mean_R@1_vs_chance_n": 1,
-        "mean_R@5_vs_chance_mean": 1.1,
-        "mean_R@5_vs_chance_std": 0.0,
-        "mean_R@5_vs_chance_n": 1,
-        "mean_R@10_vs_chance_mean": 1.0,
-        "mean_R@10_vs_chance_std": 0.0,
-        "mean_R@10_vs_chance_n": 1
+        "random_MRR_n": 2,
+        "mean_R@1_vs_chance_mean": 1.25,
+        "mean_R@1_vs_chance_std": 0.3535533905932738,
+        "mean_R@1_vs_chance_n": 2,
+        "mean_R@5_vs_chance_mean": 0.9000000000000001,
+        "mean_R@5_vs_chance_std": 0.28284271247461906,
+        "mean_R@5_vs_chance_n": 2,
+        "mean_R@10_vs_chance_mean": 0.95,
+        "mean_R@10_vs_chance_std": 0.07071067811865474,
+        "mean_R@10_vs_chance_n": 2
       },
       "best_val_metric": [
+        0.0581896551724138,
         0.0603448275862069
       ],
       "threshold_source": [
@@ -1108,17 +1182,17 @@
       "precision": 0.19942857142857143,
       "recall": 1.0,
       "f1": 0.33253930443068125,
-      "auc_pr": 0.19419109528373335
+      "auc_pr": 0.19422656044101086
     },
     {
       "tag_index": 1,
       "threshold": 0.45,
       "support": 527,
       "n_evaluated": 3500,
-      "precision": 0.13654618473895583,
+      "precision": 0.13659605551497445,
       "recall": 0.7096774193548387,
-      "f1": 0.2290263319044703,
-      "auc_pr": 0.10704861464062354
+      "f1": 0.22909647779479328,
+      "auc_pr": 0.10704769081017533
     },
     {
       "tag_index": 2,
@@ -1128,7 +1202,7 @@
       "precision": 0.1362857142857143,
       "recall": 1.0,
       "f1": 0.23987930600955493,
-      "auc_pr": 0.1286158493012468
+      "auc_pr": 0.12862992961283423
     },
     {
       "tag_index": 3,
@@ -1138,17 +1212,17 @@
       "precision": 0.09514285714285714,
       "recall": 1.0,
       "f1": 0.17375423949908686,
-      "auc_pr": 0.0720864564783936
+      "auc_pr": 0.0720969163402308
     },
     {
       "tag_index": 4,
       "threshold": 0.54,
       "support": 674,
       "n_evaluated": 3500,
-      "precision": 0.20614239181014427,
-      "recall": 0.6572700296735905,
-      "f1": 0.31385051363797384,
-      "auc_pr": 0.18266932236092304
+      "precision": 0.20651162790697675,
+      "recall": 0.658753709198813,
+      "f1": 0.31444759206798867,
+      "auc_pr": 0.18265664406221443
     },
     {
       "tag_index": 5,
@@ -1158,7 +1232,7 @@
       "precision": 0.15485714285714286,
       "recall": 1.0,
       "f1": 0.2681840672934191,
-      "auc_pr": 0.15650215528251193
+      "auc_pr": 0.1565168808582996
     },
     {
       "tag_index": 6,
@@ -1168,7 +1242,7 @@
       "precision": 0.15622317596566523,
       "recall": 1.0,
       "f1": 0.2702301410541945,
-      "auc_pr": 0.21313596208023522
+      "auc_pr": 0.21312326921859037
     },
     {
       "tag_index": 7,
@@ -1178,7 +1252,7 @@
       "precision": 0.15085714285714286,
       "recall": 1.0,
       "f1": 0.2621648460774578,
-      "auc_pr": 0.19713103629073592
+      "auc_pr": 0.19712447051101029
     },
     {
       "tag_index": 8,
@@ -1188,7 +1262,7 @@
       "precision": 0.11571428571428571,
       "recall": 1.0,
       "f1": 0.20742637644046097,
-      "auc_pr": 0.13774497791888587
+      "auc_pr": 0.13769242918119762
     },
     {
       "tag_index": 9,
@@ -1198,7 +1272,7 @@
       "precision": 0.10285714285714286,
       "recall": 1.0,
       "f1": 0.18652849740932645,
-      "auc_pr": 0.06323850815754203
+      "auc_pr": 0.06323258634813379
     },
     {
       "tag_index": 10,
@@ -1208,7 +1282,7 @@
       "precision": 0.14057142857142857,
       "recall": 1.0,
       "f1": 0.24649298597194388,
-      "auc_pr": 0.09754963005596758
+      "auc_pr": 0.09755769970433076
     },
     {
       "tag_index": 11,
@@ -1218,7 +1292,7 @@
       "precision": 0.05171428571428571,
       "recall": 1.0,
       "f1": 0.09834284161912525,
-      "auc_pr": 0.050238481815474356
+      "auc_pr": 0.05022134732911028
     },
     {
       "tag_index": 12,
@@ -1228,7 +1302,7 @@
       "precision": 0.11146869514335869,
       "recall": 0.9870466321243523,
       "f1": 0.20031545741324921,
-      "auc_pr": 0.10724298227016484
+      "auc_pr": 0.10724806896308771
     },
     {
       "tag_index": 13,
@@ -1238,7 +1312,7 @@
       "precision": 0.066,
       "recall": 1.0,
       "f1": 0.12382739212007504,
-      "auc_pr": 0.1768641472159693
+      "auc_pr": 0.17672670981661287
     },
     {
       "tag_index": 14,
@@ -1248,7 +1322,7 @@
       "precision": 0.09828571428571428,
       "recall": 1.0,
       "f1": 0.17898022892819979,
-      "auc_pr": 0.25681993043939244
+      "auc_pr": 0.256865955208756
     },
     {
       "tag_index": 15,
@@ -1258,7 +1332,7 @@
       "precision": 0.11457142857142857,
       "recall": 1.0,
       "f1": 0.2055883106895668,
-      "auc_pr": 0.15608010981075976
+      "auc_pr": 0.15604201537784196
     },
     {
       "tag_index": 16,
@@ -1268,7 +1342,7 @@
       "precision": 0.13057142857142856,
       "recall": 1.0,
       "f1": 0.23098306798079352,
-      "auc_pr": 0.12765762288062088
+      "auc_pr": 0.12763204586196297
     },
     {
       "tag_index": 17,
@@ -1278,7 +1352,7 @@
       "precision": 0.078,
       "recall": 1.0,
       "f1": 0.14471243042671614,
-      "auc_pr": 0.0840846400719227
+      "auc_pr": 0.0841254783925596
     },
     {
       "tag_index": 18,
@@ -1288,7 +1362,7 @@
       "precision": 0.05228571428571428,
       "recall": 1.0,
       "f1": 0.09937550909584578,
-      "auc_pr": 0.08777010428570353
+      "auc_pr": 0.08784627787411076
     },
     {
       "tag_index": 19,
@@ -1298,7 +1372,7 @@
       "precision": 0.06885714285714285,
       "recall": 1.0,
       "f1": 0.1288425554664528,
-      "auc_pr": 0.06016690107900777
+      "auc_pr": 0.06015626345044885
     },
     {
       "tag_index": 20,
@@ -1308,7 +1382,7 @@
       "precision": 0.011717633609602743,
       "recall": 1.0,
       "f1": 0.023163841807909605,
-      "auc_pr": 0.009807610362646761
+      "auc_pr": 0.009806603754730869
     },
     {
       "tag_index": 21,
@@ -1318,7 +1392,7 @@
       "precision": 0.09371428571428571,
       "recall": 1.0,
       "f1": 0.17136886102403343,
-      "auc_pr": 0.06919659715164941
+      "auc_pr": 0.06919359086188838
     },
     {
       "tag_index": 22,
@@ -1328,7 +1402,7 @@
       "precision": 0.040285714285714286,
       "recall": 1.0,
       "f1": 0.07745124965668773,
-      "auc_pr": 0.04050187499518281
+      "auc_pr": 0.04048768505805249
     },
     {
       "tag_index": 23,
@@ -1338,7 +1412,7 @@
       "precision": 0.040285714285714286,
       "recall": 1.0,
       "f1": 0.07745124965668773,
-      "auc_pr": 0.030360120234787402
+      "auc_pr": 0.030345440425318768
     },
     {
       "tag_index": 24,
@@ -1348,7 +1422,7 @@
       "precision": 0.055142857142857146,
       "recall": 1.0,
       "f1": 0.10452206877877065,
-      "auc_pr": 0.06667026122972833
+      "auc_pr": 0.0667290034951132
     },
     {
       "tag_index": 25,
@@ -1358,7 +1432,7 @@
       "precision": 0.036,
       "recall": 1.0,
       "f1": 0.06949806949806948,
-      "auc_pr": 0.07891222559278431
+      "auc_pr": 0.07897368070436969
     },
     {
       "tag_index": 26,
@@ -1368,7 +1442,7 @@
       "precision": 0.04057142857142857,
       "recall": 1.0,
       "f1": 0.07797913234486546,
-      "auc_pr": 0.03618898081549799
+      "auc_pr": 0.03619226169198689
     },
     {
       "tag_index": 27,
@@ -1378,7 +1452,7 @@
       "precision": 0.04914285714285714,
       "recall": 1.0,
       "f1": 0.09368191721132897,
-      "auc_pr": 0.04131108586749946
+      "auc_pr": 0.041310484815732476
     },
     {
       "tag_index": 28,
@@ -1388,7 +1462,7 @@
       "precision": 0.033428571428571426,
       "recall": 1.0,
       "f1": 0.0646944982029306,
-      "auc_pr": 0.05376717664235988
+      "auc_pr": 0.05379137852646457
     },
     {
       "tag_index": 29,
@@ -1398,7 +1472,7 @@
       "precision": 0.053142857142857144,
       "recall": 1.0,
       "f1": 0.10092240911557243,
-      "auc_pr": 0.03894964434944071
+      "auc_pr": 0.03894363702728545
     },
     {
       "tag_index": 30,
@@ -1408,7 +1482,7 @@
       "precision": 0.0,
       "recall": 0.0,
       "f1": 0.0,
-      "auc_pr": 0.0026939345474976868
+      "auc_pr": 0.0026945589406773248
     },
     {
       "tag_index": 31,
@@ -1418,7 +1492,7 @@
       "precision": 0.019714285714285715,
       "recall": 1.0,
       "f1": 0.038666293079293916,
-      "auc_pr": 0.021823588005633488
+      "auc_pr": 0.021791631325765302
     },
     {
       "tag_index": 32,
@@ -1428,7 +1502,7 @@
       "precision": 0.03514285714285714,
       "recall": 1.0,
       "f1": 0.06789953077560033,
-      "auc_pr": 0.03363702089052699
+      "auc_pr": 0.03362156977175841
     },
     {
       "tag_index": 33,
@@ -1438,7 +1512,7 @@
       "precision": 0.022857142857142857,
       "recall": 1.0,
       "f1": 0.04469273743016759,
-      "auc_pr": 0.019851917997626332
+      "auc_pr": 0.019864683101881345
     },
     {
       "tag_index": 34,
@@ -1448,7 +1522,7 @@
       "precision": 0.05028571428571429,
       "recall": 1.0,
       "f1": 0.09575625680087052,
-      "auc_pr": 0.18722447229275677
+      "auc_pr": 0.18746698660627722
     },
     {
       "tag_index": 35,
@@ -1458,7 +1532,7 @@
       "precision": 0.023142857142857142,
       "recall": 1.0,
       "f1": 0.0452387601228707,
-      "auc_pr": 0.01750313413933833
+      "auc_pr": 0.017508259886301756
     },
     {
       "tag_index": 36,
@@ -1468,7 +1542,7 @@
       "precision": 0.028857142857142856,
       "recall": 1.0,
       "f1": 0.05609552901971674,
-      "auc_pr": 0.0208683312396663
+      "auc_pr": 0.020862044844310305
     },
     {
       "tag_index": 37,
@@ -1478,7 +1552,7 @@
       "precision": 0.046285714285714284,
       "recall": 1.0,
       "f1": 0.08847624249044238,
-      "auc_pr": 0.030817428134484952
+      "auc_pr": 0.030797140418969186
     },
     {
       "tag_index": 38,
@@ -1488,7 +1562,7 @@
       "precision": 0.014857142857142857,
       "recall": 1.0,
       "f1": 0.02927927927927928,
-      "auc_pr": 0.016112747254714482
+      "auc_pr": 0.016110229461201882
     },
     {
       "tag_index": 39,
@@ -1498,7 +1572,7 @@
       "precision": 0.008571428571428572,
       "recall": 1.0,
       "f1": 0.016997167138810197,
-      "auc_pr": 0.015415187516834003
+      "auc_pr": 0.01542121035579134
     },
     {
       "tag_index": 40,
@@ -1508,7 +1582,7 @@
       "precision": 0.014571428571428572,
       "recall": 1.0,
       "f1": 0.028724303013235707,
-      "auc_pr": 0.013948992253139341
+      "auc_pr": 0.013939400399476741
     },
     {
       "tag_index": 41,
@@ -1518,7 +1592,7 @@
       "precision": 0.014,
       "recall": 1.0,
       "f1": 0.027613412228796843,
-      "auc_pr": 0.014697958482778386
+      "auc_pr": 0.01469019288652693
     },
     {
       "tag_index": 42,
@@ -1528,7 +1602,7 @@
       "precision": 0.007714285714285714,
       "recall": 1.0,
       "f1": 0.015310462149135241,
-      "auc_pr": 0.005894942280477611
+      "auc_pr": 0.005896007896091227
     },
     {
       "tag_index": 43,
@@ -1538,7 +1612,7 @@
       "precision": 0.015428571428571429,
       "recall": 1.0,
       "f1": 0.03038829487900957,
-      "auc_pr": 0.022127144982021563
+      "auc_pr": 0.022121949195474704
     },
     {
       "tag_index": 44,
@@ -1548,7 +1622,7 @@
       "precision": 0.017142857142857144,
       "recall": 1.0,
       "f1": 0.033707865168539325,
-      "auc_pr": 0.030527932261831096
+      "auc_pr": 0.030583349959795482
     },
     {
       "tag_index": 45,
@@ -1558,7 +1632,7 @@
       "precision": 0.015142857142857144,
       "recall": 1.0,
       "f1": 0.02983394314663665,
-      "auc_pr": 0.08556409215724281
+      "auc_pr": 0.08557688851549633
     },
     {
       "tag_index": 46,
@@ -1568,7 +1642,7 @@
       "precision": 0.019428571428571427,
       "recall": 1.0,
       "f1": 0.03811659192825112,
-      "auc_pr": 0.016806924183989894
+      "auc_pr": 0.016776704788535872
     },
     {
       "tag_index": 47,
@@ -1578,7 +1652,7 @@
       "precision": 0.008571428571428572,
       "recall": 1.0,
       "f1": 0.016997167138810197,
-      "auc_pr": 0.012097377003237776
+      "auc_pr": 0.012102329643335255
     },
     {
       "tag_index": 48,
@@ -1588,7 +1662,7 @@
       "precision": 0.018,
       "recall": 1.0,
       "f1": 0.03536345776031434,
-      "auc_pr": 0.01115207505933553
+      "auc_pr": 0.01115154462831815
     },
     {
       "tag_index": 49,
@@ -1598,7 +1672,7 @@
       "precision": 0.017142857142857144,
       "recall": 1.0,
       "f1": 0.033707865168539325,
-      "auc_pr": 0.014940771463738145
+      "auc_pr": 0.014941264546198124
     }
   ],
   "baselines": [
@@ -1652,81 +1726,81 @@
       "variant": "gnn_only",
       "mode": "gnn_only",
       "rewired": false,
-      "macro_f1": 0.3260620635829064,
-      "micro_f1": 0.3077493053411547,
-      "mean_auc_pr": 0.3383742456354167,
+      "macro_f1": 0.3277224008977139,
+      "micro_f1": 0.3085389151922917,
+      "mean_auc_pr": 0.33883891243669817,
       "n_params": 926388
     },
     {
       "variant": "early_concat",
       "mode": "early_concat",
       "rewired": false,
-      "macro_f1": 0.3369751835300011,
-      "micro_f1": 0.36784533197659625,
-      "mean_auc_pr": 0.34195894577294467,
+      "macro_f1": 0.33540642854330377,
+      "micro_f1": 0.36718508600267796,
+      "mean_auc_pr": 0.3419128524641502,
       "n_params": 1025716
     },
     {
       "variant": "late_concat",
       "mode": "late_concat",
       "rewired": false,
-      "macro_f1": 0.33081509982560403,
-      "micro_f1": 0.37383465598274135,
-      "mean_auc_pr": 0.337788793947573,
+      "macro_f1": 0.32993296668273236,
+      "micro_f1": 0.3702155519742143,
+      "mean_auc_pr": 0.33827387437649215,
       "n_params": 1025716
     },
     {
       "variant": "cross_attention",
       "mode": "cross_attention",
       "rewired": false,
-      "macro_f1": 0.31372906341491047,
-      "micro_f1": 0.3328445747800587,
-      "mean_auc_pr": 0.31683753992146246,
+      "macro_f1": 0.2930056847653906,
+      "micro_f1": 0.31402842963328914,
+      "mean_auc_pr": 0.3230112590972005,
       "n_params": 1454004
     },
     {
       "variant": "gated",
       "mode": "gated",
       "rewired": false,
-      "macro_f1": 0.3057889732845557,
-      "micro_f1": 0.3442038780074218,
-      "mean_auc_pr": 0.3187648793918108,
+      "macro_f1": 0.30492878198995166,
+      "micro_f1": 0.3520475239811073,
+      "mean_auc_pr": 0.31744966877392694,
       "n_params": 1124020
     },
     {
       "variant": "bidirectional",
       "mode": "bidirectional",
       "rewired": false,
-      "macro_f1": 0.3124188433591603,
-      "micro_f1": 0.324021040327294,
-      "mean_auc_pr": 0.32442231500839197,
+      "macro_f1": 0.31747361561993126,
+      "micro_f1": 0.32814309004560166,
+      "mean_auc_pr": 0.3283892800817576,
       "n_params": 2080948
     },
     {
       "variant": "cross_attention + rewired graph",
       "mode": "cross_attention",
       "rewired": true,
-      "macro_f1": 0.31661035705933693,
-      "micro_f1": 0.31092120702251547,
-      "mean_auc_pr": 0.31867994387169835,
+      "macro_f1": 0.31561129213004874,
+      "micro_f1": 0.33302519614117426,
+      "mean_auc_pr": 0.3257775504575655,
       "n_params": 1454004
     }
   ],
   "tsne_genre": {
     "knn_probe": 0.6067415730337079,
-    "silhouette": -0.018973843981136655,
+    "silhouette": -0.01897421391134494,
     "perplexity": 30,
     "n_points": 801
   },
   "tsne_mood": {
     "knn_probe": 0.6036363636363636,
-    "silhouette": 0.045479589485131644,
+    "silhouette": 0.04548076376629249,
     "perplexity": 30,
     "n_points": 275
   },
   "tsne_mood_mtat": {
-    "knn_probe": 0.559029993618379,
-    "silhouette": -0.20551814571441562,
+    "knn_probe": 0.5596681557115507,
+    "silhouette": -0.20551832010673882,
     "perplexity": 30,
     "n_points": 1567,
     "n_labelled": 1567,
@@ -1737,30 +1811,30 @@
     "n_queries": 2503,
     "n_pairs": 2503,
     "g2t_R@1": 0.00039952057530962844,
-    "g2t_R@5": 0.0023971234518577705,
-    "g2t_R@10": 0.0043947263284059125,
-    "g2t_medR": 998.0,
-    "g2t_meanR": 1079.1286456252496,
-    "g2t_MRR": 0.004343176743943933,
-    "t2g_R@1": 0.0007990411506192569,
-    "t2g_R@5": 0.001997602876548142,
-    "t2g_R@10": 0.003595685177786656,
-    "t2g_medR": 1216.0,
-    "t2g_meanR": 1233.025968837395,
-    "t2g_MRR": 0.003885190234681536,
-    "mean_R@1": 0.0005992808629644426,
-    "mean_R@5": 0.0021973631642029563,
-    "mean_R@10": 0.003995205753096284,
-    "mean_MRR": 0.004114183489312735,
+    "g2t_R@5": 0.0015980823012385138,
+    "g2t_R@10": 0.003995205753096284,
+    "g2t_medR": 1236.0,
+    "g2t_meanR": 1239.300439472633,
+    "g2t_MRR": 0.0033322611476220365,
+    "t2g_R@1": 0.00039952057530962844,
+    "t2g_R@5": 0.0011985617259288853,
+    "t2g_R@10": 0.0031961646024770275,
+    "t2g_medR": 1219.0,
+    "t2g_meanR": 1239.2780663204155,
+    "t2g_MRR": 0.00323134079414374,
+    "mean_R@1": 0.00039952057530962844,
+    "mean_R@5": 0.0013983220135836995,
+    "mean_R@10": 0.0035956851777866556,
+    "mean_MRR": 0.0032818009708828885,
     "random_R@1": 0.00039952057530962844,
     "random_R@5": 0.001997602876548142,
     "random_R@10": 0.003995205753096284,
     "random_medR": 1252.0,
     "random_meanR": 1252.0,
     "random_MRR": 0.003357035838321842,
-    "mean_R@1_vs_chance": 1.5,
-    "mean_R@5_vs_chance": 1.1,
-    "mean_R@10_vs_chance": 1.0
+    "mean_R@1_vs_chance": 1.0,
+    "mean_R@5_vs_chance": 0.7000000000000001,
+    "mean_R@10_vs_chance": 0.9
   },
   "retrieval_examples": [
     {
@@ -1773,21 +1847,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.16819284856319427,
+          "score": 0.16817781329154968,
           "is_correct": true
         },
         {
           "rank": 2,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.1656552106142044,
+          "score": 0.16563363373279572,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.1639202982187271,
+          "score": 0.16390468180179596,
           "is_correct": false
         }
       ]
@@ -1802,21 +1876,21 @@
           "rank": 1,
           "track_id": "musiccaps_B3lq6U4PDZo_30_40",
           "caption": "This features a melody played using. There are played in the background like clockwork. A plays a note. There is in this. This has a theme and can be used in a children's scary movie. There is a lot of white noise that can be heard in this low quality recording. There are in this.",
-          "score": 0.15973058342933655,
+          "score": 0.15974296629428864,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_fjj9NJX8GB0_400_410",
           "caption": "This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.",
-          "score": 0.1590525209903717,
+          "score": 0.15906091034412384,
           "is_correct": true
         },
         {
           "rank": 3,
           "track_id": "musiccaps_lbB2VQYIMo0_30_40",
           "caption": "This is a. There is a variety of pieces ranging from pop to to. The made by the shoes of the dancers can also be heard. The atmosphere is rather. Parts of this recording could be lifted as samples to be used in beat-making.",
-          "score": 0.1582660973072052,
+          "score": 0.1582803726196289,
           "is_correct": false
         }
       ]
@@ -1831,50 +1905,21 @@
           "rank": 1,
           "track_id": "musiccaps__n3r2inlqBc_520_530",
           "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": -0.015729084610939026,
+          "score": -0.01573268696665764,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_D_QEW1Lnl2Q_30_40",
           "caption": "The recording features of, and some. It is obviously a, but the is since it does not have much depth to it.",
-          "score": -0.020582731813192368,
+          "score": -0.02058105170726776,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_EC4GbkL3XvI_80_90",
           "caption": "This is an intricately piece on the, there is a high level of applied to the. There's also one singular underneath the complex being.",
-          "score": -0.022441484034061432,
-          "is_correct": true
-        }
-      ]
-    },
-    {
-      "query_track_id": "musiccaps_H4tyvJJzSDk_30_40",
-      "query_caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
-      "true_rank": 3,
-      "is_failure": false,
-      "top3": [
-        {
-          "rank": 1,
-          "track_id": "musiccaps__n3r2inlqBc_520_530",
-          "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
-          "score": 0.1271054893732071,
-          "is_correct": false
-        },
-        {
-          "rank": 2,
-          "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
-          "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
-          "score": 0.12515053153038025,
-          "is_correct": false
-        },
-        {
-          "rank": 3,
-          "track_id": "musiccaps_H4tyvJJzSDk_30_40",
-          "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
-          "score": 0.11572536081075668,
+          "score": -0.022440360859036446,
           "is_correct": true
         }
       ]
@@ -1889,21 +1934,50 @@
           "rank": 1,
           "track_id": "musiccaps_ypg2ItQIc2c_190_200",
           "caption": "This piece is an. The tempo is fast with hard hitting, clanging, and shakers. It is, intense and.",
-          "score": -0.06383410841226578,
+          "score": -0.06385602056980133,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_GJYhDjThTHM_30_40",
           "caption": "This is a piece that feels, and intense. There are like and, and for percussion. There is one over-bearing vibrational sound that overwhelms the whole arrangement - it is played once and rings for three seconds.",
-          "score": -0.06670500338077545,
+          "score": -0.0667269304394722,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_KoAGZ_dB8MM_60_70",
           "caption": "A this melody. The song is with a rolling bells, and other ambient echo tones and tones. The song is and. The is very and not enjoyable.",
-          "score": -0.067971371114254,
+          "score": -0.06799077242612839,
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "query_track_id": "musiccaps_H4tyvJJzSDk_30_40",
+      "query_caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
+      "true_rank": 3,
+      "is_failure": false,
+      "top3": [
+        {
+          "rank": 1,
+          "track_id": "musiccaps__n3r2inlqBc_520_530",
+          "caption": "This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.",
+          "score": 0.1270870417356491,
+          "is_correct": false
+        },
+        {
+          "rank": 2,
+          "track_id": "musiccaps_4W3Ql8JbEN8_30_40",
+          "caption": "The recording features located in the right channel, in the left channel of the stereo image and in the middle. It and, like for a.",
+          "score": 0.12513284385204315,
+          "is_correct": false
+        },
+        {
+          "rank": 3,
+          "track_id": "musiccaps_H4tyvJJzSDk_30_40",
+          "caption": "featuring an, and. The is, the is and the mood is an one. Would be perfect in an.",
+          "score": 0.11571500450372696,
           "is_correct": true
         }
       ]
@@ -1918,21 +1992,21 @@
           "rank": 1,
           "track_id": "musiccaps_w4Z1QuBOMWU_70_80",
           "caption": "The song is an. The is with a guitarist traditional in a. The song has a groove and sounds delightful. The song has a.",
-          "score": 0.23874565958976746,
+          "score": 0.2387475222349167,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.23679772019386292,
+          "score": 0.23680250346660614,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.23663634061813354,
+          "score": 0.23664163053035736,
           "is_correct": false
         }
       ]
@@ -1947,21 +2021,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.06696991622447968,
+          "score": 0.06690548360347748,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_CRDDdjDinYc_50_60",
           "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.05764297395944595,
+          "score": 0.05757734924554825,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_UoSID1KzWuI_30_40",
           "caption": "This song contains a composition played on an 12 strumming chords while another is playing a paced melody in a higher key. The whole pattern repeats itself. This song may be playing in an Irish bar.",
-          "score": 0.05670740455389023,
+          "score": 0.05663779750466347,
           "is_correct": false
         }
       ]
@@ -1976,21 +2050,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.15077705681324005,
+          "score": 0.15075860917568207,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_KMQmM12G9Z4_110_120",
           "caption": "A sings this and upbeat. The starts with a with and but emphatic piano accompaniment and, and a like a. Post this the picks up to an upbeat with hard hitting, rides, upbeat synthesiser harmony and instruments. The is a, bouncy, vivacious, Dance /.",
-          "score": 0.14690349996089935,
+          "score": 0.14688877761363983,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_-7B9tPuIP-w_450_460",
           "caption": "A voice narrates a to the rhythm of a in the. The is with, keyboard accompaniment, and vocals. The plays softly in the as the speaks and burgeons when he stops. The is a and Roll and the is a.",
-          "score": 0.14579060673713684,
+          "score": 0.1457807868719101,
           "is_correct": false
         }
       ]
@@ -2005,21 +2079,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.1964380145072937,
+          "score": 0.19642145931720734,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.19182097911834717,
+          "score": 0.1918061375617981,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_b9rgWct9ivI_110_120",
           "caption": "This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.",
-          "score": 0.190360888838768,
+          "score": 0.19034504890441895,
           "is_correct": false
         }
       ]
@@ -2034,21 +2108,21 @@
           "rank": 1,
           "track_id": "musiccaps_vrMmkVV4SOE_30_40",
           "caption": "An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.",
-          "score": 0.20026037096977234,
+          "score": 0.20026658475399017,
           "is_correct": false
         },
         {
           "rank": 2,
           "track_id": "musiccaps_CRDDdjDinYc_50_60",
           "caption": "A e- takes the lead melody along with the. The and the bass are providing a rock groove in the background. Another e- is playing along with the bass on the lower notes, it's highly distorted and has some overdrive on it. The streams and. His is full of reverb and delay. The whole is of poor quality.",
-          "score": 0.18979620933532715,
+          "score": 0.18979774415493011,
           "is_correct": false
         },
         {
           "rank": 3,
           "track_id": "musiccaps_P8nK4i8XscM_30_40",
           "caption": "This is the used as a. There is a and an beat playing the of \"I'm a Barbie Girl\". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as \"I'm a Barbie Girl\" but with different lyrics. There is an 8-bit related to the. There is a atmospher",
-          "score": 0.18885725736618042,
+          "score": 0.18885399401187897,
           "is_correct": false
         }
       ]
@@ -2058,7 +2132,7 @@
     "S_graph_real": 0.9919955165055974,
     "S_graph_rewired": 0.9811027139569177,
     "tau": 0.5,
-    "mean_edge_cosine": 0.9306884121491367
+    "mean_edge_cosine": 0.9306884121211693
   },
   "bert_attention_examples": [
     {
@@ -2207,11 +2281,11 @@
         },
         {
           "tag": "india",
-          "score": 0.5599218010902405
+          "score": 0.5598917007446289
         },
         {
           "tag": "heavy",
-          "score": 0.5519964098930359
+          "score": 0.5520265698432922
         }
       ],
       "true_tags": [
@@ -2223,37 +2297,37 @@
     }
   ],
   "seed_summary": {
-    "n_seeds": 22,
-    "macro_f1_mean": 0.317887183503028,
-    "macro_f1_std": 0.10526950072256437,
-    "macro_f1_n": 16,
-    "micro_f1_mean": 0.3378781226149814,
-    "micro_f1_std": 0.12299461896738652,
-    "micro_f1_n": 16,
-    "mean_auc_pr_mean": 0.3306332589111102,
-    "mean_auc_pr_std": 0.12417214573171431,
-    "mean_auc_pr_n": 16,
-    "n_rows_mean": 4145.5,
-    "n_rows_std": 1799.004836013511,
-    "n_rows_n": 16,
-    "genre_accuracy_mean": 0.4289637952559301,
-    "genre_accuracy_std": 0.006699829146066802,
-    "genre_accuracy_n": 5,
-    "genre_macro_f1_mean": 0.4266920229717194,
-    "genre_macro_f1_std": 0.0105778729732466,
-    "genre_macro_f1_n": 5,
+    "n_seeds": 27,
+    "macro_f1_mean": 0.3244168499779934,
+    "macro_f1_std": 0.10070576332886721,
+    "macro_f1_n": 18,
+    "micro_f1_mean": 0.3443197676253378,
+    "micro_f1_std": 0.11717549386185575,
+    "micro_f1_n": 18,
+    "mean_auc_pr_mean": 0.3377596418363802,
+    "mean_auc_pr_std": 0.11848634492534356,
+    "mean_auc_pr_n": 18,
+    "n_rows_mean": 4073.777777777778,
+    "n_rows_std": 1702.714495620088,
+    "n_rows_n": 18,
+    "genre_accuracy_mean": 0.4333868378812199,
+    "genre_accuracy_std": 0.012241256440804161,
+    "genre_accuracy_n": 7,
+    "genre_macro_f1_mean": 0.4286164555987539,
+    "genre_macro_f1_std": 0.01167925455615336,
+    "genre_macro_f1_n": 7,
     "genre_n_rows_mean": 801.0,
     "genre_n_rows_std": 0.0,
-    "genre_n_rows_n": 5,
+    "genre_n_rows_n": 7,
     "genre_n_classes_mean": 8.0,
     "genre_n_classes_std": 0.0,
-    "genre_n_classes_n": 5,
-    "macro_f1_fixed_half_mean": 0.22348271486906165,
-    "macro_f1_fixed_half_std": 0.09389611002886165,
-    "macro_f1_fixed_half_n": 8,
-    "micro_f1_fixed_half_mean": 0.3604795848583442,
-    "micro_f1_fixed_half_std": 0.15663943753463508,
-    "micro_f1_fixed_half_n": 8,
+    "genre_n_classes_n": 7,
+    "macro_f1_fixed_half_mean": 0.23666154885593943,
+    "macro_f1_fixed_half_std": 0.08737804945536884,
+    "macro_f1_fixed_half_n": 10,
+    "micro_f1_fixed_half_mean": 0.3814709680949361,
+    "micro_f1_fixed_half_std": 0.1450984893759006,
+    "micro_f1_fixed_half_n": 10,
     "valence_mae_mean": 0.7321130160851912,
     "valence_mae_std": 0.0960361365742301,
     "valence_mae_n": 4,
@@ -2280,88 +2354,88 @@
     "arousal_n_n": 4,
     "gallery_size_mean": 2503.0,
     "gallery_size_std": 0.0,
-    "gallery_size_n": 1,
+    "gallery_size_n": 2,
     "n_queries_mean": 2503.0,
     "n_queries_std": 0.0,
-    "n_queries_n": 1,
+    "n_queries_n": 2,
     "n_pairs_mean": 2503.0,
     "n_pairs_std": 0.0,
-    "n_pairs_n": 1,
+    "n_pairs_n": 2,
     "g2t_R@1_mean": 0.00039952057530962844,
     "g2t_R@1_std": 0.0,
-    "g2t_R@1_n": 1,
-    "g2t_R@5_mean": 0.0023971234518577705,
-    "g2t_R@5_std": 0.0,
-    "g2t_R@5_n": 1,
-    "g2t_R@10_mean": 0.0043947263284059125,
-    "g2t_R@10_std": 0.0,
-    "g2t_R@10_n": 1,
-    "g2t_medR_mean": 998.0,
-    "g2t_medR_std": 0.0,
-    "g2t_medR_n": 1,
-    "g2t_meanR_mean": 1079.1286456252496,
-    "g2t_meanR_std": 0.0,
-    "g2t_meanR_n": 1,
-    "g2t_MRR_mean": 0.004343176743943933,
-    "g2t_MRR_std": 0.0,
-    "g2t_MRR_n": 1,
-    "t2g_R@1_mean": 0.0007990411506192569,
-    "t2g_R@1_std": 0.0,
-    "t2g_R@1_n": 1,
-    "t2g_R@5_mean": 0.001997602876548142,
-    "t2g_R@5_std": 0.0,
-    "t2g_R@5_n": 1,
-    "t2g_R@10_mean": 0.003595685177786656,
-    "t2g_R@10_std": 0.0,
-    "t2g_R@10_n": 1,
-    "t2g_medR_mean": 1216.0,
-    "t2g_medR_std": 0.0,
-    "t2g_medR_n": 1,
-    "t2g_meanR_mean": 1233.025968837395,
-    "t2g_meanR_std": 0.0,
-    "t2g_meanR_n": 1,
-    "t2g_MRR_mean": 0.003885190234681536,
-    "t2g_MRR_std": 0.0,
-    "t2g_MRR_n": 1,
-    "mean_R@1_mean": 0.0005992808629644426,
-    "mean_R@1_std": 0.0,
-    "mean_R@1_n": 1,
-    "mean_R@5_mean": 0.0021973631642029563,
-    "mean_R@5_std": 0.0,
-    "mean_R@5_n": 1,
-    "mean_R@10_mean": 0.003995205753096284,
-    "mean_R@10_std": 0.0,
-    "mean_R@10_n": 1,
-    "mean_MRR_mean": 0.004114183489312735,
-    "mean_MRR_std": 0.0,
-    "mean_MRR_n": 1,
+    "g2t_R@1_n": 2,
+    "g2t_R@5_mean": 0.001997602876548142,
+    "g2t_R@5_std": 0.000565007416049978,
+    "g2t_R@5_n": 2,
+    "g2t_R@10_mean": 0.004194966040751098,
+    "g2t_R@10_std": 0.0002825037080249891,
+    "g2t_R@10_n": 2,
+    "g2t_medR_mean": 1117.0,
+    "g2t_medR_std": 168.2914139223983,
+    "g2t_medR_n": 2,
+    "g2t_meanR_mean": 1159.2145425489412,
+    "g2t_meanR_std": 113.25856158429842,
+    "g2t_meanR_n": 2,
+    "g2t_MRR_mean": 0.003837718945782985,
+    "g2t_MRR_std": 0.0007148252733664555,
+    "g2t_MRR_n": 2,
+    "t2g_R@1_mean": 0.0005992808629644426,
+    "t2g_R@1_std": 0.00028250370802498904,
+    "t2g_R@1_n": 2,
+    "t2g_R@5_mean": 0.0015980823012385135,
+    "t2g_R@5_std": 0.000565007416049978,
+    "t2g_R@5_n": 2,
+    "t2g_R@10_mean": 0.0033959248901318418,
+    "t2g_R@10_std": 0.0002825037080249891,
+    "t2g_R@10_n": 2,
+    "t2g_medR_mean": 1217.5,
+    "t2g_medR_std": 2.1213203435596424,
+    "t2g_medR_n": 2,
+    "t2g_meanR_mean": 1236.1520175789053,
+    "t2g_meanR_std": 4.420900526883075,
+    "t2g_meanR_n": 2,
+    "t2g_MRR_mean": 0.003558265514412638,
+    "t2g_MRR_std": 0.0004623413732793059,
+    "t2g_MRR_n": 2,
+    "mean_R@1_mean": 0.0004994007191370355,
+    "mean_R@1_std": 0.0001412518540124945,
+    "mean_R@1_n": 2,
+    "mean_R@5_mean": 0.0017978425888933278,
+    "mean_R@5_std": 0.000565007416049978,
+    "mean_R@5_n": 2,
+    "mean_R@10_mean": 0.00379544546544147,
+    "mean_R@10_std": 0.0002825037080249891,
+    "mean_R@10_n": 2,
+    "mean_MRR_mean": 0.0036979922300978117,
+    "mean_MRR_std": 0.0005885833233228807,
+    "mean_MRR_n": 2,
     "random_R@1_mean": 0.00039952057530962844,
     "random_R@1_std": 0.0,
-    "random_R@1_n": 1,
+    "random_R@1_n": 2,
     "random_R@5_mean": 0.001997602876548142,
     "random_R@5_std": 0.0,
-    "random_R@5_n": 1,
+    "random_R@5_n": 2,
     "random_R@10_mean": 0.003995205753096284,
     "random_R@10_std": 0.0,
-    "random_R@10_n": 1,
+    "random_R@10_n": 2,
     "random_medR_mean": 1252.0,
     "random_medR_std": 0.0,
-    "random_medR_n": 1,
+    "random_medR_n": 2,
     "random_meanR_mean": 1252.0,
     "random_meanR_std": 0.0,
-    "random_meanR_n": 1,
+    "random_meanR_n": 2,
     "random_MRR_mean": 0.003357035838321842,
     "random_MRR_std": 0.0,
-    "random_MRR_n": 1,
-    "mean_R@1_vs_chance_mean": 1.5,
-    "mean_R@1_vs_chance_std": 0.0,
-    "mean_R@1_vs_chance_n": 1,
-    "mean_R@5_vs_chance_mean": 1.1,
-    "mean_R@5_vs_chance_std": 0.0,
-    "mean_R@5_vs_chance_n": 1,
-    "mean_R@10_vs_chance_mean": 1.0,
-    "mean_R@10_vs_chance_std": 0.0,
-    "mean_R@10_vs_chance_n": 1
+    "random_MRR_n": 2,
+    "mean_R@1_vs_chance_mean": 1.25,
+    "mean_R@1_vs_chance_std": 0.3535533905932738,
+    "mean_R@1_vs_chance_n": 2,
+    "mean_R@5_vs_chance_mean": 0.9000000000000001,
+    "mean_R@5_vs_chance_std": 0.28284271247461906,
+    "mean_R@5_vs_chance_n": 2,
+    "mean_R@10_vs_chance_mean": 0.95,
+    "mean_R@10_vs_chance_std": 0.07071067811865474,
+    "mean_R@10_vs_chance_n": 2
   },
   "musiccaps_survival": {
     "status_counts": {
