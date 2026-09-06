@@ -447,6 +447,42 @@ below. `python scripts/run_queue.py --plan` shows it without running anything.
 - **B2** was never timed; the 1.5–2.5 h band is a prior. Whether it held is
   recorded in the queue table.
 
+<!-- QUEUE:BEGIN (rewritten by scripts/run_queue.py) -->
+
+## Local run queue -- live status
+
+Updated 2026-09-06 06:57. **0 done, 0 failed, 21 remaining.**
+
+Estimated **11.1 h** of local GPU left (no steps measured yet; estimates are priors).
+
+C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not sit in front of C5-C7 for a day. See `state/kaggle_c4_instructions.md`; merge with `scripts/import_kaggle_results.py`.
+
+| Step | Phase | State | Wall-clock |
+|---|---|---|---|
+| C1a baselines B1/B2/B4 | C1 | [~] | running |
+| C1b structural controls | C1 | [ ] | ~35 min est. |
+| C2 Task 3 headline (MTAT, bert-base) | C2 | [ ] | ~200 min est. |
+| C3 Task 4 headline (MusicCaps dual encoder) | C3 | [ ] | ~45 min est. |
+| C3 retrieval export | C3 | [ ] | ~10 min est. |
+| C3 listening study | C3 | [ ] | ~5 min est. |
+| C5 Task 3 MusicCaps bert_only | C5 | [ ] | ~25 min est. |
+| C5 Task 3 MusicCaps gnn_only | C5 | [ ] | ~25 min est. |
+| C5 Task 3 MusicCaps cross_attention | C5 | [ ] | ~25 min est. |
+| C6 zero-shot vs supervised | C6 | [ ] | ~15 min est. |
+| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [ ] | ~30 min est. |
+| C6 threshold bootstrap | C6 | [ ] | ~5 min est. |
+| C6 compact figures | C6 | [ ] | ~2 min est. |
+| C6 genre confusion figure | C6 | [ ] | ~2 min est. |
+| C7 Task 2 genre seed 1337 | C7 | [ ] | ~4 min est. |
+| C7 Task 2 genre seed 2024 | C7 | [ ] | ~4 min est. |
+| C7 Task 2 tags seed 1337 | C7 | [ ] | ~10 min est. |
+| C7 Task 2 tags seed 2024 | C7 | [ ] | ~10 min est. |
+| C7 Task 4 seed 1337 | C7 | [ ] | ~45 min est. |
+| C7 Task 4 seed 2024 | C7 | [ ] | ~45 min est. |
+| report fill + structural check | C7 | [ ] | ~1 min est. |
+
+<!-- QUEUE:END -->
+
 ## Phase B0 - gaps to close before Task 3
 
 - [x] **B0.1 structural controls wired.** `graph.rewire` applies
