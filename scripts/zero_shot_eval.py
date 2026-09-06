@@ -140,7 +140,6 @@ def main(argv=None) -> int:
     LOGGER.info("zero-shot over %d MusicCaps aspects, %d templates",
                 len(tags), len(TEMPLATES))
 
-    model = _build_dual(cfg, device)
     ckpt = find_checkpoint(
         project_root() / cfg["paths"].get("checkpoints", "results/checkpoints"),
         task=4, seed=args.seed, run_tag=args.run_tag)
@@ -151,10 +150,27 @@ def main(argv=None) -> int:
         )
     LOGGER.info("using checkpoint %s", ckpt.name)
     payload = torch.load(ckpt, map_location=device, weights_only=False)
+
+    # The encoder must be the architecture the checkpoint was trained with, not
+    # whatever config.yaml currently defaults to. Task 4 trains bert-base while
+    # the config default is distilbert, and load_state_dict(strict=False) is
+    # happy to leave 96 tensors of a 12-layer tower randomly initialised and
+    # return a number that looks entirely plausible.
+    trained_with = ((payload.get("config") or {}).get("bert") or {}).get("model_name")
+    if trained_with and trained_with != cfg["bert"]["model_name"]:
+        LOGGER.info("checkpoint was trained with %s; config says %s -- using the "
+                    "checkpoint's", trained_with, cfg["bert"]["model_name"])
+        cfg["bert"]["model_name"] = trained_with
+
+    model = _build_dual(cfg, device)
     state = payload.get("model_state", payload)
     missing, unexpected = model.load_state_dict(state, strict=False)
     if missing:
-        LOGGER.warning("%d parameter(s) missing from the checkpoint", len(missing))
+        raise SystemExit(
+            f"{len(missing)} parameter(s) did not load from {ckpt.name} "
+            f"(e.g. {missing[:3]}). The zero-shot score would be measured on a "
+            "partly random encoder, so this refuses rather than reporting it."
+        )
     model.eval()
 
     tokenizer = load_tokenizer(cfg["bert"]["model_name"])

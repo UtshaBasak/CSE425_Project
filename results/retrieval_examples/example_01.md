@@ -1,21 +1,21 @@
 # Retrieval example 1 (success)
 
-**Query track**: `musiccaps_fjj9NJX8GB0_400_410`  
-**Caption**: This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.
+**Query track**: `musiccaps_NmwmOY6iBFg_30_40`  
+**Caption**: The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.
 
-**Rank of the true match**: 2 of 2503
+**Rank of the true match**: 1 of 2503
 
 ## Top 3 retrieved
 
-1. [--] `musiccaps_B3lq6U4PDZo_30_40` (score 0.160)
+1. [OK] `musiccaps_NmwmOY6iBFg_30_40` (score 0.360)
 
-    This features a melody played using. There are played in the background like clockwork. A plays a note. There is in this. This has a theme and can be used in a children's scary movie. There is a lot of white noise that can be heard in this low quality recording. There are in this.
+    The music excerpt is split into two different songs. The first half features the type of that DJs usually do. A song is running in a loop in the background. In the second half the music fades in and becomes louder but at the same time it sounds as if it's interrupted.
 
-2. [OK] `musiccaps_fjj9NJX8GB0_400_410` (score 0.159)
+2. [--] `musiccaps_dbldb9tq8ng_30_40` (score 0.357)
 
-    This contains breaking and shooting. There is also a lot of deep rumbling noise. The whole audio is panned to the right side of the speakers. This is an and of poor audio-quality. This audio may be playing in a video-game.
+    The song features a singing the same as the, followed by widely spread, kick hits, punchy, and crash. There is a at some point in the loop. The is what makes the image and therefore the song sounds in.
 
-3. [--] `musiccaps_lbB2VQYIMo0_30_40` (score 0.158)
+3. [--] `musiccaps_fsTVRca31nI_30_40` (score 0.325)
 
-    This is a. There is a variety of pieces ranging from pop to to. The made by the shoes of the dancers can also be heard. The atmosphere is rather. Parts of this recording could be lifted as samples to be used in beat-making.
+    The music features a voice. The voice follows a with a sound. The bass is backing the. The beat is made first with ticking sounds but then it's played by a.
 

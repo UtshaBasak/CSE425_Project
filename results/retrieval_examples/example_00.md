@@ -1,21 +1,21 @@
 # Retrieval example 0 (success)
 
-**Query track**: `musiccaps_vrMmkVV4SOE_30_40`  
-**Caption**: An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.
+**Query track**: `musiccaps__n3r2inlqBc_520_530`  
+**Caption**: This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.
 
 **Rank of the true match**: 1 of 2503
 
 ## Top 3 retrieved
 
-1. [OK] `musiccaps_vrMmkVV4SOE_30_40` (score 0.168)
+1. [OK] `musiccaps__n3r2inlqBc_520_530` (score 0.331)
 
-    An is playing low notes serving as a bassline while a is hitting the with a lot of fill-ins losing the rhythm and shouting. This is of poor quality.
+    This audio contains,. You can hear running/, clicking and other noises that like being in a big cave. This is an.
 
-2. [--] `musiccaps_b9rgWct9ivI_110_120` (score 0.166)
+2. [--] `musiccaps_HU7oqkJeItQ_0_10` (score 0.292)
 
-    This is a series of - a compilation. The compilation is separated by the. One of the is orchestral a motif that would be used when something or suspenseful happens. The other contains a jazzy motif. There is also a sultry speaking sassily with some percussion under her vocal.
+    The recording a being aggressively. The recording is, and it sounds, but regardless, the is.
 
-3. [--] `musiccaps_P8nK4i8XscM_30_40` (score 0.164)
+3. [--] `musiccaps_rUIGOcQMaSE_40_50` (score 0.290)
 
-    This is the used as a. There is a and an beat playing the of "I'm a Barbie Girl". There is a and a in an automated fashion in the English language but with a German accent. They are the same tune as "I'm a Barbie Girl" but with different lyrics. There is an 8-bit related to the. There is a atmospher
+    The contains, hits and. At the very end of the video there is a. Judging by the silence at the end, it could be said that this is an of the. It sounds, and, like any sound should sound like.
 

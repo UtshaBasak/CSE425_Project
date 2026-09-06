@@ -13,40 +13,40 @@
   "per_template": [
     {
       "template": "{tag}",
-      "macro_f1": 0.08373090189121042,
-      "micro_f1": 0.10264587443582607,
-      "mean_auc_pr": 0.052972446439361366,
-      "macro_f1_fixed_half": 0.09360293364341908
+      "macro_f1": 0.087281505249734,
+      "micro_f1": 0.09944860831379801,
+      "mean_auc_pr": 0.06008699466171048,
+      "macro_f1_fixed_half": 0.0947128635368259
     },
     {
       "template": "a recording of {tag} music",
-      "macro_f1": 0.08327084583053802,
-      "micro_f1": 0.10422883155455012,
-      "mean_auc_pr": 0.0525793148875492,
-      "macro_f1_fixed_half": 0.0932837751554186
+      "macro_f1": 0.09238036287632312,
+      "micro_f1": 0.10294005345551738,
+      "mean_auc_pr": 0.056937875117197286,
+      "macro_f1_fixed_half": 0.09107769815345951
     },
     {
       "template": "this music sounds {tag}",
-      "macro_f1": 0.08609893763836025,
-      "micro_f1": 0.10457676162530057,
-      "mean_auc_pr": 0.05339336803657225,
-      "macro_f1_fixed_half": 0.09360548671330428
+      "macro_f1": 0.08886663995766034,
+      "micro_f1": 0.0971439390629324,
+      "mean_auc_pr": 0.05635391025512148,
+      "macro_f1_fixed_half": 0.09036027520231618
     },
     {
       "template": "an audio clip that is {tag}",
-      "macro_f1": 0.08472912882475674,
-      "micro_f1": 0.10317681574999668,
-      "mean_auc_pr": 0.05291357353169672,
-      "macro_f1_fixed_half": 0.09370214578539102
+      "macro_f1": 0.09007576608286579,
+      "micro_f1": 0.1017704242580313,
+      "mean_auc_pr": 0.05496992724894417,
+      "macro_f1_fixed_half": 0.08681158541678911
     }
   ],
   "ensemble": {
-    "macro_f1": 0.08484490346457886,
-    "micro_f1": 0.10331218598887405,
-    "mean_auc_pr": 0.052989892018412386,
-    "macro_f1_fixed_half": 0.09350054338527045
+    "macro_f1": 0.0914225287336857,
+    "micro_f1": 0.10123731366394056,
+    "mean_auc_pr": 0.05694216358245256,
+    "macro_f1_fixed_half": 0.0907381319238597
   },
-  "template_spread_macro_f1": 0.0028280918078222306,
+  "template_spread_macro_f1": 0.005098857626589112,
   "threshold_source": "val",
   "supervised_reference": {
     "run": "task3_seed42_musiccaps_cross_attention",
@@ -55,5 +55,5 @@
     "fusion_mode": "cross_attention"
   },
   "noise_floor": 0.0288,
-  "zero_shot_gap": 0.23394166421896695
+  "zero_shot_gap": 0.2273640389498601
 }
