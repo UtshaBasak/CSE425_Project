@@ -514,7 +514,7 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
   six times below the 0.0288 noise floor, and micro-F1 moved the other way
   (-0.0022).** The two runs are indistinguishable. Reported as such.
 
-- [ ] **B0.3 B2-vs-GNN framing prepared.** B2 is now a 3.43M-parameter
+- [x] **B0.3 B2-vs-GNN framing prepared.** B2 is now a 3.43M-parameter
   short-chunk CNN on a full-resolution cache and may beat the GNN's 42.3% on
   FMA-small genre. If it does it is the headline finding and stays that way --
   the GNN will not be re-tuned until it wins. The comparison is then about
@@ -522,10 +522,18 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
   against full-resolution spectrograms), not about graphs. **B4 is the control
   that isolates structure**, because it uses the same 96-dim features without
   it, so the Task 2 discussion is built on the B4 -> GNN delta with B2 as an
-  upper reference. Awaiting the B2 runs.
+  upper reference.
+  **Outcome: B2 won.** 46.3% accuracy / 0.4435 macro-F1 against the GNN's
+  43.7% +- 1.8 / 0.4315 +- 0.0128 over three seeds. The pre-registered rule was
+  honoured: no GNN hyperparameter was touched after seeing it, and the report
+  states plainly that the CNN baseline outscores the GNN. Two caveats are
+  reported with it - the GNN's own seed spread covers most of the gap and B2 is
+  single-seed, so no ordering is claimed; and B2 needs ~10x the parameters
+  (2,887,368 vs 292,616) and ~10x the wall-clock (16.5 min vs 1.7 min) to get
+  there.
 
-- [ ] **B0.4 Task 1 attention examples** must come from a corrected-vocabulary
-  run. Blocked on the sweep finishing.
+- [x] **B0.4 Task 1 attention examples** regenerated from the
+  corrected-vocabulary run; five panels in `results/plots/bert_attention_*.png`.
 
 - [x] **B0.5 mood label sets defined in `config.yaml`**, not at plot time.
   Worth recording: of 15 proposed affect words, **7 are not in MTAT's top-50 at
@@ -583,11 +591,12 @@ B0.1 controls, because all three want the same GPU.
   tests cover it, including one asserting no winner is named among
   indistinguishable rows.
 
-- [ ] **B1.1 both domains** - MTAT metadata primary, MusicCaps `caption_masked`
-  secondary. Queued. The contrast is the finding: fusion gain should scale with
-  text informativeness, so a small or absent gain on MTAT metadata is the
-  *expected* result and is explained by the text source rather than being a
-  failure.
+- [x] **B1.1 both domains** - MTAT metadata primary, MusicCaps `caption_masked`
+  secondary. The contrast is the finding, and it came out stronger than
+  expected: *which modality dominates flips with the corpus*. On MTAT the graph
+  carries the task (`gnn_only` 0.2720, `bert_only` 0.1529); on MusicCaps the
+  ordering inverts (`bert_only` 0.3073, `gnn_only` 0.1117). Same architecture,
+  different corpus. Reported as `sec:contrast`.
 
 
 
@@ -608,7 +617,8 @@ B0.1 controls, because all three want the same GPU.
 - [x] **B2.4 ten examples with >= 2 failures** already existed from Phase A
   (`export_retrieval_examples`); it selects the two worst-ranked queries
   deliberately.
-- [ ] **B2.1 dual encoder run** - queued.
+- [x] **B2.1 dual encoder run** - three seeds, `task4_seed*_musiccaps_dual.json`.
+  Now reported quantitatively as `sec:retrieval`.
 
 ## Phase B3 - analysis
 
@@ -623,7 +633,9 @@ B0.1 controls, because all three want the same GPU.
   that would be trivially separable and inflate it.
 - [x] t-SNE already carries k-NN probe and silhouette; `S_graph` real-vs-rewired
   plotting already exists and now has real rewired runs to consume.
-- [ ] Three case studies on the **MusicCaps** Task 3 model - queued.
+- [x] Three case studies on the **MusicCaps** Task 3 model - two successes and
+  one failure, drawn from the caption corpus with the matching vocabulary after
+  the first attempt was caught running MusicCaps weights over MTAT rows.
 
 ## Phase B4 - human evaluation
 
