@@ -512,3 +512,16 @@ Format:
 [2026-09-08 01:36] NOTE  results/metrics.json still holds the pre-fix MTAT case studies. Nothing in the LaTeX pipeline
                         reads it - fill_report takes case studies from results/case_studies.json, which is the corrected
                         MusicCaps run - so it is inert, but it is stale and would mislead anyone who opened it.
+
+[2026-09-08 01:50] FIX   THE RETRIEVAL FIGURE'S CAPTION DESCRIBED A DIFFERENT SET THAN THE FIGURE. The exporter's pool
+                        grew to 30 when the listening study needed an unbiased random sample, but the figure still plots
+                        only the 10 curated extremes - and the caption macros kept summarising all 30. A reader saw ten
+                        stems captioned "median rank 451 over 30 queries" and "21 of the 30 queries place the true clip
+                        outside the top ten". The word "Both" made it worse: it referred to the two worst-ranked queries
+                        from when the note was written, and after the pool grew it dangled off a sentence about 21.
+                        The notes now apply the figure's own selection rule, so caption and picture describe the same
+                        rows, and both medians are given - 2 among the curated 10, 451 over the full 30 - because the
+                        curated median is not a performance estimate and should not be readable as one.
+[2026-09-08 01:55] REPORT Report at 9.94 pages + 0.5 appendix. Was 9.99 after the retrieval fix, which is not a margin;
+                        recovered it by collapsing the B2-granularity caveat, which I had just duplicated into Results,
+                        back to a pointer from Limitations. 119 macros, zero pending. 215 fast tests pass.
