@@ -634,8 +634,31 @@ def build_macros() -> dict:
     # random baseline the payload carries, since K/gallery is the only
     # number that makes a recall of 0.0135 interpretable.
     # ----------------------------------------------------------------- #
-    seeds = [load(f"task4_seed{s}_musiccaps_dual.json") for s in (42, 1337, 2024)]
+    # D1 re-ran Task 4 at batch 128 for ~10x the optimiser steps. Prefer those
+    # runs where they exist and fall back to the originals, so a partial re-run
+    # never silently mixes the two: the guard below refuses a mixed set.
+    d1 = [load(f"task4_seed{s}_musiccaps_dual_d1.json") for s in (42, 1337, 2024)]
+    d1 = [r for r in d1 if r and isinstance(r.get("test"), dict)]
+    old_runs = [load(f"task4_seed{s}_musiccaps_dual.json") for s in (42, 1337, 2024)]
+    old_runs = [r for r in old_runs if r and isinstance(r.get("test"), dict)]
+    seeds = d1 if len(d1) == 3 else old_runs
     tests = [r["test"] for r in seeds if r and isinstance(r.get("test"), dict)]
+    if seeds:
+        macros["FourBatch"] = integer(seeds[0].get("contrastive_batch_size"))
+        macros["FourEpochs"] = integer(seeds[0].get("epochs_run"))
+        macros["FourBestEpoch"] = integer(seeds[0].get("best_epoch"))
+    else:
+        for key in ("FourBatch", "FourEpochs", "FourBestEpoch"):
+            macros[key] = PENDING
+    # the original numbers stay reportable: the improvement is the finding
+    if old_runs and len(d1) == 3:
+        prev = [r["test"]["mean_R@10"] for r in old_runs]
+        macros["FourPrevRAtTen"] = num(sum(prev) / len(prev), 4)
+        prev_lift = [r["test"]["mean_R@10_vs_chance"] for r in old_runs]
+        macros["FourPrevLift"] = num(sum(prev_lift) / len(prev_lift), 1)
+    else:
+        macros["FourPrevRAtTen"] = PENDING
+        macros["FourPrevLift"] = PENDING
     if tests:
         def _mean(key):
             values = [t[key] for t in tests if _scalar(t.get(key)) is not None]

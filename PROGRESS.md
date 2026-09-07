@@ -806,3 +806,30 @@ DEAM emotion metrics were already written by every Task 3 run; this was a
 `fill_report.py` gap, not a missing experiment. `emotion_metrics()` inverts the
 standardised predictions before scoring, so MAE/RMSE are on the **original 1-9
 scale** and R2 is affine-invariant.
+
+## Phase D1-D6 - submission day
+
+- [x] **D1 Task 4 re-run: it was undertrained, not data-limited.** At batch 512
+  over 2,095 pairs an epoch is 4 optimiser steps. Re-run at batch 128, same
+  architecture: **R@10 0.0135 -> 0.0175 +- 0.0016, lift 3.4x -> 4.4x**, median
+  rank 686 -> 631. Val R@10 peaked at epoch 35 of 75, so it converged rather
+  than being cut short again. Three seeds. The earlier number is reported
+  alongside, because "the data is too small" and "we did not train it long
+  enough" are different claims and only one had been tested.
+- [x] **D2 DEAM emotion, resolved at rung 1.** Valence MAE 0.714 / R2 0.311,
+  arousal MAE 0.753 / R2 0.478 on 275 test tracks, MAE on the 1-9 scale.
+  Valence is far less stable across seeds (0.247 +- 0.134) than arousal
+  (0.522 +- 0.060); reported as measured.
+- [x] **D3 budget consistency.** The T3 row in the main table was a
+  placeholder reading "Phase B", and B1/B4 were hardcoded from the
+  **pre-normalisation** baselines file - B4 printed 0.3239 where the real value
+  is 0.3146. Both fixed; B4 -> GNN delta is 0.0591, about 2.1x the floor.
+  Ablation labelled reduced-budget with epoch counts.
+- [x] **D4 figures.** t-SNE (3 panels), diagnostics, attention (5 rows),
+  architecture diagram. All composited from existing real runs.
+- [x] **D5 compression 11.9 -> 9.96 pages** by the pre-registered order.
+- [x] **D6 freeze:** 173 macros, zero pending, no structural problems, 216
+  tests pass. `state/SUBMISSION_CHECKLIST.md` maps all five required items.
+- [!] **Item 4 (report PDF) is the one open action** - operator compiles on
+  Overleaf. The previous `report/final_report.pdf` was synthetic and is
+  quarantined.
