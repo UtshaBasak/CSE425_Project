@@ -559,3 +559,11 @@ Format:
 [2026-09-08 03:30] D6    FROZEN. 173 macros, zero pending, check_tex clean, 216 tests pass, fresh clone 212 pass /
                         5 skip with no defects found. Submission ZIP 303 files / 10.2 MB.
                         ONE OPEN ACTION: report/final_report.pdf must be compiled on Overleaf by the operator.
+
+[2026-09-08 04:10] FIND  RUBRIC AUDIT FOUND A THIRD WIRING GAP. Zero-shot tag prediction is an explicit Task 4
+                        deliverable in the project PDF; results/zero_shot_seed42.json has existed since Phase C and no
+                        macro had ever read it - the same failure as the DEAM metrics and the Task 4 results table.
+                        Added: 0.0914 macro-F1 zero-shot against the supervised model's 0.3188 over 2,503 clips, with
+                        a template spread of 0.0051 (inside the floor), so the number reflects the representation
+                        rather than prompt wording. 33 of 34 deliverables now present; the one gap is the operator's
+                        Overleaf compile. Report re-frozen at exactly 10.00 pages.

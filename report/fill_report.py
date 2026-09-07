@@ -397,6 +397,19 @@ def build_macros() -> dict:
                     "RetrievalNShown", "RetrievalNPool"):
             macros[key] = PENDING
 
+    # ---- zero-shot tag prediction (Task 4 deliverable) ----------------- #
+    zs = load("zero_shot_seed42.json") or {}
+    if zs.get("ensemble"):
+        macros["ZeroShotF"] = num(dig(zs, "ensemble", "macro_f1"))
+        macros["ZeroShotSpread"] = num(zs.get("template_spread_macro_f1"))
+        macros["ZeroShotSup"] = num(dig(zs, "supervised_reference", "macro_f1"))
+        macros["ZeroShotGap"] = num(zs.get("zero_shot_gap"))
+        macros["ZeroShotClips"] = integer(zs.get("n_test_clips"))
+    else:
+        for key in ("ZeroShotF", "ZeroShotSpread",
+                    "ZeroShotSup", "ZeroShotGap", "ZeroShotClips"):
+            macros[key] = PENDING
+
     # ---- D4 figure captions ------------------------------------------- #
     # The panels each print their own probe numbers, but the caption has to
     # state them too: a reader should not have to squint at a subplot title to
