@@ -13,7 +13,7 @@ EPOCHS ?=
 OVERRIDE := $(if $(EPOCHS),--override train.epochs=$(EPOCHS),)
 TRAIN    := $(PYTHON) -m src.train --config $(CONFIG) --device $(DEVICE) --seed $(SEED)
 
-.PHONY: report mel-cache vocab thresholds kaggle-payload-ablation help setup verify-data splits features graphs smoke \
+.PHONY: report mel-cache vocab thresholds kaggle-payload-ablation help setup verify-data splits features graphs smoke human-eval human-eval-sheet \
         task1 task2 task3 task4 all-tasks baselines evaluate test lint clean clean-results
 
 help:
@@ -136,6 +136,16 @@ thresholds:
 
 # The living report: numbers injected from results/, then structurally checked
 # because there is no LaTeX toolchain here to catch a broken macro.
+# Two halves, run weeks apart: the sheet is built before the study, the
+# analysis after the responses come back. Building the sheet a second time
+# would reshuffle the presentation order and orphan the responses, so the
+# page target is deliberately separate and not a dependency of the analysis.
+human-eval-sheet:
+	$(PYTHON) scripts/make_listening_page.py --config $(CONFIG)
+
+human-eval:
+	$(PYTHON) scripts/analyse_human_eval.py
+
 report:
 	$(PYTHON) scripts/plot_genre_confusion.py --config $(CONFIG)
 	$(PYTHON) report/fill_report.py

@@ -464,6 +464,116 @@ def build_macros() -> dict:
                     "BootValRows", "BootWorstTags", "BootWorstTagsTable"):
             macros[key] = PENDING
 
+    # ----------------------------------------------------------------- #
+    # Task 4, contrastive graph--caption retrieval. Averaged over the three
+    # seeds and over both directions, because neither direction is the
+    # headline on its own. Every recall is reported against the analytic
+    # random baseline the payload carries, since K/gallery is the only
+    # number that makes a recall of 0.0135 interpretable.
+    # ----------------------------------------------------------------- #
+    seeds = [load(f"task4_seed{s}_musiccaps_dual.json") for s in (42, 1337, 2024)]
+    tests = [r["test"] for r in seeds if r and isinstance(r.get("test"), dict)]
+    if tests:
+        def _mean(key):
+            values = [t[key] for t in tests if _scalar(t.get(key)) is not None]
+            return sum(values) / len(values) if values else None
+
+        def _sd(key):
+            values = [t[key] for t in tests if _scalar(t.get(key)) is not None]
+            if len(values) < 2:
+                return None
+            mu = sum(values) / len(values)
+            return (sum((v - mu) ** 2 for v in values) / (len(values) - 1)) ** 0.5
+
+        macros["FourSeeds"] = integer(len(tests))
+        macros["FourGallery"] = integer(_mean("gallery_size"))
+        macros["FourRAtOne"] = num(_mean("mean_R@1"), 4)
+        macros["FourRAtFive"] = num(_mean("mean_R@5"), 4)
+        macros["FourRAtTen"] = num(_mean("mean_R@10"), 4)
+        macros["FourRAtTenSd"] = num(_sd("mean_R@10"), 4)
+        macros["FourMRR"] = num(_mean("mean_MRR"), 4)
+        macros["FourChanceOne"] = num(_mean("random_R@1"), 4)
+        macros["FourChanceFive"] = num(_mean("random_R@5"), 4)
+        macros["FourChanceTen"] = num(_mean("random_R@10"), 4)
+        macros["FourChanceMRR"] = num(_mean("random_MRR"), 4)
+        macros["FourLiftOne"] = num(_mean("mean_R@1_vs_chance"), 1)
+        macros["FourLiftFive"] = num(_mean("mean_R@5_vs_chance"), 1)
+        macros["FourLiftTen"] = num(_mean("mean_R@10_vs_chance"), 1)
+
+        g2t, t2g = _mean("g2t_medR"), _mean("t2g_medR")
+        macros["FourMedR"] = integer((g2t + t2g) / 2 if None not in (g2t, t2g) else None)
+        macros["FourChanceMedR"] = integer(_mean("random_medR"))
+        macros["FourGtoT"] = num(_mean("g2t_R@10"), 4)
+        macros["FourTtoG"] = num(_mean("t2g_R@10"), 4)
+    else:
+        for key in ("FourSeeds", "FourGallery", "FourRAtOne", "FourRAtFive",
+                    "FourRAtTen", "FourRAtTenSd", "FourMRR", "FourChanceOne",
+                    "FourChanceFive", "FourChanceTen", "FourChanceMRR",
+                    "FourLiftOne", "FourLiftFive", "FourLiftTen", "FourMedR",
+                    "FourChanceMedR", "FourGtoT", "FourTtoG"):
+            macros[key] = PENDING
+
+    # ----------------------------------------------------------------- #
+    # B4 listening study. Every macro here is defined whether or not the
+    # study ran, and the verdict macro carries the null when it is a null --
+    # this section is the one most likely to be read as a positive claim it
+    # does not make.
+    # ----------------------------------------------------------------- #
+    human = load("human_eval.json") or {}
+    if human:
+        macros["HERaters"] = integer(human.get("n_raters"))
+        macros["HEItems"] = integer(human.get("n_items_rated"))
+        macros["HEControls"] = integer(human.get("n_controls"))
+        macros["HERatings"] = integer(human.get("n_ratings"))
+        macros["HEMean"] = num(human.get("mean_rating"), 2)
+        macros["HESd"] = num(human.get("std_rating"), 2)
+        macros["HEMeanReal"] = num(human.get("mean_rating_real"), 2)
+        macros["HEMeanControl"] = num(human.get("mean_rating_control"), 2)
+        macros["HEAlpha"] = num(human.get("krippendorff_alpha"), 3)
+        macros["HESpearman"] = num(human.get("pairwise_spearman_mean"), 3)
+        macros["HESpearmanSd"] = num(human.get("pairwise_spearman_std"), 3)
+        macros["HEPairs"] = integer(human.get("n_rater_pairs"))
+        macros["HEGap"] = num(human.get("control_discrimination"), 2)
+        macros["HEItemMin"] = num(human.get("real_item_mean_min"), 2)
+        macros["HEItemMax"] = num(human.get("real_item_mean_max"), 2)
+        macros["HEBetweenH"] = num(human.get("between_item_H"), 1)
+        macros["HEReused"] = integer(human.get("n_controls_reusing_a_caption"))
+
+        share = _scalar(human.get("between_item_variance_share"))
+        macros["HEVarShare"] = PENDING if share is None else f"{100 * share:.0f}"
+
+        # p-values want scientific notation when they are small, and LaTeX
+        # wants the exponent typeset rather than printed as "e-11".
+        def _p(value):
+            value = _scalar(value)
+            if value is None:
+                return PENDING
+            if value >= 1e-3:
+                return f"{value:.3f}"
+            exponent = 0
+            mantissa = value
+            while mantissa < 1:
+                mantissa *= 10
+                exponent += 1
+            return f"{mantissa:.1f} \\times 10^{{-{exponent}}}"
+
+        macros["HEGapP"] = _p(human.get("control_discrimination_p"))
+        macros["HEBetweenP"] = _p(human.get("between_item_p"))
+
+        discriminating = (_scalar(human.get("control_discrimination")) or 0) >= 0.5 \
+            and (_scalar(human.get("control_discrimination_p")) or 1) <= 0.05
+        macros["HEVerdict"] = (
+            "the ratings support the retrieval quality" if discriminating else
+            "the study is inconclusive as validation of retrieval quality"
+        )
+    else:
+        for key in ("HERaters", "HEItems", "HEControls", "HERatings", "HEMean",
+                    "HESd", "HEMeanReal", "HEMeanControl", "HEAlpha",
+                    "HESpearman", "HESpearmanSd", "HEPairs", "HEGap", "HEGapP",
+                    "HEItemMin", "HEItemMax", "HEBetweenH", "HEBetweenP",
+                    "HEVarShare", "HEReused", "HEVerdict"):
+            macros[key] = PENDING
+
     return macros
 
 

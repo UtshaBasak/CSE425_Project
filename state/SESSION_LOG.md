@@ -461,3 +461,37 @@ Format:
                         instability measured in A7.4.
 [2026-09-06 20:35] GATE  REPORT COMPLETE except human eval: zero pending macros, check_tex clean, 9.9 pages + 0.4
                         appendix against a 6-10 limit. 211 fast tests pass.
+
+[2026-09-08 00:15] DONE  B4 responses arrived: 10 raters, 24 items, 240 ratings.
+[2026-09-08 00:17] FIND  THE STUDY RETURNS A NULL. Controls scored 3.65 against genuine pairs' 3.62 - a gap of -0.03 in
+                        the WRONG direction, p = 0.582. The listening study validates nothing about retrieval quality.
+                        Reported as inconclusive, which is what the protocol fixed in advance requires.
+[2026-09-08 00:18] FIND  But "raters weren't listening" and "the controls weren't controls" are different claims with
+                        different costs, and the headline gap cannot tell them apart. Added two diagnostics to
+                        analyse_human_eval.py. Kruskal-Wallis across items: H = 99.8, p = 1.5e-11, 41.8% of variance
+                        BETWEEN items, real-item means spanning 1.70-4.90. The panel was attending. What failed was the
+                        control construction: 3 of 4 controls reuse a caption that a real item in the same sheet also
+                        carries, so a rater meeting one description twice over different audio has no basis for calling
+                        either pairing wrong. One such control scored 4.70 against its genuine counterpart's 4.10.
+                        The fourth control's unique caption described RECORDING CONDITIONS and scored 4.20 - the same
+                        property that makes the case-study successes succeed. Two judges, one learned and one human,
+                        limited by the same corpus property.
+[2026-09-08 00:30] REPORT Human Evaluation section written from real numbers, control discrimination first. 21 macros.
+[2026-09-08 00:35] FIND  TASK 4 HAD NO RESULTS SUBSECTION. Three of four tasks had result tables; the contrastive
+                        retrieval numbers sat in results/ and appeared nowhere in the report except a qualitative
+                        figure. Added sec:retrieval + 18 macros: R@10 0.0135 +- 0.0006 vs analytic chance 0.0040
+                        (3.4x), median rank 686 of 2,503 vs chance 1,252, both directions agreeing.
+[2026-09-08 00:50] FIX   THE PAGE ESTIMATOR WAS WRONG BY A FULL PAGE, and I nearly cut real prose to satisfy it.
+                        check_tex split at \appendix and counted everything above as body - including the AUTOGEN
+                        macro block, which typesets nothing where it sits, and \BootWorstTagsTable, a table that only
+                        renders INSIDE the appendix. Meanwhile a use site counted as one word whether it expanded to a
+                        digit or a 130-word note. Macros now expand at their use sites, as LaTeX does. Two tests guard
+                        it; both fail against the previous version. 10.4 -> 9.6 pages with no content removed.
+[2026-09-08 00:55] REPORT Consolidated real duplication found while compressing: the four integrity defects were each
+                        stated twice (Section 3 with effect sizes, then "What the Assertions Caught") and three of them
+                        a third time in Limitations. Kept Section 3, which absorbed the one paragraph unique to the
+                        removed section. ~900 words recovered, no fact lost.
+[2026-09-08 01:00] FIX   .gitignore line 134 had "data/human_eval/*.wav" and "*.npz" concatenated with a comment
+                        fragment, so neither pattern worked. Nothing had leaked into the index. Repaired.
+[2026-09-08 01:05] GATE  REPORT COMPLETE. Zero pending macros, check_tex clean, 9.7 pages + 0.5 appendix against 6-10.
+                        215 fast tests pass, 1 skipped. Every deliverable section now carries real numbers.

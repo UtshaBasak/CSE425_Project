@@ -102,6 +102,64 @@ def to_long(responses: pd.DataFrame, key: dict) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def between_item_discrimination(long: pd.DataFrame) -> dict:
+    """Did raters spread the items out, whatever they did with the controls?
+
+    A null control gap has two very different explanations: the panel was not
+    listening, or the panel was listening and the controls were not actually
+    mismatched. This separates them. If ratings differ across items far beyond
+    chance and a large share of the total variance is between items rather than
+    within them, the panel was discriminating and the control manipulation is
+    what failed.
+    """
+    from scipy import stats as _stats
+
+    groups = [g["rating"].values for _, g in long.groupby("item_id")]
+    if len(groups) < 2:
+        return {}
+    H, p_value = _stats.kruskal(*groups)
+
+    grand = long["rating"].mean()
+    between = sum(len(g) * (g["rating"].mean() - grand) ** 2
+                  for _, g in long.groupby("item_id"))
+    total = float(((long["rating"] - grand) ** 2).sum())
+
+    means = long.groupby("item_id")["rating"].mean()
+    real = long[~long["is_control"]].groupby("item_id")["rating"].mean()
+    return {
+        "between_item_H": float(H),
+        "between_item_p": float(p_value),
+        "between_item_variance_share": float(between / total) if total else None,
+        "item_mean_min": float(means.min()),
+        "item_mean_max": float(means.max()),
+        "real_item_mean_min": float(real.min()) if len(real) else None,
+        "real_item_mean_max": float(real.max()) if len(real) else None,
+    }
+
+
+def control_caption_reuse(key: dict) -> dict:
+    """Do any controls carry a caption that a real item in the sheet also has?
+
+    A control is meant to be a caption paired with audio it does not describe.
+    If the same caption is also shown against its true clip elsewhere in the
+    sheet, the rater sees one description twice over different audio and has no
+    basis for calling either pairing the wrong one -- so the item stops being a
+    control and becomes a second opinion on a generic caption.
+    """
+    real = [it for it in key["items"] if not it["is_control"]]
+    reused = []
+    for control in (it for it in key["items"] if it["is_control"]):
+        twins = [o["item_id"] for o in real if o["caption"] == control["caption"]]
+        if twins:
+            reused.append({"control_id": control["item_id"],
+                           "clip_number": int(control["number"]),
+                           "shares_caption_with": twins})
+    n_controls = sum(1 for it in key["items"] if it["is_control"])
+    return {"n_controls_reusing_a_caption": len(reused),
+            "n_controls": n_controls,
+            "control_caption_reuse": reused}
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--responses", default="data/human_eval/raw_responses.csv")
@@ -130,6 +188,8 @@ def main(argv=None) -> int:
 
     n_raters = long["rater_id"].nunique()
     stats = compute_agreement(long.rename(columns={"rater_id": "rater"}))
+    stats.update(between_item_discrimination(long))
+    stats.update(control_caption_reuse(key))
     stats.update({
         "n_raters": int(n_raters),
         "n_items_rated": int(long["item_id"].nunique()),
@@ -145,11 +205,26 @@ def main(argv=None) -> int:
         stats["verdict"] = ("no control items were rated, so the study cannot "
                             "show that raters were discriminating")
     elif discrimination < 0.5 or (p_value is not None and p_value > 0.05):
+        attended = (stats.get("between_item_p") is not None
+                    and stats["between_item_p"] < 0.01)
+        reused = stats.get("n_controls_reusing_a_caption", 0)
+        why = ""
+        if attended:
+            why = (" Ratings did differ sharply across items "
+                   f"(Kruskal-Wallis p = {stats['between_item_p']:.2g}, "
+                   f"{stats['between_item_variance_share']:.0%} of variance "
+                   "between items), so the panel was attending; the control "
+                   "manipulation is what failed, not the panel.")
+        if reused:
+            why += (f" {reused} of {stats.get('n_controls', 0)} controls carry a "
+                    "caption that a real item in the same sheet also carries, "
+                    "which makes those controls unidentifiable by construction.")
         stats["verdict"] = (
             f"controls scored within {discrimination:.2f} of real pairs "
             f"(p = {p_value:.3f}). The ratings do NOT establish that raters were "
-            "discriminating, so the human evaluation is reported as "
-            "inconclusive rather than as support for the retrieval quality."
+            "discriminating between true and mismatched pairs, so the human "
+            "evaluation is reported as inconclusive rather than as support for "
+            "the retrieval quality." + why
         )
     else:
         stats["verdict"] = (
@@ -173,6 +248,14 @@ def main(argv=None) -> int:
           f"over {stats.get('n_rater_pairs', 0)} pairs")
     print(f"control gap          {stats.get('control_discrimination', float('nan')):+.2f} "
           f"(p = {stats.get('control_discrimination_p', float('nan')):.3g})")
+    if stats.get("between_item_H") is not None:
+        print(f"between-item         H = {stats['between_item_H']:.1f}, "
+              f"p = {stats['between_item_p']:.2g}, "
+              f"{stats['between_item_variance_share']:.0%} of variance "
+              f"(item means {stats['item_mean_min']:.2f}-{stats['item_mean_max']:.2f})")
+    if stats.get("n_controls_reusing_a_caption"):
+        print(f"control caption reuse {stats['n_controls_reusing_a_caption']} of "
+              f"{stats['n_controls']} controls share a caption with a real item")
     print(f"\n{stats['verdict']}")
     print(f"\nwrote {out} and {long_path.relative_to(root)}")
     return 0

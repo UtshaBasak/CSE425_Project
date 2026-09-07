@@ -131,10 +131,12 @@ data/processed/*
 # makes the study reproducible.
 data/human_eval/listening_page.html
 data/human_eval/*.mp3
-data/human_eval/*.wav*.npz            per-run val/test score matrices, inputs to
-#                                   scripts/threshold_bootstrap.py. The bootstrap
-#                                   RESULT (results/threshold_bootstrap.json) is
-#                                   committed; the matrices it consumes are not.
+data/human_eval/*.wav
+
+# Per-run val/test score matrices (*.npz), the inputs to
+# scripts/threshold_bootstrap.py. The bootstrap RESULT
+# (results/threshold_bootstrap.json) is committed; the matrices it consumes are
+# not -- they are large and regenerable from the checkpoints.
 results/scores/
 
 # -----------------------------------------------------------------------------
