@@ -200,3 +200,6 @@ ENV/
 Thumbs.db
 desktop.ini
 $RECYCLE.BIN/
+
+# submission bundle, rebuilt on demand
+submission_*.zip
