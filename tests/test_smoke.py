@@ -1862,6 +1862,59 @@ def test_page_guard_passes_inside_the_limit(tmp_path):
     assert not any("OVER the" in p for p in check_tex.check(path))
 
 
+def test_macros_are_counted_where_they_are_used_not_where_defined(tmp_path):
+    """A macro definition typesets nothing where it sits.
+
+    The AUTOGEN block sits above \\appendix, so counting it as body prose
+    charged the main body for every macro body -- including a table that only
+    ever renders inside the appendix. That inflated the estimate by a full page
+    and would have had us cutting real prose to fix a measurement error.
+    """
+    from report import check_tex
+
+    note = "word " * 400                      # a long prose macro, appendix-only
+    body = "\n".join([
+        "% --- AUTOGEN:BEGIN ---",
+        "\\newcommand{\\AppendixNote}{" + note + "}",
+        "\\newcommand{\\Score}{0.356}",
+        "% --- AUTOGEN:END ---",
+        "word " * 100,
+        "\\Score{} is the headline.",
+        "\\appendix",
+        "\\AppendixNote{}",
+    ])
+    path = tmp_path / "macros.tex"
+    path.write_text(_tex(body), encoding="utf-8")
+
+    est = check_tex.estimate(path)
+    # the 400-word note belongs to the appendix, where it is used
+    assert est["words"] < 200, (
+        f"body counted {est['words']} words; the appendix-only macro leaked in"
+    )
+    assert est["appendix_pages"] > 400 / check_tex.WORDS_PER_PAGE * 0.9, (
+        "the appendix was not charged for the macro it actually typesets"
+    )
+
+
+def test_a_table_defined_in_the_macro_block_belongs_to_its_use_site(tmp_path):
+    from report import check_tex
+
+    body = "\n".join([
+        "% --- AUTOGEN:BEGIN ---",
+        "\\newcommand{\\BigTable}{\\begin{table}x\\end{table}}",
+        "% --- AUTOGEN:END ---",
+        "word " * 50,
+        "\\appendix",
+        "\\BigTable{}",
+    ])
+    path = tmp_path / "table.tex"
+    path.write_text(_tex(body), encoding="utf-8")
+
+    assert check_tex.estimate(path)["tables"] == 0, (
+        "a table used only in the appendix was charged to the main body"
+    )
+
+
 def test_appendix_material_is_counted_separately(tmp_path):
     """The planned response to overflow is an appendix, so it must not count."""
     from report import check_tex
@@ -2321,3 +2374,49 @@ def test_importer_refuses_a_foreign_vocabulary(tmp_path, monkeypatch):
     assert "REFUSED" in combined, combined[-800:]
     assert result.returncode == 2, "a rejected import should not exit clean"
     assert not (project_root() / "results" / "task3_seed42_bogus.json").exists()
+
+
+# --------------------------------------------------------------------------- #
+# B4 -- a null control gap has two explanations, and they are not equivalent
+# --------------------------------------------------------------------------- #
+def test_between_item_discrimination_separates_inattention_from_bad_controls():
+    """Raters who spread items across the scale were attending, whatever the
+    control gap says. Without this the study's null is unreadable."""
+    import pandas as pd
+    sys.path.insert(0, str(project_root() / "scripts"))
+    from analyse_human_eval import between_item_discrimination
+
+    # ten raters agreeing that item A is bad and item B is good
+    rows = []
+    for rater in range(10):
+        rows.append({"item_id": "a", "rating": 1.0, "is_control": False})
+        rows.append({"item_id": "b", "rating": 5.0, "is_control": False})
+    stats = between_item_discrimination(pd.DataFrame(rows))
+    assert stats["between_item_p"] < 0.01
+    assert stats["between_item_variance_share"] > 0.9, (
+        "perfectly separated items should put nearly all variance between them"
+    )
+
+    # the same raters clicking at random-ish, with no item structure
+    rows = [{"item_id": item, "rating": float(1 + (i + j) % 5),
+             "is_control": False}
+            for i, item in enumerate(("a", "b")) for j in range(10)]
+    stats = between_item_discrimination(pd.DataFrame(rows))
+    assert stats["between_item_variance_share"] < 0.2
+
+
+def test_control_caption_reuse_is_detected():
+    """A control whose caption also appears on a real item is not a control."""
+    sys.path.insert(0, str(project_root() / "scripts"))
+    from analyse_human_eval import control_caption_reuse
+
+    key = {"items": [
+        {"item_id": "item_0", "number": 1, "is_control": False, "caption": "a hip hop song"},
+        {"item_id": "ctrl_0", "number": 2, "is_control": True, "caption": "a hip hop song"},
+        {"item_id": "ctrl_1", "number": 3, "is_control": True, "caption": "unique text"},
+    ]}
+    found = control_caption_reuse(key)
+    assert found["n_controls"] == 2
+    assert found["n_controls_reusing_a_caption"] == 1
+    assert found["control_caption_reuse"][0]["control_id"] == "ctrl_0"
+    assert found["control_caption_reuse"][0]["shares_caption_with"] == ["item_0"]

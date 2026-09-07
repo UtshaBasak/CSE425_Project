@@ -1,0 +1,78 @@
+{
+  "n_raters": 10,
+  "n_items": 24,
+  "mean_rating": 3.620833333333333,
+  "std_rating": 1.464149117709289,
+  "krippendorff_alpha": 0.35564911855197345,
+  "pairwise_spearman_mean": 0.3498074909576066,
+  "pairwise_spearman_std": 0.22699470256527043,
+  "n_rater_pairs": 45,
+  "mean_rating_real": 3.615,
+  "mean_rating_control": 3.65,
+  "control_discrimination": -0.0349999999999997,
+  "control_discrimination_p": 0.5824861630055145,
+  "raters_discriminating": 4,
+  "item_ids": [
+    "control_000",
+    "control_001",
+    "control_002",
+    "control_003",
+    "item_000",
+    "item_001",
+    "item_002",
+    "item_003",
+    "item_004",
+    "item_005",
+    "item_006",
+    "item_007",
+    "item_008",
+    "item_009",
+    "item_010",
+    "item_011",
+    "item_012",
+    "item_013",
+    "item_014",
+    "item_015",
+    "item_016",
+    "item_017",
+    "item_018",
+    "item_019"
+  ],
+  "between_item_H": 99.82020960722622,
+  "between_item_p": 1.5121481783675756e-11,
+  "between_item_variance_share": 0.41787672397735637,
+  "item_mean_min": 1.7,
+  "item_mean_max": 4.9,
+  "real_item_mean_min": 1.7,
+  "real_item_mean_max": 4.9,
+  "n_controls_reusing_a_caption": 3,
+  "n_controls": 4,
+  "control_caption_reuse": [
+    {
+      "control_id": "control_001",
+      "clip_number": 6,
+      "shares_caption_with": [
+        "item_012"
+      ]
+    },
+    {
+      "control_id": "control_000",
+      "clip_number": 11,
+      "shares_caption_with": [
+        "item_002"
+      ]
+    },
+    {
+      "control_id": "control_003",
+      "clip_number": 17,
+      "shares_caption_with": [
+        "item_002"
+      ]
+    }
+  ],
+  "n_items_rated": 24,
+  "n_ratings": 240,
+  "responses_file": "data\\human_eval\\raw_responses.csv",
+  "meets_five_rater_minimum": true,
+  "verdict": "controls scored within -0.03 of real pairs (p = 0.582). The ratings do NOT establish that raters were discriminating between true and mismatched pairs, so the human evaluation is reported as inconclusive rather than as support for the retrieval quality. Ratings did differ sharply across items (Kruskal-Wallis p = 1.5e-11, 42% of variance between items), so the panel was attending; the control manipulation is what failed, not the panel. 3 of 4 controls carry a caption that a real item in the same sheet also carries, which makes those controls unidentifiable by construction."
+}

@@ -72,6 +72,17 @@ EQUATION = re.compile(r"\\begin\{equation\}")
 PAGE_BEGIN = "%% PAGEBUDGET:BEGIN"
 PAGE_END = "%% PAGEBUDGET:END"
 
+#: the AUTOGEN block holds macro *definitions*, which typeset nothing in place
+AUTOGEN_BEGIN = "--- AUTOGEN:BEGIN"
+AUTOGEN_END = "--- AUTOGEN:END"
+
+#: \newcommand{\Name}{body}, capturing the body too; it may span lines and
+#: nest braces two deep. Distinct from NEWCOMMAND above, which captures only
+#: the name and is what the undefined/unused-macro check uses.
+DEFINITION = re.compile(
+    r"\\newcommand\{\\(\w+)\}\{((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\}",
+    re.DOTALL)
+
 #: IEEEtran two-column, 10pt: measured against typical conference papers. These
 #: are estimates for steering, not a substitute for compiling -- the point is to
 #: notice a 12-page draft early, not to predict the page count to two decimals.
@@ -211,6 +222,37 @@ def _count(body: str) -> dict:
             "float_pages": floats, "total_pages": prose + floats}
 
 
+def expand_macros(text: str) -> str:
+    """Replace every AUTOGEN macro with its body, then drop the definitions.
+
+    Without this the estimate is wrong in both directions at once. A definition
+    like \\CaseStudyNote contributes its 130 words where it is *defined* --
+    above \\appendix, so always to the body -- while the caption that actually
+    typesets it counts as one token. A table defined in the block but used in
+    the appendix is charged to the body outright. Expanding at the use site is
+    what LaTeX does, and is the only accounting that matches the printed page.
+
+    Runs on raw text, before comments are stripped, because the AUTOGEN markers
+    are themselves comments.
+    """
+    begin, end = text.find(AUTOGEN_BEGIN), text.find(AUTOGEN_END)
+    if begin < 0 or end < 0:
+        return text                                  # no block; nothing to do
+    block = strip_comments(text[begin:end])
+    definitions = dict(DEFINITION.findall(block))
+    if not definitions:
+        return text
+    rest = text[:begin] + text[end:]
+
+    # Two passes: a macro body may reference another macro. Two suffices here
+    # and terminates unconditionally, which a fixpoint loop would not.
+    for _ in range(2):
+        for name, value in definitions.items():
+            rest = rest.replace("\\" + name + "{}", value)
+            rest = rest.replace("\\" + name + " ", value + " ")
+    return rest
+
+
 def estimate(path: Path) -> dict:
     """Rough page count: prose words plus fixed allowances for floats.
 
@@ -220,7 +262,7 @@ def estimate(path: Path) -> dict:
     alongside the rest; the planned response is to move qualitative overflow
     into a marked appendix, so the estimate has to be able to see that split.
     """
-    body = strip_comments(path.read_text(encoding="utf-8"))
+    body = strip_comments(expand_macros(path.read_text(encoding="utf-8")))
     split = APPENDIX.search(body)
     main = body[: split.start()] if split else body
     appendix = body[split.start():] if split else ""

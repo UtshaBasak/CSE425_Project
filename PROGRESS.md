@@ -640,7 +640,34 @@ B0.1 controls, because all three want the same GPU.
   invert the headline finding, so it refuses a mismatched export rather than
   guessing. It states plainly when control discrimination is too small for the
   study to be informative.
-- [ ] Awaiting `data/human_eval/raw_responses.csv` - a hard human dependency.
+- [x] **Responses in: 10 raters, 24 items, 240 ratings.** Above the five-rater
+  minimum.
+- [x] **The study returns a null, and the null is attributable.** Controls
+  scored 3.65 against 3.62 for genuine pairs - a gap of **-0.03**, the wrong
+  direction, p = 0.582. Raters did not separate true pairings from mismatched
+  ones, so the study validates nothing about retrieval quality and is reported
+  that way.
+- [x] **The panel was attending; the control construction failed.** These are
+  different claims and the headline gap cannot separate them, so two diagnostics
+  were added to `analyse_human_eval.py`. Ratings differ across items far beyond
+  chance (Kruskal-Wallis H = 99.8, p = 1.5e-11) with **41.8% of variance between
+  items** and real-item means spanning 1.70-4.90 - nearly the full scale.
+  Listeners clicking at random produce neither.
+- [x] **Diagnosed: 3 of the 4 controls reuse a caption that a real item in the
+  same sheet also carries.** A rater meeting one description twice over
+  different audio cannot tell which pairing is wrong. The captions also survive
+  reshuffling - one control reused a generic hip-hop description and scored
+  **4.70 against its genuine counterpart's 4.10**. The fourth, with a unique
+  caption, described *recording conditions* and scored 4.20, because low-fidelity
+  clips are common in MusicCaps and that description transfers freely.
+- [x] **This converges with the case studies**, where the captions the model
+  gets right are also the recording-condition ones. Two judges, one learned and
+  one human, limited by the same corpus property.
+- Krippendorff alpha 0.356 (ordinal), mean pairwise Spearman 0.350 over 45
+  pairs - above chance, well below the 0.667 usually treated as a floor.
+- Repair needs controls drawn from acoustically distant clips with captions
+  appearing exactly once: a redesign, not a reanalysis. Out of scope, and said
+  so in the report.
 
 ## Phase B6 - submission artifacts
 
@@ -669,8 +696,37 @@ B0.1 controls, because all three want the same GPU.
   input-granularity asymmetry.
 - [x] Reproducibility section: hardware, seeds, train-only provenance rules,
   threshold discipline, exact commands.
-- Report is **7.4 pages** of a 6-10 limit; `check_tex.py` clean apart from
-  macros pending on runs in flight.
+- Report is **9.7 pages + 0.5 appendix** of a 6-10 limit; `check_tex.py` clean,
+  `fill_report.py --check` reports zero pending macros.
+
+## Phase B8 - closing the report
+
+- [x] **Task 4 had no quantitative subsection in Results.** The retrieval
+  numbers existed in `results/` and were reported nowhere; three of the four
+  tasks had result tables and the fourth did not. Added
+  Section~`sec:retrieval` with 18 new macros: R@10 **0.0135 +- 0.0006** against
+  an analytic chance of 0.0040, a **3.4x lift**, median rank 686 of 2,503
+  where chance is 1,252, both directions agreeing.
+- [x] **Human Evaluation section written** from the real ratings, control
+  discrimination first as the protocol requires.
+- [x] **The page estimator was overcharging the body by a full page.**
+  `check_tex.py` split the file at `\appendix` and counted everything above it
+  as body prose - including the AUTOGEN macro block, which typesets nothing
+  where it sits, and `\BootWorstTagsTable`, a table that only ever renders
+  *inside* the appendix. Macros now expand at their use sites, as LaTeX does.
+  Two tests guard it; both fail against the previous version.
+- [x] **Consolidated a genuine duplication**: the four data-integrity defects
+  were each stated twice - once in Section 3 with effect sizes, again in "What
+  the Assertions Caught" - and three of them a third time in Limitations. The
+  facts and effect sizes stay in Section 3, which absorbed the synthesis
+  paragraph that was the only thing unique to the removed section. ~900 words
+  recovered with no factual loss.
+- [x] `make human-eval` and `make human-eval-sheet` targets added, so the
+  commands the Reproducibility appendix documents actually exist.
+- [x] Repaired a mangled `.gitignore` line where `data/human_eval/*.wav` and
+  `*.npz` had been concatenated with a comment fragment, leaving neither pattern
+  functional. No binaries had reached the index.
+- 215 fast tests pass, 1 skipped.
 
 
 ### Why Task 1 needs no graphs
