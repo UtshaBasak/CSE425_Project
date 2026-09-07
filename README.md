@@ -72,8 +72,10 @@ python report/check_tex.py --update   # structural checks + page-count estimate
 The prose contains **no literal numbers** -- only macros, all defined in a
 generated block. A result that does not exist yet renders as *pending* and the
 script names it, so a stale figure cannot survive a re-run and a missing one
-cannot hide. `report/final_report.md` is a superseded draft kept only because
-`report/build_report.py` renders it as a quick preview.
+cannot hide. The earlier markdown preview pipeline is retired and quarantined in
+`results/_synthetic_smoke/`: it had built a 24-page PDF from synthetic metrics
+that sat at the deliverable path for three revisions. `final_report.pdf` is now
+produced only by the operator's Overleaf compile -- see `report/README.md`.
 
 ## Installation
 
