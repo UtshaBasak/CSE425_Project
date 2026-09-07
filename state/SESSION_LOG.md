@@ -525,3 +525,37 @@ Format:
 [2026-09-08 01:55] REPORT Report at 9.94 pages + 0.5 appendix. Was 9.99 after the retrieval fix, which is not a margin;
                         recovered it by collapsing the B2-granularity caveat, which I had just duplicated into Results,
                         back to a pointer from Limitations. 119 macros, zero pending. 215 fast tests pass.
+
+[2026-09-08 03:00] D0    QUARANTINED THE SYNTHETIC PDF. report/final_report.pdf was Creator: Matplotlib v3.11.1, written
+                        2026-09-05, 24 pages against a 6-10 limit, built by build_report.py from metrics.json when its
+                        synthetic flag was true. It sat at the exact deliverable path for three revisions - worse than
+                        missing, because it looked satisfied. Moved with the markdown report and its generator to
+                        results/_synthetic_smoke/, renamed, and a test keeps them there.
+[2026-09-08 03:02] D0.2  THE FOUR C6 "produced no artifact" MARKERS WERE WRONG. Every artifact exists with real
+                        provenance - three t-SNE panels, F1-vs-epoch, five attention examples, S_graph, the bootstrap,
+                        20 real sample graphs, metrics.json itself. Stale bookkeeping, not missing work. D0.3: all
+                        three Task 4 seeds exist and are real; the "exit code 1" entry did not match disk.
+[2026-09-08 03:04] D1    TASK 4 WAS UNDERTRAINED, NOT DATA-LIMITED. Batch 512 over 2,095 pairs is 4 optimiser steps per
+                        epoch. Re-run at batch 128, architecture untouched: R@10 0.0135 -> 0.0175 +- 0.0016, lift
+                        3.4x -> 4.4x, median rank 686 -> 631, val peaking at epoch 35 of 75. Three seeds, 2.8 min each.
+                        Both numbers reported: the difference between "too little data" and "too little training" is
+                        exactly the claim that should be tested before it is made.
+[2026-09-08 03:06] D2    DEAM emotion resolved at rung 1 - every Task 3 run had already written valence/arousal metrics
+                        and no macro had ever read them. Valence MAE 0.714 / R2 0.311, arousal 0.753 / 0.478, n=275.
+                        Valence swings 0.247 +- 0.134 across seeds against arousal's 0.522 +- 0.060, so the spread is
+                        reported: a single valence number from this setup is not reproducible.
+[2026-09-08 03:08] D3    TWO DEFECTS IN THE HEADLINE TABLE. The T3 row read "Phase B" - a placeholder, so the 22-mark
+                        hard task had no row in the table comparing it to everything else. And B1/B4 were hardcoded
+                        from baselines_seed42_PRENORM.json, the run predating the normalisation fix, in a report whose
+                        reproducibility claim is that no literal figures appear in the prose. B4 printed 0.3239 against
+                        a real 0.3146, understating the B4 -> GNN delta that carries the structural claim. Now macros:
+                        delta 0.0591, about 2.1x the floor - separable, and modest, and we say both.
+[2026-09-08 03:13] D4    Figures composited from existing real runs, not regenerated. Also built the architecture
+                        diagram the report never had - every figure was a result, while the rubric asks for diagrams.
+[2026-09-08 03:25] D5    11.9 -> 9.96 pages by the pre-registered compression order. Bootstrap table, attention figure,
+                        diagnostics figure, confusion matrix, corpora table and the whole Qualitative Analysis section
+                        moved behind \appendix; prose trimmed from Related Work, Setup, Intro, Method and Data only.
+                        Results, Limitations, the floor, the protocol findings, human eval and reproducibility untouched.
+[2026-09-08 03:30] D6    FROZEN. 173 macros, zero pending, check_tex clean, 216 tests pass, fresh clone 212 pass /
+                        5 skip with no defects found. Submission ZIP 303 files / 10.2 MB.
+                        ONE OPEN ACTION: report/final_report.pdf must be compiled on Overleaf by the operator.
