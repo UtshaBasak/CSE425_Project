@@ -231,10 +231,36 @@ def build_macros() -> dict:
     macros["TOneMtatParams"] = integer(mtat.get("trainable_params"))
 
     # ---- Task 2, both domains ------------------------------------------ #
+    # The headline genre row is reported over all three seeds. It was seed 42
+    # alone while Reproducibility promised three, and the GNN's own spread
+    # (+-1.8 points of accuracy) turns out to cover most of the gap to B2 --
+    # so the single-seed version overstated a difference in both directions
+    # depending on which seed had landed in the table.
+    genre_runs = [load(f"task2_seed{seed}_fma_genre.json") or {}
+                  for seed in (42, 1337, 2024)]
+    genre_runs = [g for g in genre_runs if dig(g, "test", "genre_accuracy") is not None]
+
+    def _spread(field):
+        values = [dig(g, "test", field) for g in genre_runs]
+        values = [v for v in values if _scalar(v) is not None]
+        if not values:
+            return None, None
+        mu = sum(values) / len(values)
+        if len(values) < 2:
+            return mu, 0.0
+        return mu, (sum((v - mu) ** 2 for v in values) / (len(values) - 1)) ** 0.5
+
+    acc_mu, acc_sd = _spread("genre_accuracy")
+    f1_mu, f1_sd = _spread("genre_macro_f1")
+    macros["TTwoGenreSeeds"] = integer(len(genre_runs)) if genre_runs else PENDING
+    macros["TTwoGenreAccMean"] = (pct(acc_mu) + r"\%") if acc_mu is not None else PENDING
+    macros["TTwoGenreAccSd"] = pct(acc_sd) if acc_sd is not None else PENDING
+    macros["TTwoGenreFMean"] = num(f1_mu)
+    macros["TTwoGenreFSd"] = num(f1_sd)
+
+    # Parameter count and wall-clock are per-run, not averaged: they describe
+    # the model, and seed 42 is the representative run for both.
     genre = load("task2_seed42_fma_genre.json") or {}
-    macros["TTwoGenreAcc"] = pct(dig(genre, "test", "genre_accuracy")) + r"\%" \
-        if isinstance(dig(genre, "test", "genre_accuracy"), float) else PENDING
-    macros["TTwoGenreF"] = num(dig(genre, "test", "genre_macro_f1"))
     macros["TTwoGenreParams"] = integer(genre.get("trainable_params"))
     macros["TTwoGenreTime"] = seconds(genre.get("wall_clock_s"))
 

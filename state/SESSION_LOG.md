@@ -495,3 +495,20 @@ Format:
                         fragment, so neither pattern worked. Nothing had leaked into the index. Repaired.
 [2026-09-08 01:05] GATE  REPORT COMPLETE. Zero pending macros, check_tex clean, 9.7 pages + 0.5 appendix against 6-10.
                         215 fast tests pass, 1 skipped. Every deliverable section now carries real numbers.
+
+[2026-09-08 01:30] FIND  THE HEADLINE TASK 2 TABLE WAS WRONG IN THREE WAYS AT ONCE, and the bolding was the tell:
+                        it bolded T2 GNN as the winner while B2 mel CNN scored HIGHER on both metrics (46.3%/0.4435
+                        against 42.3%/0.4277). It also reported seed 42 alone while three GNN seeds exist, and the
+                        Reproducibility section claimed "42, 1337 and 2024 for every reported ablation row and headline
+                        result" - which was therefore false as written. And B0.3 had fixed in advance that if B2 won it
+                        becomes the headline and the GNN is not re-tuned; that commitment had never reached the prose.
+                        Fixed all three: the GNN row now carries the 3-seed mean 43.7% +- 1.8 / 0.4315 +- 0.0128, B2 is
+                        labelled single-seed, neither row is bolded, and the text says plainly that the CNN outscores
+                        the GNN. Reporting the spread also changes the reading - +-1.8 points covers most of the gap, so
+                        no ordering is claimed either way, and B2 needs ~10x the parameters and ~10x the wall-clock.
+[2026-09-08 01:35] DONE  Five PROGRESS.md items were still open against work that had landed days earlier (B0.3, B0.4,
+                        B1.1, B2.1, the MusicCaps case studies). Verified each against its artifacts, then closed them
+                        with outcomes rather than ticks. Zero open checkboxes remain.
+[2026-09-08 01:36] NOTE  results/metrics.json still holds the pre-fix MTAT case studies. Nothing in the LaTeX pipeline
+                        reads it - fill_report takes case studies from results/case_studies.json, which is the corrected
+                        MusicCaps run - so it is inert, but it is stale and would mislead anyone who opened it.
