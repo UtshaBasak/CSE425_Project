@@ -1,0 +1,61 @@
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+03:06:57 | INFO    | gbmc.train | task 4 | seed 1337 | device cuda | amp True | synthetic False
+03:06:57 | INFO    | gbmc.train | tag vocabulary: 50 tags from tag_vocab.json (tags.vocab_source=mtat)
+03:06:57 | INFO    | gbmc.splits | text_source=caption_masked applied to 35984 rows
+03:06:57 | INFO    | gbmc.splits | leakage check passed: 35984 rows, 35984 tracks, 8730 artists across ['test', 'train', 'val']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/100 [00:00<?, ?it/s]Loading weights: 100%|##########| 100/100 [00:00<00:00, 3779.09it/s]
+[transformers] [1mDistilBertModel LOAD REPORT[0m from: distilbert-base-uncased
+Key                     | Status     |  | 
+------------------------+------------+--+-
+vocab_layer_norm.weight | UNEXPECTED |  | 
+vocab_transform.bias    | UNEXPECTED |  | 
+vocab_layer_norm.bias   | UNEXPECTED |  | 
+vocab_transform.weight  | UNEXPECTED |  | 
+vocab_projector.bias    | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+03:07:02 | INFO    | gbmc.bert | BERT freeze_mode=top_n -> 28351488 trainable encoder params (of 6 layers)
+03:08:41 | INFO    | gbmc.contrastive | precomputed 35984 text embeddings; BERT frozen for Task 4
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch_geometric\utils\_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+03:09:57 | INFO    | gbmc.train | task 4 epoch 1/800 | loss 5.0199 | val mean_R@10=0.0474 | 75.4s
+03:09:57 | INFO    | gbmc | VRAM[task4_epoch1] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:01 | INFO    | gbmc.train | task 4 epoch 2/800 | loss 4.9847 | val mean_R@10=0.0539 | 1.2s
+03:10:01 | INFO    | gbmc | VRAM[task4_epoch2] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:13 | INFO    | gbmc.train | task 4 epoch 3/800 | loss 4.9316 | val mean_R@10=0.0474 | 0.8s
+03:10:13 | INFO    | gbmc | VRAM[task4_epoch3] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:15 | INFO    | gbmc.bert | BERT freeze_mode=top_n -> 28351488 trainable encoder params (of 6 layers)
+03:10:15 | INFO    | gbmc.train | epoch 4: unfroze top 4 BERT layers and rebuilt the optimiser
+03:10:16 | INFO    | gbmc.train | task 4 epoch 4/800 | loss 4.9188 | val mean_R@10=0.0517 | 0.9s
+03:10:16 | INFO    | gbmc | VRAM[task4_epoch4] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:18 | INFO    | gbmc.train | task 4 epoch 5/800 | loss 4.9017 | val mean_R@10=0.0603 | 1.2s
+03:10:18 | INFO    | gbmc | VRAM[task4_epoch5] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:22 | INFO    | gbmc.train | task 4 epoch 6/800 | loss 4.8873 | val mean_R@10=0.0625 | 1.2s
+03:10:22 | INFO    | gbmc | VRAM[task4_epoch6] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:31 | INFO    | gbmc.train | task 4 epoch 7/800 | loss 4.8444 | val mean_R@10=0.0754 | 0.9s
+03:10:31 | INFO    | gbmc | VRAM[task4_epoch7] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:37 | INFO    | gbmc.train | task 4 epoch 8/800 | loss 4.8194 | val mean_R@10=0.0797 | 1.1s
+03:10:37 | INFO    | gbmc | VRAM[task4_epoch8] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:44 | INFO    | gbmc.train | task 4 epoch 9/800 | loss 4.7861 | val mean_R@10=0.0970 | 1.3s
+03:10:44 | INFO    | gbmc | VRAM[task4_epoch9] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB
+03:10:48 | INFO    | gbmc.train | task 4 epoch 10/800 | loss 4.7295 | val mean_R@10=0.0884 | 1.2s
+03:10:48 | INFO    | gbmc | VRAM[task4_epoch10] allocated=279.4 MB peak=291.3 MB reserved=1290.0 MB

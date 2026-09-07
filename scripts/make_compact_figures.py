@@ -146,9 +146,72 @@ def case_study_figure(case_dir: Path, out_path: Path):
     return {"path": str(out_path), "n_panels": len(panels)}
 
 
+def _stack(paths, out_path, layout, figsize, titles=None, title_size=8):
+    """Composite existing PNGs into one figure.
+
+    D4 wants t-SNE, F1 curves, attention examples and S_graph in the report.
+    They were all rendered from real runs during Phase C; what the page budget
+    cannot take is nine more single-panel floats. Recombining beats
+    regenerating: the pixels are already correct and re-running the t-SNE would
+    move the embedding for no gain.
+    """
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.image as mpimg
+    import matplotlib.pyplot as plt
+
+    paths = [Path(p) for p in paths]
+    missing = [p for p in paths if not p.exists()]
+    if missing:
+        LOGGER.warning("missing panels, skipping %s: %s", out_path.name,
+                       ", ".join(p.name for p in missing))
+        return None
+
+    rows, cols = layout
+    fig, axes = plt.subplots(rows, cols, figsize=figsize, squeeze=False)
+    flat = [ax for row in axes for ax in row]
+    for ax in flat:
+        ax.set_axis_off()
+    for i, (ax, path) in enumerate(zip(flat, paths)):
+        ax.imshow(mpimg.imread(path))
+        if titles and i < len(titles):
+            ax.set_title(titles[i], fontsize=title_size)
+    fig.tight_layout(pad=0.4)
+    ensure_dir(out_path.parent)
+    fig.savefig(out_path, dpi=180, bbox_inches="tight")
+    plt.close(fig)
+    LOGGER.info("wrote %s (%d panels)", out_path, len(paths))
+    return {"path": str(out_path), "n_panels": len(paths)}
+
+
+def tsne_figure(plots: Path):
+    """Three t-SNE panels side by side, identical perplexity."""
+    return _stack(
+        [plots / "tsne_genre.png", plots / "tsne_mood.png",
+         plots / "tsne_mood_mtat.png"],
+        plots / "tsne_panels.png", layout=(1, 3), figsize=(7.2, 2.5),
+        titles=["(a) FMA genre", "(b) DEAM quadrants", "(c) MTAT mood tags"])
+
+
+def attention_figure(plots: Path):
+    """The five Task 1 attention examples, stacked."""
+    return _stack(
+        [plots / f"bert_attention_0{i}.png" for i in range(5)],
+        plots / "attention_examples.png", layout=(5, 1), figsize=(6.4, 8.0))
+
+
+def diagnostics_figure(plots: Path):
+    """F1-vs-epoch beside the S_graph structural control."""
+    return _stack(
+        [plots / "f1_vs_epoch.png", plots / "graph_coherence.png"],
+        plots / "diagnostics.png", layout=(1, 2), figsize=(7.2, 2.7),
+        titles=["(a) macro/micro-F1 vs epoch", "(b) $S_{graph}$ real vs rewired"])
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--what", default="retrieval,cases")
+    parser.add_argument("--what",
+                        default="retrieval,cases,tsne,attention,diagnostics")
     args = parser.parse_args(argv)
 
     root = project_root()
@@ -166,6 +229,13 @@ def main(argv=None) -> int:
 
     if "cases" in wanted:
         produced["cases"] = case_study_figure(plots, plots / "case_studies.png")
+
+    if "tsne" in wanted:
+        produced["tsne"] = tsne_figure(plots)
+    if "attention" in wanted:
+        produced["attention"] = attention_figure(plots)
+    if "diagnostics" in wanted:
+        produced["diagnostics"] = diagnostics_figure(plots)
 
     if not any(produced.values()):
         LOGGER.warning("nothing produced; the inputs do not exist yet")

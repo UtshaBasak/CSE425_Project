@@ -397,6 +397,32 @@ def build_macros() -> dict:
                     "RetrievalNShown", "RetrievalNPool"):
             macros[key] = PENDING
 
+    # ---- D4 figure captions ------------------------------------------- #
+    # The panels each print their own probe numbers, but the caption has to
+    # state them too: a reader should not have to squint at a subplot title to
+    # learn that the silhouette is negative.
+    metrics = load("metrics.json") or {}
+    for key, prefix in (("tsne_genre", "TsneGenre"), ("tsne_mood", "TsneMood"),
+                        ("tsne_mood_mtat", "TsneMtat")):
+        panel = metrics.get(key) or {}
+        macros[prefix + "Knn"] = num(panel.get("knn_probe"), 3)
+        macros[prefix + "Sil"] = num(panel.get("silhouette"), 3)
+        macros[prefix + "N"] = integer(panel.get("n_points"))
+    macros["TsnePerplexity"] = integer((metrics.get("tsne_genre") or {}).get("perplexity"))
+    macros["TsneMtatExcluded"] = integer(
+        (metrics.get("tsne_mood_mtat") or {}).get("n_unlabelled_excluded"))
+
+    coherence = metrics.get("graph_coherence") or {}
+    macros["SGraphReal"] = num(coherence.get("S_graph_real"), 4)
+    macros["SGraphRewired"] = num(coherence.get("S_graph_rewired"), 4)
+    macros["SGraphTau"] = num(coherence.get("tau"), 2)
+    macros["SGraphEdgeCos"] = num(coherence.get("mean_edge_cosine"), 3)
+
+    attention = metrics.get("bert_attention_examples") or []
+    macros["AttnN"] = integer(len(attention))
+    macros["AttnDistinct"] = integer(
+        len({str(a.get("text", "")).strip().lower() for a in attention}))
+
     cases = load("case_studies.json") or {}
     macros["CaseStudyNote"] = (cases.get("caption_note") or PENDING)
 
@@ -507,6 +533,99 @@ def build_macros() -> dict:
                     "BootLeadFixed", "BootThrStdMean", "BootThrStdMax",
                     "BootValRows", "BootWorstTags", "BootWorstTagsTable"):
             macros[key] = PENDING
+
+    # ----------------------------------------------------------------- #
+    # D2 -- DEAM valence/arousal. An explicit PDF deliverable that every Task 3
+    # run had already written and no macro had ever read. The headline is the
+    # full-budget run; the seed spread comes from the three fixed-budget
+    # ablation runs of the same mode, because valence turns out to be far less
+    # stable across seeds than arousal and a single seed would hide that.
+    # ----------------------------------------------------------------- #
+    emo = load("task3_seed42_mtat_cross_attention_headline.json") or {}
+    etest = emo.get("test", {}) if isinstance(emo.get("test"), dict) else {}
+    if etest.get("valence_mae") is not None:
+        macros["EmoValMAE"] = num(etest.get("valence_mae"), 3)
+        macros["EmoValRMSE"] = num(etest.get("valence_rmse"), 3)
+        macros["EmoValRTwo"] = num(etest.get("valence_r2"), 3)
+        macros["EmoAroMAE"] = num(etest.get("arousal_mae"), 3)
+        macros["EmoAroRMSE"] = num(etest.get("arousal_rmse"), 3)
+        macros["EmoAroRTwo"] = num(etest.get("arousal_r2"), 3)
+        macros["EmoN"] = integer(etest.get("valence_n"))
+        macros["EmoScale"] = ("1--9 (predictions inverted from standardised)"
+                              if etest.get("emotion_target_scale") == "standardised"
+                              else "raw 1--9")
+
+        def _emo_spread(field):
+            values = []
+            for seed in (42, 1337, 2024):
+                run = load(f"task3_seed{seed}_mtat_cross_attention.json") or {}
+                value = _scalar(dig(run, "test", field))
+                if value is not None:
+                    values.append(value)
+            if not values:
+                return None, None
+            mu = sum(values) / len(values)
+            if len(values) < 2:
+                return mu, 0.0
+            return mu, (sum((v - mu) ** 2 for v in values) / (len(values) - 1)) ** 0.5
+
+        v_mu, v_sd = _emo_spread("valence_r2")
+        a_mu, a_sd = _emo_spread("arousal_r2")
+        macros["EmoValRTwoMean"] = num(v_mu, 3)
+        macros["EmoValRTwoSd"] = num(v_sd, 3)
+        macros["EmoAroRTwoMean"] = num(a_mu, 3)
+        macros["EmoAroRTwoSd"] = num(a_sd, 3)
+    else:
+        for key in ("EmoValMAE", "EmoValRMSE", "EmoValRTwo", "EmoAroMAE",
+                    "EmoAroRMSE", "EmoAroRTwo", "EmoN", "EmoScale",
+                    "EmoValRTwoMean", "EmoValRTwoSd", "EmoAroRTwoMean",
+                    "EmoAroRTwoSd"):
+            macros[key] = PENDING
+
+    # ----------------------------------------------------------------- #
+    # D3 -- Task 3 full-budget headline, and the baselines as macros.
+    # The main table carried "Phase B" where the T3 row belongs, and its B1/B4
+    # numbers were literals copied from the pre-normalisation baseline run.
+    # ----------------------------------------------------------------- #
+    macros["TThreeHeadF"] = num(etest.get("macro_f1"))
+    macros["TThreeHeadFixed"] = num(etest.get("macro_f1_fixed_half"))
+    macros["TThreeHeadMicro"] = num(etest.get("micro_f1"))
+    macros["TThreeHeadPR"] = num(etest.get("mean_auc_pr"))
+    macros["TThreeHeadParams"] = integer(emo.get("trainable_params"))
+    macros["TThreeHeadEpochs"] = integer(emo.get("epochs_run"))
+    macros["TThreeHeadTime"] = seconds(emo.get("wall_clock_s"))
+    red = load("task3_seed42_mtat_cross_attention.json") or {}
+    macros["TThreeAblEpochs"] = integer(red.get("epochs_run"))
+    macros["TThreeAblTime"] = seconds(red.get("wall_clock_s"))
+
+    b1r = find_baseline(baselines, "B1_random")
+    b1m = find_baseline(baselines, "B1_majority")
+    b4 = find_baseline(baselines, "B4_pca_mlp")
+    macros["BOneRandF"] = num(b1r.get("macro_f1"))
+    macros["BOneRandMicro"] = num(b1r.get("micro_f1"))
+    macros["BOneRandPR"] = num(b1r.get("mean_auc_pr"))
+    macros["BOneMajF"] = num(b1m.get("macro_f1"))
+    macros["BOneMajMicro"] = num(b1m.get("micro_f1"))
+    macros["BOneMajPR"] = num(b1m.get("mean_auc_pr"))
+    macros["BFourF"] = num(b4.get("macro_f1"))
+    macros["BFourMicro"] = num(b4.get("micro_f1"))
+    macros["BFourPR"] = num(b4.get("mean_auc_pr"))
+
+    gnn_f = _scalar(dig(tags, "test", "macro_f1"))
+    b4_f = _scalar(b4.get("macro_f1"))
+    if gnn_f is not None and b4_f is not None:
+        delta = gnn_f - b4_f
+        macros["BFourDelta"] = num(delta)
+        floor = _scalar((boot_spread := load("threshold_bootstrap.json") or {}).get("spread_limit"))
+        lead = None
+        for entry in (boot_spread.get("runs") or []):
+            if entry.get("run") == "task2_seed42_mtat_tags":
+                lead = _scalar(entry.get("test_macro_f1_spread"))
+        ref = lead or floor
+        macros["BFourDeltaFloors"] = num(delta / ref, 1) if ref else PENDING
+    else:
+        macros["BFourDelta"] = PENDING
+        macros["BFourDeltaFloors"] = PENDING
 
     # ----------------------------------------------------------------- #
     # Task 4, contrastive graph--caption retrieval. Averaged over the three
