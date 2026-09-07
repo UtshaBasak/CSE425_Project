@@ -356,27 +356,45 @@ def build_macros() -> dict:
 
     # ---- qualitative figures -------------------------------------------- #
     examples = load("retrieval_examples/retrieval_examples.json") or {}
-    rows = examples.get("examples", [])
+    pool = examples.get("examples", [])
+    # The figure plots the curated extremes only -- scripts/make_compact_figures
+    # applies exactly this rule. The pool also carries random draws added for
+    # the listening study, and summarising those in the caption would describe
+    # rows that are not in the picture.
+    rows = [r for r in pool if r.get("selection") in (None, "best", "worst")] or pool
     if rows:
         ranks = sorted(int(r.get("true_rank") or 0) for r in rows if r.get("true_rank"))
         failures = [r for r in ranks if r > 10]
         gallery = int(examples.get("gallery_size", 0) or 0)
         macros["MCTestHalf"] = integer(round(gallery / 2)) if gallery else PENDING
+        macros["RetrievalNShown"] = integer(len(rows))
+        macros["RetrievalNPool"] = integer(len(pool))
+        pool_ranks = sorted(int(r.get("true_rank") or 0)
+                            for r in pool if r.get("true_rank"))
         macros["RetrievalFigNote"] = (
-            f"Median rank {int(np.median(ranks))} over {len(rows)} queries."
-            if ranks else PENDING)
-        macros["RetrievalFailureNote"] = (
-            f"{len(failures)} of the {len(rows)} queries place the true clip "
-            f"outside the top ten, the worst at rank {max(ranks)}. "
-            "Both are captions dominated by production and ambience terms rather "
-            "than by instrumentation or rhythm -- properties that segment-level "
-            "chroma, MFCC and contrast statistics do not represent, because the "
-            "node features summarise what is played rather than how the "
-            "recording was made."
-            if failures else
-            "Every query placed the true clip in the top ten.")
+            f"Median rank {int(np.median(ranks))} among the {len(rows)} shown, "
+            f"but these are the curated extremes: over the full "
+            f"{len(pool)}-query export the median is "
+            f"{int(np.median(pool_ranks))}. Read the panel for the failure "
+            "modes, not for a performance estimate."
+            if ranks and pool_ranks else PENDING)
+        if failures:
+            subject = ("Both" if len(failures) == 2 else
+                       "The worst two" if len(failures) > 2 else "It")
+            macros["RetrievalFailureNote"] = (
+                f"{len(failures)} of the {len(rows)} shown place the true clip "
+                f"outside the top ten, the worst at rank {max(ranks)}. "
+                f"{subject} are captions dominated by production and ambience "
+                "terms rather than by instrumentation or rhythm -- properties "
+                "that segment-level chroma, MFCC and contrast statistics do not "
+                "represent, because the node features summarise what is played "
+                "rather than how the recording was made.")
+        else:
+            macros["RetrievalFailureNote"] = (
+                "Every query shown placed the true clip in the top ten.")
     else:
-        for key in ("MCTestHalf", "RetrievalFigNote", "RetrievalFailureNote"):
+        for key in ("MCTestHalf", "RetrievalFigNote", "RetrievalFailureNote",
+                    "RetrievalNShown", "RetrievalNPool"):
             macros[key] = PENDING
 
     cases = load("case_studies.json") or {}
