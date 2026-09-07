@@ -1,0 +1,37 @@
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+02:56:48 | INFO    | gbmc.train | task 4 | seed 42 | device cuda | amp True | synthetic False
+02:56:48 | INFO    | gbmc.train | tag vocabulary: 50 tags from tag_vocab.json (tags.vocab_source=mtat)
+02:56:48 | INFO    | gbmc.splits | text_source=caption_masked applied to 35984 rows
+02:56:48 | INFO    | gbmc.splits | leakage check passed: 35984 rows, 35984 tracks, 8730 artists across ['test', 'train', 'val']
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Loading weights:   0%|          | 0/100 [00:00<?, ?it/s]Loading weights: 100%|##########| 100/100 [00:00<00:00, 2691.35it/s]
+[transformers] [1mDistilBertModel LOAD REPORT[0m from: distilbert-base-uncased
+Key                     | Status     |  | 
+------------------------+------------+--+-
+vocab_projector.bias    | UNEXPECTED |  | 
+vocab_layer_norm.weight | UNEXPECTED |  | 
+vocab_transform.weight  | UNEXPECTED |  | 
+vocab_transform.bias    | UNEXPECTED |  | 
+vocab_layer_norm.bias   | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+02:56:53 | INFO    | gbmc.bert | BERT freeze_mode=top_n -> 28351488 trainable encoder params (of 6 layers)
+02:58:36 | INFO    | gbmc.contrastive | precomputed 35984 text embeddings; BERT frozen for Task 4
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch_geometric\utils\_scatter.py:91: UserWarning: The usage of `scatter(reduce='max')` can be accelerated via the 'torch-scatter' package, but it was not found
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
+B:\CSE425_Project\gnn-bert-music-context\.venv\Lib\site-packages\torch\jit\_script.py:1491: FutureWarning: `torch.jit.script` is deprecated. Please switch to `torch.compile` or `torch.export`.
+  warnings.warn(
