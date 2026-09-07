@@ -2420,3 +2420,24 @@ def test_control_caption_reuse_is_detected():
     assert found["n_controls_reusing_a_caption"] == 1
     assert found["control_caption_reuse"][0]["control_id"] == "ctrl_0"
     assert found["control_caption_reuse"][0]["shares_caption_with"] == ["item_0"]
+
+
+# --------------------------------------------------------------------------- #
+# D0.1 -- the synthetic report pipeline stays quarantined
+# --------------------------------------------------------------------------- #
+def test_synthetic_report_pipeline_stays_quarantined():
+    """A 24-page Matplotlib PDF built from synthetic metrics sat at the exact
+    path the assignment requires, looking like a satisfied deliverable. The
+    markdown preview pipeline that produced it is retired; only the operator's
+    Overleaf export may write report/final_report.pdf."""
+    report = project_root() / "report"
+    for gone in ("final_report.md", "build_report.py"):
+        assert not (report / gone).exists(), (
+            f"report/{gone} is back. It is retired: the .tex is the only report "
+            "source, and a second generator is how the stale synthetic PDF "
+            "survived three revisions at the deliverable path."
+        )
+    quarantine = project_root() / "results" / "_synthetic_smoke"
+    assert (quarantine / "final_report_SYNTHETIC.pdf").exists(), (
+        "the quarantined synthetic PDF is missing; it is kept as evidence"
+    )

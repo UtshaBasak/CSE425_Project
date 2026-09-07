@@ -469,16 +469,16 @@ C4 is not in this queue: the seven-mode ablation runs on Kaggle so it does not s
 | C5 Task 3 MusicCaps gnn_only | C5 | [x] | 2.2 min |
 | C5 Task 3 MusicCaps cross_attention | C5 | [x] | 19.7 min |
 | C6 zero-shot vs supervised | C6 | [x] | 0.3 min |
-| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [!] | produced no artifact |
-| C6 threshold bootstrap | C6 | [!] | produced no artifact |
-| C6 compact figures | C6 | [!] | produced no artifact |
-| C6 genre confusion figure | C6 | [!] | produced no artifact |
+| C6 full evaluation (t-SNE, S_graph, case studies) | C6 | [x] | D0.2: artifacts exist on disk, real provenance; marker was stale |
+| C6 threshold bootstrap | C6 | [x] | D0.2: results/threshold_bootstrap.json exists, real |
+| C6 compact figures | C6 | [x] | D0.2: retrieval_examples.png + case_studies.png exist, real |
+| C6 genre confusion figure | C6 | [x] | D0.2: plots/genre_confusion.png exists, real |
 | C7 Task 2 genre seed 1337 | C7 | [x] | 1.0 min |
 | C7 Task 2 genre seed 2024 | C7 | [x] | 1.1 min |
 | C7 Task 2 tags seed 1337 | C7 | [x] | 3.7 min |
 | C7 Task 2 tags seed 2024 | C7 | [x] | 4.9 min |
 | C7 Task 4 seed 1337 | C7 | [x] | 3.8 min |
-| C7 Task 4 seed 2024 | C7 | [!] | exit code 1 |
+| C7 Task 4 seed 2024 | C7 | [x] | D0.3: artifact exists, real, 49 epochs; the exit code did not match disk |
 | report fill + structural check | C7 | [x] | 0.0 min |
 
 <!-- QUEUE:END -->
@@ -746,3 +746,63 @@ B0.1 controls, because all three want the same GPU.
 Task 1 is text-only, so the payload is 3.4 MB rather than the ~1.4 GB a
 graph-carrying archive would be. Phase B will need the graph payload
 (`make kaggle-payload`) for Tasks 3 and 4.
+
+## Phase D0 - safety triage (submission day)
+
+### D0.1 Synthetic report pipeline quarantined
+
+`report/final_report.pdf` sat at the exact path the assignment requires and was
+**not a build of the `.tex` at all**: its metadata reads `Creator: Matplotlib
+v3.11.1`, it was written 2026-09-05, and it runs to **24 pages** against a 6-10
+limit. `report/build_report.py` stamps its appendix
+`('synthetic' if metrics.get('synthetic') else 'real')`, and at that build the
+flag was true. Three revisions stale and synthetic-sourced, at the deliverable
+path - worse than missing, because it looked satisfied.
+
+Moved to `results/_synthetic_smoke/`, renamed so they cannot be mistaken again:
+`final_report_SYNTHETIC.pdf`, `final_report_SYNTHETIC.md`,
+`build_report_RETIRED.py`. The markdown preview pipeline is retired: the `.tex`
+superseded it, and keeping a second report generator alive is how the stale PDF
+survived. A test asserts neither file returns to its old path.
+
+`results/metrics.json` is **real** (`synthetic: False`, cuda, 22 real runs), so
+only the PDF was contaminated.
+
+### D0.2 Artifact inventory - resolved against disk, not notes
+
+The four C6 `[!] produced no artifact` entries are **wrong**. Every artifact
+exists and every one carries real provenance:
+
+| Artifact | Exists? | Real or synthetic? | Needed for |
+|---|---|---|---|
+| `plots/genre_confusion.png` | yes | real | report fig 1 |
+| `plots/retrieval_examples.png` | yes | real | report fig 2 |
+| `plots/case_studies.png` | yes | real (MusicCaps) | report fig 3 |
+| `plots/tsne_genre.png` | yes | real | D4 - assignment |
+| `plots/tsne_mood.png` (DEAM quadrants) | yes | real | D4 - assignment |
+| `plots/tsne_mood_mtat.png` | yes | real | D4 - assignment |
+| `plots/f1_vs_epoch.png` | yes | real | D4 - assignment |
+| `plots/bert_attention_0{0..4}.png` | yes (5) | real | D4 - assignment |
+| `plots/graph_coherence.png` (S_graph) | yes | real | D4 - assignment |
+| `plots/per_tag_prf.png` | yes | real | appendix |
+| `results/metrics.json` | yes | `synthetic: False`, cuda | consolidated results |
+| `results/threshold_bootstrap.json` | yes | real | floor + appendix |
+| `data/processed/sample_graphs/*.pt` | yes (20) | real, 0 synthetic names | deliverable 2 |
+
+**The C6 markers were stale bookkeeping, not missing work.** Corrected below.
+This also shrinks D4 from "generate four figures" to "wire existing real
+figures into the `.tex`", which is where the page budget, not the GPU, is the
+binding constraint.
+
+### D0.3 C7 Task 4 seed 2024 - the log was wrong, `FourSeeds = 3` is right
+
+All three seeds exist with `provenance: real`, `synthetic: False`, device cuda,
+gallery 2,503: seed 42 (57 epochs), 1337 (44), 2024 (49). The `exit code 1`
+entry does not match the artifact on disk. **n = 3 is honest and stands.**
+
+### D2 resolved at rung 1 - no re-run needed
+
+DEAM emotion metrics were already written by every Task 3 run; this was a
+`fill_report.py` gap, not a missing experiment. `emotion_metrics()` inverts the
+standardised predictions before scoring, so MAE/RMSE are on the **original 1-9
+scale** and R2 is affine-invariant.
