@@ -397,6 +397,40 @@ def build_macros() -> dict:
                     "RetrievalNShown", "RetrievalNPool"):
             macros[key] = PENDING
 
+    # ---- the Task 3 evaluation-filter defect --------------------------- #
+    # Every corrected run keeps its pre-fix numbers under `test_uncorrected`,
+    # so the size of the correction is itself measurable rather than asserted.
+    deltas, before, after = [], None, None
+    for seed in (42, 1337, 2024):
+        for mode in ("gnn_only", "early_concat", "late_concat", "gated",
+                     "bidirectional", "cross_attention", "bert_only"):
+            run = load(f"task3_seed{seed}_mtat_{mode}.json") or {}
+            old = (run.get("test_uncorrected") or {}).get("macro_f1")
+            new_v = dig(run, "test", "macro_f1")
+            if _scalar(old) is not None and _scalar(new_v) is not None:
+                deltas.append(new_v - old)
+                before = before or (run.get("test") or {}).get("n_test_rows_before_fix")
+                after = after or (run.get("test") or {}).get("n_test_rows")
+    if deltas:
+        macros["CorrDelta"] = num(sum(deltas) / len(deltas), 4)
+        macros["CorrDeltaMax"] = num(max(deltas), 4)
+        macros["CorrRowsBefore"] = integer(before)
+        macros["CorrRowsAfter"] = integer(after)
+        macros["CorrNRuns"] = integer(len(deltas))
+    else:
+        for key in ("CorrDelta", "CorrDeltaMax", "CorrRowsBefore",
+                    "CorrRowsAfter", "CorrNRuns"):
+            macros[key] = PENDING
+
+    # cross_attention is now the one fusion mode outside the floor
+    ca = []
+    for seed in (42, 1337, 2024):
+        v = dig(load(f"task3_seed{seed}_mtat_cross_attention.json") or {},
+                "test", "macro_f1")
+        if _scalar(v) is not None:
+            ca.append(v)
+    macros["AblationCrossAttn"] = num(sum(ca) / len(ca)) if ca else PENDING
+
     # ---- zero-shot tag prediction (Task 4 deliverable) ----------------- #
     zs = load("zero_shot_seed42.json") or {}
     if zs.get("ensemble"):

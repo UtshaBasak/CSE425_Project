@@ -38,7 +38,7 @@ KNOWN = {
     # TeX primitives and graphicx commands. A checker that cries wolf on valid
     # LaTeX is a checker people stop reading, and the resizebox/ifdim idiom
     # for shrinking an over-wide table is entirely standard.
-    "resizebox", "ifdim", "else", "fi", "and", "appendices", "width", "height", "depth", "relax",
+    "resizebox", "ifdim", "else", "fi", "and", "appendices", "href", "url", "width", "height", "depth", "relax",
     "hspace", "vspace", "noindent", "footnote", "appendix",
     "begin", "end", "documentclass", "usepackage", "newcommand", "def", "title",
     "author", "maketitle", "section", "subsection", "subsubsection", "paragraph",

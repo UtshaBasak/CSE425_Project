@@ -349,9 +349,9 @@
     }
   ],
   "test": {
-    "macro_f1": 0.307321963604577,
-    "micro_f1": 0.24205105239587998,
-    "mean_auc_pr": 0.3348923061559889,
+    "macro_f1": 0.30945199041473,
+    "micro_f1": 0.3656064313177211,
+    "mean_auc_pr": 0.34838946625038253,
     "n_rows": 7079,
     "valence_mae": 0.8700268598036333,
     "valence_rmse": 1.0565267414341746,
@@ -362,8 +362,15 @@
     "arousal_r2": 0.17261356335348244,
     "arousal_n": 275,
     "emotion_target_scale": "standardised",
-    "macro_f1_fixed_half": 0.22865822715473047,
-    "micro_f1_fixed_half": 0.3307201458523245
+    "macro_f1_fixed_half": 0.23454865992482318,
+    "micro_f1_fixed_half": 0.3307201458523245,
+    "n_test_rows": 2503,
+    "n_test_rows_before_fix": 7079,
+    "evaluated_corpora": [
+      "deam",
+      "musiccaps"
+    ],
+    "selection_signal_contaminated": true
   },
   "vram": {
     "tag": "task3_epoch8",
@@ -394,5 +401,27 @@
       "max": 8.1
     }
   },
-  "run_tag": "musiccaps_bert_only"
+  "run_tag": "musiccaps_bert_only",
+  "test_uncorrected": {
+    "macro_f1": 0.307321963604577,
+    "micro_f1": 0.24205105239587998,
+    "mean_auc_pr": 0.3348923061559889,
+    "n_rows": 7079,
+    "valence_mae": 0.8700268598036333,
+    "valence_rmse": 1.0565267414341746,
+    "valence_r2": 0.01890194534367806,
+    "valence_n": 275,
+    "arousal_mae": 0.9620737452940508,
+    "arousal_rmse": 1.1783691928671052,
+    "arousal_r2": 0.17261356335348244,
+    "arousal_n": 275,
+    "emotion_target_scale": "standardised",
+    "macro_f1_fixed_half": 0.22865822715473047,
+    "micro_f1_fixed_half": 0.3307201458523245
+  },
+  "evaluation_corrected": {
+    "reason": "val/test loaders were not filtered by corpus; MusicCaps rows scored against the MTAT vocabulary (and vice versa) as confident negatives",
+    "recomputed_from": "results/scores/task3_seed42_musiccaps_bert_only_scores.npz",
+    "thresholds_retuned_on": "filtered validation split"
+  }
 }

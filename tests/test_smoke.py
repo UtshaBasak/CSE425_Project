@@ -2441,3 +2441,30 @@ def test_synthetic_report_pipeline_stays_quarantined():
     assert (quarantine / "final_report_SYNTHETIC.pdf").exists(), (
         "the quarantined synthetic PDF is missing; it is kept as evidence"
     )
+
+
+# --------------------------------------------------------------------------- #
+# Task 3 evaluated the wrong corpora: train filtered, val/test did not
+# --------------------------------------------------------------------------- #
+def test_task3_evaluation_is_filtered_to_the_training_corpora():
+    """An MTAT run was scored over 7,079 test rows instead of 3,775.
+
+    datasets.py gives the -1 sentinel to any corpus outside {mtat, musiccaps},
+    so FMA and DEAM rows were masked out harmlessly. MusicCaps is *inside* that
+    set, so its rows arrived as confident zeros against the MTAT vocabulary and
+    counted as true negatives on all 50 tags -- worth about 0.07 macro-F1 on
+    every Task 3 result. The guard is textual because constructing a real
+    bundle needs the corpora on disk.
+    """
+    source = (project_root() / "src" / "train.py").read_text(encoding="utf-8")
+    start = source.index("def run_task3")
+    body = source[start:source.index("\ndef ", start + 10)]
+
+    for split in ("val", "test"):
+        assert f'bundle.dataset("{split}", eval_corpora)' in body, (
+            f'run_task3 builds its {split} loader without a corpus filter. '
+            "Training filters with corpora_for(); evaluation must use the same "
+            "corpora or MusicCaps rows are scored against the MTAT vocabulary."
+        )
+    assert 'bundle.dataset("val")' not in body, "unfiltered val loader is back"
+    assert 'bundle.dataset("test")' not in body, "unfiltered test loader is back"

@@ -671,12 +671,21 @@ def run_task3(cfg, args, bundle: DataBundle, device) -> dict:
     ratio = tuple(cfg.get("multitask", {}).get("batch_ratio", (4, 1)))
     LOGGER.info("task 3 alternating %d tag : %d emotion batches (DEAM is ~1:14 "
                 "the size of MTAT)", ratio[0], ratio[1])
+    # Evaluation must see the same corpora training did. Leaving this unfiltered
+    # scored an MTAT run over 7,079 test rows instead of 3,775: MusicCaps is in
+    # the {mtat, musiccaps} set that datasets.py gives real label vectors, so its
+    # rows arrived as confident zeros against the MTAT vocabulary and counted as
+    # true negatives on every tag. That is the exact failure corpora_for's own
+    # docstring warns about, and it cost ~0.07 macro-F1 on every Task 3 row.
+    eval_corpora = tuple(dict.fromkeys(
+        tuple(corpora_for(cfg, "tag")) + tuple(corpora_for(cfg, "emotion"))))
+    LOGGER.info("task 3 evaluating on %s", ", ".join(eval_corpora))
     loaders = {
         "train": _AlternatingTrainLoader(tag_loader, emo_loader, ratio=ratio),
-        "val": make_loader(bundle.dataset("val"), cfg, shuffle=False, seed=args.seed,
-                           num_workers=args.num_workers),
-        "test": make_loader(bundle.dataset("test"), cfg, shuffle=False, seed=args.seed,
-                            num_workers=args.num_workers),
+        "val": make_loader(bundle.dataset("val", eval_corpora), cfg, shuffle=False,
+                           seed=args.seed, num_workers=args.num_workers),
+        "test": make_loader(bundle.dataset("test", eval_corpora), cfg, shuffle=False,
+                            seed=args.seed, num_workers=args.num_workers),
     }
 
     max_length = int(cfg["bert"]["max_length"])
