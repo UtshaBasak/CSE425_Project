@@ -38,7 +38,7 @@ KNOWN = {
     # TeX primitives and graphicx commands. A checker that cries wolf on valid
     # LaTeX is a checker people stop reading, and the resizebox/ifdim idiom
     # for shrinking an over-wide table is entirely standard.
-    "resizebox", "ifdim", "else", "fi", "width", "height", "depth", "relax",
+    "resizebox", "ifdim", "else", "fi", "and", "appendices", "width", "height", "depth", "relax",
     "hspace", "vspace", "noindent", "footnote", "appendix",
     "begin", "end", "documentclass", "usepackage", "newcommand", "def", "title",
     "author", "maketitle", "section", "subsection", "subsubsection", "paragraph",
@@ -71,7 +71,9 @@ CITE = re.compile(r"\\cite\{([^}]+)\}")
 BIBITEM = re.compile(r"\\bibitem\{([^}]+)\}")
 GRAPHIC = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
 TABLE = re.compile(r"\\begin\{table\}")
-APPENDIX = re.compile(r"\\appendix\b")
+#: IEEEtran spells it \appendices when there is more than one appendix;
+#: matching only \appendix\b counted the entire appendix as main body.
+APPENDIX = re.compile(r"\\appendices\b|\\appendix\b")
 EQUATION = re.compile(r"\\begin\{equation\}")
 
 PAGE_BEGIN = "%% PAGEBUDGET:BEGIN"

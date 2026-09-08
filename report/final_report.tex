@@ -273,11 +273,27 @@ opera & 0.487 & 0.117 \\
 \title{Segment Graphs and Language Models for Music Context Understanding:\\
 A Multi-Task Study with Explicit Leakage Accounting}
 
-\author{\IEEEauthorblockN{Author Name}
-\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
-\textit{BRAC University}\\
-Dhaka, Bangladesh \\
-amit@lamppost.org.bd}
+\author{
+  \IEEEauthorblockN{Utsha Basak}
+  \IEEEauthorblockA{\textit{Department of Computer Science} \\
+  \textit{and Engineering} \\
+  \textit{BRAC University}\\
+  Dhaka, Bangladesh \\
+  utsha.basak@g.bracu.ac.bd}
+  \and
+  \IEEEauthorblockN{Second Author}
+  \IEEEauthorblockA{\textit{Department of Computer Science} \\
+  \textit{and Engineering} \\
+  \textit{BRAC University}\\
+  Dhaka, Bangladesh \\
+  second.author@email.com}
+  \and
+  \IEEEauthorblockN{Third Author}
+  \IEEEauthorblockA{\textit{Department of Computer Science} \\
+  \textit{and Engineering} \\
+  \textit{BRAC University}\\
+  Dhaka, Bangladesh \\
+  third.author@email.com}
 }
 
 \maketitle
@@ -531,6 +547,7 @@ each model cost.
 \section{Results}
 % ===========================================================================
 \subsection{Task 2: genre classification on FMA-small}
+\label{sec:genre}
 Table~\ref{tab:genre} reports the headline Task 2 result: eight-way
 single-label classification over FMA-small. The split is near-balanced
 (797--801 training clips per class, 100--101 test clips), so chance sits at
@@ -576,7 +593,7 @@ rewiring ablation, both on the GNN's own features, and the Task 2 structural
 claim rests on those rather than on this row.
 
 \textbf{Where the errors go is more informative than the diagonal.}
-The confusion structure is far from uniform.
+Fig.~\ref{fig:confusion} shows the confusion structure is far from uniform.
 Hip-Hop is the most separable class and Electronic the next, which is what one
 would expect from a representation built on rhythmic and spectral segment
 statistics. The failures cluster: Folk is predicted as Experimental more often
@@ -585,7 +602,7 @@ being confused broadly. That pattern is a property of the label set as much as
 of the model -- ``Instrumental'' and ``Experimental'' are not acoustically
 disjoint categories, and a recording can satisfy both descriptions without any
 annotation error. Reporting only the aggregate accuracy would hide this
-entirely, which is why the matrix is reported alongside it.
+entirely, which is why the matrix is reported in the Appendix.
 
 \subsection{Task 2 second domain: MagnaTagATune multi-label tagging}
 \label{sec:tagging}
@@ -1247,9 +1264,9 @@ Introduction to Its Methodology}, 2nd ed. Thousand Oaks, CA: Sage, 2004.
 %   3. per-tag threshold detail-> summary line in the text, table to here
 %   4. anything still over     -> here, clearly marked
 % ===========================================================================
-\appendix
+\appendices
 
-\begin{table}[h]
+\begin{table}[ht]
 \caption{Corpora, after verification that every referenced file exists and
 decodes. ``Usable'' is what the manifests actually contain.}
 \label{tab:data}
@@ -1369,13 +1386,22 @@ Panel (b) of Fig.~\ref{fig:diagnostics} is read in
 Section~\ref{sec:tsne}: at a mean edge cosine of \SGraphEdgeCos{} against
 $\tau = \SGraphTau{}$ the statistic is saturated, so we report it and draw no
 conclusion from it.
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \includegraphics[width=0.70\columnwidth]{figures/diagnostics.png}
 \caption{(a) Macro- and micro-F1 against training epoch. (b) The
 $S_{\text{graph}}$ coherence control, real against degree-preserving rewired
 graphs.}
 \label{fig:diagnostics}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{figures/genre_confusion_compact.png}
+\caption{FMA-small genre confusion, row-normalised, chance 0.125.
+(a) the GNN averaged over seeds 42/1337/2024; (b) the B2 mel CNN, one seed.
+Cells below 0.10 are left unlabelled. Read in Section~\ref{sec:genre}.}
+\label{fig:confusion}
 \end{figure}
 
 \section{Per-Tag Threshold Stability}
