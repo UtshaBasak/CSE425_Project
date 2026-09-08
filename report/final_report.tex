@@ -45,6 +45,19 @@
 %%   \usepackage[colorlinks=true,citecolor=blue,linkcolor=blue,urlcolor=blue,
 %%               breaklinks=true]{hyperref}
 \usepackage[hidelinks,breaklinks=true]{hyperref}
+% Float placement. IEEEtran inherits LaTeX's defaults: at most three floats per
+% page, at least 20% of every page given to text, and a top float may not exceed
+% 70% of the page. The appendix runs six floats in close succession, so the last
+% two were deferred onto an eleventh page while page ten sat half empty. These
+% values let a page carry more of its own floats; no content moves.
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.85}
+\renewcommand{\textfraction}{0.06}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{topnumber}{4}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 % --- AUTOGEN:BEGIN ---------------------------------------------------------
@@ -116,8 +129,8 @@ task3\_seed42\_musiccaps\_gnn\_only & 0.1120 & 0.0007 & 0.0116 \\
 \newcommand{\BootVerdict}{The largest spread is 0.0690 macro-F1, above the 0.02 threshold fixed in advance. Tuned numbers are therefore reported alongside fixed-0.5 numbers throughout, and differences smaller than this spread are not interpreted.}
 \newcommand{\BootWorstTags}{\texttt{chant} ($\sigma=0.23$), \texttt{orchestra} ($\sigma=0.17$), \texttt{classical} ($\sigma=0.14$), \texttt{loud} ($\sigma=0.14$), \texttt{quiet} ($\sigma=0.13$)}
 \newcommand{\BootWorstTagsTable}{%
-\begin{table}[h]
-\caption{The twelve least stable per-tag thresholds on MagnaTagATune, over 100 validation resamples. Every one is a low-frequency tag: with 977 validation clips, a tag appearing in a few dozen of them has almost no positive examples left after resampling, so the tuner is fitting noise.}
+\begin{table}[!ht]
+\caption{The ten least stable per-tag thresholds on MagnaTagATune, over 100 validation resamples. Every one is a low-frequency tag: with 977 validation clips, a tag appearing in a few dozen of them has almost no positive examples left after resampling, so the tuner is fitting noise.}
 \label{tab:threshdetail}
 \centering
 \small
@@ -1297,7 +1310,7 @@ Introduction to Its Methodology}, 2nd ed. Thousand Oaks, CA: Sage, 2004.
 % ===========================================================================
 \appendices
 
-\begin{table}[ht]
+\begin{table}[!ht]
 \caption{Corpora, after verification that every referenced file exists and
 decodes. ``Usable'' is what the manifests actually contain.}
 \label{tab:data}
@@ -1379,7 +1392,7 @@ makes visible at a glance both which queries succeeded and \emph{by how far} the
 failures failed, which a list of captions does not, and it costs a tenth of the
 page budget.
 
-\begin{figure}[t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=0.90\columnwidth]{figures/retrieval_examples.png}
 \caption{The \RetrievalNShown{} qualitative retrieval queries. Each stem runs
@@ -1400,7 +1413,7 @@ uninformative by construction. MusicCaps captions give real musical language to
 align against. Fig.~\ref{fig:cases} presents all three in one figure, one column
 each, with at least one failure case. \CaseStudyNote{}
 
-\begin{figure}[t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=0.95\columnwidth]{figures/case_studies.png}
 \caption{Three Task 3 case studies on MusicCaps: segment graph with GATv2
@@ -1417,7 +1430,7 @@ Panel (b) of Fig.~\ref{fig:diagnostics} is read in
 Section~\ref{sec:tsne}: at a mean edge cosine of \SGraphEdgeCos{} against
 $\tau = \SGraphTau{}$ the statistic is saturated, so we report it and draw no
 conclusion from it.
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=0.70\columnwidth]{figures/diagnostics.png}
 \caption{(a) Macro- and micro-F1 against training epoch. (b) The
@@ -1426,7 +1439,7 @@ graphs.}
 \label{fig:diagnostics}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
 \includegraphics[width=\columnwidth]{figures/genre_confusion_compact.png}
 \caption{FMA-small genre confusion, row-normalised, chance 0.125.
@@ -1435,7 +1448,7 @@ Cells below 0.10 are left unlabelled. Read in Section~\ref{sec:genre}.}
 \label{fig:confusion}
 \end{figure}
 
-\begin{table}[h]
+\begin{table}[!ht]
 \caption{DEAM valence and arousal, test split (\EmoN{} tracks), from the
 full-budget multi-task Task 3 run. MAE and RMSE are on the 1--9 scale. The
 right-hand column is the $R^2$ spread over seeds 42/1337/2024 at the fixed

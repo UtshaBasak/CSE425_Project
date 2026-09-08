@@ -536,8 +536,11 @@ def build_macros() -> dict:
             rows = [f"{d['tag'].replace('_', chr(92) + '_')} & "
                     f"{d['threshold_mean']:.3f} & {d['threshold_std']:.3f} \\\\"
                     for d in detail]
+            spelled = {8: "eight", 9: "nine", 10: "ten", 11: "eleven",
+                       12: "twelve"}.get(len(detail), str(len(detail)))
             macros["BootWorstTagsTable"] = (
-                "\\begin{table}[h]\n\\caption{The twelve least stable per-tag "
+                "\\begin{table}[!ht]\n\\caption{The " + spelled +
+                " least stable per-tag "
                 "thresholds on MagnaTagATune, over " + str(boot["n_boot"]) +
                 " validation resamples. Every one is a low-frequency tag: with "
                 + integer(lead["n_val_rows"]) + " validation clips, a tag "
