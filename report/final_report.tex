@@ -33,6 +33,11 @@
 \usepackage{url}
 \usepackage[table]{xcolor}
 \usepackage{textcomp}
+
+%% Shrink a table only if it is wider than the column; leave it alone if not.
+%% Fixes Tables II and IV bleeding into the adjacent column.
+\newcommand{\fittab}[1]{%
+  \resizebox{\ifdim\width>\columnwidth\columnwidth\else\width\fi}{!}{#1}}
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 % --- AUTOGEN:BEGIN ---------------------------------------------------------
@@ -103,12 +108,12 @@ task3\_seed42\_musiccaps\_gnn\_only & 0.1120 & 0.0007 & 0.0116 \\
 \newcommand{\BootVerdict}{The largest spread is 0.0690 macro-F1, above the 0.02 threshold fixed in advance. Tuned numbers are therefore reported alongside fixed-0.5 numbers throughout, and differences smaller than this spread are not interpreted.}
 \newcommand{\BootWorstTags}{\texttt{chant} ($\sigma=0.23$), \texttt{orchestra} ($\sigma=0.17$), \texttt{classical} ($\sigma=0.14$), \texttt{loud} ($\sigma=0.14$), \texttt{quiet} ($\sigma=0.13$)}
 \newcommand{\BootWorstTagsTable}{%
-\begin{table}[h]
-\caption{The twelve least stable per-tag thresholds on MagnaTagATune, over 100 validation resamples. Every one is a low-frequency tag: with 977 validation clips, a tag appearing in a few dozen of them has almost no positive examples left after resampling, so the tuner is fitting noise.}
+\begin{table}[t]
+\caption{The six least stable per-tag thresholds on MagnaTagATune, over 100 validation resamples. Every one is a low-frequency tag: with 977 validation clips, a tag appearing in a few dozen of them has almost no positive examples left after resampling, so the tuner is fitting noise.}
 \label{tab:threshdetail}
 \centering
 \small
-\begin{tabular}{@{}lrr@{}}
+\fittab{\begin{tabular}{@{}lrr@{}}
 \toprule
 Tag & Mean threshold & s.d. \\
 \midrule
@@ -118,12 +123,8 @@ classical & 0.236 & 0.141 \\
 loud & 0.306 & 0.137 \\
 quiet & 0.439 & 0.127 \\
 opera & 0.487 & 0.117 \\
-choir & 0.163 & 0.104 \\
-techno & 0.493 & 0.098 \\
-foreign & 0.093 & 0.096 \\
-eastern & 0.036 & 0.096 \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 }
 \newcommand{\CaseStudyNote}{All three come from the MusicCaps fusion model and are scored against the MusicCaps aspect vocabulary. The two successes are both captions whose content words describe \emph{recording conditions} rather than musical content --- ``amateur recording'', and ``low quality, noisy, mono'' at confidences of 1.00, 1.00 and 0.96 --- which is consistent with the segment features carrying spectral character more readily than musical structure. The failure is more informative than a wrong answer would be: for a clip described as a triangle wave with randomly placed samples, the model's top prediction \emph{is} the correct tag, \texttt{instrumental}, but at 0.11 against that tag's validation-tuned threshold of 0.46. The representation ranked it first and the operating point rejected it, which is a calibration failure rather than a perceptual one and is exactly the instability Section~\ref{sec:thresholds} quantifies.}
@@ -482,10 +483,12 @@ the loss masks rather than imputes --- BCE only where
 $y_{\text{tag}} \neq -1$, squared error only where the target is not
 \texttt{NaN}:
 \begin{equation}
-\mathcal{L} = \frac{\sum_{ij} m_{ij}\,\ell^{\text{BCE}}_{ij}}{\sum_{ij} m_{ij}}
- \cdot \frac{1}{s_{\text{tag}}}
- + \sum_{t \in \{v,a\}} \lambda_t \frac{\sum_i m^t_i (\hat{y}^t_i - y^t_i)^2}
-   {\sum_i m^t_i} \cdot \frac{1}{s_t},
+\begin{split}
+\mathcal{L} &= \frac{1}{s_{\text{tag}}}\cdot
+   \frac{\sum_{ij} m_{ij}\,\ell^{\text{BCE}}_{ij}}{\sum_{ij} m_{ij}} \\[2pt]
+&\quad + \sum_{t \in \{v,a\}} \frac{\lambda_t}{s_t}\cdot
+   \frac{\sum_i m^t_i\,(\hat{y}^t_i - y^t_i)^2}{\sum_i m^t_i},
+\end{split}
 \end{equation}
 where each $s$ is an exponential moving average of that term's own recent
 magnitude. Without it, squared error on DEAM's 1--9 scale sits around 4--10
@@ -543,7 +546,7 @@ and the comparison is read accordingly. Neither row is bolded: see the text.}
 \label{tab:genre}
 \centering
 \small
-\begin{tabular}{@{}lrrrr@{}}
+\fittab{\begin{tabular}{@{}lrrrr@{}}
 \toprule
 Model & Acc. & Macro-F1 & Params & Wall-clock \\
 \midrule
@@ -551,7 +554,7 @@ B2 mel CNN (1 seed) & \BTwoGenreAcc{} & \BTwoGenreF{} & \BTwoGenreParams{} & \BT
 T2 GNN (\TTwoGenreSeeds{} seeds) & \TTwoGenreAccMean{} & \TTwoGenreFMean{} & \TTwoGenreParams{} & \TTwoGenreTime{} \\
 \quad seed spread & $\pm$\TTwoGenreAccSd{} & $\pm$\TTwoGenreFSd{} & & \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \label{sec:b2fair}
@@ -573,8 +576,7 @@ rewiring ablation, both on the GNN's own features, and the Task 2 structural
 claim rests on those rather than on this row.
 
 \textbf{Where the errors go is more informative than the diagonal.}
-Fig.~\ref{fig:confusion} (Appendix~\ref{app:qualitative}) shows the confusion
-structure is far from uniform.
+The confusion structure is far from uniform.
 Hip-Hop is the most separable class and Electronic the next, which is what one
 would expect from a representation built on rhythmic and spectral segment
 statistics. The failures cluster: Folk is predicted as Experimental more often
@@ -593,17 +595,14 @@ makes Tasks 2 and 3 comparable at all.
 
 \begin{table}[t]
 \caption{MagnaTagATune test split, 50 tags. Thresholds tuned on validation and
-frozen before test was touched; the ``@0.5'' column is the same model scored at
-a fixed threshold, reported alongside because the tuned operating point is not
-stable (Section~\ref{sec:thresholds}). Accuracy is deliberately absent: the
-majority baseline reaches 94.6\% element accuracy at 0.00 macro-F1. All rows
-are full-budget. The T3 row is the multi-task model, which is also fitting
-DEAM valence and arousal (Section~\ref{sec:emotion}); it is not a
-tags-only model and should not be read as one.}
+frozen before test was touched. ``@0.5'' is the same model at a fixed
+threshold (Section~\ref{sec:thresholds}). All rows are full-budget; the T3 row
+is the multi-task model, not a tags-only one
+(Section~\ref{sec:emotion}). Accuracy is deliberately absent.}
 \label{tab:mtat}
 \centering
 \small
-\begin{tabular}{@{}lrrrrr@{}}
+\fittab{\begin{tabular}{@{}lrrrrr@{}}
 \toprule
 Model & Macro-F1 & @0.5 & Micro-F1 & AUC-PR & Params \\
 \midrule
@@ -615,7 +614,7 @@ B4 PCA + MLP         & \BFourF{} & --- & \BFourMicro{} & \BFourPR{} & --- \\
 B3/T1 BERT (meta.)   & \TOneMtatF{} & \TOneMtatFixed{} & \TOneMtatMicro{} & \TOneMtatPR{} & \TOneMtatParams{} \\
 T3 fusion (multi-task)& \TThreeHeadF{} & \TThreeHeadFixed{} & \TThreeHeadMicro{} & \TThreeHeadPR{} & \TThreeHeadParams{} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \textbf{What the audio-only rows say.} B4 mean-pools the \emph{same}
@@ -675,7 +674,7 @@ different label vocabulary, different split.}
 \label{tab:musiccaps}
 \centering
 \small
-\begin{tabular}{@{}llrrrr@{}}
+\fittab{\begin{tabular}{@{}llrrrr@{}}
 \toprule
 Text input & Freeze & Macro-F1 & @0.5 & Micro-F1 & AUC-PR \\
 \midrule
@@ -684,7 +683,7 @@ Text input & Freeze & Macro-F1 & @0.5 & Micro-F1 & AUC-PR \\
 \texttt{caption\_masked} & full FT & \textbf{\MCMaskedF{}} & \MCMaskedFixed{} & \MCMaskedMicro{} & \MCMaskedPR{} \\
 \texttt{caption\_raw}    & full FT & \MCRawF{} & \MCRawFixed{} & \MCRawMicro{} & \MCRawPR{} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \textbf{The leakage gap is \LeakGap{} macro-F1, a \LeakPct{}\% relative
@@ -730,25 +729,22 @@ no row in this table may be compared against Table~\ref{tab:mtat}.
 
 \begin{table}[t]
 \caption{Task 3 fusion ablation on MagnaTagATune, mean $\pm$ s.d.\ over seeds
-42/1337/2024, DistilBERT. \textbf{Reduced budget}: \TThreeAblEpochs{} epochs and
-\TThreeAblTime{} per run, against the full-budget headline's
-\TThreeHeadEpochs{} epochs and \TThreeHeadTime{} in
-Table~\ref{tab:mtat}. Comparisons \emph{within} this table are valid --- the
-budget is identical across modes, which is the point of holding it fixed.
-Comparisons against the full-budget rows of Table~\ref{tab:mtat} are
-\emph{not}. ``@0.5'' is the same model at an untuned threshold.
-\textbf{The measurement floor is \BootLeadSpread{} macro-F1}
-(Section~\ref{sec:noisefloor}); rows closer than that are not separable.}
+42/1337/2024, DistilBERT. \textbf{Reduced budget}: \TThreeAblEpochs{} epochs,
+\TThreeAblTime{} per run, identical across modes --- so compare
+\emph{within} this table only, never against the full-budget rows of
+Table~\ref{tab:mtat}. \textbf{The measurement floor is \BootLeadSpread{}
+macro-F1}; rows closer than that are not separable
+(Section~\ref{sec:noisefloor}).}
 \label{tab:ablation}
 \centering
 \small
-\begin{tabular}{@{}lrrrr@{}}
+\fittab{\begin{tabular}{@{}lrrrr@{}}
 \toprule
 Fusion mode & Macro-F1 & @0.5 & $\Delta$ vs best & Seeds \\
 \midrule
 \AblationRows
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \AblationVerdict{} The one mode that \emph{is} separable is
@@ -779,14 +775,14 @@ ablation budget.}
 \label{tab:emotion}
 \centering
 \small
-\begin{tabular}{@{}lrrrr@{}}
+\fittab{\begin{tabular}{@{}lrrrr@{}}
 \toprule
 Target & MAE & RMSE & $R^2$ & $R^2$ over 3 seeds \\
 \midrule
 Valence & \EmoValMAE{} & \EmoValRMSE{} & \EmoValRTwo{} & \EmoValRTwoMean{} $\pm$ \EmoValRTwoSd{} \\
 Arousal & \EmoAroMAE{} & \EmoAroRMSE{} & \EmoAroRTwo{} & \EmoAroRTwoMean{} $\pm$ \EmoAroRTwoSd{} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \textbf{Arousal is learnable from this representation; valence is much less so.}
@@ -859,7 +855,7 @@ different label vocabularies, so compare \emph{within} a column, never across.}
 \label{tab:contrast}
 \centering
 \small
-\begin{tabular}{@{}lrr@{}}
+\fittab{\begin{tabular}{@{}lrr@{}}
 \toprule
 Mode & MTAT (metadata) & MusicCaps (caption) \\
 \midrule
@@ -867,7 +863,7 @@ Mode & MTAT (metadata) & MusicCaps (caption) \\
 \texttt{gnn\_only}       & \AblationGnnOnly{}  & \MCGnnOnly{} \\
 \texttt{cross\_attention}& \AblationBest{}     & \MCCrossAttention{} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \textbf{Which modality dominates flips with the corpus, and the flip is large.}
@@ -904,7 +900,7 @@ is uninterpretable without its chance value, so both are given.
 \caption{Task 4 retrieval, mean over \FourSeeds{} seeds and both directions,
 gallery \FourGallery{}. Chance is analytic ($K/N$), not estimated.}
 \label{tab:retrieval}
-\begin{tabular}{lrrr}
+\fittab{\begin{tabular}{lrrr}
 \toprule
 Metric & Model & Chance & Lift \\
 \midrule
@@ -914,7 +910,7 @@ R@10    & \FourRAtTen{}  & \FourChanceTen{}  & \FourLiftTen{}$\times$ \\
 MRR     & \FourMRR{}     & \FourChanceMRR{}  & --- \\
 median rank & \FourMedR{} & \FourChanceMedR{} & --- \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \textbf{The model learns something, and not much.} R@10 is
@@ -963,7 +959,7 @@ validation. That fit is a fit like any other, and MagnaTagATune's validation
 split is 977 clips from 14 artists -- small, and correlated within artist. We
 resample the validation rows with replacement \NBoot{} times, re-tune all 50
 thresholds on each replicate, and apply each threshold vector unchanged to the
-fixed test split. Table~\ref{tab:boot} reports the resulting spread.
+fixed test split.
 
 %% bootstrap table moved to the appendix (D5 step 1)
 
@@ -1259,7 +1255,7 @@ decodes. ``Usable'' is what the manifests actually contain.}
 \label{tab:data}
 \centering
 \small
-\begin{tabular}{@{}lrrl@{}}
+\fittab{\begin{tabular}{@{}lrrl@{}}
 \toprule
 Corpus & Nominal & Usable & Role \\
 \midrule
@@ -1271,7 +1267,7 @@ Lakh MIDI Clean & 17{,}256 & 17{,}184 & chord validation only \\
 \midrule
 \textbf{Total (trained on)} & & \textbf{\NTracks{}} & \textbf{\NGraphs{} stored graphs} \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \end{table}
 
 \section{Reproducibility}
@@ -1283,66 +1279,44 @@ number cannot survive a re-run; a result that has not been produced yet renders
 as \emph{pending} and the script names it.
 
 \textbf{Hardware.} One NVIDIA GTX 1650 (4~GB, compute capability 7.5, no tensor
-cores), Intel i5-11400H, 16~GB RAM. Mixed precision throughout. The transformer
-sweeps were also run on a Kaggle T4; results agreed to four decimal places where
-both were run.
+cores), Intel i5-11400H, 16~GB RAM, mixed precision throughout. The transformer
+sweeps were also run on a Kaggle T4 and agreed to four decimal places.
 
-\textbf{Seeds.} 42, 1337 and 2024 for every reported ablation row and headline
-result. The B1/B2/B4 baselines are single-seed (42) and are labelled as such
-wherever they appear beside a multi-seed row. Seeding covers Python, NumPy, torch and the dataloader workers;
-determinism is not otherwise forced, so single-run numbers carry CUDA
-non-determinism on the order of $10^{-3}$ --- an order of magnitude below the
-measurement floor, and one reason the floor rather than the seed spread is the
-binding constraint.
+\textbf{Seeds.} 42, 1337 and 2024 for every ablation row and headline result;
+the B1/B2/B4 baselines are single-seed (42) and labelled as such wherever they
+appear beside a multi-seed row. Seeding covers Python, NumPy, torch and the
+dataloader workers. Determinism is not otherwise forced, so single-run numbers
+carry CUDA non-determinism of order $10^{-3}$ --- an order of magnitude below
+the measurement floor, which is why the floor rather than the seed spread is
+the binding constraint.
 
-\textbf{Splits and statistics.} Splits are artist-disjoint within and across
-corpora, asserted at the start of every training job. Feature normalisation, mel
-normalisation, emotion target scaling and the tag vocabularies are all computed
+\textbf{Splits, statistics and thresholds.} Splits are artist-disjoint within
+and across corpora, asserted at the start of every training job. Feature and
+mel normalisation, emotion target scaling and the tag vocabularies are computed
 on the training split only; each artifact records that provenance and the
-pipeline refuses to run against one that does not.
+pipeline refuses to run against one that does not. Thresholds are tuned on
+validation, frozen, then applied once to test, which is read exactly once per
+run after both the model and the thresholds are final.
 
-\textbf{Thresholds.} Tuned on validation, frozen, then applied once to test. The
-test split is read exactly once per run, after both the model and the thresholds
-are final.
-
-\textbf{Listening study.} The presentation order, the control assignments and
-the item-to-clip mapping are fixed by \texttt{sheet\_key.json}, written by
-\texttt{scripts/make\_listening\_page.py} under a recorded seed. The
-de-identified ratings (\texttt{raw\_responses.csv}, timestamps only --- no
-identifying fields were collected) and the reshaped long form are committed;
+\textbf{Listening study.} Presentation order, control assignments and the
+item-to-clip mapping are fixed by \texttt{sheet\_key.json}, written under a
+recorded seed. The de-identified ratings (timestamps only; no identifying
+fields were collected) and the reshaped long form are committed, and
 \texttt{scripts/analyse\_human\_eval.py} regenerates every number in
-Section~\ref{sec:human} from them, and refuses to guess when the form columns
-do not line up with the key.
+Section~\ref{sec:human} from them, refusing to guess when the form columns do
+not line up with the key.
 
 \textbf{Commands.} The full pipeline is
+{\footnotesize
 \begin{verbatim}
-make verify-data      # check every file exists and decodes
-make splits           # manifests + artist-disjoint repair
-make vocab            # train-only tag vocabularies
-make features graphs  # 96-dim cache, segment graphs
-make mel-cache        # full-resolution mels for B2
-make all-tasks        # tasks 1-4, all seeds
-make baselines        # B1, B2, B4
-make thresholds       # bootstrap the operating point
-make evaluate         # tables and figures
-make human-eval       # listening sheet, then ratings analysis
-make report           # fill and check the LaTeX
+make verify-data      # files exist + decode
+make splits vocab     # disjoint, train-only
+make features graphs  # 96-d cache + graphs
+make mel-cache        # full-res mels for B2
+make all-tasks baselines thresholds
+make evaluate human-eval report
 \end{verbatim}
-
-\begin{table}[t]
-\caption{Bootstrap over the validation split (\NBoot{} replicates): thresholds
-re-tuned per replicate, applied to the fixed test split.}
-\label{tab:boot}
-\centering
-\small
-\begin{tabular}{@{}lrrr@{}}
-\toprule
-Run & Tuned & Fixed 0.5 & Spread \\
-\midrule
-\BootRows
-\bottomrule
-\end{tabular}
-\end{table}
+}
 
 \section{Qualitative Analysis}
 \label{app:qualitative}
@@ -1359,15 +1333,16 @@ page budget.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/retrieval_examples.png}
+\includegraphics[width=0.90\columnwidth]{figures/retrieval_examples.png}
 \caption{The \RetrievalNShown{} qualitative retrieval queries. Each stem runs
 from rank 1 to the rank the true clip actually received among \MCTest{}
 candidates; lower is better. The dashed lines mark R@10 and the median rank a uniformly random
-ranking would give (\MCTestHalf{}). \RetrievalFigNote{}}
+ranking would give (\MCTestHalf{}). Curated extremes, not a performance
+estimate.}
 \label{fig:retrieval}
 \end{figure}
 
-\RetrievalFailureNote{}
+\RetrievalFigNote{} \RetrievalFailureNote{}
 
 \subsection{Three case studies}
 Run on the MusicCaps Task 3 model rather than the MTAT one. This is not
@@ -1375,56 +1350,32 @@ arbitrary: MTAT's text channel is \texttt{clip\_info} metadata, so a
 token-alignment map over it shows a graph attending to an artist name, which is
 uninformative by construction. MusicCaps captions give real musical language to
 align against. Fig.~\ref{fig:cases} presents all three in one figure, one column
-each, with at least one failure case.
+each, with at least one failure case. \CaseStudyNote{}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=\columnwidth]{figures/case_studies.png}
+\includegraphics[width=0.95\columnwidth]{figures/case_studies.png}
 \caption{Three Task 3 case studies on MusicCaps: segment graph with GATv2
-attention, caption token alignment, and prediction against ground truth.
-\CaseStudyNote{}}
+attention, caption token alignment, and prediction against ground truth. Two
+successes and one failure; read in the text above.}
 \label{fig:cases}
 \end{figure}
 
 % ===========================================================================
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=\columnwidth]{figures/genre_confusion.png}
-\caption{FMA-small genre confusion, row-normalised. Chance is 0.125. The
-diagonal is not the whole story: the off-diagonal mass concentrates in a few
-specific pairs, and those pairs are ones the label set itself does not separate
-acoustically.}
-\label{fig:confusion}
-\end{figure}
-
 \section{Training Curves and the Graph Coherence Control}
 \label{app:diagnostics}
+Panel (b) of Fig.~\ref{fig:diagnostics} is read in
+Section~\ref{sec:tsne}: at a mean edge cosine of \SGraphEdgeCos{} against
+$\tau = \SGraphTau{}$ the statistic is saturated, so we report it and draw no
+conclusion from it.
 \begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{figures/diagnostics.png}
-\caption{(a) Macro- and micro-F1 against training epoch. (b) The graph
-coherence control $S_{\text{graph}}$ on real graphs against degree-preserving
-rewired ones. Section~\ref{sec:tsne} reads (b): at a mean edge cosine of
-\SGraphEdgeCos{} against $\tau = \SGraphTau{}$ the statistic is saturated, and
-we draw no conclusion from it.}
+\includegraphics[width=0.70\columnwidth]{figures/diagnostics.png}
+\caption{(a) Macro- and micro-F1 against training epoch. (b) The
+$S_{\text{graph}}$ coherence control, real against degree-preserving rewired
+graphs.}
 \label{fig:diagnostics}
-\end{figure}
-
-\section{Task 1 Attention Examples}
-\label{app:attention}
-\begin{figure}[h]
-\centering
-\includegraphics[width=\columnwidth]{figures/attention_examples.png}
-\caption{\AttnN{} Task 1 predictions with token attention over the
-MagnaTagATune \texttt{clip\_info} text. Note that the \AttnN{} panels carry
-only \AttnDistinct{} distinct texts: MagnaTagATune's text channel is title,
-album and artist, which is constant across every clip cut from the same
-recording, so two clips of one track receive identical input and identical
-predictions. That is not a rendering fault --- it is the clearest available
-illustration of why the metadata channel reaches only \TOneMtatF{} macro-F1
-(Section~\ref{sec:tagging}): it has no clip-level resolution to give.}
-\label{fig:attention}
 \end{figure}
 
 \section{Per-Tag Threshold Stability}
@@ -1433,7 +1384,8 @@ Section~\ref{sec:thresholds} reports the aggregate effect of resampling the
 validation split. This appendix carries the per-tag detail, which is the part
 that explains \emph{why} the aggregate moves: the instability is not spread
 evenly across the vocabulary but concentrated in the rare tags, whose thresholds
-are fitted on a handful of positive examples.
+are fitted on a handful of positive examples. Table~\ref{tab:threshdetail}
+lists the six worst.
 
 \BootWorstTagsTable
 

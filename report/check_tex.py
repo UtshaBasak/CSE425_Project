@@ -35,6 +35,11 @@ ROOT = project_root()
 
 #: macros LaTeX and IEEEtran already define, which must not be reported missing
 KNOWN = {
+    # TeX primitives and graphicx commands. A checker that cries wolf on valid
+    # LaTeX is a checker people stop reading, and the resizebox/ifdim idiom
+    # for shrinking an over-wide table is entirely standard.
+    "resizebox", "ifdim", "else", "fi", "width", "height", "depth", "relax",
+    "hspace", "vspace", "noindent", "footnote", "appendix",
     "begin", "end", "documentclass", "usepackage", "newcommand", "def", "title",
     "author", "maketitle", "section", "subsection", "subsubsection", "paragraph",
     "textbf", "textit", "emph", "texttt", "item", "label", "ref", "cite",
