@@ -539,7 +539,7 @@ def build_macros() -> dict:
             spelled = {8: "eight", 9: "nine", 10: "ten", 11: "eleven",
                        12: "twelve"}.get(len(detail), str(len(detail)))
             macros["BootWorstTagsTable"] = (
-                "\\begin{table}[!ht]\n\\caption{The " + spelled +
+                "\\begin{table}[!htbp]\n\\caption{The " + spelled +
                 " least stable per-tag "
                 "thresholds on MagnaTagATune, over " + str(boot["n_boot"]) +
                 " validation resamples. Every one is a low-frequency tag: with "
